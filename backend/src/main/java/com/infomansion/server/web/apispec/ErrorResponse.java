@@ -10,12 +10,18 @@ import org.springframework.http.ResponseEntity;
 @Getter
 @RequiredArgsConstructor
 public class ErrorResponse {
+    private boolean success;
     private final HttpStatus status;
     private final String message;
 
     protected ErrorResponse(ErrorCode errorCode) {
+        this.success = false;
         this.status = errorCode.getStatus();
         this.message = errorCode.getMessage();
+    }
+
+    protected void setSuccess() {
+        this.success = true;
     }
 
     public static ResponseEntity<ErrorResponse> error(CustomException e) {

@@ -24,6 +24,7 @@ class ApiResponseTest {
         mockMvc.perform(
                 get("/test/success"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("true"))
                 .andExpect(jsonPath("$.status").exists())
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.data").exists())
@@ -37,6 +38,7 @@ class ApiResponseTest {
         mockMvc.perform(
                         get("/test/error"))
                 .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"))
                 .andExpect(jsonPath("$.status").exists())
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.message").value("지원하지 않는 Http Method 방식입니다."));

@@ -10,6 +10,7 @@ public class ApiResponse<T> extends ErrorResponse {
 
     private ApiResponse(T data) {
         super(ErrorCode.SUCCESS);
+        this.setSuccess();
         this.data = data;
     }
 
