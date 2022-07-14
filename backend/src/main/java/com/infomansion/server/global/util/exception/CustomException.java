@@ -1,4 +1,4 @@
-package com.infomansion.server.util.exception;
+package com.infomansion.server.global.util.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

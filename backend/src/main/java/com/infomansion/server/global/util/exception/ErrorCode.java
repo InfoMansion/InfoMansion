@@ -1,4 +1,4 @@
-package com.infomansion.server.util.exception;
+package com.infomansion.server.global.util.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,9 +7,6 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
-
-    //== 200 ==//
-    SUCCESS(HttpStatus.OK, "성공"),
 
     //== 400 ==//
     NOT_SUPPORTED_HTTP_METHOD(HttpStatus.BAD_REQUEST,"지원하지 않는 Http Method 방식입니다."),
