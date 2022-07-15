@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -25,7 +26,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserApiControllerTest {
 
@@ -69,7 +69,7 @@ class UserApiControllerTest {
 
         List<User> all = userRepository.findAll();
         assertThat(all.get(0).getEmail()).isEqualTo(email);
-        assertThat(all.get(0).getPassword()).isEqualTo(password);
+        assertThat(all.get(0).getPassword()).isNotEqualTo(password);
         assertThat(all.get(0).getTel()).isEqualTo(tel);
         assertThat(all.get(0).getUsername()).isEqualTo(username);
 

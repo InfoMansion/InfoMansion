@@ -2,6 +2,7 @@ package com.infomansion.server.domain.user.dto;
 
 import com.infomansion.server.domain.user.domain.User;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -27,10 +28,10 @@ public class UserSignUpRequestDto {
         this.tel = tel;
     }
 
-    public User toEntity() {
+    public User toEntityWithEncryptPassword(PasswordEncoder passwordEncoder) {
         return User.builder()
                 .email(email)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .tel(tel)
                 .username(username)
                 .build();
