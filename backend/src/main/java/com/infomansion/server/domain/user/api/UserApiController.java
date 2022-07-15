@@ -5,10 +5,12 @@ import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
+import com.infomansion.server.global.util.jwt.ReissueDto;
 import com.infomansion.server.global.util.jwt.TokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,4 +35,9 @@ public class UserApiController {
                 .body(new CommonResponse<>(userService.login(requestDto)));
     }
 
+    @PostMapping("/api/v1/auth/reissue")
+    public ResponseEntity<? extends BasicResponse> userReissue(@Valid @RequestBody ReissueDto reissueDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userService.reissue(reissueDto)));
+    }
 }

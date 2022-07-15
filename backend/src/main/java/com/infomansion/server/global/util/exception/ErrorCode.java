@@ -14,6 +14,7 @@ public enum ErrorCode {
     DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST, "중복된 사용자 닉네임입니다."),
 
     // JWT
+    NOT_VALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 Refresh Token입니다."),
     TOKEN_WITHOUT_AUTHORITY(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
     EMPTY_CREDENTIALS(HttpStatus.UNAUTHORIZED, "인증 정보가 없습니다."),
 
