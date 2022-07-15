@@ -4,6 +4,7 @@ export default function Headernav() {
     return (
         <>
             <nav>
+                {/* headernav는 이 파일을 수정해서 작업해 주시면 될거같습니다~~ */}
             <ul>
                 <li>
                     <Link href="/">
@@ -11,13 +12,8 @@ export default function Headernav() {
                     </Link>
                 </li>
                 <li>
-                    <Link href="/example1">
-                        <a>example1</a>
-                    </Link>
-                </li>
-                <li>
-                    <Link href="/example2">
-                        <a>example2</a>
+                    <Link href="/RoomPage">
+                        <a>Roompage</a>
                     </Link>
                 </li>
             </ul>
