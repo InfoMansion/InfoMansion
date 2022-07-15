@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Mainframe from '../components/Mainframe'
+import Layout from '../components/Layout'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
@@ -9,9 +9,9 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="/favicon.ico"/>
         <title>InfoMaision</title>
       </Head>
-      <Mainframe>
+      <Layout>
         <Component {...pageProps} />
-      </Mainframe>
+      </Layout>
     </>
   )
 }
