@@ -7,7 +7,7 @@ import { useGLTF } from '@react-three/drei'
 
 export default function Model({ ...props }) {
   const group = useRef()
-  const { nodes, materials } = useGLTF('/shelf_white_medium_1.glb')
+  const { nodes, materials } = useGLTF('/stuffAssets/shelf_white_medium_1.glb')
   return (
     <group ref={group} {...props} dispose={null}>
       <mesh geometry={nodes.low_poly_interior1899.geometry} material={materials.low_poly_interior} position={[-8.71, 43, -15.95]} scale={100} />
@@ -22,4 +22,4 @@ export default function Model({ ...props }) {
   )
 }
 
-useGLTF.preload('/shelf_white_medium_1.glb')
+useGLTF.preload('/stuffAssets/shelf_white_medium_1.glb')
