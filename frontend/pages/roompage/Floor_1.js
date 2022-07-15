@@ -7,12 +7,12 @@ import { useGLTF } from '@react-three/drei'
 
 export default function Model({ ...props }) {
   const group = useRef()
-  const { nodes, materials } = useGLTF('/desk.gltf')
+  const { nodes, materials } = useGLTF('/floor_1.glb')
   return (
     <group ref={group} {...props} dispose={null}>
-      <mesh geometry={nodes.low_poly_interior282.geometry} material={materials.low_poly_interior} position={[0, 0, 0]} rotation={[0, 1.57, 0]} scale={100} />
+      <mesh geometry={nodes.low_poly_interior1922.geometry} material={materials.low_poly_interior} position={[0,0,0]} scale={100} />
     </group>
   )
 }
 
-useGLTF.preload('/desk.gltf')
+useGLTF.preload('/floor_1.glb')
