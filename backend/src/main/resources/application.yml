@@ -27,6 +27,9 @@ logging:
       infomansion:
         server: debug
 
+jwt:
+  secret: dGhpcy1pcy10ZW1wLXNlY3JldC1rZXktZm9yLWluZm8tbWFuc2lvbgo=
+
 ---
 #################
 # test 환경      #

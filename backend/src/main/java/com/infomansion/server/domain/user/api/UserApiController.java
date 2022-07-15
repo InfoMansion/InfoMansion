@@ -1,9 +1,11 @@
 package com.infomansion.server.domain.user.api;
 
+import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
+import com.infomansion.server.global.util.jwt.TokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,4 +26,11 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CommonResponse<>(userService.join(requestDto)));
     }
+
+    @PostMapping("/api/v1/auth/login")
+    public ResponseEntity<CommonResponse<TokenDto>> userLogin(@Valid @RequestBody UserLoginRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userService.login(requestDto)));
+    }
+
 }
