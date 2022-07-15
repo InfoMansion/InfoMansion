@@ -33,8 +33,3 @@ logging:
 
 jwt:
   secret: dGhpcy1pcy1hLXRlbXAtc2VjcmV0LWtleS1mb3ItaW5mby1tYW5zaW9uLWluLXNzYWZ5LTd0aC1ieS1jaGl5b25ncy1sZXRzZ29pbmZvbWFuc2lvbgo=
-
----
-#################
-# test 환경      #
-#################

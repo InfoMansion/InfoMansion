@@ -21,8 +21,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Transactional
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserServiceImplTest {
 
     @Autowired
@@ -30,6 +29,11 @@ class UserServiceImplTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @AfterEach
+    public void cleanUp() {
+        userRepository.deleteAll();;
+    }
 
     @Test
     public void 비밀번호_암호화() {
