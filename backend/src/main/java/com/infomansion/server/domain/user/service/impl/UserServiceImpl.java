@@ -32,11 +32,9 @@ public class UserServiceImpl implements UserService {
 
     private void validateDuplicateUser(UserSignUpRequestDto requestDto) {
         // email 중복 검증
-        List<User> usersByEmail = userRepository.findUsersByEmail(requestDto.getEmail());
-        if(!usersByEmail.isEmpty()) throw new CustomException(ErrorCode.DUPLICATE_USER_EMAIL);
+        if(userRepository.existsByEmail(requestDto.getEmail())) throw new CustomException(ErrorCode.DUPLICATE_USER_EMAIL);
 
         // username 중복 검증
-        List<User> usersByUsername = userRepository.findUsersByUsername(requestDto.getUsername());
-        if(!usersByUsername.isEmpty()) throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
+        if(userRepository.existsByUsername(requestDto.getUsername())) throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
     }
 }
