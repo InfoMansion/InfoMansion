@@ -26,3 +26,8 @@ logging:
     com:
       infomansion:
         server: debug
+
+---
+#################
+# test 환경      #
+#################

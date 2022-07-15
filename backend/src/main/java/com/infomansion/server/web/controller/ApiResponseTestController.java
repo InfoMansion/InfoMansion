@@ -1,9 +1,9 @@
 package com.infomansion.server.web.controller;
 
-import com.infomansion.server.util.exception.CustomException;
-import com.infomansion.server.util.exception.ErrorCode;
-import com.infomansion.server.web.apispec.ApiResponse;
-import com.infomansion.server.web.apispec.ErrorResponse;
+import com.infomansion.server.global.util.exception.CustomException;
+import com.infomansion.server.global.util.exception.ErrorCode;
+import com.infomansion.server.global.apispec.CommonResponse;
+import com.infomansion.server.global.apispec.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiResponseTestController {
 
     @GetMapping("/test/success")
-    public ApiResponse<?> success() {
-        return ApiResponse.ok("test");
+    public ResponseEntity<CommonResponse<String>> success() {
+        return ResponseEntity.ok(new CommonResponse<>("test"));
     }
 
     @GetMapping("/test/error")
