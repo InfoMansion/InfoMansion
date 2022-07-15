@@ -43,7 +43,18 @@ export default function Example() {
             <Canvas onCreated={state => state.gl.setClearColor("white")} >
                 {/* light */}
                 <pointLight position={[10, 20, 4]} intensity={0.6}/>
-                <pointLight position={[100, 100, 100]} intensity={0.2}/>
+                <directionalLight 
+                    position={[10, 10, 10]} 
+                    intensity={0.2}
+                    castShadow
+                    shadow-mapSize-width={1024}
+                    shadow-mapSize-height={1024}
+                    shadow-camera-far={50}
+                    shadow-camera-left={-100}
+                    shadow-camera-right={100}
+                    shadow-camera-top={100}
+                    shadow-camera-bottom={-100}
+                />
 
                 {/* 창 밖에서 들어오는 빛 테스트용 */}
                 {/* <pointLight position={[-4, 2, 2]} intensity={0.5} /> */}
@@ -67,7 +78,7 @@ export default function Example() {
                 <Sofa_large_brown_1 position={[1,0,0.3]} />
                 <Table_brown_small_1 position={[11.9, -43, 16]}/>
                 <Table_side_black_1 position={[12, -42.9, 15.9]}/>
-                <Table_wood_1 position={[12, -42.9, 16.2]}/>
+                <Table_wood_1 castShadow position={[12, -42.9, 16.2]}/>
             </Canvas>
 
             </div>
