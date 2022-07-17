@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import tokenState from '../state/token'
+import { useState } from 'react';
 
 function Copyright(props) {
   return (
@@ -30,6 +31,31 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+
+  const [inputEmail, setInputEmail] = useState('')
+  const [inputPassword, setInputPassword] = useState('')
+  const [inputUsername, setInputUsername] = useState('')
+  const [inputTel, setInputTel] = useState('')
+  const [inputUnFinish, setInputUnFinish] = useState(true)
+
+  function handleInput (event) {
+    const { name, value } = event.target;
+    if (name === 'email') {
+      setInputEmail(value)
+    } else if (name === 'password') {
+      setInputPassword(value)
+    } else if (name === 'username') {
+      setInputUsername(value)
+    } else if (name === 'tel') {
+      setInputTel(value)
+    }
+
+    if (!!(inputEmail && inputPassword && inputUsername && inputTel)) {
+      setInputUnFinish(false)
+    }
+  }
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -78,6 +104,7 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange={handleInput}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -89,6 +116,7 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={handleInput}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -99,6 +127,7 @@ export default function SignUp() {
                   label="username"
                   name="username"
                   autoComplete="username"
+                  onChange={handleInput}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -109,6 +138,7 @@ export default function SignUp() {
                   label="tel"
                   name="tel"
                   autoComplete="tel"
+                  onChange={handleInput}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -123,6 +153,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled = {inputUnFinish}
             >
               Sign Up
             </Button>
