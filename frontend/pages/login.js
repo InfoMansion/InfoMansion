@@ -101,6 +101,7 @@ export default function LogIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              autoCapitalize='off'
               onChange={handleInput}
             />
             <TextField

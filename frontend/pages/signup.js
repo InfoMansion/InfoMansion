@@ -105,6 +105,7 @@ export default function SignUp() {
                   name="email"
                   autoComplete="email"
                   onChange={handleInput}
+                  autoCapitalize='off'
                 />
               </Grid>
               <Grid item xs={12}>
