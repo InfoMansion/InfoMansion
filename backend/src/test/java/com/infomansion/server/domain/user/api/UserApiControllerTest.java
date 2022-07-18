@@ -1,11 +1,13 @@
 package com.infomansion.server.domain.user.api;
 
 import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.dto.UserChangePasswordDto;
 import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
+import com.infomansion.server.global.apispec.ErrorResponse;
 import com.infomansion.server.global.util.jwt.TokenDto;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,13 +19,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithSecurityContext;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,7 +56,7 @@ class UserApiControllerTest {
     public void user_로그인_성공() {
         //given
         String email = "infomansion@test.com";
-        String password = "testPassword";
+        String password = "testPassword1@";
         String tel = "01012345678";
         String username = "testUsername";
         UserSignUpRequestDto signUpRequestDto = UserSignUpRequestDto.builder()
@@ -80,7 +85,7 @@ class UserApiControllerTest {
     public void user_로그인_실패() {
         //given
         String email = "infomansion@test.com";
-        String password = "testPassword";
+        String password = "testPassword1@";
         String tel = "01012345678";
         String username = "testUsername";
         UserSignUpRequestDto signUpRequestDto = UserSignUpRequestDto.builder()
@@ -89,7 +94,7 @@ class UserApiControllerTest {
                 .tel(tel)
                 .username(username)
                 .build();
-        UserLoginRequestDto loginRequestDto = new UserLoginRequestDto(email, "wrongPassword");
+        UserLoginRequestDto loginRequestDto = new UserLoginRequestDto(email, "wrongPassword1@");
 
         String signUpUrl = "http://localhost:" + port + "/api/v1/auth/signup";
         String loginUrl = "http://localhost:" + port + "/api/v1/auth/login";
@@ -104,12 +109,83 @@ class UserApiControllerTest {
     }
 
 
-    @DisplayName("사용자 회원가입 성공")
+    @DisplayName("비밀번호 형식에 맞지 않는 사용자 회원가입 실패")
+    @Test
+    public void user_회원가입_실패_잘못된_비밀번호_형식() {
+        //given
+        String email = "infomansion@test.com";
+        String password = "testPassword";
+        String tel = "01012345678";
+        String username = "testUsername";
+        UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username(username)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/auth/signup";
+
+        //when
+        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(url, requestDto, ErrorResponse.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(responseEntity.getBody()).isInstanceOf(BasicResponse.class);
+
+        ErrorResponse res = (ErrorResponse) responseEntity.getBody();
+
+        System.out.println(res);
+        assertThat(res.isSuccess()).isFalse();
+
+    }
+
+    @DisplayName("중복된 이메일인 사용자 회원가입 실패")
+    @Test
+    public void user_회원가입_실패_중복된_이메일() {
+        //given
+        String email = "infomansion@test.com";
+        String password = "testPassword1@";
+        String tel = "01012345678";
+        String username = "testUsername";
+        UserSignUpRequestDto requestDto1 = UserSignUpRequestDto.builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username(username)
+                .build();
+
+        UserSignUpRequestDto requestDto2 = UserSignUpRequestDto.builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username("username")
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/auth/signup";
+
+        //when
+        restTemplate.postForEntity(url, requestDto1, CommonResponse.class);
+        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(url, requestDto2, CommonResponse.class);
+
+        //then
+        System.out.println(responseEntity);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(responseEntity.getBody()).isInstanceOf(BasicResponse.class);
+
+        CommonResponse res = (CommonResponse) responseEntity.getBody();
+
+        assertThat(res.isSuccess()).isFalse();
+        assertThat(res.getData()).isNull();
+
+    }
+
+    @DisplayName("비밀번호 형식에 맞는 사용자 회원가입 성공")
     @Test
     public void user_회원가입_성공() {
         //given
         String email = "infomansion@test.com";
-        String password = "testPassword";
+        String password = "testPassword"+"1"+"$";
         String tel = "01012345678";
         String username = "testUsername";
         UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
@@ -129,6 +205,7 @@ class UserApiControllerTest {
         assertThat(responseEntity.getBody()).isInstanceOf(BasicResponse.class);
 
         CommonResponse res = (CommonResponse) responseEntity.getBody();
+        assertThat(res.isSuccess()).isTrue();
 
         Optional<User> user = userRepository.findById(Long.valueOf((Integer) res.getData()));
 
