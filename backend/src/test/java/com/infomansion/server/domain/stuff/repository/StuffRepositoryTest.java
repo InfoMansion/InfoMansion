@@ -20,9 +20,9 @@ public class StuffRepositoryTest {
     @Autowired
     private StuffRepository stuffRepository;
 
-    @DisplayName("Stuff 생성 성공")
+    @DisplayName("Stuff 생성 및 조회 성공")
     @Test
-    public void Stuff_생성() {
+    public void Stuff_생성_및_조회() {
         String stuffName = "laptop";
         Long price = 30L;
         Category category = Category.IT;
