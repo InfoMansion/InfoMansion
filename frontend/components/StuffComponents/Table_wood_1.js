@@ -9,15 +9,15 @@ export default function Model({ Hover, Click, ...props }) {
   const [name, setName] = useState("Table_wood_1");
   
   // 부모객체의 호버, 클릭 함수 호출
-  function onHover() { Hover(name); }
-  function onClick() { Click(name); }
+  function onHover(e) { Hover(e, name); }
+  function onClick(e) { Click(e, name); }
 
   const group = useRef()
   const { nodes, materials } = useGLTF('/stuffAssets/table_wood_1.glb')
   return (
     <group 
-      onPointerOver={() => onHover()} 
-      onPointerDown={() => onClick()}
+      onPointerOver={(e) => onHover(e)} 
+      onPointerDown={(e) => onClick(e)}
       
       ref={group} dispose={null}
       castShadow

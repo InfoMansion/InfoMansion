@@ -1,7 +1,7 @@
 import { OrbitControls, OrthographicCamera } from '@react-three/drei'
 import {Canvas, useThree, useFrame} from '@react-three/fiber'
 import { useEffect, useState } from 'react'
-import { Camera, Mesh } from 'three'
+import { Camera, Mesh, StaticReadUsage } from 'three'
 import styles from '../styles/Home.module.css'
 
 // wall과 floor는 고정. 
@@ -20,16 +20,24 @@ import Table_wood_1 from './StuffComponents/Table_wood_1'
 
 export default function Room() {
     // 화면 카메라 확대 수준 조절용 변수
-    const [zoomscale, setzoomscale] = useState(70);
+    const [zoomscale, setzoomscale] = useState(80);
 
-    let stuffhover = function(name) {
-        console.log(name);
+    function CanvasHover(e) {
+        useFrame((state) => {
+            const distance = 40;
+            
+            state.camera.position.y = e.nativeEvent.offsetY;
+            state.camera.lookAt(0,0,0);
+        })
+        console.log("canvas " + e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
+        return null;
     }
-    
-    function Hover(name) {
+    function Hover(e, name) {
+        console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
         console.log(name + " 호버");
     }
-    function Click(name) {
+    function Click(e, name) {
+        console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
         console.log(name + " 클릭");
     }
 
@@ -50,9 +58,19 @@ export default function Room() {
 
     return (
         <div 
-            className={styles.container}
-            style={{ width : "600px", height : "700px" }}>
-            <Canvas shadows onCreated={state => state.gl.setClearColor("#fafafa")} >
+            
+            style={{ 
+                width : "600px", 
+                height : "700px",
+                margin : '30px auto'
+                }}>
+            
+            <Canvas 
+                onPointerMove={e => CanvasHover(e)}
+                
+                shadows 
+                onCreated={state => state.gl.setClearColor("#fafafa")} >
+                
                 {/* light */}
                 <pointLight position={[10, 20, 4]} intensity={0.3}/>
                 <directionalLight 
@@ -98,10 +116,10 @@ export default function Room() {
                 {/* 그림자 뱉을 요소 */}
                 {/* 이거 클로저 함수로 컴포넌트 리턴받도록 변경할 것. */}
                 <Table_wood_1 Hover={Hover} Click={Click} position={[12.06, -43, 16.13]}/>
+
                 <Chair Hover={Hover} Click={Click} position={[3.5,0,3.5]}/>
                 <Sofa_large_brown_1 Hover={Hover} Click={Click} position={[1,0,0.3]} />
                 <Shelf_white_medium Hover={Hover} Click={Click} position={[12, -43.01, 16]}/>
-
 
                 <Curtain position={[-1.8,2,1.8]}/>
                 <Plant_orange_medium position={[0.2,0,2.4]}/>
