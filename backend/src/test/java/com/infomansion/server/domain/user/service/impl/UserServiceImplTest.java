@@ -42,11 +42,13 @@ class UserServiceImplTest {
         String password = "testPassword";
         String tel = "01012345678";
         String username = "testUsername1";
+        String categories = "IT,COOK";
         UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
+                .categories(categories)
                 .build();
 
         //when
@@ -65,11 +67,14 @@ class UserServiceImplTest {
         String password = "testPassword";
         String tel = "01012345678";
         String username = "testUsername1";
+        String categories = "IT,COOK";
+
         UserSignUpRequestDto requestDto1 = UserSignUpRequestDto.builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
+                .categories(categories)
                 .build();
 
         username = "testUsername2";
@@ -78,8 +83,8 @@ class UserServiceImplTest {
                 .password(password)
                 .tel(tel)
                 .username(username)
+                .categories(categories)
                 .build();
-
 
         //when
         userService.join(requestDto1);
@@ -98,11 +103,13 @@ class UserServiceImplTest {
         String password = "testPassword";
         String tel = "01012345678";
         String username = "testUsername1";
+        String categories = "IT,COOK";
         UserSignUpRequestDto requestDto1 = UserSignUpRequestDto.builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
+                .categories(categories)
                 .build();
 
         email = "info@test.com";
@@ -111,6 +118,7 @@ class UserServiceImplTest {
                 .password(password)
                 .tel(tel)
                 .username(username)
+                .categories(categories)
                 .build();
 
         //when
@@ -121,4 +129,5 @@ class UserServiceImplTest {
                 .isInstanceOf(CustomException.class);
 
     }
+
 }

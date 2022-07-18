@@ -19,7 +19,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(value = CustomException.class)
-    public ResponseEntity<?> handleCustomException(CustomException e) {
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
         return ErrorResponse.error(e);
     }
 }
