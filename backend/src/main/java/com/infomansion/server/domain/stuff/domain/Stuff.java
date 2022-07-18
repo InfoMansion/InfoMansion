@@ -32,11 +32,12 @@ public class Stuff {
 
 
     @Builder
-    public Stuff(String stuffName, Long price, Category category, int stuffSize, StuffType stuffType) {
+    public Stuff(String stuffName, Long price, Category category, int stuffSize, StuffType stuffType, StuffImage stuffImage) {
         this.stuffName = stuffName;
         this.price = price;
         this.category = category;
         this.stuffSize = stuffSize;
         this.stuffType = stuffType;
+        this.stuffImage = stuffImage;
     }
 }
