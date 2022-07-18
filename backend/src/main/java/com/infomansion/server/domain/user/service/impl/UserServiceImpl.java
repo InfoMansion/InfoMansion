@@ -1,6 +1,8 @@
 package com.infomansion.server.domain.user.service.impl;
 
 import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.dto.UserAuthRequestDto;
+import com.infomansion.server.domain.user.dto.UserChangePasswordDto;
 import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.repository.UserRepository;
@@ -10,6 +12,7 @@ import com.infomansion.server.global.util.exception.ErrorCode;
 import com.infomansion.server.global.util.jwt.ReissueDto;
 import com.infomansion.server.global.util.jwt.TokenDto;
 import com.infomansion.server.global.util.jwt.TokenProvider;
+import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -80,6 +83,27 @@ public class UserServiceImpl implements UserService {
         return tokenDto;
     }
 
+    @Override
+    public boolean authBeforeChangePassword(UserAuthRequestDto requestDto) {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if(!passwordEncoder.matches(requestDto.getCurrentPassword(), user.getPassword())) {
+            throw new CustomException(ErrorCode.WRONG_PASSWORD);
+        }
+
+        return true;
+    }
+
+    @Transactional
+    public Long changePasswordAfterAuth(UserChangePasswordDto requestDto) {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.changePassword(passwordEncoder.encode(requestDto.getNewPassword()));
+
+        return user.getId();
+    }
 
     private void validateDuplicateUser(UserSignUpRequestDto requestDto) {
         // email 중복 검증

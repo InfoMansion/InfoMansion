@@ -37,4 +37,11 @@ public class User {
     public void grantToAdmin() {
         this.authority = UserAuthority.ROLE_ADMIN;
     }
+
+    /**
+     * User의 password 재설정 메서드
+     */
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
