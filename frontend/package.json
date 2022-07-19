@@ -11,7 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
-    "@mui/material": "^5.8.7",
+    "@mui/material": "^5.9.0",
     "@react-three/drei": "^9.17.1",
     "@react-three/fiber": "^8.1.0",
     "next": "12.2.2",
@@ -29,7 +29,7 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0"
   },
-  "eslintConfig" : {
-    "extends" : "react-app"
+  "eslintConfig": {
+    "extends": "react-app"
   }
 }

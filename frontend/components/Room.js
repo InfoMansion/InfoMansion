@@ -1,6 +1,6 @@
 import { OrbitControls, OrthographicCamera } from '@react-three/drei'
 import {Canvas, useThree, useFrame} from '@react-three/fiber'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Camera, Mesh, StaticReadUsage } from 'three'
 import styles from '../styles/Home.module.css'
 
@@ -18,20 +18,11 @@ import Table_brown_small_1 from './StuffComponents/Table_brown_small_1'
 import Table_side_black_1 from './StuffComponents/Table_side_black_1'
 import Table_wood_1 from './StuffComponents/Table_wood_1'
 
-export default function Room() {
-    // 화면 카메라 확대 수준 조절용 변수
-    const [zoomscale, setzoomscale] = useState(80);
+export default function Room( {...props} ) {
 
-    function CanvasHover(e) {
-        useFrame((state) => {
-            const distance = 40;
-            
-            state.camera.position.y = e.nativeEvent.offsetY;
-            state.camera.lookAt(0,0,0);
-        })
-        console.log("canvas " + e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
-        return null;
-    }
+    // 화면 카메라 확대 수준 조절용 변수
+    const [zoomscale, setzoomscale] = useState(90);
+
     function Hover(e, name) {
         console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
         console.log(name + " 호버");
@@ -51,22 +42,23 @@ export default function Room() {
             state.camera.position.y = distance;
             state.camera.position.z = distance;
             
+            // console.log(e);
             state.camera.lookAt(0, 0, 0);
         })
         return null
-      }
+    }
 
     return (
         <div 
             
             style={{ 
-                width : "600px", 
-                height : "700px",
-                margin : '30px auto'
+                width : "650px", 
+                height : "800px",
+                // margin : '30px auto'
                 }}>
             
             <Canvas 
-                onPointerMove={e => CanvasHover(e)}
+                onPointerMove={console.log("호버호버")}
                 
                 shadows 
                 onCreated={state => state.gl.setClearColor("#fafafa")} >
@@ -92,18 +84,8 @@ export default function Room() {
                 <ambientLight intensity={0.2} />
 
                 {/* camera */}
-                <OrthographicCamera makeDefault zoom={zoomscale} />
                 <RoomCamera />
-
-                {/* 그림자 테스트용 */}
-                {/* <mesh castShadow position={[2,2,2]}>
-                    <boxBufferGeometry attatch="geometry" />
-                    <meshLambertMaterial attatch="material" color="orange" />
-                </mesh>
-                <mesh receiveShadow position={[2,-1.5,2]} scale={3}>
-                    <boxBufferGeometry attatch="geometry" />
-                    <meshLambertMaterial attatch="material" color="white" />
-                </mesh> */}
+                <OrthographicCamera makeDefault zoom={zoomscale} />
                 
                 {/* 실제 구현될 방 요소 */}
                 {/* 그림자를 받을 요소, 그림자를 뱉을 요소로 나눔. */}

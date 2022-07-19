@@ -12,7 +12,7 @@ export default function Headernav() {
                     </Link>
                 </li>
                 <li>
-                    <Link href="/RoomPage">
+                    <Link href="/RoomPage/1">
                         <a>Roompage</a>
                     </Link>
                 </li>
