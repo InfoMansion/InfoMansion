@@ -19,6 +19,7 @@ import Table_side_black_1 from './StuffComponents/Table_side_black_1'
 import Table_wood_1 from './StuffComponents/Table_wood_1'
 
 export default function Room( {...props} ) {
+    const [roomID] = useState(props.roomID);
 
     // 화면 카메라 확대 수준 조절용 변수
     const [zoomscale, setzoomscale] = useState(90);

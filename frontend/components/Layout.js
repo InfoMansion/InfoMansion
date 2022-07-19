@@ -13,8 +13,6 @@ const Root = styled('div')(({ theme }) => ({
       width : '1280px',
     },
   }));
-  
-  
 
 export default function Mainframe({children}) {
     return (
