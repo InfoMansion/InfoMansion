@@ -1,34 +1,20 @@
 package com.infomansion.server.domain.user.api;
 
 import com.infomansion.server.domain.user.domain.User;
-import com.infomansion.server.domain.user.dto.UserChangePasswordDto;
 import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import com.infomansion.server.global.apispec.ErrorResponse;
-import com.infomansion.server.global.util.jwt.TokenDto;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithSecurityContext;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -285,4 +271,5 @@ class UserApiControllerTest {
         assertThat(response.isSuccess()).isTrue();
 
     }
+
 }

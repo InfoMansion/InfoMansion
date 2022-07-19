@@ -1,12 +1,8 @@
 package com.infomansion.server.domain.user.domain;
 
-import com.infomansion.server.domain.category.Category;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
 @ToString
 @Getter
@@ -39,6 +35,12 @@ public class User {
         this.categories = categories;
     }
 
+    /**
+     * 관심 카테고리 변경 메서드
+     */
+    public void changeCategories(String categories) {
+        this.categories = categories;
+    }
 
     /**
      * Admin으로 권한을 상승시키는 메서드
