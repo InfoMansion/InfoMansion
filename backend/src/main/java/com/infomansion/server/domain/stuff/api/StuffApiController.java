@@ -25,29 +25,24 @@ public class StuffApiController {
                 .body(new CommonResponse<>(stuffService.createStuff(requestDto)));
     }
 
-    @PostMapping("/api/v1/stuff/create")
-    public ResponseEntity<CommonResponse<Stuff>> createStuff(@Valid @RequestBody StuffCreateRequestDto requestDto) {
-        return null;
-    }
-
-    @GetMapping("/api/v1/stuff")
-    public ResponseEntity<CommonResponse<List<Stuff>>> findAllStuff() {
-        return null;
-    }
-
-    @GetMapping("/api/v1/stuff")
-    public ResponseEntity<CommonResponse<Stuff>> findStuffById(@Valid @RequestParam StuffRequestDto requestDto) {
-        return null;
-    }
-
-    @PutMapping("/api/v1/stuff")
-    public ResponseEntity<CommonResponse<Integer>> updateStuff(@Valid @RequestBody StuffUpdateRequestDto requestDto) {
-        return null;
-    }
-
-    @DeleteMapping("/api/v1/stuff")
-    public ResponseEntity<CommonResponse<Integer>> removeStuff(@Valid @RequestParam StuffRequestDto requestDto) {
-        return null;
-    }
+//    @GetMapping("/api/v1/stuff")
+//    public ResponseEntity<CommonResponse<List<Stuff>>> findAllStuff() {
+//        return null;
+//    }
+//
+//    @GetMapping("/api/v1/stuff/{stuff_id}")
+//    public ResponseEntity<CommonResponse<Stuff>> findStuffById(@PathVariable Long stuff_id) {
+//        return null;
+//    }
+//
+//    @PutMapping("/api/v1/stuff/{stuff_id}")
+//    public ResponseEntity<CommonResponse<Integer>> updateStuff(@PathVariable Long stuff_id, @Valid @RequestBody StuffRequestDto requestDto) {
+//        return null;
+//    }
+//
+//    @DeleteMapping("/api/v1/stuff/{stuff_id}")
+//    public ResponseEntity<CommonResponse<Integer>> removeStuff(@Valid @PathVariable Long stuff_id) {
+//        return null;
+//    }
 
 }

@@ -29,6 +29,7 @@ public enum ErrorCode {
 
     // STUFF
     NOT_VALID_STUFF_ID(HttpStatus.BAD_REQUEST, 40050, "유효하지 않은 Stuff id입니다.");
+
     private final HttpStatus status;
     private final int code;
     private final String message;
