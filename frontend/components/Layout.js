@@ -7,7 +7,7 @@ const Root = styled('div')(({ theme }) => ({
     
   
     [theme.breakpoints.down('lg')]: {
-      width : '600px'
+      width : '650px'
     },
     [theme.breakpoints.up('lg')]: {
       width : '1280px',
