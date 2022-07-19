@@ -21,12 +21,16 @@ public class UserSignUpRequestDto {
     @NotBlank
     private String tel;
 
+    @NotBlank
+    private String categories;
+
     @Builder
-    public UserSignUpRequestDto(String email, String password, String username, String tel) {
+    public UserSignUpRequestDto(String email, String password, String username, String tel, String categories) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.tel = tel;
+        this.categories = categories;
     }
 
     public User toEntityWithEncryptPassword(PasswordEncoder passwordEncoder) {
@@ -35,6 +39,7 @@ public class UserSignUpRequestDto {
                 .password(passwordEncoder.encode(password))
                 .tel(tel)
                 .username(username)
+                .categories(categories)
                 .build();
     }
 }

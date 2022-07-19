@@ -1,6 +1,6 @@
 package com.infomansion.server.domain.stuff.repository;
 
-import com.infomansion.server.domain.stuff.domain.Category;
+import com.infomansion.server.domain.category.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.domain.StuffType;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +27,7 @@ public class StuffRepositoryTest {
         Long price = 30L;
         Category category = Category.IT;
         int stuffSize = 2;
-        StuffType stuffType = StuffType.S;
+        StuffType stuffType = StuffType.STUFF;
         Stuff stuff = Stuff.builder()
                 .stuffName(stuffName)
                 .price(price)

@@ -1,12 +1,9 @@
 package com.infomansion.server.domain.user.api;
 
-import com.infomansion.server.domain.user.dto.UserAuthRequestDto;
-import com.infomansion.server.domain.user.dto.UserChangePasswordDto;
-import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
+import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
-import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.global.util.jwt.ReissueDto;
 import com.infomansion.server.global.util.jwt.TokenDto;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +47,11 @@ public class UserApiController {
     public ResponseEntity<? extends BasicResponse> userChangePassword(@Valid @RequestBody UserChangePasswordDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userService.changePasswordAfterAuth(requestDto)));
+    }
+
+    @PatchMapping("/api/v1/users/categories")
+    public ResponseEntity<? extends BasicResponse> userChangeCategories(@Valid @RequestBody UserChangeCategoriesDto requestDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userService.changeCategories(requestDto)));
     }
 }

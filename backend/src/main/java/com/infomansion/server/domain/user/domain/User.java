@@ -19,16 +19,27 @@ public class User {
     private String username;
     private String tel;
 
+    @Column(length = 200)
+    private String categories;
+
     @Enumerated(EnumType.STRING)
     private UserAuthority authority;
 
     @Builder
-    public User(String email, String password, String username, String tel) {
+    public User(String email, String password, String username, String tel, String categories) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.tel = tel;
         this.authority = UserAuthority.ROLE_USER;
+        this.categories = categories;
+    }
+
+    /**
+     * 관심 카테고리 변경 메서드
+     */
+    public void changeCategories(String categories) {
+        this.categories = categories;
     }
 
     /**

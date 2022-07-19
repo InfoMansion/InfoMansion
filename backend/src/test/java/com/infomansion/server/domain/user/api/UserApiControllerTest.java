@@ -1,34 +1,20 @@
 package com.infomansion.server.domain.user.api;
 
 import com.infomansion.server.domain.user.domain.User;
-import com.infomansion.server.domain.user.dto.UserChangePasswordDto;
 import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import com.infomansion.server.global.apispec.ErrorResponse;
-import com.infomansion.server.global.util.jwt.TokenDto;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithSecurityContext;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,11 +45,13 @@ class UserApiControllerTest {
         String password = "testPassword1@";
         String tel = "01012345678";
         String username = "testUsername";
+        String categories = "IT,COOK";
         UserSignUpRequestDto signUpRequestDto = UserSignUpRequestDto.builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
+                .categories(categories)
                 .build();
         UserLoginRequestDto loginRequestDto = new UserLoginRequestDto(email, password);
 
@@ -101,7 +89,7 @@ class UserApiControllerTest {
 
         //when
         restTemplate.postForEntity(signUpUrl, signUpRequestDto, CommonResponse.class);
-        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(loginUrl, loginRequestDto, CommonResponse.class);
+        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(loginUrl, loginRequestDto, ErrorResponse.class);
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
@@ -135,8 +123,8 @@ class UserApiControllerTest {
 
         ErrorResponse res = (ErrorResponse) responseEntity.getBody();
 
-        System.out.println(res);
         assertThat(res.isSuccess()).isFalse();
+        assertThat(res.getCode()).isEqualTo(40031);
 
     }
 
@@ -148,11 +136,13 @@ class UserApiControllerTest {
         String password = "testPassword1@";
         String tel = "01012345678";
         String username = "testUsername";
+        String categories = "IT";
         UserSignUpRequestDto requestDto1 = UserSignUpRequestDto.builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
+                .categories(categories)
                 .build();
 
         UserSignUpRequestDto requestDto2 = UserSignUpRequestDto.builder()
@@ -160,39 +150,41 @@ class UserApiControllerTest {
                 .password(password)
                 .tel(tel)
                 .username("username")
+                .categories(categories)
                 .build();
 
         String url = "http://localhost:" + port + "/api/v1/auth/signup";
 
         //when
-        restTemplate.postForEntity(url, requestDto1, CommonResponse.class);
-        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(url, requestDto2, CommonResponse.class);
+        restTemplate.postForEntity(url, requestDto1, ErrorResponse.class);
+        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(url, requestDto2, ErrorResponse.class);
 
         //then
-        System.out.println(responseEntity);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(responseEntity.getBody()).isInstanceOf(BasicResponse.class);
 
-        CommonResponse res = (CommonResponse) responseEntity.getBody();
+        ErrorResponse res = (ErrorResponse) responseEntity.getBody();
 
         assertThat(res.isSuccess()).isFalse();
-        assertThat(res.getData()).isNull();
+        assertThat(res.getCode()).isEqualTo(40002);
 
     }
 
     @DisplayName("비밀번호 형식에 맞는 사용자 회원가입 성공")
     @Test
-    public void user_회원가입_성공() {
+    public void user_올바른_비밀번호_회원가입_성공() {
         //given
         String email = "infomansion@test.com";
         String password = "testPassword"+"1"+"$";
         String tel = "01012345678";
         String username = "testUsername";
+        String categories = "IT,COOK";
         UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
+                .categories(categories)
                 .build();
 
         String url = "http://localhost:" + port + "/api/v1/auth/signup";
@@ -215,4 +207,69 @@ class UserApiControllerTest {
         assertThat(user.get().getUsername()).isEqualTo(username);
 
     }
+
+    @DisplayName("올바르지 않은 카테고리를 지정한 사용자는 회원가입을 실패합니다.")
+    @Test
+    public void 올바르지_않은_카테고리를_지정한_사용자는_회원가입_실패() {
+        //given
+        String email = "infomansion@test.com";
+        String password = "testPassword"+"1"+"$";
+        String tel = "01012345678";
+        String username = "testUsername";
+        String categories = "SSAFY,IT";
+        UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username(username)
+                .categories(categories)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/auth/signup";
+
+        //when
+        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(url, requestDto, ErrorResponse.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(responseEntity.getBody()).isInstanceOf(BasicResponse.class);
+
+        ErrorResponse response = (ErrorResponse) responseEntity.getBody();
+
+        assertThat(response.getCode()).isEqualTo(40040);
+
+    }
+
+    @DisplayName("올바른 카테고리를 지정한 사용자는 회원가입에 성공합니다.")
+    @Test
+    public void 올바른_카테고리를_지정한_사용자는_회원가입_성공() {
+        //given
+        String email = "infomansion@test.com";
+        String password = "testPassword"+"1"+"$";
+        String tel = "01012345678";
+        String username = "testUsername";
+        String categories = "IT,COOK";
+        UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username(username)
+                .categories(categories)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/auth/signup";
+
+        //when
+        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(url, requestDto, CommonResponse.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isInstanceOf(BasicResponse.class);
+
+        CommonResponse response = (CommonResponse) responseEntity.getBody();
+
+        assertThat(response.isSuccess()).isTrue();
+
+    }
+
 }

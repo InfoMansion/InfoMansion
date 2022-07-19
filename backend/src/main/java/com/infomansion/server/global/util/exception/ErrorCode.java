@@ -22,7 +22,10 @@ public enum ErrorCode {
 
     // VALIDATION
     NOT_SUPPORTED_HTTP_METHOD(HttpStatus.BAD_REQUEST, 40030,"지원하지 않는 Http Method 방식입니다."),
-    NOT_VALID_METHOD_ARGUMENT(HttpStatus.BAD_REQUEST,40031,"유효하지 않은 Request Body 혹은 Argument입니다.");
+    NOT_VALID_METHOD_ARGUMENT(HttpStatus.BAD_REQUEST,40031,"유효하지 않은 Request Body 혹은 Argument입니다."),
+
+    // CATEGORY
+    NOT_VALID_CATEGORY(HttpStatus.BAD_REQUEST, 40040, "유효하지 않은 카테고리입니다.");
 
     private final HttpStatus status;
     private final int code;
