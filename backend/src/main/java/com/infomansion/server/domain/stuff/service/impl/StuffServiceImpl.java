@@ -1,6 +1,8 @@
 package com.infomansion.server.domain.stuff.service.impl;
 
+import com.infomansion.server.domain.category.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
+import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
@@ -22,21 +24,29 @@ public class StuffServiceImpl implements StuffService {
     private final StuffRepository stuffRepository;
 
     @Override
-    @Transactional
     public Long createStuff(StuffRequestDto requestDto) {
         return stuffRepository.save(requestDto.toEntity()).getId();
     }
 
     @Override
     public Long updateStuff(Long stuff_id, StuffRequestDto requestDto) {
-        return stuffRepository.save(requestDto.toEntity()).getId();
+        validationStuffId(stuff_id);
+        stuffRepository.findById(stuff_id).get();
+        Stuff newStuff = Stuff.builder()
+                .id(stuff_id)
+                .stuffName(requestDto.getStuffName())
+                .stuffNameKor(requestDto.getStuffNameKor())
+                .price(requestDto.getPrice())
+                .stuffType(StuffType.valueOf(requestDto.getStuffType()))
+                .category(Category.valueOf(requestDto.getCategory()))
+                .build();
+        return stuffRepository.save(newStuff).getId();
     }
 
     @Override
     public StuffResponseDto findStuffById(Long stuff_id) {
         Stuff stuff = stuffRepository.findById(stuff_id)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_VALID_STUFF_ID));
-
         return new StuffResponseDto(stuff);
     }
 
@@ -50,6 +60,11 @@ public class StuffServiceImpl implements StuffService {
 
     @Override
     public void removeStuff(Long stuff_id) {
+        validationStuffId(stuff_id);
         stuffRepository.deleteById(stuff_id);
+    }
+
+    private void validationStuffId(Long stuff_id) {
+        if(!stuffRepository.existsById(stuff_id)) throw new CustomException(ErrorCode.NOT_VALID_STUFF_ID);
     }
 }

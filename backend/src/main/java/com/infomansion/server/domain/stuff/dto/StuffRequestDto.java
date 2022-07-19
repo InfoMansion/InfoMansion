@@ -1,7 +1,7 @@
 package com.infomansion.server.domain.stuff.dto;
 
 
-import com.infomansion.server.domain.stuff.domain.Category;
+import com.infomansion.server.domain.category.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.global.util.validation.ValidEnum;
@@ -26,10 +26,10 @@ public class StuffRequestDto {
     @Min(0)
     @NotNull
     private Long price;
-    @ValidEnum(enumClass = Category.class, ignoreCase = true, message = "유효하지 않은 카테고리입니다.")
+    @ValidEnum(enumClass = Category.class, ignoreCase = true)
     @NotBlank
     private String category;
-    @ValidEnum(enumClass = StuffType.class, ignoreCase = true, message = "유효하지 않은 타입입니다.")
+    @ValidEnum(enumClass = StuffType.class, ignoreCase = true)
     @NotBlank
     private String stuffType;
 
