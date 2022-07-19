@@ -1,86 +1,63 @@
 package com.infomansion.server.domain.stuff.api;
 
-import com.infomansion.server.domain.stuff.domain.Category;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.infomansion.server.domain.category.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
+import com.infomansion.server.domain.stuff.service.StuffService;
+import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
+import com.infomansion.server.global.config.SecurityConfig;
+import com.infomansion.server.global.util.security.WithCustomUserDetails;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+
+@WebMvcTest(controllers = StuffApiController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class StuffApiControllerTest {
 
-    @LocalServerPort
-    private int port;
-
     @Autowired
-    private TestRestTemplate restTemplate;
+    private MockMvc mockMvc;
 
-    @Autowired
-    private StuffRepository stuffRepository;
+    @MockBean
+    private StuffService stuffService;
 
-    @AfterEach
-    public void cleanUp() {
-        stuffRepository.deleteAll();
-    }
-
-    @DisplayName("Stuff 생성 성공")
+    @DisplayName("유효한 Enum 값이 아니면 Stuff 생성이 불가능합니다.")
+    @WithMockUser(roles = "USER")
     @Test
-    public void stuff_생성_성공() {
-        // given
-        String stuffName = "notebook";
-        String stuffNameKor = "노트북";
-        Long price = 30L;
-        String category = "IT";
-        String stuffType = "STUFF";
-
-        StuffRequestDto requestDto = StuffRequestDto.builder()
-                .stuffName(stuffName)
-                .stuffNameKor(stuffNameKor)
-                .price(price)
-                .category(category)
-                .stuffType(stuffType)
-                .build();
-
-        String createUrl = "http://localhost:" + port + "/api/v1/stuff/create";
-
-        //when
-        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(createUrl, requestDto, CommonResponse.class);
-
-        //then
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(responseEntity.getBody()).isInstanceOf(BasicResponse.class);
-
-        CommonResponse res = (CommonResponse) responseEntity.getBody();
-
-        Optional<Stuff> stuff = stuffRepository.findById(Long.valueOf((Integer)res.getData()));
-
-        assertThat(stuff.get().getStuffName()).isEqualTo(stuffName);
-        assertThat(stuff.get().getStuffNameKor()).isEqualTo(stuffNameKor);
-        assertThat(stuff.get().getPrice()).isEqualTo(price);
-        assertThat(stuff.get().getCategory()).isEqualTo(Category.valueOf(category));
-        assertThat(stuff.get().getStuffType()).isEqualTo(StuffType.valueOf(stuffType));
-    }
-
-    @DisplayName("Stuff 생성 실패")
-    @Test
-    public void stuff_생성_실패() {
+    public void stuff_생성_실패() throws Exception {
         // given
         String stuffName = "notebook";
         String stuffNameKor = "노트북";
@@ -96,12 +73,16 @@ public class StuffApiControllerTest {
                 .stuffType(stuffType)
                 .build();
 
-        String createUrl = "http://localhost:" + port + "/api/v1/auth/stuff/create";
+        ObjectMapper objectMapper = new ObjectMapper();
+        String s = objectMapper.writeValueAsString(requestDto);
 
-        //when
-        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(createUrl, requestDto, CommonResponse.class);
-        System.out.println("responseEntity = " + responseEntity);
-        //then
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        mockMvc.perform(
+                post("/api/v1/stuff/create")
+                        .content(s)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value("false"));
     }
+
 }
