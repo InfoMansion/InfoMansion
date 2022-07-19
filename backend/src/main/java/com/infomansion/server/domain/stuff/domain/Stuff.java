@@ -4,9 +4,11 @@ import com.infomansion.server.domain.category.Category;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
+@ToString
 @Getter
 @NoArgsConstructor
 @Entity
