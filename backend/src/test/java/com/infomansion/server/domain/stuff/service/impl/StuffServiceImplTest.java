@@ -1,20 +1,17 @@
 package com.infomansion.server.domain.stuff.service.impl;
 
-import com.infomansion.server.domain.stuff.domain.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
-import com.infomansion.server.domain.stuff.domain.StuffType;
-import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
+import com.infomansion.server.domain.stuff.dto.StuffCreateRequestDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.stuff.service.StuffService;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
+import javax.swing.text.html.Option;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -41,7 +38,7 @@ public class StuffServiceImplTest {
         String category = "IT";
         String stuffType = "STUFF";
 
-        StuffRequestDto requestDto = StuffRequestDto.builder()
+        StuffCreateRequestDto requestDto = StuffCreateRequestDto.builder()
                 .stuffName(stuffName)
                 .stuffNameKor(stuffNameKor)
                 .price(price)
@@ -50,10 +47,10 @@ public class StuffServiceImplTest {
                 .build();
 
         // when
-        Long stuff_id = stuffService.createStuff(requestDto);
+        Stuff stuff = stuffService.createStuff(requestDto);
 
         // then
-        Optional<Stuff> findStuff = stuffRepository.findById(stuff_id);
+        Optional<Stuff> findStuff = stuffRepository.findById(stuff.getId());
         assertThat(findStuff.get().getStuffNameKor()).isEqualTo(stuffNameKor);
 
     }
