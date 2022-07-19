@@ -25,7 +25,12 @@ public enum ErrorCode {
     NOT_VALID_METHOD_ARGUMENT(HttpStatus.BAD_REQUEST,40031,"유효하지 않은 Request Body 혹은 Argument입니다."),
 
     // CATEGORY
-    NOT_VALID_CATEGORY(HttpStatus.BAD_REQUEST, 40040, "유효하지 않은 카테고리입니다.");
+    NOT_VALID_CATEGORY(HttpStatus.BAD_REQUEST, 40040, "유효하지 않은 카테고리입니다."),
+
+
+
+    //== 404 ==//
+    VERIFY_KEY_NOT_FOUND(HttpStatus.NOT_FOUND, 40400, "인증 키를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final int code;

@@ -5,6 +5,7 @@ import com.infomansion.server.domain.user.dto.UserChangeCategoriesDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.user.service.UserService;
+import com.infomansion.server.domain.user.service.VerifyEmailService;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.security.WithCustomUserDetails;
 import org.assertj.core.api.Assertions;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
@@ -28,6 +30,9 @@ class UserServiceImplTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @MockBean
+    private VerifyEmailService verifyEmailService;
 
     @BeforeEach
     public void setUp() {

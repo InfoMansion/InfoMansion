@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
@@ -120,6 +119,18 @@ public class UserServiceImpl implements UserService {
         user.changeCategories(requestDto.getCategories());
 
         return user.getId();
+    }
+
+    @Override
+    @Transactional
+    public boolean verifiedByEmail(String key) {
+        String email = verifyEmailService.verifyEmail(key);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.grantFromTempToUser();
+        return true;
     }
 
     private void validateCategory(String requestCategories) {
