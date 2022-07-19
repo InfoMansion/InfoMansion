@@ -1,8 +1,8 @@
 package com.infomansion.server.domain.user.service.impl;
 
+import com.infomansion.server.domain.category.Category;
 import com.infomansion.server.domain.user.domain.User;
-import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
-import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
+import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.global.util.exception.CustomException;
@@ -10,6 +10,7 @@ import com.infomansion.server.global.util.exception.ErrorCode;
 import com.infomansion.server.global.util.jwt.ReissueDto;
 import com.infomansion.server.global.util.jwt.TokenDto;
 import com.infomansion.server.global.util.jwt.TokenProvider;
+import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +20,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
 
@@ -39,6 +43,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Long join(UserSignUpRequestDto requestDto) {
         validateDuplicateUser(requestDto);
+        validateCategory(requestDto.getCategories());
         return userRepository.save(requestDto.toEntityWithEncryptPassword(passwordEncoder)).getId();
     }
 
@@ -80,6 +85,51 @@ public class UserServiceImpl implements UserService {
         return tokenDto;
     }
 
+    @Override
+    public boolean authBeforeChangePassword(UserAuthRequestDto requestDto) {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if(!passwordEncoder.matches(requestDto.getCurrentPassword(), user.getPassword())) {
+            throw new CustomException(ErrorCode.WRONG_PASSWORD);
+        }
+
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public Long changePasswordAfterAuth(UserChangePasswordDto requestDto) {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.changePassword(passwordEncoder.encode(requestDto.getNewPassword()));
+
+        return user.getId();
+    }
+
+    @Transactional
+    public Long changeCategories(UserChangeCategoriesDto requestDto) {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        validateCategory(requestDto.getCategories());
+        user.changeCategories(requestDto.getCategories());
+
+        return user.getId();
+    }
+
+    private void validateCategory(String requestCategories) {
+        List<String> categories = new ArrayList<>();
+        for (Category value : Category.values()) {
+            categories.add(value.name());
+        }
+
+        StringTokenizer st = new StringTokenizer(requestCategories,",");
+        while(st.hasMoreTokens()) {
+            if(!categories.contains(st.nextToken())) throw new CustomException(ErrorCode.NOT_VALID_CATEGORY);
+        }
+    }
 
     private void validateDuplicateUser(UserSignUpRequestDto requestDto) {
         // email 중복 검증
