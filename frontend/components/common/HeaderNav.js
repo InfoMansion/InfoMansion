@@ -93,7 +93,15 @@ export default function DenseAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" style={{ background: '#FFFFFF' }}>
-        <Toolbar variant="dense" style={{ justifyContent: 'space-evenly' }}>
+        <Toolbar
+          variant="dense"
+          style={{
+            justifyContent: 'space-between',
+            maxWidth: '1280px',
+            width: '100%',
+            margin: '0 auto',
+          }}
+        >
           <Link href="/">
             <div
               style={{
@@ -147,7 +155,6 @@ export default function DenseAppBar() {
               <AccountCircle />
             </IconButton>
           </div>
-          <Typography variant="h6" color="inherit" component="div"></Typography>
         </Toolbar>
       </AppBar>
       {renderMenu}
