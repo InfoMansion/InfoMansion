@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Card, Divider, Grid, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles'
 import { maxWidth } from "@mui/system";
 import { useState } from "react";
@@ -34,9 +34,6 @@ export default function UserInfo( {...props} ) {
                     p : 2
                 }}
                 container
-                xs={{
-                    width : '600px'
-                }}
             >
                 <Grid item xs={3}>
                     <Avatar 
@@ -53,10 +50,20 @@ export default function UserInfo( {...props} ) {
 
                 </Grid>
                 <Grid item xs={9}>
-                    <Typography>{userinfo.username}</Typography>
-                    <Typography>{userinfo.email}</Typography>
+                    <Typography
+                        variant='h4'
+                    >
+                        {userinfo.username}
+                    </Typography>
+                    <Typography
+                        variant="body2"
+                        color="text.secondary"
+                    >
+                        {userinfo.email}
+                    </Typography>
                 </Grid>
-
+            
+            <Divider />
             <Typography
                 sx={{
                     m : 2,
@@ -64,8 +71,7 @@ export default function UserInfo( {...props} ) {
                 >
                 {userinfo.introduction}
             </Typography>
-
-
+            
             <RecentPost />
                 </Grid>
         </Card>

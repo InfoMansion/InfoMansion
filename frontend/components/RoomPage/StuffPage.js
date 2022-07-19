@@ -38,71 +38,76 @@ export default function StuffPage( {...props} ) {
     ])
 
     return (
-        <>
-            <Paper
-                sx={{
-                    p : 1,
-                    width : '650px'
-                }}
-            >
+        <Paper
+            style={{
+                backgroundColor : 'rgba(255,255,255,0.5)'
+            }}
+            sx={{
+                p : 1,
+                width : '650px',
+                position : 'absolute',
+                zIndex : 'tooltip'
+            }}
+        >
+            
+            {posts.map( post => (
                 
-                {posts.map( post => (
-                    
-                    <Card 
+                <Card 
+                    sx={{
+                        height : '150px',
+                        my : 1,
+                    }}
+                >
+                    <CardActionArea
                         sx={{
-                            height : '150px',
-                            my : 1
+                            display : 'flex',
                         }}
+                        onClick={() => console.log(post.name)}
                     >
-                        <CardActionArea
+                        <CardMedia
+                            component="img"
+                            sx={{
+                                height : 150,
+                                width : 150,
+                            }}
+                            image={`/image/${post.image}`}
+                            alt='no img'
+                        />
+                        
+                        <CardContent
                             sx={{
                                 display : 'flex',
+                                flexDirection : 'column', 
                             }}
-                            onClick={() => console.log(post.name)}
                         >
-                            <CardMedia
-                                component="img"
+                            <Typography
+                                variant="h6"
+                                color="text.primary"
+                            >
+                                {post.name}
+                            </Typography>
+
+                            <Divider sx={{m : 1}}/>
+
+                            <Typography
+                                variant="body2"
+                                color='text.secondary'
                                 sx={{
-                                    height : 150,
-                                    width : 150,
-                                }}
-                                image={`/image/${post.image}`}
-                                alt='no img'
-                            />
-                            
-                            <CardContent
-                                sx={{
-                                    display : 'flex',
-                                    flexDirection : 'column', 
+                                    // height : 10
                                 }}
                             >
-                                <Typography
-                                    variant="h6"
-                                    color="text.primary"
-                                >
-                                    {post.name}
-                                </Typography>
-                                <Divider sx={{m : 1}}/>
-                                <Typography
-                                    variant="body2"
-                                    color='text.secondary'
-                                    sx={{
-                                        // height : 10
-                                    }}
-                                >
-                                    { 
-                                        ((post.content).length > maxcontent) ?
-                                        
-                                        (((post.content).substring(0, maxcontent-3)) + '...') 
-                                        : mytextvar 
-                                    }
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                ))}
+                                { 
+                                    ((post.content).length > maxcontent) ?
+                                    
+                                    (((post.content).substring(0, maxcontent-3)) + '...') 
+                                    : mytextvar 
+                                }
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                </Card>
+            ))}
 
-            </Paper>
-        </>
+        </Paper>
     )
 }

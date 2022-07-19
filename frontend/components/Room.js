@@ -18,7 +18,7 @@ import Table_brown_small_1 from './StuffComponents/Table_brown_small_1'
 import Table_side_black_1 from './StuffComponents/Table_side_black_1'
 import Table_wood_1 from './StuffComponents/Table_wood_1'
 
-export default function Room( {...props} ) {
+export default function Room( { StuffClick, ...props} ) {
     const [roomID] = useState(props.roomID);
 
     // 화면 카메라 확대 수준 조절용 변수
@@ -31,6 +31,9 @@ export default function Room( {...props} ) {
     function Click(e, name) {
         console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
         console.log(name + " 클릭");
+
+        // RoomPage의 stuffClick 함수 실행시키기.
+        StuffClick(name);
     }
 
     function RoomCamera() {
@@ -59,10 +62,10 @@ export default function Room( {...props} ) {
                 }}>
             
             <Canvas 
-                onPointerMove={console.log("호버호버")}
+                onPointerMove={() => console.log("호버호버")}
                 
                 shadows 
-                onCreated={state => state.gl.setClearColor("#fafafa")} >
+                onCreated={state => state.gl.setClearColor("#ffffff")} >
                 
                 {/* light */}
                 <pointLight position={[10, 20, 4]} intensity={0.3}/>

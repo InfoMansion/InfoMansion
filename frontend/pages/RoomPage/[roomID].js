@@ -8,7 +8,12 @@ import StuffPage from "../../components/RoomPage/StuffPage";
 
 export default function RoomPage() {
     const [roomID, setRoomID] = useState(useRouter().query.roomID);
-    const [stuffon, setStuffon] = useState(false);
+    const [stuffon, setStuffon] = useState('');
+
+    function StuffClick(name) {
+        console.log("방에서 디버그" + name);
+        setStuffon(!stuffon);
+    }
 
     // userID 가져오는 코드 작성해야 함.
     // 아직 작동은 안하지만, 사용자별 방을 보여줄 때 활용할 변수.
@@ -36,8 +41,19 @@ export default function RoomPage() {
                 </Grid>
                 <Grid item lg={7}>
                     {/* 여기에 post 페이지 */}
+                    {/* arcodian을 히든 상태로 absolute 걸어놓고, 확장시키기 */}
                     {
-                        (stuffon) ? <StuffPage />
+                        (stuffon) ?
+                            <div>
+                                <StuffPage />
+                                {/* 이거 아코디언으로 늘리기 */}
+                                <Box
+                                    sx={{
+                                        height : '300px'
+                                    }}
+                                ></Box>
+
+                            </div>
                         : <></>
                     }
                     <Box
@@ -46,7 +62,7 @@ export default function RoomPage() {
                         }}
                     >
                         {/* Room 위치를 absolute로 잡고, 이를 stuff페이지 크기를 보고 적당히 아래로 밀어내기 */}
-                        <Room roomID={roomID} />
+                        <Room StuffClick={StuffClick} roomID={roomID} />
                     </Box>
                 </Grid>
             </Grid>
