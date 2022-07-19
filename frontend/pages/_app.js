@@ -1,22 +1,19 @@
-import Head from 'next/head'
-import Mainframe from '../components/Mainframe'
-import '../styles/globals.css'
-import { RecoilRoot } from 'recoil'
+import Head from "next/head";
+import Layout from "../components/Layout";
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <link rel="icon" href="/favicon.ico"/>
-        <title>InfoMaision</title>
+        <link rel="icon" href="/favicon.ico" />
+        <title>InfoMansion</title>
       </Head>
-      <RecoilRoot>
-      <Mainframe>
+      <Layout>
         <Component {...pageProps} />
-      </Mainframe>
-      </RecoilRoot>
+      </Layout>
     </>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;
