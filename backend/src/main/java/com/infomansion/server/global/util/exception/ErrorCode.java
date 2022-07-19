@@ -25,8 +25,10 @@ public enum ErrorCode {
     NOT_VALID_METHOD_ARGUMENT(HttpStatus.BAD_REQUEST,40031,"유효하지 않은 Request Body 혹은 Argument입니다."),
 
     // CATEGORY
-    NOT_VALID_CATEGORY(HttpStatus.BAD_REQUEST, 40040, "유효하지 않은 카테고리입니다.");
+    NOT_VALID_CATEGORY(HttpStatus.BAD_REQUEST, 40040, "유효하지 않은 카테고리입니다."),
 
+    // STUFF
+    NOT_VALID_STUFF_ID(HttpStatus.BAD_REQUEST, 40050, "유효하지 않은 Stuff id입니다.");
     private final HttpStatus status;
     private final int code;
     private final String message;

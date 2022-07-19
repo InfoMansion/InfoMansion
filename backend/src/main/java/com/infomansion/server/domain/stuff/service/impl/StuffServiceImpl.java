@@ -1,14 +1,17 @@
 package com.infomansion.server.domain.stuff.service.impl;
 
 import com.infomansion.server.domain.stuff.domain.Stuff;
-import com.infomansion.server.domain.stuff.dto.StuffCreateRequestDto;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
+import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.stuff.service.StuffService;
+import com.infomansion.server.global.util.exception.CustomException;
+import com.infomansion.server.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,29 +21,35 @@ public class StuffServiceImpl implements StuffService {
 
     private final StuffRepository stuffRepository;
 
-
     @Override
-    public Stuff createStuff(StuffCreateRequestDto requestDto) {
-        return stuffRepository.save(requestDto.toEntity());
+    @Transactional
+    public Long createStuff(StuffRequestDto requestDto) {
+        return stuffRepository.save(requestDto.toEntity()).getId();
     }
 
     @Override
-    public Stuff updateStuff(StuffCreateRequestDto requestDto) {
-        return stuffRepository.save(requestDto.toEntity());
+    public Long updateStuff(Long stuff_id, StuffRequestDto requestDto) {
+        return stuffRepository.save(requestDto.toEntity()).getId();
     }
 
     @Override
-    public Stuff findStuffById(StuffRequestDto requestDto) {
-        return stuffRepository.findById(requestDto.getId()).get();
+    public StuffResponseDto findStuffById(Long stuff_id) {
+        Stuff stuff = stuffRepository.findById(stuff_id)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_VALID_STUFF_ID));
+
+        return new StuffResponseDto(stuff);
     }
 
     @Override
-    public List<Stuff> findAllStuff() {
-        return stuffRepository.findAll();
+    public List<StuffResponseDto> findAllStuff() {
+        List<StuffResponseDto> responseDtoList = new ArrayList<>();
+        stuffRepository.findAll()
+                .forEach(stuff -> responseDtoList.add(new StuffResponseDto(stuff)));
+        return responseDtoList;
     }
 
     @Override
-    public void removeStuff(StuffRequestDto requestDto) {
-        stuffRepository.deleteById(requestDto.getId());
+    public void removeStuff(Long stuff_id) {
+        stuffRepository.deleteById(stuff_id);
     }
 }
