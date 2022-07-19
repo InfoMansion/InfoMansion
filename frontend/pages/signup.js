@@ -18,16 +18,15 @@ import { useState } from 'react';
 const theme = createTheme();
 
 export default function SignUp() {
-
   const [inputEmail, setInputEmail] = useState('')
   const [inputPassword, setInputPassword] = useState('')
   const [inputPassword2, setInputPassword2] = useState('')
   const [inputUsername, setInputUsername] = useState('')
-  const [inputUnFinish, setInputUnFinish] = useState(true)
 
   const confirmEmail = (/^[\w+_]\w+@\w+\.\w+/).test(inputEmail);
   const confirmPassword = ( /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/).test(inputPassword);
-  const confirmPwSame = (inputPassword === inputPassword2)
+  const confirmPwSame = !!(inputPassword === inputPassword2)
+  const inputUnFinish = !(confirmEmail && confirmPassword && confirmPwSame && inputUsername)
 
   function handleInput (event) {
     const { name, value } = event.target;
@@ -40,9 +39,6 @@ export default function SignUp() {
     } else if (name === 'username') {
       setInputUsername(value)
     } 
-    if (!!(confirmEmail && confirmPassword && confirmPwSame && inputUsername)) {
-      setInputUnFinish(false)
-    }
   }
 
 
