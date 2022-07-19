@@ -9,7 +9,6 @@ import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import com.infomansion.server.global.apispec.ErrorResponse;
 import org.junit.jupiter.api.*;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -267,8 +266,6 @@ class UserApiControllerTest {
                 .build();
 
         String url = "http://localhost:" + port + "/api/v1/auth/signup";
-
-//        doNothing().when(verifyEmailService).sendVerificationMail(anyString());
 
         //when
         ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(url, requestDto, CommonResponse.class);

@@ -16,7 +16,6 @@ import javax.mail.internet.MimeMessage;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class VerifyEmailServiceImpl implements VerifyEmailService {
 
@@ -26,6 +25,7 @@ public class VerifyEmailServiceImpl implements VerifyEmailService {
 
     private final RedisUtil redisUtil;
 
+    @Autowired
     private final JavaMailSender emailSender;
 
 
@@ -46,6 +46,7 @@ public class VerifyEmailServiceImpl implements VerifyEmailService {
     }
 
     @Override
+    @Transactional
     public void sendVerificationMail(String email) {
         if(email == null) throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
@@ -57,9 +58,10 @@ public class VerifyEmailServiceImpl implements VerifyEmailService {
     }
 
     @Override
+    @Transactional
     public String verifyEmail(String key) {
         String userEmail = redisUtil.getData(key);
-        if(userEmail == null) throw new CustomException(ErrorCode.VERIFY_KEY_NOT_FOUND);
+        if(userEmail == null) throw new CustomException(ErrorCode.VERIFICATION_KEY_NOT_FOUND);
 
         redisUtil.deleteData(key);
 

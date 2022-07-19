@@ -140,7 +140,6 @@ class UserServiceImplTest {
 
         //then
         User user = userRepository.findById(userId).get();
-        System.out.println(user);
 
         assertThat(user.getCategories()).isEqualTo("BEAUTY");
 
