@@ -12,18 +12,18 @@ import javax.persistence.Id;
 @Getter
 @NoArgsConstructor
 @Entity
-public class StuffImage {
+public class StuffFile {
 
     @Id @GeneratedValue
-    @Column(name = "stuff_image_id")
+    @Column(name = "stuff_file_id")
     private Long id;
 
-    private String stuffImageUrl;
-    private String stuffImageName;
+    private String stuffGlbPath;
+    private String stuffJsPath;
 
     @Builder
-    public StuffImage(String stuffImageUrl, String stuffImageName) {
-        this.stuffImageUrl = stuffImageUrl;
-        this.stuffImageName = stuffImageName;
+    public StuffFile(String stuffGlbPath, String stuffJsPath) {
+        this.stuffGlbPath = stuffGlbPath;
+        this.stuffJsPath = stuffJsPath;
     }
 }
