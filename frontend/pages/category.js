@@ -1,18 +1,35 @@
 import * as React from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
+import likeCateState from '../state/token'
+import { useRecoilState } from 'recoil';
 
 export default function Category() {
+	console.log(likeCateState)
+
+	// function clickCategory(name){
+
+	// 	const [likeCate, setlikeCate] = useRecoilState(likeCateState)
+	// 	setlikeCate((name) => likeCate + name)
+	// 	console.log(likeCate)
+
+	// }
+
   return (
     <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
       {itemData.map((item) => (
-        <ImageListItem key={item.img}>
-          <img
+        <ImageListItem key={item.img} 
+					style={{ backgroundImage: `url(${item.img}?w=164&h=164&fit=crop&auto=format)`}}
+					className="category">
+						<p className="categoryName">
+							<b>{item.title}</b>
+						</p>
+          {/* <img
             src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
             srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
             alt={item.title}
             loading="lazy"
-          />
+          /> */}
         </ImageListItem>
       ))}
     </ImageList>
