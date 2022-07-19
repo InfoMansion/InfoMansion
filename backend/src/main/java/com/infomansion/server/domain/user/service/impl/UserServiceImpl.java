@@ -5,6 +5,7 @@ import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.user.service.UserService;
+import com.infomansion.server.domain.user.service.VerifyEmailService;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
 import com.infomansion.server.global.util.jwt.ReissueDto;
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final RedisTemplate redisTemplate;
+    private final VerifyEmailService verifyEmailService;
 
 
     @Override
@@ -44,6 +46,7 @@ public class UserServiceImpl implements UserService {
     public Long join(UserSignUpRequestDto requestDto) {
         validateDuplicateUser(requestDto);
         validateCategory(requestDto.getCategories());
+        verifyEmailService.sendVerificationMail(requestDto.getEmail());
         return userRepository.save(requestDto.toEntityWithEncryptPassword(passwordEncoder)).getId();
     }
 

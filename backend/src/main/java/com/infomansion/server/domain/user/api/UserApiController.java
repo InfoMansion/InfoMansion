@@ -19,11 +19,7 @@ public class UserApiController {
 
     private final UserService userService;
 
-    @PostMapping("/api/v1/auth/signup")
-    public ResponseEntity<CommonResponse<Long>> userSignUp(@Valid @RequestBody UserSignUpRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new CommonResponse<>(userService.join(requestDto)));
-    }
+
 
     @PostMapping("/api/v1/auth/login")
     public ResponseEntity<CommonResponse<TokenDto>> userLogin(@Valid @RequestBody UserLoginRequestDto requestDto) {

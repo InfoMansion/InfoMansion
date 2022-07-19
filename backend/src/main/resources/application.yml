@@ -25,6 +25,22 @@ spring:
     host: localhost
     port: 6379
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: contactinfomansion@gmail.com
+    password: szdwttmotcygfloo
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          writetimeout: 5000
+          connectiontimeout: 5000
+          starttls:
+            enable: true
+            required: true
+
 logging:
   level:
     com:
