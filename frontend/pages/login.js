@@ -43,6 +43,9 @@ export default function LogIn() {
   const [inputId, setInputId] = useState('')
   const [inputPw, setInputPw] = useState('')
 
+  const confirmId = (/^[\w+_]\w+@\w+\.\w+/).test(inputId);
+  const confirmPw = ( /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/).test(inputPw);
+
   const router = useRouter()
 
   function handleInput (event) {
@@ -133,15 +136,16 @@ export default function LogIn() {
               onChange={handleInput}
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox value="remember" color="secondary" />}
               label="Remember me"
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
+              color='secondary'
               sx={{ mt: 3, mb: 2 }}
-              disabled={!(inputPw.length > 5 && inputId.includes('@'))}
+              disabled={!(confirmId && confirmPw)}
             >
               LOGIN
             </Button>
