@@ -1,19 +1,19 @@
-import Head from 'next/head'
-import Layout from '../components/Layout'
-import '../styles/globals.css'
+import Head from "next/head";
+import Layout from "../components/Layout";
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <link rel="icon" href="/favicon.ico"/>
-        <title>InfoMaision</title>
+        <link rel="icon" href="/favicon.ico" />
+        <title>InfoMansion</title>
       </Head>
       <Layout>
         <Component {...pageProps} />
       </Layout>
     </>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;
