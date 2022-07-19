@@ -24,15 +24,16 @@ public class StuffRepositoryTest {
     @Test
     public void Stuff_생성_및_조회() {
         String stuffName = "laptop";
+        String stuffNameKor = "노트북";
         Long price = 30L;
         Category category = Category.IT;
-        int stuffSize = 2;
-        StuffType stuffType = StuffType.S;
+        StuffType stuffType = StuffType.STUFF;
+
         Stuff stuff = Stuff.builder()
                 .stuffName(stuffName)
+                .stuffNameKor(stuffNameKor)
                 .price(price)
                 .category(category)
-                .stuffSize(stuffSize)
                 .stuffType(stuffType)
                 .build();
 
@@ -40,5 +41,6 @@ public class StuffRepositoryTest {
 
         List<Stuff> stuffList = stuffRepository.findAll();
         assertThat(stuffList.get(0).getStuffName()).isEqualTo(stuffName);
+        assertThat(stuffList.get(0).getStuffNameKor()).isEqualTo(stuffNameKor);
     }
 }
