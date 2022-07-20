@@ -18,15 +18,19 @@ import Table_brown_small_1 from './StuffComponents/Table_brown_small_1'
 import Table_side_black_1 from './StuffComponents/Table_side_black_1'
 import Table_wood_1 from './StuffComponents/Table_wood_1'
 
-export default function Room( { StuffClick, ...props} ) {
-    const [roomID] = useState(props.roomID);
+import userStuff from './userStuff.json'
 
+export default function Room( { StuffClick, ...props} ) {
+    // 변수 선언부
     // 화면 카메라 확대 수준 조절용 변수
     const [zoomscale, setzoomscale] = useState(90);
+    const [userID] = useState(props.userID);
+    // 제대로 불러와지는거 확인됨.
+    const [stuffs] = useState(userStuff[userID]);
 
     function Hover(e, name) {
-        console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
-        console.log(name + " 호버");
+        // console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
+        // console.log(name + " 호버");
     }
     function Click(e, name) {
         console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
@@ -34,6 +38,11 @@ export default function Room( { StuffClick, ...props} ) {
 
         // RoomPage의 stuffClick 함수 실행시키기.
         StuffClick(name);
+    }
+
+    function makeStuff(stuff) {
+        // 스터프 제작하는 코드 작성될 예정.
+        return  null;
     }
 
     function RoomCamera() {
@@ -101,9 +110,11 @@ export default function Room( { StuffClick, ...props} ) {
 
                 {/* 그림자 뱉을 요소 */}
                 {/* 이거 클로저 함수로 컴포넌트 리턴받도록 변경할 것. */}
-                <Table_wood_1 Hover={Hover} Click={Click} position={[12.06, -43, 16.13]}/>
+                {/* { stuffs.map( stuff => makeStuff(stuff) )} */}
 
+                <Table_wood_1 Hover={Hover} Click={Click} position={[12.06, -43, 16.13]}/>
                 <Chair Hover={Hover} Click={Click} position={[3.5,0,3.5]}/>
+
                 <Sofa_large_brown_1 Hover={Hover} Click={Click} position={[1,0,0.3]} />
                 <Shelf_white_medium Hover={Hover} Click={Click} position={[12, -43.01, 16]}/>
 

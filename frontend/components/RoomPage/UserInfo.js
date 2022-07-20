@@ -4,6 +4,19 @@ import { maxWidth } from "@mui/system";
 import { useState } from "react";
 import RecentPost from "./RecentPost";
 
+const Root = styled('div')(({ theme }) => ({
+    padding: theme.spacing(1),
+    margin : '30px auto',
+    
+  
+    [theme.breakpoints.down('lg')]: {
+      width : '600px'
+    },
+    [theme.breakpoints.up('lg')]: {
+      width : '1280px',
+    },
+}));
+
 export default function UserInfo( {...props} ) {
     const [userID] = useState(props.userID);
 
