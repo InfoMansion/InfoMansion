@@ -57,13 +57,16 @@ export default function Category() {
           <Avatar src="/logo.png">
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h4">
             Select Your Interest
+          </Typography>
+          <Typography component="h3" variant="h5">
+            하나 이상 선택해주세요!
           </Typography>
           <Box noValidate sx={{ mt: 3 }}>
             <ImageList
-              sx={{ width: 500, height: 450 }}
-              cols={3}
+              sx={{ width: 700, height: 450 }}
+              cols={4}
               rowHeight={164}
             >
               {itemData.map(item => (
@@ -86,7 +89,7 @@ export default function Category() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              disabled={likeCate.includes(',')}
+              disabled={!likeCate.includes(',')}
               onClick={nextPage}
             >
               NEXT

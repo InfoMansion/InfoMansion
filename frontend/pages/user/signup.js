@@ -13,6 +13,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import tokenState from '../../state/token';
+import { useRecoilState } from 'recoil';
+import { likeCateState } from '../../state/likeCate';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -20,6 +22,7 @@ const theme = createTheme();
 
 export default function SignUp() {
   const router = useRouter();
+  const [likeCate, setlikeCate] = useRecoilState(likeCateState);
 
   const [inputEmail, setInputEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
@@ -72,6 +75,7 @@ export default function SignUp() {
   };
 
   function prevPage() {
+    setlikeCate('');
     router.push('/user/category');
   }
 

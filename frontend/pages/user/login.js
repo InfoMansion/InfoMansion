@@ -22,6 +22,7 @@ import Axios from 'axios';
 import { useRouter } from 'next/router';
 import { atom, useRecoilState } from 'recoil';
 import tokenState from '../../state/token';
+import { likeCateState } from '../../state/likeCate';
 
 function TokenInput() {
   const [token, setToken] = useRecoilState(tokenState);
@@ -45,6 +46,8 @@ function TokenInput() {
 const theme = createTheme();
 
 export default function LogIn() {
+  const [likeCate, setlikeCate] = useRecoilState(likeCateState);
+
   const [inputId, setInputId] = useState('');
   const [inputPw, setInputPw] = useState('');
 
@@ -52,6 +55,12 @@ export default function LogIn() {
   const confirmPw = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(inputPw);
 
   const router = useRouter();
+
+  function goSignUp(event) {
+    event.preventDefault();
+    setlikeCate('');
+    router.push('/user/category');
+  }
 
   function handleInput(event) {
     const { name, value } = event.target;
@@ -142,10 +151,6 @@ export default function LogIn() {
                   autoComplete="current-password"
                   onChange={handleInput}
                 />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="secondary" />}
-                  label="Remember me"
-                />
                 <Button
                   type="submit"
                   fullWidth
@@ -163,7 +168,7 @@ export default function LogIn() {
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="/user/category" variant="body2">
+                    <Link href="#" variant="body2" onClick={goSignUp}>
                       {'Sign Up'}
                     </Link>
                   </Grid>
