@@ -14,10 +14,13 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import tokenState from '../state/token';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const theme = createTheme();
 
 export default function SignUp() {
+  const router = useRouter();
+
   const [inputEmail, setInputEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
   const [inputPassword2, setInputPassword2] = useState('');
@@ -67,6 +70,10 @@ export default function SignUp() {
     //   setToken(token)
     // })
   };
+
+  function prevPage() {
+    router.push('/category');
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -149,6 +156,14 @@ export default function SignUp() {
               disabled={inputUnFinish}
             >
               Sign Up
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={prevPage}
+            >
+              PREV
             </Button>
           </Box>
         </Box>

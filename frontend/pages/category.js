@@ -10,24 +10,36 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { useRecoilState } from 'recoil';
 import { likeCateState } from '../state/likeCate';
+import { Button } from '@mui/material';
+import { useRouter } from 'next/router';
 
 const theme = createTheme();
 
 export default function Category() {
+  const router = useRouter();
   const [likeCate, setlikeCate] = useRecoilState(likeCateState);
 
   function clickCategory(event) {
     const selected = event.target.getAttribute('value') + ',';
+    const count = likeCate.split(',').length - 1;
     if (likeCate.includes(selected)) {
       const updateCateState = likeCate.replace(selected, '');
       setlikeCate(updateCateState);
       event.target.style.removeProperty('opacity');
     } else {
-      const updateCateState = likeCate + selected;
-      setlikeCate(updateCateState);
-      event.target.style.opacity = 0.4;
+      if (count >= 3) {
+        alert('3개 이상은 선택이 불가능 합니다');
+      } else {
+        const updateCateState = likeCate + selected;
+        setlikeCate(updateCateState);
+        event.target.style.opacity = 0.4;
+      }
     }
     console.log(likeCate);
+  }
+
+  function nextPage() {
+    router.push('/signup');
   }
 
   return (
@@ -70,6 +82,15 @@ export default function Category() {
                 </ImageListItem>
               ))}
             </ImageList>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              disabled={likeCate.includes(',')}
+              onClick={nextPage}
+            >
+              NEXT
+            </Button>
           </Box>
         </Box>
       </Container>
