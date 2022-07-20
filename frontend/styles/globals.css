@@ -14,3 +14,16 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.category:hover {
+  opacity: 0.4;
+}
+
+.category .categoryName {
+  visibility: hidden;
+  color: red;
+}
+
+.category:hover .categoryName {
+  visibility: visible;
+}
