@@ -1,38 +1,79 @@
 import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import likeCateState from '../state/token'
 import { useRecoilState } from 'recoil';
+import { likeCateState } from '../state/likeCate';
+
+const theme = createTheme();
 
 export default function Category() {
-	console.log(likeCateState)
+  const [likeCate, setlikeCate] = useRecoilState(likeCateState);
 
-	// function clickCategory(name){
-
-	// 	const [likeCate, setlikeCate] = useRecoilState(likeCateState)
-	// 	setlikeCate((name) => likeCate + name)
-	// 	console.log(likeCate)
-
-	// }
+  function clickCategory(event) {
+    const selected = event.target.getAttribute('value') + ',';
+    if (likeCate.includes(selected)) {
+      const updateCateState = likeCate.replace(selected, '');
+      setlikeCate(updateCateState);
+      event.target.style.removeProperty('opacity');
+    } else {
+      const updateCateState = likeCate + selected;
+      setlikeCate(updateCateState);
+      event.target.style.opacity = 0.4;
+    }
+    console.log(likeCate);
+  }
 
   return (
-    <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-      {itemData.map((item) => (
-        <ImageListItem key={item.img} 
-					style={{ backgroundImage: `url(${item.img}?w=164&h=164&fit=crop&auto=format)`}}
-					className="category">
-						<p className="categoryName">
-							<b>{item.title}</b>
-						</p>
-          {/* <img
-            src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-            srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-            alt={item.title}
-            loading="lazy"
-          /> */}
-        </ImageListItem>
-      ))}
-    </ImageList>
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar src="/logo.png">
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Select Your Interest
+          </Typography>
+          <Box noValidate sx={{ mt: 3 }}>
+            <ImageList
+              sx={{ width: 500, height: 450 }}
+              cols={3}
+              rowHeight={164}
+            >
+              {itemData.map(item => (
+                <ImageListItem
+                  key={item.img}
+                  style={{
+                    backgroundImage: `url(${item.img}?w=164&h=164&fit=crop&auto=format)`,
+                  }}
+                  className="category"
+                  onClick={clickCategory}
+                  value={item.title}
+                >
+                  <p className="categoryName">
+                    <b>{item.title}</b>
+                  </p>
+                </ImageListItem>
+              ))}
+            </ImageList>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 }
 

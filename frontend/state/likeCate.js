@@ -1,6 +1,6 @@
-import { atom } from 'recoil'
+import { atom } from 'recoil';
 
-const likeCateState = atom({
+export const likeCateState = atom({
   key: 'likeCateState',
-  default: 'name',
-})
+  default: '',
+});

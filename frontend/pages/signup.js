@@ -12,47 +12,51 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import tokenState from '../state/token'
+import tokenState from '../state/token';
 import { useState } from 'react';
 
 const theme = createTheme();
 
 export default function SignUp() {
-  const [inputEmail, setInputEmail] = useState('')
-  const [inputPassword, setInputPassword] = useState('')
-  const [inputPassword2, setInputPassword2] = useState('')
-  const [inputUsername, setInputUsername] = useState('')
+  const [inputEmail, setInputEmail] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
+  const [inputPassword2, setInputPassword2] = useState('');
+  const [inputUsername, setInputUsername] = useState('');
 
-  const confirmEmail = (/^[\w+_]\w+@\w+\.\w+/).test(inputEmail);
-  const confirmPassword = ( /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/).test(inputPassword);
-  const confirmPwSame = !!(inputPassword === inputPassword2)
-  const inputUnFinish = !(confirmEmail && confirmPassword && confirmPwSame && inputUsername)
+  const confirmEmail = /^[\w+_]\w+@\w+\.\w+/.test(inputEmail);
+  const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
+    inputPassword,
+  );
+  const confirmPwSame = !!(inputPassword === inputPassword2);
+  const inputUnFinish = !(
+    confirmEmail &&
+    confirmPassword &&
+    confirmPwSame &&
+    inputUsername
+  );
 
-  function handleInput (event) {
+  function handleInput(event) {
     const { name, value } = event.target;
     if (name === 'email') {
-      setInputEmail(value)
+      setInputEmail(value);
     } else if (name === 'password') {
-      setInputPassword(value)
+      setInputPassword(value);
     } else if (name === 'password2') {
-        setInputPassword2(value)
+      setInputPassword2(value);
     } else if (name === 'username') {
-      setInputUsername(value)
-    } 
+      setInputUsername(value);
+    }
   }
 
-
-
-
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const credentials = {
       email: data.get('email'),
       password: data.get('password'),
       username: data.get('username'),
-      tel: data.get('tel')
-    }
+      tel: data.get('tel'),
+    };
     // Axios({
     //   url: 'http://localhost:8080/accounts/signup',
     //   method: 'post',
@@ -76,13 +80,18 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <Avatar src='/logo.png'>
+          <Avatar src="/logo.png">
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -93,7 +102,7 @@ export default function SignUp() {
                   name="email"
                   autoComplete="email"
                   onChange={handleInput}
-                  autoCapitalize='off'
+                  autoCapitalize="off"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -137,7 +146,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              disabled = {inputUnFinish}
+              disabled={inputUnFinish}
             >
               Sign Up
             </Button>

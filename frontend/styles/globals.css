@@ -19,7 +19,7 @@ a {
   opacity: 0.4;
 }
 
-.categoryName {
+.category .categoryName {
   visibility: hidden;
   color: red;
 }
