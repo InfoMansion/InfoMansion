@@ -7,12 +7,6 @@ spring:
     ansi:
       enabled: always
 
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/infomansion?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: infomansion
-    password: infomansion
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -21,9 +15,24 @@ spring:
         show_sql: true
         format_sql: true
 
-  redis:
-    host: localhost
-    port: 6379
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: contactinfomansion@gmail.com
+    password: szdwttmotcygfloo
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          debug: true
+          ssl:
+            enable: true
+    redirectURI: http://localhost:8080/test/success
 
 logging:
   level:
@@ -33,3 +42,13 @@ logging:
 
 jwt:
   secret: dGhpcy1pcy1hLXRlbXAtc2VjcmV0LWtleS1mb3ItaW5mby1tYW5zaW9uLWluLXNzYWZ5LTd0aC1ieS1jaGl5b25ncy1sZXRzZ29pbmZvbWFuc2lvbgo=
+
+---
+spring:
+  profiles:
+    active: dev
+---
+spring:
+  profiles:
+    active: local
+    default: local
