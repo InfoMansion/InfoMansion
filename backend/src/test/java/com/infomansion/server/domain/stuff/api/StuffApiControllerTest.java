@@ -77,7 +77,7 @@ public class StuffApiControllerTest {
         String s = objectMapper.writeValueAsString(requestDto);
 
         mockMvc.perform(
-                post("/api/v1/stuff/create")
+                post("/api/v1/stuffs")
                         .content(s)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
