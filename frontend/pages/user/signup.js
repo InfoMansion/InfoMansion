@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import tokenState from '../state/token';
+import tokenState from '../../state/token';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -72,7 +72,7 @@ export default function SignUp() {
   };
 
   function prevPage() {
-    router.push('/category');
+    router.push('/user/category');
   }
 
   return (

@@ -9,7 +9,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { useRecoilState } from 'recoil';
-import { likeCateState } from '../state/likeCate';
+import { likeCateState } from '../../state/likeCate';
 import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
 
@@ -39,7 +39,7 @@ export default function Category() {
   }
 
   function nextPage() {
-    router.push('/signup');
+    router.push('/user/signup');
   }
 
   return (

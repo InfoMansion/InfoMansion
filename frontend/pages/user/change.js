@@ -1,6 +1,14 @@
 import React from 'react';
 import { useState } from 'react';
-import { Button, Checkbox, FormControlLabel, Grid, Link, TextField, Typography} from '@mui/material';
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
 import Avatar from '@mui/material/Avatar';
@@ -9,29 +17,25 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from 'axios';
 import { useRouter } from 'next/router';
-import { atom, useRecoilState } from 'recoil'
-import tokenState from '../state/token'
+import { atom, useRecoilState } from 'recoil';
+import tokenState from '../../state/token';
 
-
-
-function TokenInput(){
+function TokenInput() {
   const [token, setToken] = useRecoilState(tokenState);
-
 }
-
 
 const theme = createTheme();
 
 export default function Change() {
-  const router = useRouter()
+  const router = useRouter();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const credentials = {
       email: data.get('email'),
       password: data.get('password'),
-    }
+    };
 
     // Axios({
     //   url: 'http://localhost:8080/accounts/login',
@@ -42,7 +46,6 @@ export default function Change() {
     //   const token = res.data.key
     //   setToken(token)
     // })
-    
   };
 
   return (
@@ -63,7 +66,12 @@ export default function Change() {
           <Typography component="h1" variant="h5">
             Change Password
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
             <TextField
               margin="normal"
               required
