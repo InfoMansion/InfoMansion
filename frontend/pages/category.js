@@ -27,8 +27,8 @@ export default function Category() {
       setlikeCate(updateCateState);
       event.target.style.removeProperty('opacity');
     } else {
-      if (count >= 3) {
-        alert('3개 이상은 선택이 불가능 합니다');
+      if (count >= 100) {
+        alert('100개 이상은 선택이 불가능 합니다');
       } else {
         const updateCateState = likeCate + selected;
         setlikeCate(updateCateState);
