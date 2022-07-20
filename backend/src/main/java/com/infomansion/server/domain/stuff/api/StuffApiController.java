@@ -32,23 +32,23 @@ public class StuffApiController {
                 .body(new CommonResponse<>(stuffService.findAllStuff()));
     }
 
-    @GetMapping("/api/v1/stuffs/{stuff_id}")
-    public ResponseEntity<CommonResponse<StuffResponseDto>> findStuffById(@PathVariable Long stuff_id) {
+    @GetMapping("/api/v1/stuffs/{stuffId}")
+    public ResponseEntity<CommonResponse<StuffResponseDto>> findStuffById(@PathVariable Long stuffId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(stuffService.findStuffById(stuff_id)));
+                .body(new CommonResponse<>(stuffService.findStuffById(stuffId)));
     }
 
-    @PutMapping("/api/v1/stuffs/{stuff_id}")
-    public ResponseEntity<CommonResponse<Long>> updateStuff(@PathVariable Long stuff_id, @Valid @RequestBody StuffRequestDto requestDto) {
+    @PutMapping("/api/v1/stuffs/{stuffId}")
+    public ResponseEntity<CommonResponse<Long>> updateStuff(@PathVariable Long stuffId, @Valid @RequestBody StuffRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(stuffService.updateStuff(stuff_id, requestDto)));
+                .body(new CommonResponse<>(stuffService.updateStuff(stuffId, requestDto)));
     }
 
-    @DeleteMapping("/api/v1/stuffs/{stuff_id}")
-    public ResponseEntity<CommonResponse<Long>> removeStuff(@Valid @PathVariable Long stuff_id) {
-        stuffService.removeStuff(stuff_id);
+    @DeleteMapping("/api/v1/stuffs/{stuffId}")
+    public ResponseEntity<CommonResponse<Long>> removeStuff(@Valid @PathVariable Long stuffId) {
+        stuffService.removeStuff(stuffId);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(stuff_id));
+                .body(new CommonResponse<>(stuffId));
     }
 
 }
