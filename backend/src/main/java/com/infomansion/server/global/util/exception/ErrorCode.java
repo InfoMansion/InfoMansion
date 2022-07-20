@@ -28,7 +28,11 @@ public enum ErrorCode {
     NOT_VALID_CATEGORY(HttpStatus.BAD_REQUEST, 40040, "유효하지 않은 카테고리입니다."),
 
     // STUFF
-    STUFF_NOT_FOUND(HttpStatus.BAD_REQUEST, 40050, "해당 Stuff id를 찾을 수 없습니다.");
+    STUFF_NOT_FOUND(HttpStatus.BAD_REQUEST, 40050, "해당 Stuff id를 찾을 수 없습니다."),
+
+
+    //== 404 ==//
+    VERIFICATION_KEY_NOT_FOUND(HttpStatus.NOT_FOUND, 40400, "인증 키를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final int code;

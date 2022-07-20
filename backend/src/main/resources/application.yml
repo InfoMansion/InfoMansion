@@ -25,6 +25,25 @@ spring:
     host: localhost
     port: 6379
 
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: contactinfomansion@gmail.com
+    password: szdwttmotcygfloo
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          debug: true
+          ssl:
+            enable: true
+    redirectURI: http://localhost:8080/test/success
+
 logging:
   level:
     com:
