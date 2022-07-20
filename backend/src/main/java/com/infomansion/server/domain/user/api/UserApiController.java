@@ -19,23 +19,9 @@ public class UserApiController {
 
     private final UserService userService;
 
-    @PostMapping("/api/v1/auth/signup")
-    public ResponseEntity<CommonResponse<Long>> userSignUp(@Valid @RequestBody UserSignUpRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new CommonResponse<>(userService.join(requestDto)));
-    }
 
-    @PostMapping("/api/v1/auth/login")
-    public ResponseEntity<CommonResponse<TokenDto>> userLogin(@Valid @RequestBody UserLoginRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userService.login(requestDto)));
-    }
 
-    @PostMapping("/api/v1/auth/reissue")
-    public ResponseEntity<? extends BasicResponse> userReissue(@Valid @RequestBody ReissueDto reissueDto) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userService.reissue(reissueDto)));
-    }
+
 
     @GetMapping("/api/v1/users/password")
     public ResponseEntity<? extends BasicResponse> userAuthBeforeChangePassword(@Valid @RequestBody UserAuthRequestDto requestDto) {

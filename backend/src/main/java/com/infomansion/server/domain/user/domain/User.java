@@ -31,7 +31,7 @@ public class User {
         this.password = password;
         this.username = username;
         this.tel = tel;
-        this.authority = UserAuthority.ROLE_USER;
+        this.authority = UserAuthority.ROLE_TEMP;
         this.categories = categories;
     }
 
@@ -40,6 +40,13 @@ public class User {
      */
     public void changeCategories(String categories) {
         this.categories = categories;
+    }
+
+    /**
+     * 임시 회원을 일반 회원으로 등급을 상승시키는 메서드
+     */
+    public void grantFromTempToUser() {
+        this.authority = UserAuthority.ROLE_USER;
     }
 
     /**
