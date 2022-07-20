@@ -30,8 +30,8 @@ public class StuffServiceImpl implements StuffService {
 
     @Override
     public Long updateStuff(Long stuff_id, StuffRequestDto requestDto) {
-        validationStuffId(stuff_id);
-        stuffRepository.findById(stuff_id).get();
+        stuffRepository.findById(stuff_id)
+                .orElseThrow(() -> new CustomException(ErrorCode.STUFF_NOT_FOUND));
         Stuff newStuff = Stuff.builder()
                 .id(stuff_id)
                 .stuffName(requestDto.getStuffName())
@@ -46,7 +46,7 @@ public class StuffServiceImpl implements StuffService {
     @Override
     public StuffResponseDto findStuffById(Long stuff_id) {
         Stuff stuff = stuffRepository.findById(stuff_id)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_VALID_STUFF_ID));
+                .orElseThrow(() -> new CustomException(ErrorCode.STUFF_NOT_FOUND));
         return new StuffResponseDto(stuff);
     }
 
@@ -65,6 +65,6 @@ public class StuffServiceImpl implements StuffService {
     }
 
     private void validationStuffId(Long stuff_id) {
-        if(!stuffRepository.existsById(stuff_id)) throw new CustomException(ErrorCode.NOT_VALID_STUFF_ID);
+        if(!stuffRepository.existsById(stuff_id)) throw new CustomException(ErrorCode.STUFF_NOT_FOUND);
     }
 }
