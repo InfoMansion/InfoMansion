@@ -4,9 +4,11 @@ import com.infomansion.server.domain.category.Category;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
+@ToString
 @Getter
 @NoArgsConstructor
 @Entity
@@ -17,28 +19,28 @@ public class Stuff {
     private Long id;
 
     private String stuffName;
+    private String stuffNameKor;
     private Long price;
 
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    private int stuffSize;
-
     @Enumerated(EnumType.STRING)
     private StuffType stuffType;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stuff_image_id")
-    private StuffImage stuffImage;
+    @JoinColumn(name = "stuff_file_id")
+    private StuffFile stuffFile;
 
 
     @Builder
-    public Stuff(String stuffName, Long price, Category category, int stuffSize, StuffType stuffType, StuffImage stuffImage) {
+    public Stuff(Long id, String stuffName, String stuffNameKor, Long price, Category category, StuffType stuffType, StuffFile stuffFile) {
+        this.id = id;
         this.stuffName = stuffName;
+        this.stuffNameKor = stuffNameKor;
         this.price = price;
         this.category = category;
-        this.stuffSize = stuffSize;
         this.stuffType = stuffType;
-        this.stuffImage = stuffImage;
+        this.stuffFile = stuffFile;
     }
 }
