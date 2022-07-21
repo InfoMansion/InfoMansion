@@ -5,6 +5,8 @@ import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
+import com.infomansion.server.domain.userstuff.dto.UserStuffIncludeRequestDto;
+import com.infomansion.server.domain.userstuff.dto.UserStuffModifyRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
@@ -54,6 +56,61 @@ public class UserStuffServiceImpl implements UserStuffService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
 
         return new UserStuffResponseDto(findUserStuff);
+    }
+
+    @Override
+    public Long excludeUserStuff(Long userStuffId) {
+        UserStuff findUserStuff = userStuffRepository.findById(userStuffId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        /**
+         * 이미 제외된 Stuff를 요청하는 경우 throw
+         */
+        if(!findUserStuff.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
+
+        UserStuff request = UserStuff.builder()
+                .id(findUserStuff.getId())
+                .stuff(findUserStuff.getStuff())
+                .user(findUserStuff.getUser())
+                .alias(findUserStuff.getAlias())
+                .category(findUserStuff.getCategory())
+                .selected(false)
+                .posX(0f).posY(0f).posZ(0f)
+                .rotX(0f).rotY(0f).rotZ(0f).build();
+
+        return userStuffRepository.save(request).getId();
+    }
+
+    @Override
+    public Long includeUserStuff(UserStuffIncludeRequestDto requestDto) {
+        UserStuff findUserStuff = userStuffRepository.findById(requestDto.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        /**
+         * 이미 배치된 Stuff를 요청하는 경우 throw
+         */
+        if(findUserStuff.getSelected()) throw new CustomException(ErrorCode.INCLUDED_USER_STUFF);
+
+        return userStuffRepository.save(requestDto.toEntity(findUserStuff)).getId();
+    }
+
+    @Override
+    public Long modifyAliasAndCategory(UserStuffModifyRequestDto requestDto) {
+        /**
+         * Alias와 Category 둘 다 입력하지 않았다면 throw
+         */
+        if(requestDto.getCategory() == null && requestDto.getAlias() == null)
+            throw new CustomException(ErrorCode.NULL_VALUE_OF_ALIAS_AND_CATEGORY);
+
+        UserStuff us = userStuffRepository.findById(requestDto.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        /**
+         * 배치되지 않은 Stuff의 Alias나 Category를 변경할 경우 throw
+         */
+        if(!us.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
+
+        return userStuffRepository.save(requestDto.toEntity(us)).getId();
     }
 
 

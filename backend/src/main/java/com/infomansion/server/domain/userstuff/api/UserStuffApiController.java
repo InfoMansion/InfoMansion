@@ -1,5 +1,7 @@
 package com.infomansion.server.domain.userstuff.api;
 
+import com.infomansion.server.domain.userstuff.dto.UserStuffIncludeRequestDto;
+import com.infomansion.server.domain.userstuff.dto.UserStuffModifyRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
@@ -35,5 +37,23 @@ public class UserStuffApiController {
     private ResponseEntity<CommonResponse<List<UserStuffResponseDto>>> findAllUserStuff(@PathVariable Long userId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new CommonResponse<>(userStuffService.findAllUserStuff(userId)));
+    }
+
+    @PutMapping("/api/v1/userstuffs/{userStuffId}")
+    private ResponseEntity<CommonResponse<Long>> excludeUserStuff(@PathVariable Long userStuffId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new CommonResponse<>(userStuffService.excludeUserStuff(userStuffId)));
+    }
+
+    @PutMapping("/api/v1/userstuffs")
+    private ResponseEntity<CommonResponse<Long>> includeUserStuff(@Valid @RequestBody UserStuffIncludeRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new CommonResponse<>(userStuffService.includeUserStuff(requestDto)));
+    }
+
+    @PutMapping("/api/v1/userstuffs/option")
+    private ResponseEntity<CommonResponse<Long>> modifyAliasAndCategory(@Valid @RequestBody UserStuffModifyRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new CommonResponse<>(userStuffService.modifyAliasAndCategory(requestDto)));
     }
 }
