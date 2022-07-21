@@ -20,7 +20,7 @@ export default function StuffPage( {data, ...props} ) {
     // 실제로 사용할 부분.
 
     // 더미
-    const [maxcontent] = useState(200);
+    const [maxcontent] = useState(150);
     const [stuff, setStuff] = useState(data);
 
     useEffect(() => {
@@ -37,7 +37,8 @@ export default function StuffPage( {data, ...props} ) {
             피가 놀이 따뜻한 이 인생을 얼마나 산야에 소담스러운 이상은 듣는다. 맺어, 이 뜨거운지라, 뜨고, 가진 칼이다. 인생의 부패를 방지하는 청춘이 피고 그들은 유소년에게서 청춘의 피다. 트고, 위하여, 낙원을 봄날의 방황하였으며, 갑 있다.
             때에, 따뜻한 위하여, 약동하다. 얼음 몸이 위하여 끓는다. 청춘의 얼마나 설레는 맺어, 크고 사막이다.
             `,
-            image : 'pic1.jpg'
+            image : 'pic1.jpg',
+            date : '2022-02-02'
         },
         {
             name : '오늘 점심은 머먹지',
@@ -46,7 +47,8 @@ export default function StuffPage( {data, ...props} ) {
             일월과 행복스럽고 인간의 보는 보배를 우리 교향악이다. 바로 인간의 같으며, 때문이다. 풀이 커다란 구하기 싶이 심장의 아니다.
             튼튼하며, 얼마나 고행을 현저하게 있는가? 평화스러운 그들에게 위하여 찾아 노년에게서 것은 열매를 봄바람이다. 있는 속잎나고, 설레는 천고에 하는 되려니와, 싶이 많이 부패뿐이다. 내려온 우는 자신과 뭇 주며, 몸이 설레는 것이다.
             `,
-            image : 'pic2.jpg'
+            image : 'pic2.jpg',
+            date : '2022-02-04'
         },
         {
             name : '이 글은 또 뭘 쓰지...',
@@ -55,7 +57,8 @@ export default function StuffPage( {data, ...props} ) {
             오직 그들은 거친 청춘 풍부하게 있음으로써 이상의 위하여 보는 있으랴? 우리의 듣기만 대한 설산에서 것은 용기가 쓸쓸하랴? 노년에게서 없으면, 피고 힘있다. 갑 밝은 보이는 때에, 그들은 튼튼하며, 것이 방황하였으며, 보라.
             고동을 있는 안고, 커다란 목숨이 과실이 무엇을 이것이다. 그들은 찬미를 위하여 뼈 새 봄바람이다. 그들은 찾아다녀도, 없으면 이것이다. 끓는 트고, 인류의 아니다.
             `,
-            image : 'pic3.png'
+            image : 'pic3.png',
+            date : '2022-03-02'
         },
         { 
             name : '간식을 아침에 줬으면 좋겠다w',
@@ -64,7 +67,8 @@ export default function StuffPage( {data, ...props} ) {
             피가 놀이 따뜻한 이 인생을 얼마나 산야에 소담스러운 이상은 듣는다. 맺어, 이 뜨거운지라, 뜨고, 가진 칼이다. 인생의 부패를 방지하는 청춘이 피고 그들은 유소년에게서 청춘의 피다. 트고, 위하여, 낙원을 봄날의 방황하였으며, 갑 있다.
             때에, 따뜻한 위하여, 약동하다. 얼음 몸이 위하여 끓는다. 청춘의 얼마나 설레는 맺어, 크고 사막이다.
             `,
-            image : 'pic1.jpg'
+            image : 'pic1.jpg',
+            date : '2022-03-06'
         },
         {
             name : '오늘 점심은 머먹지w',
@@ -73,7 +77,8 @@ export default function StuffPage( {data, ...props} ) {
             일월과 행복스럽고 인간의 보는 보배를 우리 교향악이다. 바로 인간의 같으며, 때문이다. 풀이 커다란 구하기 싶이 심장의 아니다.
             튼튼하며, 얼마나 고행을 현저하게 있는가? 평화스러운 그들에게 위하여 찾아 노년에게서 것은 열매를 봄바람이다. 있는 속잎나고, 설레는 천고에 하는 되려니와, 싶이 많이 부패뿐이다. 내려온 우는 자신과 뭇 주며, 몸이 설레는 것이다.
             `,
-            image : 'pic2.jpg'
+            image : 'pic2.jpg',
+            date : '2022-04-22'
         },
         {
             name : '이 글은 또 뭘 쓰지..w.',
@@ -82,7 +87,8 @@ export default function StuffPage( {data, ...props} ) {
             오직 그들은 거친 청춘 풍부하게 있음으로써 이상의 위하여 보는 있으랴? 우리의 듣기만 대한 설산에서 것은 용기가 쓸쓸하랴? 노년에게서 없으면, 피고 힘있다. 갑 밝은 보이는 때에, 그들은 튼튼하며, 것이 방황하였으며, 보라.
             고동을 있는 안고, 커다란 목숨이 과실이 무엇을 이것이다. 그들은 찬미를 위하여 뼈 새 봄바람이다. 그들은 찾아다녀도, 없으면 이것이다. 끓는 트고, 인류의 아니다.
             `,
-            image : 'pic3.png'
+            image : 'pic3.png',
+            date : '2022-05-31'
         },
     ])
 
@@ -106,7 +112,7 @@ export default function StuffPage( {data, ...props} ) {
                     textAlign : 'center',
                     backgroundColor : '#ffffff',
                 }}
-                >
+            >
                 <Typography
                     variant='h4'
                     sx={{
@@ -120,7 +126,7 @@ export default function StuffPage( {data, ...props} ) {
                     sx={{
                         borderRadius : 3,
                         backgroundColor : '#ffa0a0',
-                        minWidth : 50,
+                        minWidth : 60,
                         color : '#ffffff'
                     }}
                 >
@@ -173,13 +179,25 @@ export default function StuffPage( {data, ...props} ) {
                                     flexDirection : 'column', 
                                 }}
                             >
-                                <Typography
-                                    variant="h6"
-                                    color="text.primary"
+                                <Box
+                                    sx={{
+                                        display : 'flex',
+                                        justifyContent : 'space-between',
+                                        alignItems : 'center'
+                                    }}
                                 >
-                                    {post.name}
-                                </Typography>
-                            
+                                    <Typography
+                                        variant="h6"
+                                        color="text.primary"
+                                    >
+                                        {post.name}
+                                    </Typography>
+                                    <Typography
+                                        variant="body4"
+                                        color="#aaaaaa">
+                                        {post.date}
+                                    </Typography>
+                                </Box>
                                 <Divider sx={{m : 1}}/>
                             
                                 <Typography
