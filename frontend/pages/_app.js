@@ -10,7 +10,9 @@ function MyApp({ Component, pageProps }) {
         <title>InfoMansion</title>
       </Head>
       <Layout>
-        <Component {...pageProps} />
+        <Component {...pageProps} 
+        
+        />
       </Layout>
     </>
   );

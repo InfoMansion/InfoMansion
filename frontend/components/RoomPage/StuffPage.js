@@ -86,41 +86,45 @@ export default function StuffPage( {...props} ) {
 
     return (
         <Paper
-            elevation={2}
+            elevation={1}
             style={{
-                backgroundColor : 'rgba(255,255,255,0.5)'
+                backgroundColor : 'rgba(255,255,255,0.8)'
             }}
             sx={{
                 width : '650px',
-                borderRadius : 3
+                borderRadius : 1,
+                m : 1
             }}
         >
             <CssBaseline />
             {/* 타이틀 영역 */}
-            <Paper elevation={2}>
-                <Toolbar
+            <Toolbar
+                sx={{
+                    display : 'flex',
+                    textAlign : 'center',
+                    backgroundColor : '#ffffff',
+                }}
+                >
+                <Typography
+                    variant='h4'
                     sx={{
-                        display : 'flex',
-                        textAlign : 'center',
-                        backgroundColor : '#dddddd',
-                        elevation : 4,
+                        mr : 2
                     }}
-                    >
-                    <Typography
-                        variant='h4'
-                        sx={{
-                            mr : 2
-                        }}
-                    >
-                        {alias}
-                    </Typography>
+                >
+                    {alias}
+                </Typography>
 
-                    <Typography>
-                        {category}
-                    </Typography>
-                </Toolbar>
-
-            </Paper>
+                <Typography 
+                    sx={{
+                        borderRadius : 3,
+                        backgroundColor : '#ffa0a0',
+                        minWidth : 50,
+                        color : '#ffffff'
+                    }}
+                >
+                    {category}
+                </Typography>
+            </Toolbar>
 
             <Divider />
             <Container
@@ -142,6 +146,7 @@ export default function StuffPage( {...props} ) {
                     sx={{
                         maxHeight : '150px',
                         my : 1,
+                        backgroundColor : 'rgba(255,255,255,0.5)'
                     }}
                 >
                     <CardActionArea
