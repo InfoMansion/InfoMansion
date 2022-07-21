@@ -1,0 +1,172 @@
+/* The same layout with floats ► https://codepen.io/Rafiozoo/pen/BYVOeg */
+/* IE / Edge support with SVG ► https://codepen.io/Rafiozoo/pen/MQBZbd */
+IMG {
+  width: 100%;
+  display: block;
+}
+.item IMG {
+  visibility: hidden;
+}
+.container {
+  margin: 3rem auto;
+  padding: 1rem 0 2.4rem;
+  /* 	background-color: gold; */
+  text-align: center;
+  max-width: 50rem;
+}
+.item {
+  width: 10rem;
+  height: 10rem;
+  position: relative;
+
+  /* Default - simple fallback when no CSS Grid support */
+  display: inline-block;
+  margin: 0.4rem;
+}
+.item::before {
+  /* Goldenrod outline on the hexagon */
+  content: "";
+  background-image: url("/test.png");
+  background-size: 160px 160px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: goldenrod;
+  clip-path: polygon(50% 0, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+  transform: scale(1.077);
+  transition: transform 0.3s;
+}
+.item:hover::before {
+  transform: scale(1.154);
+}
+.item A {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* 	background-image: See JS. */
+  background-size: cover;
+  background-position: center;
+  clip-path: polygon(50% 0, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+}
+
+@supports (display: grid) {
+  @media (min-width: 17rem) {
+    .container {
+      display: grid;
+      max-width: 15rem;
+      grid-template-columns: repeat(3, 5rem);
+    }
+    .item {
+      grid-column: span 2;
+      margin: 0; /* reset */
+      margin-bottom: -1.4rem; /* shifting up the items in the next row */
+    }
+    .item:nth-child(even) {
+      grid-column: 2;
+    }
+  }
+
+  @media (min-width: 22rem) {
+    .container {
+      max-width: 20rem;
+      grid-template-columns: repeat(4, 5rem);
+    }
+    .item:nth-child(3n + 1) {
+      grid-column: 1;
+    }
+    .item:nth-child(3n + 2) {
+      grid-column: 3;
+    }
+    .item:nth-child(3n + 0) {
+      grid-column: 2;
+    }
+  }
+
+  @media (min-width: 32rem) {
+    .container {
+      max-width: 30rem;
+      grid-template-columns: repeat(6, 5rem);
+    }
+    .item:nth-child(5n + 1) {
+      grid-column: 1;
+    }
+    .item:nth-child(5n + 2) {
+      grid-column: 3;
+    }
+    .item:nth-child(5n + 3) {
+      grid-column: 5;
+    }
+    .item:nth-child(5n + 4) {
+      grid-column: 2;
+    }
+    .item:nth-child(5n + 0) {
+      grid-column: 4;
+    }
+  }
+
+  @media (min-width: 42rem) {
+    .container {
+      max-width: 40rem;
+      grid-template-columns: repeat(8, 5rem);
+    }
+    .item:nth-child(7n + 1) {
+      grid-column: 1;
+    }
+    .item:nth-child(7n + 2) {
+      grid-column: 3;
+    }
+    .item:nth-child(7n + 3) {
+      grid-column: 5;
+    }
+    .item:nth-child(7n + 4) {
+      grid-column: 7;
+    }
+    .item:nth-child(7n + 5) {
+      grid-column: 2;
+    }
+    .item:nth-child(7n + 6) {
+      grid-column: 4;
+    }
+    .item:nth-child(7n + 0) {
+      grid-column: 6;
+    }
+  }
+
+  @media (min-width: 54rem) {
+    .container {
+      max-width: 50rem;
+      grid-template-columns: repeat(10, 5rem);
+    }
+    .item:nth-child(9n + 1) {
+      grid-column: 1;
+    }
+    .item:nth-child(9n + 2) {
+      grid-column: 3;
+    }
+    .item:nth-child(9n + 3) {
+      grid-column: 5;
+    }
+    .item:nth-child(9n + 4) {
+      grid-column: 7;
+    }
+    .item:nth-child(9n + 5) {
+      grid-column: 9;
+    }
+    .item:nth-child(9n + 6) {
+      grid-column: 2;
+    }
+    .item:nth-child(9n + 7) {
+      grid-column: 4;
+    }
+    .item:nth-child(9n + 8) {
+      grid-column: 6;
+    }
+    .item:nth-child(9n + 0) {
+      grid-column: 8;
+    }
+  }
+}

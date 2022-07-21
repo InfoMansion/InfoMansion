@@ -111,7 +111,7 @@ export default function DenseAppBar() {
                 cursor: 'pointer',
               }}
             >
-              <Image src="/logo.png" alt="" width={30} height={30} />
+              <Image src="/vectorLogo.svg" alt="" width={30} height={30} />
               <div
                 style={{ color: 'black', fontSize: '20px', padding: '10px' }}
               >
