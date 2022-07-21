@@ -3,13 +3,11 @@ import { Link } from '@mui/material';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Hex.module.css';
-import Login from './user/login';
 
 export default function Home() {
   return (
     <>
       <h1>Main page</h1>
-      <Login></Login>
       <div style={{ display: 'flex', width: '1280px', height: '640px' }}>
         <div style={{ width: '80%', height: '100%' }}>
           <ul className={styles.container}>
