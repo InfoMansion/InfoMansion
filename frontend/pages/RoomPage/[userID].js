@@ -10,11 +10,13 @@ import { useSpring, animated } from 'react-spring'
 
 export default function RoomPage() {
     const [userID, setUserID] = useState(useRouter().query.userID);
+    const [stuffID, setStuffID] = useState('');
     const [stuffon, setStuffon] = useState('');
 
-    function StuffClick(name) {
+    function StuffClick(stuff) {
+        // 여기서 stuffpage로 변수 전달하면 됨.
         setStuffon(!stuffon);
-        console.log("방에서 디버그" + name);
+        console.log("방에서 디버그" + stuff);
     }
     const openAnimation = useSpring({
         from: { opacity: "0.3", maxHeight: "0px" },
@@ -38,7 +40,7 @@ export default function RoomPage() {
                 position : 'absolute',
             })
             await next({
-                position : stuffon ? 'absolute' : 'static',
+                // position : stuffon ? 'absolute' : 'static',
             })
         },
         config: { 
@@ -62,13 +64,12 @@ export default function RoomPage() {
                     justifyContent : 'center'
                 }}
             >
-
-                {/* 이곳에 룸페이지가 구현됩니다. */}
                 <Grid item 
                     lg={4}
                 >
                     <UserInfo userID = {userID} />
                 </Grid>
+
                 <Grid item lg={7}
                     sx={{
                         display : 'flex',
@@ -80,7 +81,10 @@ export default function RoomPage() {
                             my : 1 
                         }}
                     >
-                        <Room StuffClick={StuffClick} userID={userID} />
+                        <Room 
+                            StuffClick={StuffClick} 
+                            userID={userID} 
+                        />
                     </Box>
 
                     {

@@ -1,48 +1,48 @@
 import { OrbitControls, OrthographicCamera } from '@react-three/drei'
 import {Canvas, useThree, useFrame} from '@react-three/fiber'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, setState } from 'react'
+import { useRouter } from 'next/router'
 import { Camera, Mesh, StaticReadUsage } from 'three'
 import styles from '../styles/Home.module.css'
 
-// wall과 floor는 고정. 
-import Wall from './StuffComponents/Wall_test_1'
-import Floor from './StuffComponents/Floor_1'
-
-// 방 구현 에셋들.
-import Curtain from './StuffComponents/Curtain_white_large_1'
-import Chair from './StuffComponents/Chair_brown_1'
-import Plant_orange_medium from './StuffComponents/Plant_orange_medium_1'
-import Shelf_white_medium from './StuffComponents/Shelf_white_medium_1'
-import Sofa_large_brown_1 from './StuffComponents/Sofa_large_brown_1'
-import Table_brown_small_1 from './StuffComponents/Table_brown_small_1'
-import Table_side_black_1 from './StuffComponents/Table_side_black_1'
-import Table_wood_1 from './StuffComponents/Table_wood_1'
+import Stuff3D from './RoomPage/Stuff3D'
 
 import userStuff from './userStuff.json'
+import walltest from './walltest.json'
 
 export default function Room( { StuffClick, ...props} ) {
+    const [zoomscale, setzoomscale] = useState(90);
+    const [userID, setUserID] = useState(0);
+    const [mapstuffs, setMapstuffs] = useState([]);
+    const [stuffs, setStuffs] = useState([]);
+
+    const router = useRouter();
+    useEffect(() => {
+        if(!router.isReady) return;
+
+        // set끼리 동기처리가 안돼요 왤까요ㅠㅠ
+        setUserID(router.query.userID);     
+        // stuff get
+        setMapstuffs(userStuff[router.query.userID].slice(0, 2));
+        setStuffs(userStuff[router.query.userID].slice(2));
+
+    }, [router.isReady]);
+
     // 변수 선언부
     // 화면 카메라 확대 수준 조절용 변수
-    const [zoomscale, setzoomscale] = useState(90);
-    const [userID] = useState(props.userID);
-    // 제대로 불러와지는거 확인됨.
-    const [stuffs] = useState(userStuff[userID]);
 
-    function Hover(e, name) {
+    function Hover(e, stuff) {
         // console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
-        // console.log(name + " 호버");
+        console.log(name + " 호버");
     }
-    function Click(e, name) {
+    function Click(e, stuff) {
         console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
-        console.log(name + " 클릭");
+        console.log(stuff.stuff_name + " 클릭");
 
+        // 데코는 사우이 이벤트 진행 안함.
+        if(stuff.category == 'deco') return null;
         // RoomPage의 stuffClick 함수 실행시키기.
-        StuffClick(name);
-    }
-
-    function makeStuff(stuff) {
-        // 스터프 제작하는 코드 작성될 예정.
-        return  null;
+        StuffClick(stuff);
     }
 
     function RoomCamera() {
@@ -55,7 +55,6 @@ export default function Room( { StuffClick, ...props} ) {
             state.camera.position.y = distance;
             state.camera.position.z = distance;
             
-            // console.log(e);
             state.camera.lookAt(0, 0, 0);
         })
         return null
@@ -68,7 +67,8 @@ export default function Room( { StuffClick, ...props} ) {
                 width : "650px", 
                 height : "800px",
                 // margin : '30px auto'
-                }}>
+                }}
+            >
             
             <Canvas 
                 onPointerMove={() => console.log("호버호버")}
@@ -104,24 +104,31 @@ export default function Room( { StuffClick, ...props} ) {
                 {/* 그림자를 받을 요소, 그림자를 뱉을 요소로 나눔. */}
                 {/* 그림자 받을 요소 */}
                 <mesh receiveShadow>
-                    <Wall  position={[0,0,0]} />
-                    <Floor position={[0,4,0]} />
+                    { mapstuffs.map( stuff => 
+                        <Stuff3D
+                            Hover={Hover}
+                            Click={Click}
+                            
+                            data={stuff}
+                            key={stuff.name}
+                        />
+                        )}
                 </mesh>
 
                 {/* 그림자 뱉을 요소 */}
                 {/* 이거 클로저 함수로 컴포넌트 리턴받도록 변경할 것. */}
-                {/* { stuffs.map( stuff => makeStuff(stuff) )} */}
-
-                <Table_wood_1 Hover={Hover} Click={Click} position={[12.06, -43, 16.13]}/>
-                <Chair Hover={Hover} Click={Click} position={[3.5,0,3.5]}/>
-
-                <Sofa_large_brown_1 Hover={Hover} Click={Click} position={[1,0,0.3]} />
-                <Shelf_white_medium Hover={Hover} Click={Click} position={[12, -43.01, 16]}/>
-
-                <Curtain position={[-1.8,2,1.8]}/>
-                <Plant_orange_medium position={[0.2,0,2.4]}/>
-                <Table_brown_small_1 position={[11.9, -43, 16]}/>
-                <Table_side_black_1 position={[12, -42.9, 15.9]}/>
+                <mesh castShadow>
+                    { stuffs.map( stuff => 
+                        <Stuff3D 
+                            Hover={Hover} Click={Click} 
+                            data={stuff} 
+                            key={stuff.name}
+                
+                            position={[stuff.pos_x, stuff.pos_y, stuff.pos_z]}
+                            rotation={[stuff.rot_x, stuff.rot_y, stuff.rot_z]}
+                        />
+                    )}
+                </mesh>
 
                 {/* 사용자 인터렉션 */}
                 {/* <OrbitControls /> */}
