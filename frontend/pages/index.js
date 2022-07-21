@@ -14,46 +14,46 @@ export default function Home() {
         <div style={{ width: '80%', height: '100%' }}>
           <ul class="container">
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
             <li class="item">
-              <Link href="/RoomPage"></Link>
+              <Link href="/RoomPage/1"></Link>
             </li>
           </ul>
         </div>
