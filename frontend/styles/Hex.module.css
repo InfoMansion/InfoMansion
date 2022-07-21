@@ -1,10 +1,4 @@
-/* The same layout with floats ► https://codepen.io/Rafiozoo/pen/BYVOeg */
-/* IE / Edge support with SVG ► https://codepen.io/Rafiozoo/pen/MQBZbd */
-IMG {
-  width: 100%;
-  display: block;
-}
-.item IMG {
+.item img {
   visibility: hidden;
 }
 .container {
@@ -25,8 +19,8 @@ IMG {
 }
 .item::before {
   /* Goldenrod outline on the hexagon */
-  content: "";
-  background-image: url("/test.png");
+  content: '';
+  background-image: url('/test.png');
   background-size: 160px 160px;
   position: absolute;
   top: 0;
