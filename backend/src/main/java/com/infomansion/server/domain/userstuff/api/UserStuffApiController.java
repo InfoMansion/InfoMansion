@@ -25,13 +25,13 @@ public class UserStuffApiController {
                 .body(new CommonResponse<>(userStuffService.saveUserStuff(requestDto)));
     }
 
-    @GetMapping("/api/v1/userstuffs")
-    private ResponseEntity<CommonResponse<UserStuffResponseDto>> findUserStuffById(@Valid @RequestParam UserStuffRequestDto requestDto) {
+    @GetMapping("/api/v1/userstuffs/{userStuffId}")
+    private ResponseEntity<CommonResponse<UserStuffResponseDto>> findUserStuffById(@PathVariable Long userStuffId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(new CommonResponse<>(userStuffService.findUserStuffById(requestDto)));
+                .body(new CommonResponse<>(userStuffService.findUserStuffByUserStuffId(userStuffId)));
     }
 
-    @GetMapping("/api/v1/userstuffs/{userId}")
+    @GetMapping("/api/v1/userstuffs/list/{userId}")
     private ResponseEntity<CommonResponse<List<UserStuffResponseDto>>> findAllUserStuff(@PathVariable Long userId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new CommonResponse<>(userStuffService.findAllUserStuff(userId)));

@@ -11,7 +11,7 @@ public interface UserStuffService {
 
     List<UserStuffResponseDto> findAllUserStuff(Long userId);
 
-    UserStuffResponseDto findUserStuffById(UserStuffRequestDto requestDto);
+    UserStuffResponseDto findUserStuffByUserStuffId(Long userStuffId);
 
 
 }

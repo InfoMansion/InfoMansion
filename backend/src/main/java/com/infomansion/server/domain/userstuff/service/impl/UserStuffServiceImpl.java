@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -42,19 +43,17 @@ public class UserStuffServiceImpl implements UserStuffService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        List<UserStuffResponseDto> result = new ArrayList<>();
-        userStuffRepository.findByUser(user).forEach(userStuff -> result.add(new UserStuffResponseDto(userStuff)));
-        return result;
+        return userStuffRepository.findByUser(user).stream()
+                .map(userStuff -> new UserStuffResponseDto(userStuff))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public UserStuffResponseDto findUserStuffById(UserStuffRequestDto requestDto) {
-        User user = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        Stuff stuff = stuffRepository.findById(requestDto.getStuffId())
-                .orElseThrow(() -> new CustomException(ErrorCode.STUFF_NOT_FOUND));
+    public UserStuffResponseDto findUserStuffByUserStuffId(Long userStuffId) {
+        UserStuff findUserStuff = userStuffRepository.findById(userStuffId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
 
-        return new UserStuffResponseDto(userStuffRepository.findByUserAndStuff(user, stuff));
+        return new UserStuffResponseDto(findUserStuff);
     }
 
 

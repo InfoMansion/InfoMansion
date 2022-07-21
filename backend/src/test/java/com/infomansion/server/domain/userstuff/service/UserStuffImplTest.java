@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -93,11 +94,10 @@ public class UserStuffImplTest {
         // when
         UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
                 .stuffId(stuffIds.get(0)).userId(userId).build();
-        userStuffService.saveUserStuff(requestDto);
+        Long userStuffId = userStuffService.saveUserStuff(requestDto);
 
         // then
-        UserStuffRequestDto request = UserStuffRequestDto.builder().userId(userId).stuffId(stuffIds.get(0)).build();
-        UserStuffResponseDto result = userStuffService.findUserStuffById(request);
+        UserStuffResponseDto result = userStuffService.findUserStuffByUserStuffId(userStuffId);
         assertThat(result.getStuffNameKor()).isEqualTo("노트북1");
     }
 

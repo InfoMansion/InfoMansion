@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotBlank;
 
-@Transactional
 @Getter
 @NoArgsConstructor
 public class UserStuffRequestDto {

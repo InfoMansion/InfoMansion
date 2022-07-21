@@ -11,6 +11,8 @@ import lombok.ToString;
 @Getter
 public class UserStuffResponseDto {
 
+    private Long userStuffId;
+
     private String stuffName;
     private String stuffNameKor;
     private StuffType stuffType;
@@ -28,6 +30,7 @@ public class UserStuffResponseDto {
     private Float rotZ;
 
     public UserStuffResponseDto(UserStuff userStuff) {
+        this.userStuffId = userStuff.getId();
         this.stuffName = userStuff.getStuff().getStuffName();
         this.stuffNameKor = userStuff.getStuff().getStuffNameKor();
         this.stuffType = userStuff.getStuff().getStuffType();
