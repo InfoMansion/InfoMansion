@@ -1,5 +1,6 @@
 package com.infomansion.server.domain.user.api;
 
+import com.infomansion.server.domain.user.auth.AccessTokenDto;
 import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.service.UserService;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,9 +53,21 @@ public class AuthApiController {
     }
 
     @PostMapping("/api/v1/auth/login")
-    public ResponseEntity<CommonResponse<TokenDto>> userLogin(@Valid @RequestBody UserLoginRequestDto requestDto) {
+    public ResponseEntity<? extends BasicResponse> userLogin(@Valid @RequestBody UserLoginRequestDto requestDto) {
+
+        TokenDto tokenDto = userService.login(requestDto);
+        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", tokenDto.getRefreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .path("/api/v1/auth/reissue")
+                .maxAge(120)
+                .sameSite("Strict")
+                .domain("localhost")
+                .build();
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userService.login(requestDto)));
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .body(new CommonResponse<>(AccessTokenDto.of(tokenDto)));
     }
 
     @PostMapping("/api/v1/auth/reissue")
