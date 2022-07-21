@@ -30,11 +30,12 @@ public enum ErrorCode {
     // STUFF
     STUFF_NOT_FOUND(HttpStatus.BAD_REQUEST, 40050, "해당 Stuff id를 찾을 수 없습니다."),
 
+    // USERSTUFF
+    USER_STUFF_NOT_FOUND(HttpStatus.BAD_REQUEST, 40060, "유효하지 않은 Stuff입니다."),
 
     //== 404 ==//
-    VERIFICATION_KEY_NOT_FOUND(HttpStatus.NOT_FOUND, 40400, "인증 키를 찾을 수 없습니다."),
+    VERIFICATION_KEY_NOT_FOUND(HttpStatus.NOT_FOUND, 40400, "인증 키를 찾을 수 없습니다.");
 
-    USER_STUFF_NOT_FOUND(HttpStatus.BAD_REQUEST, 40060, "유효하지 않은 Stuff입니다.");
 
     private final HttpStatus status;
     private final int code;
