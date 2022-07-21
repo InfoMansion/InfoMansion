@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar, Box, Card, CardActionArea, CardContent, CardMedia, CssBaseline, Divider, Paper, Slide, Toolbar, Typography, useScrollTrigger } from '@mui/material'
 import { Container, textAlign } from "@mui/system";
+import { useFrame } from "@react-three/fiber";
 
 function ElevationScroll(props) {
     const { children, window } = props;
@@ -15,15 +16,16 @@ function ElevationScroll(props) {
     });
 }
 
-export default function StuffPage( {...props} ) {
+export default function StuffPage( {data, ...props} ) {
     // 실제로 사용할 부분.
-    // const [alias] = useState(props.stuff_alias);
-    // const [category] = useState(props.category);
-    
+
     // 더미
-    const [alias] = useState('나의 싸피 일상');
-    const [category] = useState('IT');
-    const [maxcontent] = useState(100);
+    const [maxcontent] = useState(200);
+    const [stuff, setStuff] = useState(data);
+
+    useEffect(() => {
+        setStuff(data);
+    }, [data])
 
     // 사용자 PK, stuffID 같이 넘겨주면 받을 수 있음.
     // 여기서 넘겨주고 받아와야 함.
@@ -111,7 +113,7 @@ export default function StuffPage( {...props} ) {
                         mr : 2
                     }}
                 >
-                    {alias}
+                    {stuff.stuff_alias}
                 </Typography>
 
                 <Typography 
@@ -122,7 +124,7 @@ export default function StuffPage( {...props} ) {
                         color : '#ffffff'
                     }}
                 >
-                    {category}
+                    {stuff.category}
                 </Typography>
             </Toolbar>
 

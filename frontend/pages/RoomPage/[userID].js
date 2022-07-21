@@ -10,13 +10,13 @@ import { useSpring, animated } from 'react-spring'
 
 export default function RoomPage() {
     const [userID, setUserID] = useState(useRouter().query.userID);
-    const [stuffID, setStuffID] = useState('');
+    const [stuff, setStuff] = useState({});
     const [stuffon, setStuffon] = useState('');
 
     function StuffClick(stuff) {
         // 여기서 stuffpage로 변수 전달하면 됨.
         setStuffon(!stuffon);
-        console.log("방에서 디버그" + stuff);
+        setStuff(stuff);
     }
     const openAnimation = useSpring({
         from: { opacity: "0.3", maxHeight: "0px" },
@@ -97,7 +97,7 @@ export default function RoomPage() {
                                 className={styles.stuffPage}
                                 style={StuffAnimation}
                             >
-                                <StuffPage />
+                                <StuffPage data={stuff}/>
                             </animated.div>
 
                             <animated.div
