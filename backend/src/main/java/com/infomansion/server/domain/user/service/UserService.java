@@ -12,4 +12,5 @@ public interface UserService {
     boolean authBeforeChangePassword(UserAuthRequestDto requestDto);
     Long changePasswordAfterAuth(UserChangePasswordDto requestDto);
     Long changeCategories(UserChangeCategoriesDto requestDto);
+    boolean verifiedByEmail(String key);
 }
