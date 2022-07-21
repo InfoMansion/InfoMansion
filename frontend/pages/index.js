@@ -1,24 +1,23 @@
-import { debounce } from 'lodash';
 import { Link } from '@mui/material';
 import styles from '../styles/Hex.module.css';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function Home() {
-  if (typeof window !== 'undefined') {
-    const [windowSize, setWindowSize] = useState({ width: window.innerWidth });
+  const [windowSize, setWindowSize] = useState();
 
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-      });
+  const handleResize = useCallback(() => {
+    setWindowSize({
+      width: window.innerWidth,
+    });
+  }, []);
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
     };
-    useEffect(() => {
-      window.addEventListener('resize', handleResize);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }, []);
-  }
+  }, [handleResize]);
 
   return (
     <>
@@ -26,21 +25,17 @@ export default function Home() {
       <div style={{ display: 'flex', width: '100%', height: '640px' }}>
         <div style={{ width: '80%', height: '100%' }}>
           <ul className={styles.container}>
-            {Array.from(
-              {
-                length:
-                  typeof window !== 'undefined'
-                    ? window.innerWidth >= 1200
-                      ? 13
-                      : 7
-                    : 13,
-              },
-              (_, idx) => (
-                <li className={styles.item}>
-                  <Link href={`/RoomPage/${idx + 1}`}></Link>
-                </li>
-              ),
-            )}
+            {windowSize &&
+              Array.from(
+                {
+                  length: windowSize.width >= 1200 ? 13 : 7,
+                },
+                (_, idx) => (
+                  <li className={styles.item}>
+                    <Link href={`/RoomPage/${idx + 1}`}></Link>
+                  </li>
+                ),
+              )}
           </ul>
         </div>
         <div style={{ width: '20%', height: '100%' }}>
