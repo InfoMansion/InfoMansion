@@ -13,8 +13,8 @@
             "stuff_name" : "Wall",
             "stuff_name_kor" : "나무 벽",
             "stuff_glb_path" : "Wall_Test_1",
-            "geometry" : "",
-            "materials" : ""
+            "geometry" : "low_poly_interior1917",
+            "materials" : "low_poly_interior"
         },
         {
             "stuff_id" : "1",
@@ -29,8 +29,8 @@
             "stuff_name" : "Floor",
             "stuff_name_kor" : "나무바닥",
             "stuff_js_path" : "Floor_1",
-            "geometry" : "",
-            "materials" : ""
+            "geometry" : "low_poly_interior1922",
+            "materials" : "low_poly_interior"
         },
         {
             "stuff_id" : "1",
@@ -46,7 +46,7 @@
             "stuff_name_kor" : "커튼",
             "stuff_js_path" : "Curtain_white_large_1",
             "geometry" : "",
-            "materials" : ""
+            "materials" : "low_poly_interior"
         },
         {
             "stuff_id" : "1",
@@ -61,8 +61,8 @@
             "stuff_name" : "OrangePlant",
             "stuff_name_kor" : "오렌지색 식물",
             "stuff_js_path" : "Plant_orange_medium",
-            "geometry" : "",
-            "materials" : ""
+            "geometry" : "low_poly_interior1895",
+            "materials" : "low_poly_interior"
         },
         {
             "stuff_id" : "1",
@@ -78,7 +78,7 @@
             "stuff_name_kor" : "작은 갈색 테이블",
             "stuff_js_path" : "Table_brown_small_1",
             "geometry" : "",
-            "materials" : ""
+            "materials" : "low_poly_interior"
         },
         {
             "stuff_id" : "1",
@@ -94,7 +94,7 @@
             "stuff_name_kor" : "작은 검은색 협탁",
             "stuff_js_path" : "Table_side_black_1",
             "geometry" : "",
-            "materials" : ""
+            "materials" : "low_poly_interior"
         },
         {
             "stuff_id" : "1",
