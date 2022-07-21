@@ -18,7 +18,7 @@ export default function Mainframe({ children }) {
   return (
     <Box
       style={{
-        backgroundColor : 'black',
+        backgroundColor : '#eeeeee',
       }}
       sx={{
         minHeight : '1500px'
