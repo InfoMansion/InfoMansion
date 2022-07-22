@@ -61,17 +61,17 @@ export default function SignUp() {
       email: data.get('email'),
       password: data.get('password'),
       username: data.get('username'),
-      tel: data.get('tel'),
+      category: likeCate,
     };
-    // Axios({
-    //   url: 'http://localhost:8080/accounts/signup',
-    //   method: 'post',
-    //   data: credentials
-    // })
-    // .then(res => {
-    //   const token = res.data.key
-    //   setToken(token)
-    // })
+
+    Axios({
+      url: 'http://localhost:8080/api/v1/signup',
+      method: 'post',
+      data: credentials,
+    }).then(res => {
+      console.log('인증메일이 발송되었습니다.');
+      router.push('/login');
+    });
   };
 
   function prevPage() {
