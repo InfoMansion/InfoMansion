@@ -1,6 +1,6 @@
-import { OrbitControls, OrthographicCamera } from '@react-three/drei'
+import { Circle, Image, OrbitControls, OrthographicCamera, Text } from '@react-three/drei'
 import {Canvas, useThree, useFrame} from '@react-three/fiber'
-import { useEffect, useRef, useState, setState } from 'react'
+import { useEffect, useRef, useState, setState, useLayoutEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useSpring, animated, config } from '@react-spring/three'
 
@@ -9,6 +9,8 @@ import MapStuff from './RoomPage/MapStuff'
 
 import userStuff from './userStuff.json'
 import walltest from './walltest.json'
+import { Color } from 'three'
+import StuffTag from './RoomPage/StuffTag'
 
 export default function Room( { StuffClick, ...props} ) {
     // 화면 확대 정도 조정.
@@ -18,10 +20,6 @@ export default function Room( { StuffClick, ...props} ) {
     const [mapstuffs, setMapstuffs] = useState([]);
     const [stuffs, setStuffs] = useState([]);
     const [hovered, setHovered] = useState('');
-
-    // 호버 시 useFrame으로 bool 하나 true로 바꾸고,
-    // 호버 중인 동안 태그 따라다니게 하기.
-    // 호버 시 확대하는 것도 좋을듯.
 
     const router = useRouter();
     useEffect(() => {
@@ -79,7 +77,7 @@ export default function Room( { StuffClick, ...props} ) {
             >
             
             <Canvas               
-                shadows 
+                shadowmap
                 onCreated={state => state.gl.setClearColor("#ffffff")} >
                 
                 {/* light */}
@@ -120,27 +118,35 @@ export default function Room( { StuffClick, ...props} ) {
                         />
                         )}
                 </mesh>
-
+                
                 {/* 그림자 뱉을 요소 */}
                 {/* 이거 클로저 함수로 컴포넌트 리턴받도록 변경할 것. */}
                 <mesh castShadow>
                     { stuffs.map( stuff => 
-                        <Stuff
-                            Hover={Hover} 
-                            Click={Click}
+                        <group>
+                            <Stuff
+                                Hover={Hover}
+                                Click={Click}
 
-                            data={stuff} 
+                                data={stuff} 
 
-                            key={stuff.name}
+                                key={stuff.name}
 
-                            position={[stuff.pos_x, stuff.pos_y, stuff.pos_z]}
-                            rotation={[stuff.rot_x, stuff.rot_y, stuff.rot_z]}
-                        /> 
+                                position={[stuff.pos_x, stuff.pos_y, stuff.pos_z]}
+                                rotation={[stuff.rot_x, stuff.rot_y, stuff.rot_z]}
+                            />
+                            <group 
+                                position={[stuff.pos_x + 1, stuff.pos_y + 1.5, stuff.pos_z + 1]}
+                            >
+                                
+                                <StuffTag children={stuff.stuff_name} />
+                            </group>
+
+                        </group>
                     )}
                 </mesh>
 
-                {/* 사용자 인터렉션 */}
-                {/* <OrbitControls /> */}
+                <OrbitControls />
             </Canvas>
 
         </div>

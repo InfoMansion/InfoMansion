@@ -40,8 +40,6 @@ export default function Model({ Hover, Click, data, ...props }) {
       <mesh 
         geometry={nodes[geo].geometry} 
         material={materials[poly]} 
-        // position={[0, 0, 0]} 
-        // rotation={[0, 0, 0]} 
         scale={100} 
       />
     </animated.group>
