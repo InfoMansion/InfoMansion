@@ -24,6 +24,8 @@ import { atom, useRecoilState } from 'recoil';
 import { tokenState } from '../../state/token';
 import { likeCateState } from '../../state/likeCate';
 import { isLoginState } from '../../state/isLogin';
+import { Cookies } from 'react-cookie';
+import moment from 'moment';
 
 // const function Logout(){
 //   const [token, setToken] = useRecoilState(tokenState);
@@ -49,7 +51,7 @@ export default function LogIn() {
   const [isLogin, setisLogin] = useRecoilState(isLoginState);
   const [likeCate, setlikeCate] = useRecoilState(likeCateState);
   const [token, setToken] = useRecoilState(tokenState);
-
+  const cookies = new Cookies();
   const [inputId, setInputId] = useState('');
   const [inputPw, setInputPw] = useState('');
 
@@ -87,7 +89,13 @@ export default function LogIn() {
       data: credentials,
     }).then(res => {
       const accessToken = res.data.accessToken;
-      setToken(accessToken);
+      const expiresAt = res.data.expirestAt;
+      const [cookie] = res.headers['set-cookie'];
+      cookies.set(JSON.stringify(cookie));
+      setToken({
+        accessToken: accessToken,
+        expiresAt: expiresAt,
+      });
       Axios.defaults.header.common['Authorization'] = 'Bearer' + accessToken;
       setisLogin(true);
       // userState 업데이트 할 axios 요청 추가로 보내기
