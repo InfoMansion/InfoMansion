@@ -22,7 +22,6 @@ export default function Home() {
   return (
     <>
       <h1>Main page</h1>
-<<<<<<< HEAD
       <div style={{ display: 'flex', width: '100%', height: '640px' }}>
         <div style={{ width: '80%', height: '100%' }}>
           <ul className={styles.container}>
@@ -49,8 +48,5 @@ export default function Home() {
         </div>
       </div>
     </>
-=======
-    </div>
->>>>>>> 7257c8bff90484fc508764b5236360d1e100cef9
   );
 }
