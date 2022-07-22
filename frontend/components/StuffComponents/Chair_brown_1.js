@@ -6,9 +6,11 @@ import React, { useRef, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export default function Model({ Hover, Click, ...props }) {
-  const [name, setName] = useState("Chair_brown_1");
-  function onHover(e) { Hover(e, name); }
-  function onClick(e) { Click(e, name); }
+  function onHover(e) { Hover(e); }
+  function onClick(e) { Click(e); }
+
+  const geo = 'low_poly_interior1902' // props.geo
+  const poly = 'low_poly_interior'    // props.poly
 
   const group = useRef()
   const { nodes, materials } = useGLTF('/stuffAssets/chair_brown_1.glb')
@@ -21,7 +23,13 @@ export default function Model({ Hover, Click, ...props }) {
       {...props} 
       dispose={null}
     >
-      <mesh geometry={nodes.low_poly_interior1902.geometry} material={materials.low_poly_interior} position={[0,0,0]} rotation={[0, 0.34, -Math.PI / 4]} scale={100} />
+      <mesh 
+        geometry={nodes[geo].geometry} 
+        material={materials[poly]} 
+        position={[0,0,0]} 
+        rotation={[0, 0.34, -Math.PI / 4]} 
+        scale={100} 
+      />
     </group>
   )
 }
