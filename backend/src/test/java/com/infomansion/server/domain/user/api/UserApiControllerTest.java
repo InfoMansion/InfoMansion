@@ -42,7 +42,7 @@ class UserApiControllerTest {
 
     @AfterEach
     public void cleanUp() {
-        userRepository.deleteAll();;
+        userRepository.deleteAll();
     }
 
     @DisplayName("User 로그인 성공")
