@@ -5,6 +5,44 @@ import { useCallback, useEffect, useState } from 'react';
 export default function Home() {
   const [windowSize, setWindowSize] = useState();
 
+  const userRecommendList = [
+    {
+      id: 'hellossafy@ssafy.com',
+      name: '김싸피',
+      nickName: 'hellossafy',
+    },
+    {
+      id: 'iloveIU@ssafy.com',
+      name: '이지은',
+      nickName: 'IUzz',
+    },
+    {
+      id: 'sonnaldo@ssafy.com',
+      name: '손흥민',
+      nickName: '손날두',
+    },
+    {
+      id: 'y@ssafy.com',
+      name: '김싸피',
+      nickName: 'hellossafy',
+    },
+    {
+      id: 'hellossafy@ssafy.com',
+      name: '김싸피',
+      nickName: 'hellossafy',
+    },
+    {
+      id: 'hellossafy@ssafy.com',
+      name: '김싸피',
+      nickName: 'hellossafy',
+    },
+    {
+      id: 'hellossafy@ssafy.com',
+      name: '김싸피',
+      nickName: 'hellossafy',
+    },
+  ];
+
   const handleResize = useCallback(() => {
     setWindowSize({
       width: window.innerWidth,
@@ -40,10 +78,13 @@ export default function Home() {
         </div>
         <div style={{ width: '20%', height: '100%' }}>
           <div
-            style={{ width: '100%', height: '70%', background: 'red' }}
+            style={{ width: '100%', height: '50%', background: 'red' }}
           ></div>
           <div
             style={{ width: '100%', height: '30%', background: 'black' }}
+          ></div>
+          <div
+            style={{ width: '100%', height: '20%', background: 'yellow' }}
           ></div>
         </div>
       </div>
