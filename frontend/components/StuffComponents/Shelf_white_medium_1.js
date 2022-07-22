@@ -7,15 +7,15 @@ import { useGLTF } from '@react-three/drei'
 
 export default function Model({ Hover, Click, ...props }) {
   const [name, setName] = useState("Shelf_white_medium");
-  function onHover() { Hover(name); }
-  function onClick() { Click(name); }
+  function onHover(e) { Hover(e, name); }
+  function onClick(e) { Click(e, name); }
 
   const group = useRef()
   const { nodes, materials } = useGLTF('/stuffAssets/shelf_white_medium_1.glb')
   return (
     <group 
-      onPointerOver={() => onHover()}
-      onPointerDown={() => onClick()}
+      onPointerOver={(e) => onHover(e)}
+      onPointerDown={(e) => onClick(e)}
       castShadow
       ref={group} 
       {...props} 

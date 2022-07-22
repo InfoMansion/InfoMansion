@@ -1,6 +1,7 @@
-import Head from "next/head";
-import Layout from "../components/Layout";
-import "../styles/globals.css";
+import Head from 'next/head';
+import Layout from '../components/Layout';
+import '../styles/globals.css';
+import { RecoilRoot } from 'recoil';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -9,9 +10,11 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="/favicon.ico" />
         <title>InfoMansion</title>
       </Head>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <RecoilRoot>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </RecoilRoot>
     </>
   );
 }
