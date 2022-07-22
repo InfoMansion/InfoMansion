@@ -84,7 +84,7 @@ export default function DenseAppBar() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>프로필</MenuItem>
-      <Link href="/RoomPage">
+      <Link href="/RoomPage/1">
         <MenuItem onClick={handleMenuClose}>마이룸</MenuItem>
       </Link>
       <MenuItem onClick={handleMenuClose}>로그아웃</MenuItem>
