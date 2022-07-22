@@ -21,24 +21,24 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from 'axios';
 import { useRouter } from 'next/router';
 import { atom, useRecoilState } from 'recoil';
-import tokenState from '../../state/token';
+import { tokenState } from '../../state/token';
 import { likeCateState } from '../../state/likeCate';
-
-function TokenInput() {
-  const [token, setToken] = useRecoilState(tokenState);
-}
+import { isLoginState } from '../../state/isLogin';
 
 // const function Logout(){
+//   const [token, setToken] = useRecoilState(tokenState);
+//   Axios.defaults.header.common['Authorization'] = 'Bearer' + token;
 //   const handleSubmit = (event) => {
 //     event.preventDefault()
+
 // Axios({
-//   url: 'http://localhost:8080/accounts/login',
+//   url: 'http://localhost:8080/api/v1/logout',
 //   method: 'post',
-//   data: credentials
+//   headers: ''
 // })
 // .then(res => {
-//   const token = ''
-//   setToken(token)
+//   console.log('logout')
+//   setToken('')
 // })
 //   }
 // }
@@ -46,7 +46,9 @@ function TokenInput() {
 const theme = createTheme();
 
 export default function LogIn() {
+  const [isLogin, setisLogin] = useRecoilState(isLoginState);
   const [likeCate, setlikeCate] = useRecoilState(likeCateState);
+  const [token, setToken] = useRecoilState(tokenState);
 
   const [inputId, setInputId] = useState('');
   const [inputPw, setInputPw] = useState('');
@@ -79,15 +81,17 @@ export default function LogIn() {
       password: data.get('password'),
     };
 
-    // Axios({
-    //   url: 'http://localhost:8080/accounts/login',
-    //   method: 'post',
-    //   data: credentials
-    // })
-    // .then(res => {
-    //   const token = res.data.key
-    //   setToken(token)
-    // })
+    Axios({
+      url: 'http://localhost:8080/api/v1/auth/login',
+      method: 'post',
+      data: credentials,
+    }).then(res => {
+      const accessToken = res.data.accessToken;
+      setToken(accessToken);
+      Axios.defaults.header.common['Authorization'] = 'Bearer' + accessToken;
+      setisLogin(true);
+      // userState 업데이트 할 axios 요청 추가로 보내기
+    });
   };
 
   return (
