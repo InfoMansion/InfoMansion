@@ -1,6 +1,9 @@
 package com.infomansion.server.domain.user.service.impl;
 
 import com.infomansion.server.domain.category.Category;
+import com.infomansion.server.domain.room.dto.RoomRequestDto;
+import com.infomansion.server.domain.room.repository.RoomRepository;
+import com.infomansion.server.domain.room.service.RoomService;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.domain.user.repository.UserRepository;
@@ -23,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +42,8 @@ public class UserServiceImpl implements UserService {
     private final TokenProvider tokenProvider;
     private final RedisTemplate redisTemplate;
     private final VerifyEmailService verifyEmailService;
-
+    private final RoomRepository roomRepository;
+    private final RoomService roomService;
 
     @Override
     @Transactional
@@ -130,6 +135,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.grantFromTempToUser();
+
+        RoomRequestDto roomRequestDto= RoomRequestDto.builder()
+                .userId(user.getId())
+                .build();
+        roomService.createRoom(roomRequestDto);
         return true;
     }
 
