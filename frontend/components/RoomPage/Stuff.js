@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
+import { animated, config, useSpring  } from '@react-spring/three';
 
 export default function Model({ Hover, Click, data, ...props }) {
   const [geo] = useState(data.geometry);
@@ -11,19 +12,30 @@ export default function Model({ Hover, Click, data, ...props }) {
   
   const group = useRef()
 
-  // console.log(glb);
   // component가 하나라도 잘못되었을 때 렌더링이 고장나는 것을 방지.
   if(!glb) return null;
 
+  const [active, setActive] = useState(false);
+  const {scale} = useSpring({
+    scale : active ? 1.2 : 1,
+    config : config.wobbly
+  })
+
   const { nodes, materials } = useGLTF(`/stuffAssets/${glb}.glb`)
   return (
-    <group 
+    <animated.group 
       onPointerOver={(e) => onHover(e)}
       onPointerDown={(e) => onClick(e)}
+
+      onPointerEnter={() => setActive(true)}
+      onPointerLeave={() => setActive(false)}
+
       castShadow
       ref={group} 
       {...props} 
       dispose={null}
+
+      scale={scale}
     >
       <mesh 
         geometry={nodes[geo].geometry} 
@@ -32,7 +44,7 @@ export default function Model({ Hover, Click, data, ...props }) {
         // rotation={[0, 0, 0]} 
         scale={100} 
       />
-    </group>
+    </animated.group>
   )
 }
 
