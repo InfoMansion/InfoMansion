@@ -42,7 +42,6 @@ public class UserServiceImpl implements UserService {
     private final TokenProvider tokenProvider;
     private final RedisTemplate redisTemplate;
     private final VerifyEmailService verifyEmailService;
-    private final RoomRepository roomRepository;
     private final RoomService roomService;
 
     @Override

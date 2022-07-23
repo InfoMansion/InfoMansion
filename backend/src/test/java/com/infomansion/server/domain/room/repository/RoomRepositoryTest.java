@@ -1,20 +1,14 @@
 package com.infomansion.server.domain.room.repository;
 
 import com.infomansion.server.domain.room.domain.Room;
-import com.infomansion.server.domain.room.repository.RoomRepository;
-import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
-import com.infomansion.server.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.security.RunAs;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,35 +27,38 @@ public class RoomRepositoryTest {
     @Test
     public void Room_생성_및_조회(){
 
-        //User 생성
-        String email = "infomansion@test.com";
-        String password = "testPassword1$";
-        String tel = "01012345678";
-        String username = "infomansion";
-        String categories = "IT,COOK";
+        User user = null;
+        // User 생성
+        for(int i=0;i<5;i++){
+            String email = "infomansion@test.com" + (i+1);
+            String password = "testPassword1$" + (i+1);
+            String tel = "01012345678" + (i+1);
+            String username = "infomansion" + (i+1);
+            String categories = "IT,COOK";
 
-        User user = userRepository.save(User.builder()
-                .email(email)
-                .password(password)
-                .tel(tel)
-                .username(username)
-                .categories(categories)
-                .build());
+            user = userRepository.save(User.builder()
+                    .email(email)
+                    .password(password)
+                    .tel(tel)
+                    .username(username)
+                    .categories(categories)
+                    .build());
 
-        Long user_id = user.getId();
+            Long userId = user.getId();
 
-        //Room 생성
-        String roomImg = "info/roomImg";
+            //Room 생성
+            String roomImg = "info/roomImg" + (i+1);
 
-        Room room = Room.builder()
-                .user(user)
-                .room_img(roomImg).
-                build();
+            Room room = Room.builder()
+                    .user(user)
+                    .roomImg(roomImg).
+                    build();
 
-        roomRepository.save(room);
+            roomRepository.save(room);
+        }
 
-        List<Room> roomList = roomRepository.findAll();
-        assertThat(roomList.get(0).getUser().getId()).isEqualTo(user_id);
+        Room room1 = roomRepository.findByUser(user);
+        assertThat(room1.getUser().getUsername()).isEqualTo("infomansion5");
 
     }
 

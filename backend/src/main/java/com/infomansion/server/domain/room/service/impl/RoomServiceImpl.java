@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -41,13 +40,13 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void deleteRoom(Long room_id) {
-        validationRoomId(room_id);
-        roomRepository.deleteById(room_id);
+    public void deleteRoom(Long userId) {
+        validationRoomId(userId);
+        roomRepository.deleteById(userId);
     }
 
-    private void validationRoomId(Long room_id){
-        if(!roomRepository.existsById(room_id)) throw new CustomException(ErrorCode.ROOM_NOT_FOUND);
+    private void validationRoomId(Long roomId){
+        if(!roomRepository.existsById(roomId)) throw new CustomException(ErrorCode.ROOM_NOT_FOUND);
     }
 
     @Override

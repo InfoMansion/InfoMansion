@@ -14,6 +14,7 @@ public enum ErrorCode {
     DUPLICATE_USER_EMAIL(HttpStatus.BAD_REQUEST,40002, "중복된 사용자 이메일입니다."),
     DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST,40003, "중복된 사용자 닉네임입니다."),
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST, 40004, "비밀번호가 올바르지 않습니다."),
+    NOT_VALID_USER(HttpStatus.BAD_REQUEST, 40005, "해당 User에게 Room을 생성할 수 있는 권한이 없습니다."),
 
     // JWT
     NOT_VALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST,40020, "유효하지 않은 Refresh Token입니다."),
@@ -32,7 +33,6 @@ public enum ErrorCode {
 
     // ROOM
     ROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, 40060, "해당 Room을 찾을 수 없습니다."),
-    NOT_VALID_USER(HttpStatus.BAD_REQUEST, 40061, "해당 User에게 Room을 생성할 수 있는 권한이 없습니다."),
 
     // USERSTUFF
     USER_STUFF_NOT_FOUND(HttpStatus.BAD_REQUEST, 40060, "유효하지 않은 Stuff입니다."),

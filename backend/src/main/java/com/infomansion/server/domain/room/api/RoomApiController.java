@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @RestController
 public class RoomApiController {
 
-    private RoomService roomService;
+    private final RoomService roomService;
 
     @PostMapping("/api/v1/rooms")
     private ResponseEntity<CommonResponse<Long>> createRoom(@Valid @RequestBody RoomRequestDto requestDto){
@@ -24,7 +24,7 @@ public class RoomApiController {
 
     @GetMapping("/api/v1/rooms")
     private ResponseEntity<CommonResponse<RoomResponseDto>> findRoomById(@Valid @RequestParam RoomRequestDto requestDto){
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new CommonResponse<>(roomService.findRoombyId(requestDto)));
+        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomService.findRoombyId(requestDto)));
     }
 
     @DeleteMapping("/api/v1/rooms/{userId}")

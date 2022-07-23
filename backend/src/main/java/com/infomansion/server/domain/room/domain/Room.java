@@ -22,12 +22,12 @@ public class Room {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String room_img;
+    private String roomImg;
 
     @Builder
-    public Room(Long id, User user, String room_img) {
+    public Room(Long id, User user, String roomImg) {
         this.id = id;
         this.user = user;
-        this.room_img = room_img;
+        this.roomImg = roomImg;
     }
 }

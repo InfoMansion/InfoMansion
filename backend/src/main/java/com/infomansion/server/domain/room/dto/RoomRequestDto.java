@@ -7,9 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 
 @ToString
@@ -20,18 +17,18 @@ public class RoomRequestDto {
     @NotBlank
     private Long userId;
     @NotBlank
-    private String room_img;
+    private String roomImg;
 
     @Builder
     public RoomRequestDto(Long userId) {
         this.userId = userId;
-        this.room_img = "default";
+        this.roomImg = "default";
     }
 
     public Room toEntity(User user){
         return Room.builder()
                 .user(user)
-                .room_img(room_img)
+                .roomImg(roomImg)
                 .build();
     }
 }
