@@ -79,4 +79,22 @@ public class UserStuff {
         this.rotY = BigDecimal.ZERO;
         this.rotZ = BigDecimal.ZERO;
     }
+
+    /**
+     * 배치된 UserStuff의 Alias 또는 Category 변경
+     */
+    public void changeAliasAndCategory(String alias, String category) {
+        this.alias = alias == null ? this.alias : alias;
+        this.category = category == null ? this.category : Category.valueOf(category);
+    }
+
+    /**
+     * UserStuff를 배치된 상태로 변경
+     */
+    public void changeIncludedStatus(String alias, String category, BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ) {
+        this.alias = alias;
+        this.category = Category.valueOf(category);
+        this.selected = true;
+        changePosAndRot(posX, posY, posZ, rotX, rotY, rotZ);
+    }
 }

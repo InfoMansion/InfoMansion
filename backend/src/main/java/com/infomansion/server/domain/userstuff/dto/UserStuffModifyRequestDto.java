@@ -29,18 +29,6 @@ public class UserStuffModifyRequestDto {
         this.alias = alias;
     }
 
-    public UserStuff toEntity(UserStuff us) {
-        return UserStuff.builder()
-                .id(id)
-                .user(us.getUser())
-                .stuff(us.getStuff())
-                .alias(alias == null ? us.getAlias() : alias)
-                .category(category == null ? us.getCategory() : Category.valueOf(category))
-                .selected(us.getSelected())
-                .posX(us.getPosX()).posY(us.getPosY()).posZ(us.getPosZ())
-                .rotX(us.getRotX()).rotY(us.getRotY()).rotZ(us.getRotZ()).build();
-    }
-
     public void isValidCategory() {
         if(category == null) return;
         String upperCategory = category.toUpperCase();

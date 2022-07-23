@@ -81,7 +81,10 @@ public class UserStuffServiceImpl implements UserStuffService {
          */
         if(findUserStuff.getSelected()) throw new CustomException(ErrorCode.INCLUDED_USER_STUFF);
 
-        return userStuffRepository.save(requestDto.toEntity(findUserStuff)).getId();
+        findUserStuff.changeIncludedStatus(requestDto.getAlias(), requestDto.getCategory(),
+                requestDto.getPosX(), requestDto.getPosY(), requestDto.getPosZ(),
+                requestDto.getRotX(), requestDto.getRotY(), requestDto.getRotZ());
+        return findUserStuff.getId();
     }
 
     @Transactional
@@ -101,9 +104,12 @@ public class UserStuffServiceImpl implements UserStuffService {
          * 배치되지 않은 Stuff의 Alias나 Category를 변경할 경우 throw
          */
         if(!us.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
-        return userStuffRepository.save(requestDto.toEntity(us)).getId();
+
+        us.changeAliasAndCategory(requestDto.getAlias(), requestDto.getCategory());
+        return us.getId();
     }
 
+    @Transactional
     @Override
     public Long modifyPosAndRot(UserStuffPositionRequestDto requestDto) {
         UserStuff userStuff = userStuffRepository.findById(requestDto.getId())

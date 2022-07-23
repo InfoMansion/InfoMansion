@@ -53,16 +53,4 @@ public class UserStuffIncludeRequestDto {
         this.rotY = new BigDecimal(rotY);
         this.rotZ = new BigDecimal(rotZ);
     }
-
-    public UserStuff toEntity(UserStuff us) {
-        return UserStuff.builder()
-                .id(id)
-                .stuff(us.getStuff())
-                .user(us.getUser())
-                .alias(alias)
-                .category(Category.valueOf(category))
-                .selected(true)
-                .posX(posX).posY(posY).posZ(posZ)
-                .rotX(rotX).rotY(rotY).rotZ(rotZ).build();
-    }
 }
