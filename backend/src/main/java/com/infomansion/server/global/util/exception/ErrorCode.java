@@ -31,6 +31,9 @@ public enum ErrorCode {
 
     // USERSTUFF
     USER_STUFF_NOT_FOUND(HttpStatus.BAD_REQUEST, 40060, "유효하지 않은 Stuff입니다."),
+    EXCLUDED_USER_STUFF(HttpStatus.BAD_REQUEST, 40061, "제외된 Stuff입니다."),
+    INCLUDED_USER_STUFF(HttpStatus.BAD_REQUEST, 40062, "배치된 Stuff입니다."),
+    NULL_VALUE_OF_ALIAS_AND_CATEGORY(HttpStatus.BAD_REQUEST, 40063, "별칭 또는 카테고리 값이 필요합니다."),
 
     //== 401 ==//
     TOKEN_WITHOUT_AUTHORITY(HttpStatus.UNAUTHORIZED,40101, "권한 정보가 없는 토큰입니다."),

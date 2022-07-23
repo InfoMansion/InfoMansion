@@ -1,7 +1,6 @@
 package com.infomansion.server.domain.userstuff.service;
 
-import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
+import com.infomansion.server.domain.userstuff.dto.*;
 
 import java.util.List;
 
@@ -13,5 +12,12 @@ public interface UserStuffService {
 
     UserStuffResponseDto findUserStuffByUserStuffId(Long userStuffId);
 
+    Long excludeUserStuff(Long userStuffId);
+
+    Long includeUserStuff(UserStuffIncludeRequestDto requestDto);
+
+    Long modifyAliasAndCategory(UserStuffModifyRequestDto requestDto);
+
+    Long modifyPosAndRot(UserStuffPositionRequestDto requestDto);
 
 }
