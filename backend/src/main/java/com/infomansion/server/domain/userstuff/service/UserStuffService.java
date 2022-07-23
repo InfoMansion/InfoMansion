@@ -1,9 +1,6 @@
 package com.infomansion.server.domain.userstuff.service;
 
-import com.infomansion.server.domain.userstuff.dto.UserStuffIncludeRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffModifyRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
+import com.infomansion.server.domain.userstuff.dto.*;
 
 import java.util.List;
 
@@ -20,5 +17,7 @@ public interface UserStuffService {
     Long includeUserStuff(UserStuffIncludeRequestDto requestDto);
 
     Long modifyAliasAndCategory(UserStuffModifyRequestDto requestDto);
+
+    Long modifyPosAndRot(UserStuffPositionRequestDto requestDto);
 
 }

@@ -7,6 +7,7 @@ import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.dto.UserStuffIncludeRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffModifyRequestDto;
+import com.infomansion.server.domain.userstuff.dto.UserStuffPositionRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
@@ -243,6 +244,29 @@ public class UserStuffApiControllerTest {
                 .andExpect(jsonPath("$.code").value(40063))
                 .andExpect(jsonPath("$.message").value("별칭 또는 카테고리 값이 필요합니다."));
 
+    }
+
+    @DisplayName("배치되지 않은 UserStuff의 Position 변경 시 실패")
+    @Test
+    public void userstuff_pos_and_rot_수정_실패() throws Exception {
+        // given
+        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
+                .userId(userId)
+                .stuffId(stuffIds.get(0)).build();
+        Long userStuffId = userStuffService.saveUserStuff(createDto);
+
+        // when, then
+        UserStuffPositionRequestDto modifyDto = UserStuffPositionRequestDto.builder()
+                .id(userStuffId)
+                .posX(3.2).posY(3.3).posZ(0.1)
+                .rotX(0.0).rotY(0.0).rotZ(1.2).build();
+        String modifyDtoJson = objectMapper.writeValueAsString(modifyDto);
+        mockMvc.perform(put("/api/v1/userstuffs/position")
+                        .content(modifyDtoJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(40061))
+                .andExpect(jsonPath("$.message").value("제외된 Stuff입니다."));
     }
 
 

@@ -58,6 +58,18 @@ public class UserStuff {
         this.rotZ = rotZ;
     }
 
+    /**
+     * 배치된 UserStuff의 Position과 Rotation 변경
+     */
+    public void changePosAndRot(BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ) {
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
+        this.rotX = rotX;
+        this.rotY = rotY;
+        this.rotZ = rotZ;
+    }
+
     public void resetPosAndRot() {
         this.selected = false;
         this.posX = BigDecimal.ZERO;

@@ -5,10 +5,7 @@ import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
-import com.infomansion.server.domain.userstuff.dto.UserStuffIncludeRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffModifyRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
+import com.infomansion.server.domain.userstuff.dto.*;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
 import com.infomansion.server.global.util.exception.CustomException;
@@ -104,8 +101,24 @@ public class UserStuffServiceImpl implements UserStuffService {
          * 배치되지 않은 Stuff의 Alias나 Category를 변경할 경우 throw
          */
         if(!us.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
-
         return userStuffRepository.save(requestDto.toEntity(us)).getId();
     }
+
+    @Override
+    public Long modifyPosAndRot(UserStuffPositionRequestDto requestDto) {
+        UserStuff userStuff = userStuffRepository.findById(requestDto.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        /**
+         * 배치되지 않은 Stuff의 Position과 Rotation을 변경할 경우 throw
+         */
+        if(!userStuff.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
+
+        userStuff.changePosAndRot(requestDto.getPosX(), requestDto.getPosY(), requestDto.getPosZ(),
+                requestDto.getRotX(), requestDto.getRotY(), requestDto.getRotZ());
+
+        return userStuff.getId();
+    }
+
 
 }

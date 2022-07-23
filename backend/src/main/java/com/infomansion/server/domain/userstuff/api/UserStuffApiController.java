@@ -1,9 +1,6 @@
 package com.infomansion.server.domain.userstuff.api;
 
-import com.infomansion.server.domain.userstuff.dto.UserStuffIncludeRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffModifyRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
+import com.infomansion.server.domain.userstuff.dto.*;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
 import com.infomansion.server.global.apispec.CommonResponse;
 import lombok.RequiredArgsConstructor;
@@ -54,5 +51,11 @@ public class UserStuffApiController {
     public ResponseEntity<CommonResponse<Long>> modifyAliasAndCategory(@Valid @RequestBody UserStuffModifyRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userStuffService.modifyAliasAndCategory(requestDto)));
+    }
+
+    @PutMapping("/api/v1/userstuffs/position")
+    public ResponseEntity<CommonResponse<Long>> modifyPosAndRot(@Valid @RequestBody UserStuffPositionRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userStuffService.modifyPosAndRot(requestDto)));
     }
 }
