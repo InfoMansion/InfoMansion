@@ -40,9 +40,9 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void deleteRoom(Long userId) {
-        validationRoomId(userId);
-        roomRepository.deleteById(userId);
+    public void deleteRoom(Long roomId) {
+        validationRoomId(roomId);
+        roomRepository.deleteById(roomId);
     }
 
     private void validationRoomId(Long roomId){

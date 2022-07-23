@@ -17,6 +17,6 @@ public interface RoomService {
     List<RoomResponseDto> findAllRoom();
 
     //Room 삭제
-    void deleteRoom(Long userId);
+    void deleteRoom(Long roomId);
 
 }
