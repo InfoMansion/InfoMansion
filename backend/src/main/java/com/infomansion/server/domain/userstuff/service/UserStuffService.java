@@ -20,4 +20,6 @@ public interface UserStuffService {
 
     Long modifyPosAndRot(UserStuffPositionRequestDto requestDto);
 
+    Long removeUserStuff(Long userStuffId);
+
 }
