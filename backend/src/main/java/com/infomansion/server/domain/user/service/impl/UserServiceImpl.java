@@ -14,9 +14,9 @@ import com.infomansion.server.global.util.exception.ErrorCode;
 import com.infomansion.server.global.util.jwt.ReissueDto;
 import com.infomansion.server.global.util.jwt.TokenDto;
 import com.infomansion.server.global.util.jwt.TokenProvider;
+import com.infomansion.server.global.util.redis.RedisUtil;
 import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
-    private final RedisTemplate redisTemplate;
+    private final RedisUtil redisUtil;
     private final VerifyEmailService verifyEmailService;
     private final RoomService roomService;
 
@@ -62,8 +62,7 @@ public class UserServiceImpl implements UserService {
 
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresTime(), TimeUnit.MILLISECONDS);
+        redisUtil.setDataExpire("RT:"+authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresTime(), TimeUnit.MILLISECONDS);
 
         return tokenDto;
     }
@@ -71,13 +70,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public TokenDto reissue(ReissueDto reissueDto) {
-        if(!tokenProvider.validateToken(reissueDto.getRefreshToken())) {
+        if(!tokenProvider.validateToken(reissueDto.getAccessToken())) {
             throw new CustomException(ErrorCode.NOT_VALID_REFRESH_TOKEN);
         }
 
         Authentication authentication = tokenProvider.getAuthentication(reissueDto.getAccessToken());
 
-        String refreshToken = (String) redisTemplate.opsForValue().get("RT:" + authentication.getName());
+        String refreshToken = redisUtil.getData("RT:" + authentication.getName());
 
         if(!refreshToken.equals(reissueDto.getRefreshToken())) {
             throw new CustomException(ErrorCode.NOT_VALID_REFRESH_TOKEN);
@@ -85,8 +84,7 @@ public class UserServiceImpl implements UserService {
 
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresTime(), TimeUnit.MILLISECONDS);
+        redisUtil.setDataExpire("RT:"+authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresTime(), TimeUnit.MILLISECONDS);
 
         return tokenDto;
     }

@@ -5,22 +5,20 @@ import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
-import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
+import com.infomansion.server.domain.userstuff.dto.*;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class UserStuffServiceImpl implements UserStuffService {
 
@@ -28,6 +26,7 @@ public class UserStuffServiceImpl implements UserStuffService {
     private final StuffRepository stuffRepository;
     private final UserStuffRepository userStuffRepository;
 
+    @Transactional
     @Override
     public Long saveUserStuff(UserStuffRequestDto requestDto) {
         User user = userRepository.findById(requestDto.getUserId())
@@ -54,6 +53,77 @@ public class UserStuffServiceImpl implements UserStuffService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
 
         return new UserStuffResponseDto(findUserStuff);
+    }
+
+    @Transactional
+    @Override
+    public Long excludeUserStuff(Long userStuffId) {
+        UserStuff findUserStuff = userStuffRepository.findById(userStuffId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        /**
+         * 이미 제외된 Stuff를 요청하는 경우 throw
+         */
+        if(!findUserStuff.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
+
+        findUserStuff.resetPosAndRot();
+        return userStuffId;
+    }
+
+    @Transactional
+    @Override
+    public Long includeUserStuff(UserStuffIncludeRequestDto requestDto) {
+        UserStuff findUserStuff = userStuffRepository.findById(requestDto.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        /**
+         * 이미 배치된 Stuff를 요청하는 경우 throw
+         */
+        if(findUserStuff.getSelected()) throw new CustomException(ErrorCode.INCLUDED_USER_STUFF);
+
+        findUserStuff.changeIncludedStatus(requestDto.getAlias(), requestDto.getCategory(),
+                requestDto.getPosX(), requestDto.getPosY(), requestDto.getPosZ(),
+                requestDto.getRotX(), requestDto.getRotY(), requestDto.getRotZ());
+        return findUserStuff.getId();
+    }
+
+    @Transactional
+    @Override
+    public Long modifyAliasAndCategory(UserStuffModifyRequestDto requestDto) {
+        /**
+         * Alias와 Category 둘 다 입력하지 않았다면 throw
+         */
+        if(requestDto.getCategory() == null && requestDto.getAlias() == null)
+            throw new CustomException(ErrorCode.NULL_VALUE_OF_ALIAS_AND_CATEGORY);
+
+        requestDto.isValidCategory();
+        UserStuff us = userStuffRepository.findById(requestDto.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        /**
+         * 배치되지 않은 Stuff의 Alias나 Category를 변경할 경우 throw
+         */
+        if(!us.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
+
+        us.changeAliasAndCategory(requestDto.getAlias(), requestDto.getCategory());
+        return us.getId();
+    }
+
+    @Transactional
+    @Override
+    public Long modifyPosAndRot(UserStuffPositionRequestDto requestDto) {
+        UserStuff userStuff = userStuffRepository.findById(requestDto.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        /**
+         * 배치되지 않은 Stuff의 Position과 Rotation을 변경할 경우 throw
+         */
+        if(!userStuff.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
+
+        userStuff.changePosAndRot(requestDto.getPosX(), requestDto.getPosY(), requestDto.getPosZ(),
+                requestDto.getRotX(), requestDto.getRotY(), requestDto.getRotZ());
+
+        return userStuff.getId();
     }
 
 

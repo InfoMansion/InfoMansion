@@ -7,18 +7,20 @@ import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.ToString;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
+@ToString
 @Getter
 @NoArgsConstructor
 public class UserStuffRequestDto {
 
-    @NotBlank
+    @NotNull
     private Long userId;
 
-    @NotBlank
+    @NotNull
     private Long stuffId;
 
     @Builder
@@ -32,8 +34,8 @@ public class UserStuffRequestDto {
                 .stuff(stuff)
                 .user(user)
                 .selected(false)
-                .posX(0f).posY(0f).posZ(0f)
-                .rotX(0f).rotY(0f).rotZ(0f)
+                .posX(BigDecimal.ZERO).posY(BigDecimal.ZERO).posZ(BigDecimal.ZERO)
+                .rotX(BigDecimal.ZERO).rotY(BigDecimal.ZERO).rotZ(BigDecimal.ZERO)
                 .build();
     }
 
