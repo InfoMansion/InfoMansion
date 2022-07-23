@@ -15,14 +15,13 @@ import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class UserStuffServiceImpl implements UserStuffService {
 
@@ -30,6 +29,7 @@ public class UserStuffServiceImpl implements UserStuffService {
     private final StuffRepository stuffRepository;
     private final UserStuffRepository userStuffRepository;
 
+    @Transactional
     @Override
     public Long saveUserStuff(UserStuffRequestDto requestDto) {
         User user = userRepository.findById(requestDto.getUserId())
@@ -58,6 +58,7 @@ public class UserStuffServiceImpl implements UserStuffService {
         return new UserStuffResponseDto(findUserStuff);
     }
 
+    @Transactional
     @Override
     public Long excludeUserStuff(Long userStuffId) {
         UserStuff findUserStuff = userStuffRepository.findById(userStuffId)
@@ -68,19 +69,11 @@ public class UserStuffServiceImpl implements UserStuffService {
          */
         if(!findUserStuff.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
 
-        UserStuff request = UserStuff.builder()
-                .id(findUserStuff.getId())
-                .stuff(findUserStuff.getStuff())
-                .user(findUserStuff.getUser())
-                .alias(findUserStuff.getAlias())
-                .category(findUserStuff.getCategory())
-                .selected(false)
-                .posX(0f).posY(0f).posZ(0f)
-                .rotX(0f).rotY(0f).rotZ(0f).build();
-
-        return userStuffRepository.save(request).getId();
+        findUserStuff.resetPosAndRot();
+        return userStuffId;
     }
 
+    @Transactional
     @Override
     public Long includeUserStuff(UserStuffIncludeRequestDto requestDto) {
         UserStuff findUserStuff = userStuffRepository.findById(requestDto.getId())
@@ -94,6 +87,7 @@ public class UserStuffServiceImpl implements UserStuffService {
         return userStuffRepository.save(requestDto.toEntity(findUserStuff)).getId();
     }
 
+    @Transactional
     @Override
     public Long modifyAliasAndCategory(UserStuffModifyRequestDto requestDto) {
         /**
@@ -102,6 +96,7 @@ public class UserStuffServiceImpl implements UserStuffService {
         if(requestDto.getCategory() == null && requestDto.getAlias() == null)
             throw new CustomException(ErrorCode.NULL_VALUE_OF_ALIAS_AND_CATEGORY);
 
+        requestDto.isValidCategory();
         UserStuff us = userStuffRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
 
@@ -112,6 +107,5 @@ public class UserStuffServiceImpl implements UserStuffService {
 
         return userStuffRepository.save(requestDto.toEntity(us)).getId();
     }
-
 
 }
