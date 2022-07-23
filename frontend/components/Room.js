@@ -2,15 +2,14 @@ import { Circle, Image, OrbitControls, OrthographicCamera, Text } from '@react-t
 import {Canvas, useThree, useFrame} from '@react-three/fiber'
 import { useEffect, useRef, useState, setState, useLayoutEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useSpring, animated, config } from '@react-spring/three'
+import { Button } from '@mui/material'
 
 import Stuff from './RoomPage/Stuff'
 import MapStuff from './RoomPage/MapStuff'
-
-import userStuff from './userStuff.json'
-import walltest from './walltest.json'
-import { Color } from 'three'
 import StuffTag from './RoomPage/StuffTag'
+
+// data
+import userStuff from './userStuff.json'
 
 export default function Room( { StuffClick, ...props} ) {
     // 화면 확대 정도 조정.
@@ -20,6 +19,7 @@ export default function Room( { StuffClick, ...props} ) {
     const [mapstuffs, setMapstuffs] = useState([]);
     const [stuffs, setStuffs] = useState([]);
     const [hovered, setHovered] = useState('');
+    const [tagon, setTagon] = useState(true);
 
     const router = useRouter();
     useEffect(() => {
@@ -75,8 +75,22 @@ export default function Room( { StuffClick, ...props} ) {
                 // margin : '30px auto'
                 }}
             >
-            
+                {/* 태그 토글 버튼 */}
+                <Button variant="outlined"
+                    style={{
+                        position : 'absolute',
+                        zIndex : '2'
+                    }}
+                    sx={{
+                        m : 2
+                    }}
+                >
+                    태그 보기.
+                </Button>
             <Canvas               
+                style={{
+                    zIndex : '1'
+                }}
                 shadowmap
                 onCreated={state => state.gl.setClearColor("#ffffff")} >
                 
@@ -139,14 +153,18 @@ export default function Room( { StuffClick, ...props} ) {
                                 position={[stuff.pos_x + 1, stuff.pos_y + 1.5, stuff.pos_z + 1]}
                             >
                                 {/* 여기에 hovered를 걸어서 렌더링 여부를 결정 */}
-                                <StuffTag children={stuff.stuff_name} />
+                                
+                                {
+                                    (stuff.category != "deco") ?  <StuffTag children={stuff.stuff_name} />
+                                    : <></>
+                                }   
                             </group>
 
                         </group>
                     )}
                 </mesh>
 
-                <OrbitControls />
+                {/* <OrbitControls /> */}
             </Canvas>
 
         </div>

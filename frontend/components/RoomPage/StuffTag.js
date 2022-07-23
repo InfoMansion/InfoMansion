@@ -8,7 +8,7 @@ export default function StuffTag({children, ...props}) {
     const color = new Color();
     const fontProps = { 
         font: '/fonts/NanumSquareRound Regular_Regular.json', 
-        fontSize: 0.2,
+        fontSize: 0.15,
         letterSpacing: -0.1, 
         lineHeight: 1, 
         'material-toneMapped': false 

@@ -17,7 +17,7 @@ export default function Model({ Hover, Click, data, ...props }) {
 
   const [active, setActive] = useState(false);
   const {scale} = useSpring({
-    scale : active ? 1.2 : 1,
+    scale : ( active && data.category != "deco"  ) ? 1.2 : 1,
     config : config.wobbly
   })
 
