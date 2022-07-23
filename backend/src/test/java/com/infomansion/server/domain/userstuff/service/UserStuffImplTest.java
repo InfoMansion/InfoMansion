@@ -18,9 +18,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -138,8 +139,9 @@ public class UserStuffImplTest {
                 .id(userStuffId)
                 .category("IT")
                 .alias("Java 모음집")
-                .posX(1.1f).posY(0.5f).posZ(0.0f)
-                .rotX(0.0f).rotY(0.2f).rotZ(1.5f).build();
+                .posX(1.1).posY(0.5).posZ(0.0)
+                .rotX(0.0).rotY(0.2).rotZ(2.2)
+                .build();
         userStuffId = userStuffService.includeUserStuff(requestDto);
 
         // then
@@ -164,8 +166,9 @@ public class UserStuffImplTest {
                 .id(userStuffId)
                 .category("IT")
                 .alias("Java 모음집")
-                .posX(1.1f).posY(0.5f).posZ(0.0f)
-                .rotX(0.0f).rotY(0.2f).rotZ(1.5f).build();
+                .posX(1.1).posY(0.5).posZ(0.0)
+                .rotX(0.0).rotY(0.2).rotZ(2.2)
+                .build();
         userStuffId = userStuffService.includeUserStuff(requestDto);
 
         // when
@@ -173,8 +176,9 @@ public class UserStuffImplTest {
                 .id(userStuffId)
                 .category("GAME")
                 .alias("게임 모음")
-                .posX(2.1f).posY(3.5f).posZ(0.9f)
-                .rotX(0.8f).rotY(1.2f).rotZ(1.0f).build();
+                .posX(2.1).posY(3.5).posZ(0.9)
+                .rotX(0.8).rotY(1.2).rotZ(1.0)
+                .build();
 
         // then
         assertThatThrownBy(() -> {userStuffService.includeUserStuff(usird);})
@@ -196,8 +200,9 @@ public class UserStuffImplTest {
                 .id(userStuffId)
                 .category("IT")
                 .alias("Java 모음집")
-                .posX(1.1f).posY(0.5f).posZ(0.0f)
-                .rotX(0.0f).rotY(0.2f).rotZ(1.5f).build();
+                .posX(1.1).posY(0.5).posZ(0.0)
+                .rotX(0.0).rotY(0.2).rotZ(2.2)
+                .build();
         userStuffId = userStuffService.includeUserStuff(requestDto);
 
         // when
@@ -235,8 +240,9 @@ public class UserStuffImplTest {
         UserStuffIncludeRequestDto requestDto = UserStuffIncludeRequestDto.builder()
                 .id(userStuffId)
                 .category("IT").alias("Java 모음집")
-                .posX(1.1f).posY(0.5f).posZ(0.0f)
-                .rotX(0.0f).rotY(0.2f).rotZ(1.5f).build();
+                .posX(1.1).posY(0.5).posZ(0.0)
+                .rotX(0.0).rotY(0.2).rotZ(2.2)
+                .build();
         userStuffService.includeUserStuff(requestDto);
 
         // when
@@ -266,8 +272,9 @@ public class UserStuffImplTest {
         UserStuffIncludeRequestDto requestDto = UserStuffIncludeRequestDto.builder()
                 .id(userStuffId)
                 .category("IT").alias("Java 모음집")
-                .posX(1.1f).posY(0.5f).posZ(0.0f)
-                .rotX(0.0f).rotY(0.2f).rotZ(1.5f).build();
+                .posX(1.1).posY(0.5).posZ(0.0)
+                .rotX(0.0).rotY(0.2).rotZ(2.2)
+                .build();
         userStuffService.includeUserStuff(requestDto);
 
         // when
