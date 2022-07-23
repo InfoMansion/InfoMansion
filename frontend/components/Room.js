@@ -116,7 +116,7 @@ export default function Room( { StuffClick, ...props} ) {
                             data={stuff}
                             key={stuff.name}
                         />
-                        )}
+                    )}
                 </mesh>
                 
                 {/* 그림자 뱉을 요소 */}
@@ -138,7 +138,7 @@ export default function Room( { StuffClick, ...props} ) {
                             <group 
                                 position={[stuff.pos_x + 1, stuff.pos_y + 1.5, stuff.pos_z + 1]}
                             >
-                                
+                                {/* 여기에 hovered를 걸어서 렌더링 여부를 결정 */}
                                 <StuffTag children={stuff.stuff_name} />
                             </group>
 
