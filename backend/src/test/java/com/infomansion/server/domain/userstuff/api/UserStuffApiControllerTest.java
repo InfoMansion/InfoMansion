@@ -11,6 +11,7 @@ import com.infomansion.server.domain.userstuff.dto.UserStuffPositionRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
+import com.infomansion.server.global.util.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -108,8 +109,8 @@ public class UserStuffApiControllerTest {
                         .content(createDtoJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("사용자를 찾을 수 없습니다."))
-                .andExpect(jsonPath("$.code").value(40001));
+                .andExpect(jsonPath("$.message").value(ErrorCode.USER_NOT_FOUND.getMessage()))
+                .andExpect(jsonPath("$.code").value(ErrorCode.USER_NOT_FOUND.getCode()));
     }
 
 
@@ -122,8 +123,8 @@ public class UserStuffApiControllerTest {
         // when, then
         mockMvc.perform(get("/api/v1/userstuffs/"+userStuffId))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("유효하지 않은 Stuff입니다."))
-                .andExpect(jsonPath("$.code").value(40060));
+                .andExpect(jsonPath("$.message").value(ErrorCode.USER_STUFF_NOT_FOUND.getMessage()))
+                .andExpect(jsonPath("$.code").value(ErrorCode.USER_STUFF_NOT_FOUND.getCode()));
     }
 
 
@@ -138,8 +139,8 @@ public class UserStuffApiControllerTest {
         // when, then
         mockMvc.perform(get("/api/v1/userstuffs/list/"+(userId+99999)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("사용자를 찾을 수 없습니다."))
-                .andExpect(jsonPath("$.code").value(40001));
+                .andExpect(jsonPath("$.message").value(ErrorCode.USER_NOT_FOUND.getMessage()))
+                .andExpect(jsonPath("$.code").value(ErrorCode.USER_NOT_FOUND.getCode()));
     }
 
 
@@ -152,8 +153,8 @@ public class UserStuffApiControllerTest {
         // when, then
         mockMvc.perform(put("/api/v1/userstuffs/"+userStuffId))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("40060"))
-                .andExpect(jsonPath("$.message").value("유효하지 않은 Stuff입니다."));
+                .andExpect(jsonPath("$.code").value(ErrorCode.USER_STUFF_NOT_FOUND.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.USER_STUFF_NOT_FOUND.getMessage()));
     }
 
     @DisplayName("이미 제외된 userStuffId로 제외 요청 시 실패")
@@ -168,8 +169,8 @@ public class UserStuffApiControllerTest {
         // when, then
         mockMvc.perform(put("/api/v1/userstuffs/"+userStuffId))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("40061"))
-                .andExpect(jsonPath("$.message").value("제외된 Stuff입니다."));
+                .andExpect(jsonPath("$.code").value(ErrorCode.EXCLUDED_USER_STUFF.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.EXCLUDED_USER_STUFF.getMessage()));
 
     }
 
@@ -206,8 +207,8 @@ public class UserStuffApiControllerTest {
                         .content(reIncludeDtoJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(40062))
-                .andExpect(jsonPath("$.message").value("배치된 Stuff입니다."));
+                .andExpect(jsonPath("$.code").value(ErrorCode.INCLUDED_USER_STUFF.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.INCLUDED_USER_STUFF.getMessage()));
 
     }
 
@@ -241,8 +242,8 @@ public class UserStuffApiControllerTest {
                         .content(modifyDtoJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(40063))
-                .andExpect(jsonPath("$.message").value("별칭 또는 카테고리 값이 필요합니다."));
+                .andExpect(jsonPath("$.code").value(ErrorCode.NULL_VALUE_OF_ALIAS_AND_CATEGORY.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.NULL_VALUE_OF_ALIAS_AND_CATEGORY.getMessage()));
 
     }
 
@@ -265,8 +266,24 @@ public class UserStuffApiControllerTest {
                         .content(modifyDtoJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(40061))
-                .andExpect(jsonPath("$.message").value("제외된 Stuff입니다."));
+                .andExpect(jsonPath("$.code").value(ErrorCode.EXCLUDED_USER_STUFF.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.EXCLUDED_USER_STUFF.getMessage()));
+    }
+
+    @DisplayName("유효하지 않은 userStuffId로 삭제 요청 시 실패")
+    @Test
+    public void userstuff_삭제_실패() throws Exception {
+        // given
+        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
+                .userId(userId)
+                .stuffId(stuffIds.get(0)).build();
+        Long userStuffId = userStuffService.saveUserStuff(createDto);
+
+        // when, then
+        mockMvc.perform(delete("/api/v1/userstuffs/"+(userStuffId+2)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(ErrorCode.USER_STUFF_NOT_FOUND.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.USER_STUFF_NOT_FOUND.getMessage()));
     }
 
 
