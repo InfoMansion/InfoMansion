@@ -2,7 +2,6 @@ package com.infomansion.server.domain.user.service.impl;
 
 import com.infomansion.server.domain.category.Category;
 import com.infomansion.server.domain.room.dto.RoomRequestDto;
-import com.infomansion.server.domain.room.repository.RoomRepository;
 import com.infomansion.server.domain.room.service.RoomService;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.*;
@@ -26,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
