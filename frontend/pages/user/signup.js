@@ -17,6 +17,7 @@ import { useRecoilState } from 'recoil';
 import { likeCateState } from '../../state/likeCate';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const theme = createTheme();
 
@@ -54,24 +55,28 @@ export default function SignUp() {
     }
   }
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
     const credentials = {
-      email: data.get('email'),
-      password: data.get('password'),
-      username: data.get('username'),
-      category: likeCate,
+      email: inputEmail,
+      password: inputPassword,
+      username: inputUsername,
+      categories: likeCate,
+      tel: '01012345678',
     };
 
-    Axios({
-      url: 'http://localhost:8080/api/v1/signup',
-      method: 'post',
-      data: credentials,
-    }).then(res => {
+    try {
+      console.log(credentials);
+
+      const res = await axios.post(
+        'http://localhost:8080/api/v1/auth/signup',
+        credentials,
+      );
       console.log('인증메일이 발송되었습니다.');
-      router.push('/login');
-    });
+      router.push('user/login');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   function prevPage() {

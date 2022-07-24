@@ -24,7 +24,7 @@ import { atom, useRecoilState } from 'recoil';
 import { tokenState } from '../../state/token';
 import { likeCateState } from '../../state/likeCate';
 import { isLoginState } from '../../state/isLogin';
-import { Cookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 import moment from 'moment';
 
 // const function Logout(){
@@ -51,7 +51,7 @@ export default function LogIn() {
   const [isLogin, setisLogin] = useRecoilState(isLoginState);
   const [likeCate, setlikeCate] = useRecoilState(likeCateState);
   const [token, setToken] = useRecoilState(tokenState);
-  const cookies = new Cookies();
+  const [cookies, setCookie] = useCookies(['cookie-name']);
   const [inputId, setInputId] = useState('');
   const [inputPw, setInputPw] = useState('');
 
@@ -75,34 +75,34 @@ export default function LogIn() {
     }
   }
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    //const data = new FormData(event.target);
     const credentials = {
-      email: data.get('email'),
-      password: data.get('password'),
+      email: inputId,
+      password: inputPw,
     };
 
-    const getToken = async () => {
-      try {
-        const { res } = await Axios({
-          url: 'http://localhost:8080/api/v1/auth/login',
-          method: 'post',
-          data: credentials,
-        });
-        const accessToken = res.data.accessToken;
-        const expiresAt = res.data.expirestAt;
-        const [cookie] = res.headers['set-cookie'];
-        cookies.set(JSON.stringify(cookie));
-        setToken({
-          accessToken: accessToken,
-          expiresAt: expiresAt,
-        });
-        setisLogin(true);
-        // userState 업데이트 할 axios 요청 추가로 보내기
-        Axios.defaults.header.common['Authorization'] = 'Bearer' + accessToken;
-      } catch {}
-    };
+    try {
+      console.log(credentials);
+      const { data } = await axios.post(
+        'http://localhost:8080/api/v1/auth/login',
+        credentials,
+      );
+      console.log('res : ', data);
+      const accessToken = data.data.accessToken;
+      const expiresAt = data.data.expirestAt;
+      setCookie('cookie-name', accessToken, {
+        path: '/',
+        expires: expiresAt,
+      });
+      setisLogin(true);
+      // userState 업데이트 할 axios 요청 추가로 보내기
+      //axios.defaults.header.common['Authorization'] = 'Bearer' + accessToken;
+      router.push('/');
+    } catch (e) {
+      console.log('error', e);
+    }
   };
 
   return (
@@ -153,6 +153,7 @@ export default function LogIn() {
                   autoComplete="email"
                   autoFocus
                   autoCapitalize="off"
+                  value={inputId}
                   onChange={handleInput}
                 />
                 <TextField
@@ -164,6 +165,7 @@ export default function LogIn() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  value={inputPw}
                   onChange={handleInput}
                 />
                 <Button
@@ -173,6 +175,7 @@ export default function LogIn() {
                   color="secondary"
                   sx={{ mt: 3, mb: 2 }}
                   disabled={!(confirmId && confirmPw)}
+                  onClick={handleSubmit}
                 >
                   LOGIN
                 </Button>
