@@ -1,26 +1,31 @@
-import { OrbitControls, OrthographicCamera } from '@react-three/drei'
+import { Circle, Image, OrbitControls, OrthographicCamera, Text } from '@react-three/drei'
 import {Canvas, useThree, useFrame} from '@react-three/fiber'
-import { useEffect, useRef, useState, setState } from 'react'
+import { useEffect, useRef, useState, setState, useLayoutEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Camera, Mesh, StaticReadUsage } from 'three'
-import styles from '../styles/Home.module.css'
+import { Button } from '@mui/material'
 
-import Stuff3D from './RoomPage/Stuff3D'
+import Stuff from './RoomPage/Stuff'
+import MapStuff from './RoomPage/MapStuff'
+import StuffTag from './RoomPage/StuffTag'
 
+// data
 import userStuff from './userStuff.json'
 import walltest from './walltest.json'
 
 export default function Room( { StuffClick, ...props} ) {
-    const [zoomscale, setzoomscale] = useState(90);
+    // 화면 확대 정도 조정.
+    const [zoomscale] = useState(90);
+
     const [userID, setUserID] = useState(0);
     const [mapstuffs, setMapstuffs] = useState([]);
     const [stuffs, setStuffs] = useState([]);
+    const [hovered, setHovered] = useState('');
+    const [tagon, setTagon] = useState(true);
 
     const router = useRouter();
     useEffect(() => {
         if(!router.isReady) return;
 
-        // set끼리 동기처리가 안돼요 왤까요ㅠㅠ
         setUserID(router.query.userID);     
         // stuff get
         setMapstuffs(userStuff[router.query.userID].slice(0, 2));
@@ -28,52 +33,72 @@ export default function Room( { StuffClick, ...props} ) {
 
     }, [router.isReady]);
 
-    // 변수 선언부
-    // 화면 카메라 확대 수준 조절용 변수
+    // 마우스가 움직일 때 위치 받기.
+    const [mouseloc, setmouseloc] = useState([325, 375]);
 
     function Hover(e, stuff) {
-        // console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
-        console.log(name + " 호버");
+        console.log(stuff.stuff_name_kor + " 호버");
+        setHovered()
     }
+    
     function Click(e, stuff) {
         console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
         console.log(stuff.stuff_name + " 클릭");
 
-        // 데코는 사우이 이벤트 진행 안함.
+        // 데코는 이벤트 진행 안함.
         if(stuff.category == 'deco') return null;
         // RoomPage의 stuffClick 함수 실행시키기.
         StuffClick(stuff);
     }
 
+    // 카메라 위치 세팅
     function RoomCamera() {
-        useFrame((state) => {
-            // 카메라 위치 세팅
-
-            // 마우스 커서 위치에 따라 시점 살짝식 바꾸게 가능/?
+        useFrame(({mouse, camera}) => {
             const distance = 40;
-            state.camera.position.x = distance;
-            state.camera.position.y = distance;
-            state.camera.position.z = distance;
+            const con = 3;
+            const xoff = mouse.x*con;
+            const yoff = mouse.y*con;
+
+            camera.position.x = distance - xoff;
+            camera.position.y = distance - yoff;
+            camera.position.z = distance;
             
-            state.camera.lookAt(0, 0, 0);
-        })
+            camera.lookAt(xoff/20, yoff/100, 0);
+        }, [mouseloc])
         return null
     }
 
     return (
         <div 
-            
             style={{ 
                 width : "650px", 
                 height : "800px",
                 // margin : '30px auto'
                 }}
             >
-            
-            <Canvas 
-                onPointerMove={() => console.log("호버호버")}
-                
-                shadows 
+                {/* 태그 토글 버튼 */}
+                <Button variant="outlined"
+                    style={{
+                        position : 'absolute',
+                        zIndex : '2'
+                    }}
+                    sx={{
+                        m : 2
+                    }}
+                    onClick={() => setTagon(!tagon)}
+                >
+                    {
+                        (tagon) ? <div>태그 숨기기.</div>
+                        : <div>태그 보기.</div>
+                    }
+                </Button>
+
+            {/* 캔버스 영역 */}
+            <Canvas
+                style={{
+                    zIndex : '1'
+                }}
+                shadows
                 onCreated={state => state.gl.setClearColor("#ffffff")} >
                 
                 {/* light */}
@@ -82,8 +107,8 @@ export default function Room( { StuffClick, ...props} ) {
                     position={[20, 40, 20]} 
                     intensity={1}
                     castShadow
-                    shadow-mapSize-width={1024}
-                    shadow-mapSize-height={1024}
+                    shadow-mapSize-width={10}
+                    shadow-mapSize-height={10}
                     shadow-camera-far={50}
                     shadow-camera-left={-100}
                     shadow-camera-right={100}
@@ -105,33 +130,48 @@ export default function Room( { StuffClick, ...props} ) {
                 {/* 그림자 받을 요소 */}
                 <mesh receiveShadow>
                     { mapstuffs.map( stuff => 
-                        <Stuff3D
+                        <MapStuff
                             Hover={Hover}
                             Click={Click}
                             
                             data={stuff}
                             key={stuff.name}
                         />
-                        )}
+                    )}
                 </mesh>
-
+                
                 {/* 그림자 뱉을 요소 */}
                 {/* 이거 클로저 함수로 컴포넌트 리턴받도록 변경할 것. */}
                 <mesh castShadow>
                     { stuffs.map( stuff => 
-                        <Stuff3D 
-                            Hover={Hover} Click={Click} 
-                            data={stuff} 
-                            key={stuff.name}
-                
-                            position={[stuff.pos_x, stuff.pos_y, stuff.pos_z]}
-                            rotation={[stuff.rot_x, stuff.rot_y, stuff.rot_z]}
-                        />
+                        <group>
+                            <Stuff
+                                Hover={Hover}
+                                Click={Click}
+
+                                data={stuff} 
+
+                                key={stuff.name}
+
+                                position={[stuff.pos_x, stuff.pos_y, stuff.pos_z]}
+                                rotation={[stuff.rot_x, stuff.rot_y, stuff.rot_z]}
+                            />
+                            <group 
+                                position={[stuff.pos_x + 1, stuff.pos_y + 1.5, stuff.pos_z + 1]}
+                            >
+                                {/* 여기에 hovered를 걸어서 렌더링 여부를 결정 */}
+                                
+                                {
+                                    (stuff.category != "deco" && tagon) ? <StuffTag children={stuff.stuff_name} />
+                                    : <></>
+                                }   
+                            </group>
+
+                        </group>
                     )}
                 </mesh>
 
-                {/* 사용자 인터렉션 */}
-                {/* <OrbitControls /> */}
+                <OrbitControls />
             </Canvas>
 
         </div>

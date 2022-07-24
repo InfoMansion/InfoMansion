@@ -14,6 +14,7 @@
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.9.0",
     "@mui/styled-engine-sc": "^5.8.0",
+    "@react-spring/three": "^9.5.0",
     "@react-three/drei": "^9.17.1",
     "@react-three/fiber": "^8.1.0",
     "axios": "^0.27.2",
