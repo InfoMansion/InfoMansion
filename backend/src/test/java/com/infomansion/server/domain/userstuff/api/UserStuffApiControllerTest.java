@@ -255,6 +255,41 @@ public class UserStuffApiControllerTest {
 
     }
 
+    @DisplayName("유효하지 않은 category 입력 시 실패")
+    @Test
+    public void userstuff_category_수정_실패() throws Exception {
+        // given
+        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
+                .userId(userId)
+                .stuffId(stuffIds.get(0)).build();
+        Long userStuffId = userStuffService.saveUserStuff(createDto);
+
+        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
+                .id(userStuffId).alias("Java 정리").category("IT")
+                .posX(0.2).posY(0.3).posZ(3.1)
+                .rotX(1.5).rotY(0.0).rotZ(0.9)
+                .build();
+
+        String includeDtoJson = objectMapper.writeValueAsString(includeDto);
+        mockMvc.perform(put("/api/v1/userstuffs")
+                        .content(includeDtoJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+
+        // when, then
+        UserStuffModifyRequestDto modifyDto = UserStuffModifyRequestDto.builder()
+                .id(userStuffId).category("NEWS").build();
+        String modifyDtoJson = objectMapper.writeValueAsString(modifyDto);
+        mockMvc.perform(put("/api/v1/userstuffs/option")
+                        .content(modifyDtoJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(ErrorCode.NOT_VALID_CATEGORY.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.NOT_VALID_CATEGORY.getMessage()));
+
+    }
+
     @DisplayName("배치되지 않은 UserStuff의 Position 변경 시 실패")
     @Test
     public void userstuff_pos_and_rot_수정_실패() throws Exception {
@@ -292,6 +327,26 @@ public class UserStuffApiControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(ErrorCode.USER_STUFF_NOT_FOUND.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.USER_STUFF_NOT_FOUND.getMessage()));
+    }
+
+    @DisplayName("유효한 userStuffId로 삭제 요청 성공")
+    @Test
+    public void userstuff_삭제_성공() throws Exception {
+        // given
+        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
+                .userId(userId)
+                .stuffId(stuffIds.get(0)).build();
+        Long userStuffId = userStuffService.saveUserStuff(createDto);
+
+        // when
+        mockMvc.perform(delete("/api/v1/userstuffs/"+userStuffId));
+
+        // then
+        mockMvc.perform(get("/api/v1/userstuffs/"+userStuffId))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(ErrorCode.USER_STUFF_NOT_FOUND.getCode()))
+                .andExpect(jsonPath("$.message").value(ErrorCode.USER_STUFF_NOT_FOUND.getMessage()));
+
     }
 
 
