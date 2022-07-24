@@ -9,8 +9,9 @@ export default function TokenUpdate() {
   const isValid = false;
 
   if (isToken) {
-    const expiredAt = this.$moment.utc(token['expiresAt']);
-    const diffTime = this.$moment.duration(expiredAt.diff(this.$moment()));
+    const expiresAt = new Date(token['expiresAt']);
+    const now = new Date();
+    const diffTime = now - expiresAt;
     const isValid = diffTime >= 10000;
   }
 
