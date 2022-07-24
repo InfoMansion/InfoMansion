@@ -126,6 +126,7 @@ public class UserStuffServiceImpl implements UserStuffService {
         return userStuff.getId();
     }
 
+    @Transactional
     @Override
     public Long removeUserStuff(Long userStuffId) {
         UserStuff userStuff = userStuffRepository.findById(userStuffId)
