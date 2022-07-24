@@ -16,6 +16,7 @@ export default function StuffTag({children, ...props}) {
 
     const textref = useRef();
     const locref = useRef();
+    const iconref = useRef();
 
     const [hovered, setHovered] = useState(false);
 
@@ -29,8 +30,8 @@ export default function StuffTag({children, ...props}) {
     }, [hovered])
 
     useFrame(({ camera, mouse }) => {
-        locref.current.quaternion.copy(camera.quaternion)
-        textref.current.material.color.lerp(color.set(hovered ? '#ffa0a0' : 'black'), 0.1)
+        locref.current.quaternion.copy(camera.quaternion);
+        textref.current.material.color.lerp(color.set(hovered ? '#ffa0a0' : 'black'), 0.1);
     })
 
     return <group 
@@ -38,8 +39,10 @@ export default function StuffTag({children, ...props}) {
                 position={[0,0,0]}
             >
                 <mesh>
-                    <circleGeometry attach="geometry" args={[0.4, 20]} />
-                    <meshBasicMaterial attacj="material" color="red" />
+                    <circleGeometry attach="geometry" args={[0.3, 20]} />
+                    <meshBasicMaterial 
+                        attacj="material" 
+                        color={ hovered ? 'white' : '#ffa0a0'} />
                 </mesh>
                 <Text 
                     ref={textref} 

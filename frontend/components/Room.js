@@ -84,14 +84,20 @@ export default function Room( { StuffClick, ...props} ) {
                     sx={{
                         m : 2
                     }}
+                    onClick={() => setTagon(!tagon)}
                 >
-                    태그 보기.
+                    {
+                        (tagon) ? <div>태그 숨기기.</div>
+                        : <div>태그 보기.</div>
+                    }
                 </Button>
-            <Canvas               
+
+            {/* 캔버스 영역 */}
+            <Canvas
                 style={{
                     zIndex : '1'
                 }}
-                shadowmap
+                shadows
                 onCreated={state => state.gl.setClearColor("#ffffff")} >
                 
                 {/* light */}
@@ -155,7 +161,7 @@ export default function Room( { StuffClick, ...props} ) {
                                 {/* 여기에 hovered를 걸어서 렌더링 여부를 결정 */}
                                 
                                 {
-                                    (stuff.category != "deco") ?  <StuffTag children={stuff.stuff_name} />
+                                    (stuff.category != "deco" && tagon) ? <StuffTag children={stuff.stuff_name} />
                                     : <></>
                                 }   
                             </group>
@@ -164,7 +170,7 @@ export default function Room( { StuffClick, ...props} ) {
                     )}
                 </mesh>
 
-                {/* <OrbitControls /> */}
+                <OrbitControls />
             </Canvas>
 
         </div>
