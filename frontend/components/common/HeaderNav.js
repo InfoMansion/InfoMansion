@@ -15,6 +15,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Link from 'next/link';
+import { useCookies } from 'react-cookie';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -56,6 +57,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function DenseAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const [, , removeCookie] = useCookies(['cookie-name']);
   const isMenuOpen = Boolean(anchorEl);
 
   const handleProfileMenuOpen = event => {
@@ -64,6 +66,15 @@ export default function DenseAppBar() {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = event => {
+    try {
+      removeCookie('cookie-name', { path: '/' });
+      window.location.replace('/user/login');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const menuId = 'primary-search-account-menu';
@@ -87,7 +98,15 @@ export default function DenseAppBar() {
       <Link href="/RoomPage/1">
         <MenuItem onClick={handleMenuClose}>마이룸</MenuItem>
       </Link>
-      <MenuItem onClick={handleMenuClose}>로그아웃</MenuItem>
+
+      <MenuItem
+        onClick={() => {
+          handleMenuClose();
+          handleLogout();
+        }}
+      >
+        로그아웃
+      </MenuItem>
     </Menu>
   );
   return (
