@@ -83,23 +83,26 @@ export default function LogIn() {
       password: data.get('password'),
     };
 
-    axios({
-      url: 'http://localhost:8080/api/v1/auth/login',
-      method: 'post',
-      data: credentials,
-    }).then(res => {
-      const accessToken = res.data.accessToken;
-      const expiresAt = res.data.expirestAt;
-      const [cookie] = res.headers['set-cookie'];
-      cookies.set(JSON.stringify(cookie));
-      setToken({
-        accessToken: accessToken,
-        expiresAt: expiresAt,
-      });
-      Axios.defaults.header.common['Authorization'] = 'Bearer' + accessToken;
-      setisLogin(true);
-      // userState 업데이트 할 axios 요청 추가로 보내기
-    });
+    const getToken = async () => {
+      try {
+        const { res } = await Axios({
+          url: 'http://localhost:8080/api/v1/auth/login',
+          method: 'post',
+          data: credentials,
+        });
+        const accessToken = res.data.accessToken;
+        const expiresAt = res.data.expirestAt;
+        const [cookie] = res.headers['set-cookie'];
+        cookies.set(JSON.stringify(cookie));
+        setToken({
+          accessToken: accessToken,
+          expiresAt: expiresAt,
+        });
+        setisLogin(true);
+        // userState 업데이트 할 axios 요청 추가로 보내기
+        Axios.defaults.header.common['Authorization'] = 'Bearer' + accessToken;
+      } catch {}
+    };
   };
 
   return (
