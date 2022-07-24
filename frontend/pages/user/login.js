@@ -18,7 +18,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Axios from 'axios';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { atom, useRecoilState } from 'recoil';
 import { tokenState } from '../../state/token';
@@ -83,7 +83,7 @@ export default function LogIn() {
       password: data.get('password'),
     };
 
-    Axios({
+    axios({
       url: 'http://localhost:8080/api/v1/auth/login',
       method: 'post',
       data: credentials,
