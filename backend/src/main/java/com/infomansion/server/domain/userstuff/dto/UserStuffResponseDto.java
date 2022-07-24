@@ -1,11 +1,12 @@
 package com.infomansion.server.domain.userstuff.dto;
 
 import com.infomansion.server.domain.category.Category;
-import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.math.BigDecimal;
 
 @ToString
 @Getter
@@ -21,13 +22,13 @@ public class UserStuffResponseDto {
     private Category category;
     private Boolean selected;
 
-    private Float posX;
-    private Float posY;
-    private Float posZ;
+    private BigDecimal posX;
+    private BigDecimal posY;
+    private BigDecimal posZ;
 
-    private Float rotX;
-    private Float rotY;
-    private Float rotZ;
+    private BigDecimal rotX;
+    private BigDecimal rotY;
+    private BigDecimal rotZ;
 
     public UserStuffResponseDto(UserStuff userStuff) {
         this.userStuffId = userStuff.getId();

@@ -18,27 +18,29 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Axios from 'axios';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { atom, useRecoilState } from 'recoil';
-import tokenState from '../../state/token';
+import { tokenState } from '../../state/token';
 import { likeCateState } from '../../state/likeCate';
-
-function TokenInput() {
-  const [token, setToken] = useRecoilState(tokenState);
-}
+import { isLoginState } from '../../state/isLogin';
+import { useCookies } from 'react-cookie';
+import moment from 'moment';
 
 // const function Logout(){
+//   const [token, setToken] = useRecoilState(tokenState);
+//   Axios.defaults.header.common['Authorization'] = 'Bearer' + token;
 //   const handleSubmit = (event) => {
 //     event.preventDefault()
+
 // Axios({
-//   url: 'http://localhost:8080/accounts/login',
+//   url: 'http://localhost:8080/api/v1/logout',
 //   method: 'post',
-//   data: credentials
+//   headers: ''
 // })
 // .then(res => {
-//   const token = ''
-//   setToken(token)
+//   console.log('logout')
+//   setToken('')
 // })
 //   }
 // }
@@ -46,8 +48,10 @@ function TokenInput() {
 const theme = createTheme();
 
 export default function LogIn() {
+  const [isLogin, setisLogin] = useRecoilState(isLoginState);
   const [likeCate, setlikeCate] = useRecoilState(likeCateState);
-
+  const [token, setToken] = useRecoilState(tokenState);
+  const [cookies, setCookie] = useCookies(['cookie-name']);
   const [inputId, setInputId] = useState('');
   const [inputPw, setInputPw] = useState('');
 
@@ -71,23 +75,34 @@ export default function LogIn() {
     }
   }
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    //const data = new FormData(event.target);
     const credentials = {
-      email: data.get('email'),
-      password: data.get('password'),
+      email: inputId,
+      password: inputPw,
     };
 
-    // Axios({
-    //   url: 'http://localhost:8080/accounts/login',
-    //   method: 'post',
-    //   data: credentials
-    // })
-    // .then(res => {
-    //   const token = res.data.key
-    //   setToken(token)
-    // })
+    try {
+      console.log(credentials);
+      const { data } = await axios.post(
+        'http://localhost:8080/api/v1/auth/login',
+        credentials,
+      );
+      console.log('res : ', data);
+      const accessToken = data.data.accessToken;
+      const expiresAt = data.data.expirestAt;
+      setCookie('cookie-name', accessToken, {
+        path: '/',
+        expires: expiresAt,
+      });
+      setisLogin(true);
+      // userState 업데이트 할 axios 요청 추가로 보내기
+      //axios.defaults.header.common['Authorization'] = 'Bearer' + accessToken;
+      router.push('/');
+    } catch (e) {
+      console.log('error', e);
+    }
   };
 
   return (
@@ -138,6 +153,7 @@ export default function LogIn() {
                   autoComplete="email"
                   autoFocus
                   autoCapitalize="off"
+                  value={inputId}
                   onChange={handleInput}
                 />
                 <TextField
@@ -149,6 +165,7 @@ export default function LogIn() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  value={inputPw}
                   onChange={handleInput}
                 />
                 <Button
@@ -158,6 +175,7 @@ export default function LogIn() {
                   color="secondary"
                   sx={{ mt: 3, mb: 2 }}
                   disabled={!(confirmId && confirmPw)}
+                  onClick={handleSubmit}
                 >
                   LOGIN
                 </Button>

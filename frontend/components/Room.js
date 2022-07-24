@@ -10,6 +10,7 @@ import StuffTag from './RoomPage/StuffTag'
 
 // data
 import userStuff from './userStuff.json'
+import walltest from './walltest.json'
 
 export default function Room( { StuffClick, ...props} ) {
     // 화면 확대 정도 조정.

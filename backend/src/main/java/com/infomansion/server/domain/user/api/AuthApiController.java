@@ -1,5 +1,7 @@
 package com.infomansion.server.domain.user.api;
 
+import com.infomansion.server.domain.user.auth.AccessTokenRequestDto;
+import com.infomansion.server.domain.user.auth.AccessTokenResponseDto;
 import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.service.UserService;
@@ -11,11 +13,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.Duration;
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,7 +39,7 @@ public class AuthApiController {
                 .body(new CommonResponse<>(userService.join(requestDto)));
     }
 
-    @GetMapping("/api/v1/auth/verify")
+    @GetMapping("/api/v1/auth/verification")
     public ResponseEntity<? extends BasicResponse> userVerifyEmail(@Valid @RequestParam String key) {
         try {
             URI redirectUri = new URI(redirectURI);
@@ -47,18 +54,48 @@ public class AuthApiController {
                     .build();
         }
 
-
     }
 
     @PostMapping("/api/v1/auth/login")
-    public ResponseEntity<CommonResponse<TokenDto>> userLogin(@Valid @RequestBody UserLoginRequestDto requestDto) {
+    public ResponseEntity<? extends BasicResponse> userLogin(@Valid @RequestBody UserLoginRequestDto requestDto) {
+
+        TokenDto tokenDto = userService.login(requestDto);
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userService.login(requestDto)));
+                .header(HttpHeaders.SET_COOKIE, createAccessTokenCookie(tokenDto).toString())
+                .header(HttpHeaders.SET_COOKIE, createRefreshTokenCookie(tokenDto).toString())
+                .body(new CommonResponse<>(new AccessTokenResponseDto(tokenDto)));
     }
 
     @PostMapping("/api/v1/auth/reissue")
-    public ResponseEntity<? extends BasicResponse> userReissue(@Valid @RequestBody ReissueDto reissueDto) {
+    public ResponseEntity<? extends BasicResponse> userReissue(@Valid @RequestBody AccessTokenRequestDto requestDto, @CookieValue(name = "InfoMansionRefreshToken") String refreshToken) {
+        TokenDto tokenDto = userService.reissue(new ReissueDto(requestDto.getAccessToken(), refreshToken));
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userService.reissue(reissueDto)));
+                .header(HttpHeaders.SET_COOKIE, createAccessTokenCookie(tokenDto).toString())
+                .header(HttpHeaders.SET_COOKIE, createRefreshTokenCookie(tokenDto).toString())
+                .body(new CommonResponse<>(new AccessTokenResponseDto(tokenDto)));
+    }
+
+    private ResponseCookie createRefreshTokenCookie(TokenDto tokenDto) {
+        return ResponseCookie.from("InfoMansionRefreshToken", tokenDto.getRefreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .path("/api/v1/auth/reissue")
+                .maxAge(Duration.ofMillis(tokenDto.getRefreshTokenExpiresTime()))
+                .sameSite("Strict")
+                .domain("localhost")
+                .build();
+    }
+
+    private ResponseCookie createAccessTokenCookie(TokenDto tokenDto) {
+        return ResponseCookie.from("InfoMansionAccessToken", tokenDto.getAccessToken())
+                .httpOnly(false)
+                .secure(true)
+                .path("/")
+                .maxAge(Duration.ofMillis(1000*60*30L))
+                .sameSite("Strict")
+                .domain("localhost")
+                .build();
     }
 }
