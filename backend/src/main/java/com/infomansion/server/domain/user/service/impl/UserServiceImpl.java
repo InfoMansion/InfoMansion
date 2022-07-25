@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     public Long join(UserSignUpRequestDto requestDto) {
         validateDuplicateUser(requestDto);
         validateCategory(requestDto.getCategories());
-        verifyEmailService.sendVerificationMail(requestDto.getEmail());
+//        verifyEmailService.sendVerificationMail(requestDto.getEmail());
         return userRepository.save(requestDto.toEntityWithEncryptPassword(passwordEncoder)).getId();
     }
 
