@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   Button,
   Checkbox,
@@ -26,6 +26,7 @@ import { likeCateState } from '../../state/likeCate';
 import { isLoginState } from '../../state/isLogin';
 import { useCookies } from 'react-cookie';
 import moment from 'moment';
+import { borderColor } from '@mui/system';
 
 // const function Logout(){
 //   const [token, setToken] = useRecoilState(tokenState);
@@ -45,7 +46,16 @@ import moment from 'moment';
 //   }
 // }
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#ff7961',
+      main: '#ff7961',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
+  },
+});
 
 export default function LogIn() {
   const [isLogin, setisLogin] = useRecoilState(isLoginState);
@@ -59,6 +69,22 @@ export default function LogIn() {
   const confirmPw = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(inputPw);
 
   const router = useRouter();
+
+  const [windowSize, setWindowSize] = useState();
+
+  const handleResize = useCallback(() => {
+    setWindowSize({
+      width: window.innerWidth,
+    });
+  }, []);
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [handleResize]);
 
   function goSignUp(event) {
     event.preventDefault();
@@ -107,7 +133,7 @@ export default function LogIn() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: '100vh' }} spacing={6}>
         <CssBaseline />
         <Grid
           item
@@ -126,27 +152,39 @@ export default function LogIn() {
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <Card>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+            boxShadow={3}
+          >
+            <CardMedia
+              component="img"
+              image="/logo.png"
+              style={{ width: '33%', height: '35%' }}
+            ></CardMedia>
             <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
               sx={{
-                my: 8,
-                mx: 4,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                mt: 1,
               }}
             >
-              <CardMedia component="img" image="/logo.png"></CardMedia>
-              <Box
-                component="form"
-                onSubmit={handleSubmit}
-                noValidate
-                sx={{ mt: 1 }}
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
               >
                 <TextField
                   margin="normal"
                   required
-                  fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
@@ -159,7 +197,6 @@ export default function LogIn() {
                 <TextField
                   margin="normal"
                   required
-                  fullWidth
                   name="password"
                   label="Password"
                   type="password"
@@ -168,32 +205,33 @@ export default function LogIn() {
                   value={inputPw}
                   onChange={handleInput}
                 />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Button
                   type="submit"
-                  fullWidth
                   variant="contained"
-                  color="secondary"
+                  color="primary"
                   sx={{ mt: 3, mb: 2 }}
                   disabled={!(confirmId && confirmPw)}
                   onClick={handleSubmit}
                 >
                   LOGIN
                 </Button>
-                <Grid container>
-                  <Grid item xs>
-                    <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link href="#" variant="body2" onClick={goSignUp}>
-                      {'Sign Up'}
-                    </Link>
-                  </Grid>
+              </div>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Forgot password?
+                  </Link>
                 </Grid>
-              </Box>
+                <Grid item>
+                  <Link href="#" variant="body2" onClick={goSignUp}>
+                    {'Sign Up'}
+                  </Link>
+                </Grid>
+              </Grid>
             </Box>
-          </Card>
+          </Box>
         </Grid>
       </Grid>
     </ThemeProvider>
