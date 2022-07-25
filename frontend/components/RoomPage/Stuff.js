@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Text, useGLTF } from '@react-three/drei'
+import { Box, Text, useGLTF } from '@react-three/drei'
 import { animated, config, useSpring } from '@react-spring/three';
 import { Color } from 'three';
 import { useFrame } from '@react-three/fiber';
 
-export default function Model({ Hover, Click, data, ...props }) {
+export default function Model({ status, Hover, Click, data, ...props }) {
   const [geometry] = useState(data.geometry);
   const [material] = useState(data.materials);
   const [glbpath] = useState(data.stuff_glb_path);
@@ -20,6 +20,8 @@ export default function Model({ Hover, Click, data, ...props }) {
     setClicked(Number(!clicked));
     Click(e, data); 
   }
+
+  console.log(status);
 
   const [hovered, setHovered] = useState(false);
   const {scale} = useSpring({
@@ -53,7 +55,7 @@ export default function Model({ Hover, Click, data, ...props }) {
     return () => (document.body.style.cursor = 'auto')
   }, [hovered])
   
-  if(data.category != 'deco'){
+  if(status == 'view' && data.category != 'deco'){
     useFrame(({camera}) => {
       locref.current.quaternion.copy(camera.quaternion);
       textref.current.material.color.lerp(color.set(hovered ? '#ffa0a0' : 'black'), 0.1);
@@ -62,40 +64,52 @@ export default function Model({ Hover, Click, data, ...props }) {
 
 
   return <group
-    position={[data.pos_x, data.pos_y, data.pos_z]}
+      position={[data.pos_x, data.pos_y, data.pos_z]}
     >
     {/* 스터프 */}
-    <animated.group
-      onPointerOver={(e) => onHover(e)}
-      onPointerDown={(e) => onClick(e)}
-      
-      onPointerEnter={() => setHovered(true)}
-      onPointerLeave={() => setHovered(false)}
-      
-      rotation={[data.rot_x, data.rot_y, data.rot_z]}
-      scale={scale}
-      {...props} dispose={null}
-    >
-      {
-        // category deco인거 y축 이동 방지하기 위해 동적 렌더링함.
-        (data.category != 'deco') ? 
-          <animated.mesh
-            geometry={nodes[geometry].geometry} material={materials[material]} castShadow
-            scale={100}
-            position-y={positionY}
-          />
-          : 
-          <animated.mesh
-            geometry={nodes[geometry].geometry} material={materials[material]} castShadow
-            scale={100}
-          />
-      }
-    </animated.group>
-    
-    {/* 태그 */}
-    {/* 이거 조건부 렌더링 걸어야 되는데 어찌하누 */}
     {
-      (data.category != 'deco') ?
+      (status == 'view')
+      ?
+        <animated.group
+          onPointerOver={(e) => onHover(e)}
+          onPointerDown={(e) => onClick(e)}
+          
+          onPointerEnter={() => setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
+          
+          rotation={[data.rot_x, data.rot_y, data.rot_z]}
+          scale={scale}
+          {...props} dispose={null}
+        >
+          {
+            // category deco인거 y축 이동 방지하기 위해 동적 렌더링함.
+            (data.category != 'deco') ? 
+              <animated.mesh
+                geometry={nodes[geometry].geometry} material={materials[material]} castShadow
+                scale={100}
+                position-y={positionY}
+              />
+              :  (<mesh
+                geometry={nodes[geometry].geometry} material={materials[material]} castShadow
+                scale={100}
+              />)
+          }
+        </animated.group> 
+      : 
+      <group
+        rotation={[data.rot_x, data.rot_y, data.rot_z]}
+        scale={1}
+      >
+        <mesh
+          geometry={nodes[geometry].geometry} material={materials[material]} castShadow
+          scale={100}
+        />
+      </group>
+    }
+    
+    {/* 태그 */} 
+    {
+      (status == 'view' && data.category != 'deco') ?
       <group ref={locref} position={[1, 1.5, 1]}>
         <mesh>
           <circleGeometry attach="geometry" args={[0.3, 20]} />
