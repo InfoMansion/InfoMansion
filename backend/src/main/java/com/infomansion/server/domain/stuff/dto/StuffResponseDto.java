@@ -17,7 +17,7 @@ public class StuffResponseDto {
     private Long price;
     private Category category;
     private StuffType stuffType;
-    private StuffFile stuffFile;
+    private String stuffGlbPath;
 
     public StuffResponseDto(Stuff stuff) {
         this.id = stuff.getId();
@@ -26,6 +26,7 @@ public class StuffResponseDto {
         this.price = stuff.getPrice();
         this.category = stuff.getCategory();
         this.stuffType = stuff.getStuffType();
-        this.stuffFile = stuff.getStuffFile();
+        if(stuff.getStuffFile() != null)
+            this.stuffGlbPath = stuff.getStuffFile().getStuffGlbPath();
     }
 }

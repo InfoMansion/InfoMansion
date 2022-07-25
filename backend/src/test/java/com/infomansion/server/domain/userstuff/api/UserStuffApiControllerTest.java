@@ -11,6 +11,7 @@ import com.infomansion.server.domain.userstuff.dto.UserStuffPositionRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,9 @@ public class UserStuffApiControllerTest {
 
     @Autowired
     private UserStuffService userStuffService;
+
+    @Autowired
+    private UserStuffRepository userStuffRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -90,6 +94,13 @@ public class UserStuffApiControllerTest {
 
             stuffIds.add(stuffRepository.save(requestDto.toEntity()).getId());
         }
+    }
+
+    @AfterEach
+    public void reset() {
+        userStuffRepository.deleteAll();
+        stuffRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
 

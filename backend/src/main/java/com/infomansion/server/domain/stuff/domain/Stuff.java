@@ -28,19 +28,24 @@ public class Stuff {
     @Enumerated(EnumType.STRING)
     private StuffType stuffType;
 
+    private String geometry;
+    private String materials;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stuff_file_id")
     private StuffFile stuffFile;
 
 
     @Builder
-    public Stuff(Long id, String stuffName, String stuffNameKor, Long price, Category category, StuffType stuffType, StuffFile stuffFile) {
+    public Stuff(Long id, String stuffName, String stuffNameKor, Long price, Category category, StuffType stuffType, String geometry, String materials, StuffFile stuffFile) {
         this.id = id;
         this.stuffName = stuffName;
         this.stuffNameKor = stuffNameKor;
         this.price = price;
         this.category = category;
         this.stuffType = stuffType;
+        this.geometry = geometry;
+        this.materials = materials;
         this.stuffFile = stuffFile;
     }
 }

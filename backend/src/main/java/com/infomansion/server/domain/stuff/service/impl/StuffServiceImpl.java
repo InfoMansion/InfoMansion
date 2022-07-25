@@ -17,17 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class StuffServiceImpl implements StuffService {
 
     private final StuffRepository stuffRepository;
 
+    @Transactional
     @Override
     public Long createStuff(StuffRequestDto requestDto) {
         return stuffRepository.save(requestDto.toEntity()).getId();
     }
 
+    @Transactional
     @Override
     public Long updateStuff(Long stuff_id, StuffRequestDto requestDto) {
         stuffRepository.findById(stuff_id)
@@ -58,6 +60,7 @@ public class StuffServiceImpl implements StuffService {
         return responseDtoList;
     }
 
+    @Transactional
     @Override
     public void removeStuff(Long stuff_id) {
         validationStuffId(stuff_id);
