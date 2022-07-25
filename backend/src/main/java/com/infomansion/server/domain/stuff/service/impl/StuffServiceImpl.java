@@ -80,7 +80,7 @@ public class StuffServiceImpl implements StuffService {
     // String categories 분리
     private List<String> splitCategories(String categories) {
         List<String> splitCategories = Arrays.stream(categories.split(",")).collect(Collectors.toList());
-        if(splitCategories.size() > 5) throw new CustomException(ErrorCode.____THE_NUM_OF_CATEGORY);
+        if(splitCategories.size() > 5) throw new CustomException(ErrorCode.EXCEEDED_THE_NUMBER_OF_CATEGORIES);
 
         return splitCategories;
     }

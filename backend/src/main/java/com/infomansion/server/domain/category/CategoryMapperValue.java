@@ -1,9 +1,7 @@
 package com.infomansion.server.domain.category;
 
 import lombok.Getter;
-import lombok.ToString;
 
-@ToString
 @Getter
 public class CategoryMapperValue {
 
