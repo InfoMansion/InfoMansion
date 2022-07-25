@@ -66,8 +66,8 @@ export default function EditRoom( { StuffClick, ...props} ) {
     return (
         <div 
             style={{ 
-                width : "600px", 
-                height : "700px",
+                width : "610px", 
+                height : "610px",
                 // margin : '30px auto'
                 }}
             >

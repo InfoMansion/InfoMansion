@@ -17,7 +17,7 @@ export default function ScreenshotButton({...props}) {
                 var a = document.createElement('a')
                 var url = URL.createObjectURL(blob)
                 a.href = url
-                a.download = 'canvas.jpg'
+                a.download = 'canvas.png'
                 a.click()
                 console.log('function is actually being used')
                 },
