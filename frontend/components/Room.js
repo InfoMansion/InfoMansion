@@ -7,7 +7,6 @@ import { useSpring } from 'react-spring'
 
 import Stuff from './RoomPage/Stuff'
 import MapStuff from './RoomPage/MapStuff'
-import StuffTag from './RoomPage/StuffTag'
 
 // data
 import userStuff from './userStuff.json'
