@@ -15,6 +15,7 @@ import Stuffs from './RoomPage/Stuffs'
 // 이 파일은 나중에 db에 데이터 넣을 때 쓸거라 안지우고 유지하겠습니다.
 // import walltest from './walltest.json'
 import RoomCamera from './RoomPage/RoomCamera'
+import RoomLight from './RoomPage/RoomLight'
 
 export default function Room( { StuffClick, ...props} ) {
     // 화면 확대 정도 조정.
@@ -92,33 +93,12 @@ export default function Room( { StuffClick, ...props} ) {
 
             {/* 캔버스 영역 */}
             <Canvas
-                style={{
-                    zIndex : '1'
-                }}
+                style={{ zIndex : '1' }}
                 shadows
                 onCreated={state => state.gl.setClearColor("#ffffff")} >
                 
-                {/* light */}
-                {/* 이것도 언젠가 컴포넌트화 할 것 */}
-                <ambientLight intensity={0.2} />
-                <pointLight position={[10, 20, 4]} intensity={0.3}/>
-                <directionalLight 
-                    position={[20, 40, 20]} 
-                    intensity={1}
-                    castShadow
-                    shadow-mapSize-width={10}
-                    shadow-mapSize-height={10}
-                    shadow-camera-far={50}
-                    shadow-camera-left={-100}
-                    shadow-camera-right={100}
-                    shadow-camera-top={100}
-                    shadow-camera-bottom={-100}
-                />
-                {/* 창 밖에서 들어오는 빛 테스트용 */}
-                {/* <pointLight position={[-4, 2, 2]} intensity={0.5} /> */}
-                
+                <RoomLight />
 
-                {/* camera */}
                 <RoomCamera camloc={camloc}/>
                 <OrthographicCamera makeDefault zoom={zoomscale} />
                 
@@ -134,6 +114,7 @@ export default function Room( { StuffClick, ...props} ) {
                     Hover={Hover}
                     Click={Click}
                     status={'view'}
+                    tagon={tagon}
                 />
 
                 {/* <OrbitControls /> */}

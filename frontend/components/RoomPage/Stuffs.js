@@ -1,6 +1,6 @@
 import Stuff from './Stuff'
 
-export default function Stuffs({status, Hover, Click, stuffs}) {
+export default function Stuffs({tagon, status, Hover, Click, stuffs}) {
 
     return (
         <group>
@@ -10,6 +10,7 @@ export default function Stuffs({status, Hover, Click, stuffs}) {
                     Click={Click}
 
                     data={stuff}
+                    tagon={tagon}
 
                     key={stuff.stuff_name}
                     status={status}

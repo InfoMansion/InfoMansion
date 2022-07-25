@@ -4,10 +4,11 @@ import { animated, config, useSpring } from '@react-spring/three';
 import { Color } from 'three';
 import { useFrame } from '@react-three/fiber';
 
-export default function Model({ status, Hover, Click, data, ...props }) {
+export default function Model({ tagon, status, Hover, Click, data, ...props }) {
   const [geometry] = useState(data.geometry);
   const [material] = useState(data.materials);
   const [glbpath] = useState(data.stuff_glb_path);
+  const [clicked, setClicked] = useState(0);
   
   // component가 하나라도 잘못되었을 때 렌더링이 고장나는 것을 방지.
   if(!glbpath) return null;
@@ -28,12 +29,11 @@ export default function Model({ status, Hover, Click, data, ...props }) {
   })
 
   // 클릭 애니메이션 관리.
-  const [clicked, setClicked] = useState(0);
   const { spring } = useSpring({
     spring : clicked,
     config: {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
   });
-  const positionY = spring.to([0, 1], [0, 5]);
+  const positionY = spring.to([0, 1], [0, 7]);
 
   // Tag 컨트롤
   const color = new Color();
@@ -53,12 +53,13 @@ export default function Model({ status, Hover, Click, data, ...props }) {
     return () => (document.body.style.cursor = 'auto')
   }, [hovered])
   
-  if(status == 'view' && data.category != 'deco'){
-    useFrame(({camera}) => {
+  useFrame(({camera}) => {
+    if(tagon && status == 'view' && data.category != 'deco'){
+      console.log(tagon);
       locref.current.quaternion.copy(camera.quaternion);
       textref.current.material.color.lerp(color.set(hovered ? '#ffa0a0' : 'black'), 0.1);
-    })
-  }
+    }
+  }, [tagon])
 
 
   return <group
@@ -105,9 +106,10 @@ export default function Model({ status, Hover, Click, data, ...props }) {
       </group>
     }
     
-    {/* 태그 */} 
+    {/* 태그 */}
+    {/* 상위의 변화에 따라 visible을 히든으로 바꿀 것  */}
     {
-      (status == 'view' && data.category != 'deco') ?
+      (tagon && status == 'view' && data.category != 'deco') ?
       <group ref={locref} position={[1, 1.5, 1]}>
         <mesh>
           <circleGeometry attach="geometry" args={[0.3, 20]} />

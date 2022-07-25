@@ -99,9 +99,9 @@ export default function StuffPage( {data, ...props} ) {
                 backgroundColor : 'rgba(255,255,255,0.8)'
             }}
             sx={{
-                width : '650px',
+                width : '638px',
                 borderRadius : 1,
-                m : 1
+                m : 0
             }}
         >
             <CssBaseline />
