@@ -21,8 +21,6 @@ export default function Model({ status, Hover, Click, data, ...props }) {
     Click(e, data); 
   }
 
-  console.log(status);
-
   const [hovered, setHovered] = useState(false);
   const {scale} = useSpring({
     scale : ( !clicked && hovered && data.category != "deco"  ) ? 1.2 : 1,

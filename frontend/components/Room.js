@@ -25,7 +25,6 @@ export default function Room( { StuffClick, ...props} ) {
     // 사용자 가구들.
     const [mapstuffs, setMapstuffs] = useState([]);
     const [stuffs, setStuffs] = useState([]);
-
     const [hovered, setHovered] = useState(0);
     const [clicked, setClicked] = useState(0);
     const { spring } = useSpring({

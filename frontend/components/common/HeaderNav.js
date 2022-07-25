@@ -16,6 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Link from 'next/link';
 import { useCookies } from 'react-cookie';
+import AddIcon from '@mui/icons-material/Add';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -151,6 +152,17 @@ export default function DenseAppBar() {
           <div
             style={{ display: 'flex', height: '30px', alignItems: 'center' }}
           >
+            <Link href="/post/CreatePost">
+              <IconButton
+                baseClassName="fas"
+                className="fa-plus-circle"
+                size="large"
+                color="inherit"
+                style={{ color: '#9e9e9e' }}
+              >
+                <AddIcon />
+              </IconButton>
+            </Link>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
