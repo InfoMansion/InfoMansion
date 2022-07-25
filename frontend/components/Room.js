@@ -19,8 +19,11 @@ export default function Room( { StuffClick, ...props} ) {
     const [userID, setUserID] = useState(0);
     const [mapstuffs, setMapstuffs] = useState([]);
     const [stuffs, setStuffs] = useState([]);
-    const [hovered, setHovered] = useState('');
+    const [hovered, setHovered] = useState(0);
+    const [clicked, setClicked] = useState(0);
+
     const [tagon, setTagon] = useState(true);
+    const [camloc, setCamloc] = useState([0, 0, 0]);
 
     const router = useRouter();
     useEffect(() => {
@@ -47,6 +50,8 @@ export default function Room( { StuffClick, ...props} ) {
 
         // 데코는 이벤트 진행 안함.
         if(stuff.category == 'deco') return null;
+
+
         // RoomPage의 stuffClick 함수 실행시키기.
         StuffClick(stuff);
     }
@@ -59,9 +64,9 @@ export default function Room( { StuffClick, ...props} ) {
             const xoff = mouse.x*con;
             const yoff = mouse.y*con;
 
-            camera.position.x = distance - xoff;
-            camera.position.y = distance - yoff;
-            camera.position.z = distance;
+            camera.position.x = distance - xoff + camloc[0];
+            camera.position.y = distance - yoff + camloc[1];
+            camera.position.z = distance + camloc[2];
             
             camera.lookAt(xoff/20, yoff/100, 0);
         }, [mouseloc])

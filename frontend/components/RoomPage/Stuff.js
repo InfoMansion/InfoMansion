@@ -8,16 +8,27 @@ export default function Model({ Hover, Click, data, ...props }) {
   const [glb] = useState(data.stuff_glb_path);
 
   function onHover(e) { Hover(e, data); }
-  function onClick(e) { Click(e, data); }
+  function onClick(e) { 
+    setClicked(Number(!clicked));
+    Click(e, data); 
+  }
 
   // component가 하나라도 잘못되었을 때 렌더링이 고장나는 것을 방지.
   if(!glb) return null;
 
   const [active, setActive] = useState(false);
   const {scale} = useSpring({
-    scale : ( active && data.category != "deco"  ) ? 1.2 : 1,
+    scale : ( !clicked && active && data.category != "deco"  ) ? 1.2 : 1,
     config : config.wobbly
   })
+
+  const [clicked, setClicked] = useState(0);
+  const { spring } = useSpring({
+    spring : clicked,
+    config: {mass : 5, tension : 400, friction : 50, precision : 0.0001 },
+  });
+
+  const positionY = spring.to([0, 1], [0, 5]);
 
   // const transition = useTransition([], {
   //   // from: { scale: [0, 0, 0], rotation: [0, 0, 0] },
@@ -62,13 +73,13 @@ export default function Model({ Hover, Click, data, ...props }) {
       dispose={null}
       scale={scale}
     >
-      <mesh
+      <animated.mesh
         geometry={nodes[geo].geometry} 
         material={materials[poly]} 
         scale={100}
+        position-y={positionY}
       />
     </animated.group>
 }
 
-// 더미 오브젝트(용량 작게) 만들어서 처리해야 함.
 useGLTF.preload(`/stuffAssets/IM.glb`)
