@@ -25,7 +25,7 @@ export default function Model({ Hover, Click, data, ...props }) {
   const [clicked, setClicked] = useState(0);
   const { spring } = useSpring({
     spring : clicked,
-    config: {mass : 5, tension : 400, friction : 50, precision : 0.0001 },
+    config: {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
   });
 
   const positionY = spring.to([0, 1], [0, 5]);
@@ -73,12 +73,20 @@ export default function Model({ Hover, Click, data, ...props }) {
       dispose={null}
       scale={scale}
     >
-      <animated.mesh
-        geometry={nodes[geo].geometry} 
-        material={materials[poly]} 
-        scale={100}
-        position-y={positionY}
-      />
+      {
+        // category deco인거 y축 이동 방지하기 위해 동적 렌더링함.
+        (data.category != 'deco') ? 
+          <animated.mesh
+            geometry={nodes[geo].geometry} material={materials[poly]} 
+            scale={100}
+            position-y={positionY}
+          />
+          : 
+          <animated.mesh
+            geometry={nodes[geo].geometry} material={materials[poly]} 
+            scale={100}
+          />
+      }
     </animated.group>
 }
 

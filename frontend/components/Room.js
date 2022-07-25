@@ -3,6 +3,7 @@ import {Canvas, useThree, useFrame} from '@react-three/fiber'
 import { useEffect, useRef, useState, setState, useLayoutEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Button } from '@mui/material'
+import { useSpring } from 'react-spring'
 
 import Stuff from './RoomPage/Stuff'
 import MapStuff from './RoomPage/MapStuff'
@@ -21,16 +22,22 @@ export default function Room( { StuffClick, ...props} ) {
     const [stuffs, setStuffs] = useState([]);
     const [hovered, setHovered] = useState(0);
     const [clicked, setClicked] = useState(0);
+    const { spring } = useSpring({
+        spring : clicked,
+        config : {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
+    })
+    const positionY = spring.to([0, 1], [0, 10]);
 
     const [tagon, setTagon] = useState(true);
     const [camloc, setCamloc] = useState([0, 0, 0]);
 
     const router = useRouter();
+    // 마운트시 stuff 로드
     useEffect(() => {
         if(!router.isReady) return;
 
         setUserID(router.query.userID);     
-        // stuff get
+        // stuff 가져오기
         setMapstuffs(userStuff[router.query.userID].slice(0, 2));
         setStuffs(userStuff[router.query.userID].slice(2));
 
@@ -39,19 +46,20 @@ export default function Room( { StuffClick, ...props} ) {
     // 마우스가 움직일 때 위치 받기.
     const [mouseloc, setmouseloc] = useState([325, 375]);
 
-    function Hover(e, stuff) {
-        console.log(stuff.stuff_name_kor + " 호버");
-        setHovered()
-    }
+    // stuff 호버 이벤트.
+    function Hover(e, stuff) { setHovered(); }
     
+    // stuff 클릭 이벤트.
     function Click(e, stuff) {
-        console.log(e.nativeEvent.offsetX + " " + e.nativeEvent.offsetY);
-        console.log(stuff.stuff_name + " 클릭");
-
-        // 데코는 이벤트 진행 안함.
         if(stuff.category == 'deco') return null;
-
-
+        
+        setClicked(Number(!clicked));
+        if(!clicked) {
+            setCamloc([0,5, 0]);
+        }
+        else {
+            setCamloc([0, 0, 0]);
+        }
         // RoomPage의 stuffClick 함수 실행시키기.
         StuffClick(stuff);
     }
@@ -68,7 +76,7 @@ export default function Room( { StuffClick, ...props} ) {
             camera.position.y = distance - yoff + camloc[1];
             camera.position.z = distance + camloc[2];
             
-            camera.lookAt(xoff/20, yoff/100, 0);
+            camera.lookAt(xoff/20, yoff/100 + camloc[1], 0);
         }, [mouseloc])
         return null
     }
@@ -128,7 +136,10 @@ export default function Room( { StuffClick, ...props} ) {
 
                 {/* camera */}
                 <RoomCamera />
-                <OrthographicCamera makeDefault zoom={zoomscale} />
+                <mesh >
+                    <OrthographicCamera makeDefault zoom={zoomscale} />
+                    
+                </mesh>
                 
                 {/* 실제 구현될 방 요소 */}
                 {/* 그림자를 받을 요소, 그림자를 뱉을 요소로 나눔. */}
@@ -140,7 +151,6 @@ export default function Room( { StuffClick, ...props} ) {
                             Click={Click}
                             
                             data={stuff}
-                            key={stuff.name}
                         />
                     )}
                 </mesh>
@@ -176,9 +186,8 @@ export default function Room( { StuffClick, ...props} ) {
                     )}
                 </mesh>
 
-                <OrbitControls />
+                {/* <OrbitControls /> */}
             </Canvas>
-
         </div>
-      )
+      ) 
 }
