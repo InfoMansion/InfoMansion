@@ -57,7 +57,7 @@ export default function Room( { StuffClick, ...props} ) {
     
     // stuff 클릭 이벤트.
     function Click(e, stuff) {
-        if(stuff.category == 'deco') return null;
+        if(stuff.category == 'NONE') return null;
         
         // setClicked 동기처리 되도록 바꿔야 함.
         setClicked(Number(!clicked));

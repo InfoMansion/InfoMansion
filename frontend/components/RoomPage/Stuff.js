@@ -24,7 +24,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
 
   const [hovered, setHovered] = useState(false);
   const {scale} = useSpring({
-    scale : ( !clicked && hovered && data.category != "deco"  ) ? 1.2 : 1,
+    scale : ( !clicked && hovered && data.category != "NONE"  ) ? 1.2 : 1,
     config : config.wobbly
   })
 
@@ -54,7 +54,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
   }, [hovered])
   
   useFrame(({camera}) => {
-    if(tagon && status == 'view' && data.category != 'deco'){
+    if(tagon && status == 'view' && data.category != 'NONE'){
       console.log(tagon);
       locref.current.quaternion.copy(camera.quaternion);
       textref.current.material.color.lerp(color.set(hovered ? '#ffa0a0' : 'black'), 0.1);
@@ -82,7 +82,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
         >
           {
             // category deco인거 y축 이동 방지하기 위해 동적 렌더링함.
-            (data.category != 'deco') ? 
+            (data.category != 'NONE') ? 
               <animated.mesh
                 geometry={nodes[geometry].geometry} material={materials[material]} castShadow
                 scale={100}
@@ -107,9 +107,8 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
     }
     
     {/* 태그 */}
-    {/* 상위의 변화에 따라 visible을 히든으로 바꿀 것  */}
     {
-      (tagon && status == 'view' && data.category != 'deco') ?
+      (tagon && status == 'view' && data.category != 'NONE') ?
       <group ref={locref} position={[1, 1.5, 1]}>
         <mesh>
           <circleGeometry attach="geometry" args={[0.3, 20]} />
