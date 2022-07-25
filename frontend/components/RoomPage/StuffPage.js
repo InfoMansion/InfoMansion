@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Box, Card, CardActionArea, CardContent, CardMedia, CssBaseline, Divider, Paper, Slide, Toolbar, Typography, useScrollTrigger } from '@mui/material'
-import { Container, textAlign } from "@mui/system";
-import { useFrame } from "@react-three/fiber";
+import { Box, Card, CardActionArea, CardContent, CardMedia, CssBaseline, Divider, Paper, Slide, Toolbar, Typography, useScrollTrigger } from '@mui/material'
+import { Container } from "@mui/system";
 
 function ElevationScroll(props) {
     const { children, window } = props;
@@ -16,9 +15,9 @@ function ElevationScroll(props) {
     });
 }
 
-export default function StuffPage( {data, ...props} ) {
-    // 실제로 사용할 부분.
+// 이거 post 아톰화 할 것.
 
+export default function StuffPage( {data, ...props} ) {
     // 더미
     const [maxcontent] = useState(150);
     const [stuff, setStuff] = useState(data);
@@ -99,9 +98,9 @@ export default function StuffPage( {data, ...props} ) {
                 backgroundColor : 'rgba(255,255,255,0.8)'
             }}
             sx={{
-                width : '638px',
+                width : '634px',
                 borderRadius : 1,
-                m : 0
+                m : 1,  
             }}
         >
             <CssBaseline />

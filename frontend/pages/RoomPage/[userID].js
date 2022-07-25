@@ -13,17 +13,18 @@ export default function RoomPage() {
     const [stuff, setStuff] = useState({});
     const [stuffon, setStuffon] = useState('');
 
-    const RoomBox = styled('div')(({ theme }) => ({
-        padding: theme.spacing(1),
-        margin : '30px auto',  
+    // 이걸 사용하면, Canvas에서 요소가 클릭할 때 마다 새로고침됨. > 이벤트 적용 안됨.
+    // const RoomBox = styled('div')(({ theme }) => ({
+    //     padding: theme.spacing(1),
+    //     margin : '30px auto',  
       
-        [theme.breakpoints.down('lg')]: {
-          width : '638px',
-        },
-        [theme.breakpoints.up('lg')]: {
-          width : '700px',
-        },
-      }));
+    //     [theme.breakpoints.down('lg')]: {
+    //       width : '638px',
+    //     },
+    //     [theme.breakpoints.up('lg')]: {
+    //       width : '700px',
+    //     },
+    //   }));
 
     function StuffClick(stuff) {
         // 여기서 stuffpage로 변수 전달하면 됨.
@@ -80,12 +81,13 @@ export default function RoomPage() {
                     <UserInfo userID = {userID} />
                 </Grid>
 
-                <RoomBox item lg={7}
+                <Grid item lg={7}
                     sx={{
                         display : 'flex',
                         flexDirection : 'column-reverse',
                         alignItems : 'center',
-                        p : 0
+                        p : 1,
+                        my : 2
                     }}
                 >
                     <Box sx={{ my : 1 }} >
@@ -99,7 +101,7 @@ export default function RoomPage() {
                         <Box 
                             sx={{ 
                                 zIndex : 'tooltip', 
-                                width : 650
+                                width : 650,
                             }} 
                         >
                             <animated.div
@@ -117,7 +119,7 @@ export default function RoomPage() {
 
                         </Box>
                     }
-                </RoomBox>
+                </Grid>
             </Grid>
         </Container>
     )

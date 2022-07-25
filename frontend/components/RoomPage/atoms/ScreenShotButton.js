@@ -1,4 +1,3 @@
-import { Box } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import * as THREE from 'three'
 

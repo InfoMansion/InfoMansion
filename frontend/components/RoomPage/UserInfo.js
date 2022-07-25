@@ -1,8 +1,7 @@
 import { Avatar, Box, Card, Divider, Grid, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles'
-import { maxWidth } from "@mui/system";
 import { useState } from "react";
-import RecentPost from "./RecentPost";
+import RecentPost from "./RecentPosts";
 
 const Root = styled('div')(({ theme }) => ({
     padding: theme.spacing(1),
@@ -34,7 +33,6 @@ export default function UserInfo( {...props} ) {
         followcount : 10,
         followingcount : 20,
     })
-    
 
     return (
         <Card 

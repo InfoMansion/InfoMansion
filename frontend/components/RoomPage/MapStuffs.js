@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import MapStuff from './MapStuff'
+import MapStuff from './atoms/MapStuff'
 
 export default function MapStuffs({Hover, Click, stuffs}) {
     return (
