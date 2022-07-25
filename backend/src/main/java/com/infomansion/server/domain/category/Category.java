@@ -17,7 +17,7 @@ public enum Category implements CategoryMapperType {
     NATURE("자연"),
     CLEANING("청소"),
     STUDY("공부"),
-    NONE("");
+    NONE("NONE");
 
     private final String categoryName;
 
