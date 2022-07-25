@@ -1,4 +1,4 @@
-import { Circle, Image, OrbitControls, OrthographicCamera, Text } from '@react-three/drei'
+import { Box, Circle, Image, OrbitControls, OrthographicCamera, Text } from '@react-three/drei'
 import {Canvas, useThree, useFrame} from '@react-three/fiber'
 import { useEffect, useRef, useState, setState, useLayoutEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -15,25 +15,24 @@ import Stuffs from './RoomPage/Stuffs'
 // 이 파일은 나중에 db에 데이터 넣을 때 쓸거라 안지우고 유지하겠습니다.
 // import walltest from './walltest.json'
 import RoomCamera from './RoomPage/RoomCamera'
+import EditRoomCamera from './RoomPage/EditRoomCamera'
+import ScreenshotButton from './RoomPage/ScreenShotButton'
 
-export default function Room( { StuffClick, ...props} ) {
+export default function EditRoom( { StuffClick, ...props} ) {
     // 화면 확대 정도 조정.
     const [zoomscale] = useState(90);
-
     const [userID, setUserID] = useState(0);
 
     // 사용자 가구들.
     const [mapstuffs, setMapstuffs] = useState([]);
     const [stuffs, setStuffs] = useState([]);
+
     const [hovered, setHovered] = useState(0);
     const [clicked, setClicked] = useState(0);
     const { spring } = useSpring({
         spring : clicked,
         config : {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
     })
-    const positionY = spring.to([0, 1], [0, 10]);
-
-    const [tagon, setTagon] = useState(true);
     const [camloc, setCamloc] = useState([0, 0, 0]);
 
     const router = useRouter();
@@ -47,9 +46,6 @@ export default function Room( { StuffClick, ...props} ) {
         setStuffs(userStuff[router.query.userID].slice(2));
 
     }, [router.isReady]);
-
-    // 마우스가 움직일 때 위치 받기.
-    const [mouseloc, setmouseloc] = useState([325, 375]);
 
     // stuff 호버 이벤트.
     function Hover(e, stuff) { setHovered(); }
@@ -70,25 +66,11 @@ export default function Room( { StuffClick, ...props} ) {
     return (
         <div 
             style={{ 
-                width : "600px", 
-                height : "700px",
+                width : "610px", 
+                height : "610px",
                 // margin : '30px auto'
                 }}
             >
-                {/* 태그 토글 버튼 */}
-                <Button variant="outlined"
-                    style={{
-                        position : 'absolute',
-                        zIndex : '2'
-                    }}
-                    sx={{ m : 2 }}
-                    onClick={() => setTagon(!tagon)}
-                >
-                    {
-                        (tagon) ? <div>태그 숨기기.</div>
-                        : <div>태그 보기.</div>
-                    }
-                </Button>
 
             {/* 캔버스 영역 */}
             <Canvas
@@ -116,10 +98,13 @@ export default function Room( { StuffClick, ...props} ) {
                 />
                 {/* 창 밖에서 들어오는 빛 테스트용 */}
                 {/* <pointLight position={[-4, 2, 2]} intensity={0.5} /> */}
-                
 
                 {/* camera */}
-                <RoomCamera camloc={camloc}/>
+
+                <ScreenshotButton />
+                
+                {/* <Box></Box> */}
+                <EditRoomCamera camloc={camloc}/>
                 <OrthographicCamera makeDefault zoom={zoomscale} />
                 
                 {/* 벽, 바닥 */}
@@ -133,10 +118,8 @@ export default function Room( { StuffClick, ...props} ) {
                     stuffs={stuffs}
                     Hover={Hover}
                     Click={Click}
-                    status={'view'}
+                    status={'edit'}
                 />
-
-                {/* <OrbitControls /> */}
             </Canvas>
         </div>
       ) 
