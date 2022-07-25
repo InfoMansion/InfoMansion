@@ -2,7 +2,6 @@ package com.infomansion.server.domain.stuff.service.impl;
 
 import com.infomansion.server.domain.category.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
-import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
@@ -14,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -26,23 +27,28 @@ public class StuffServiceImpl implements StuffService {
     @Transactional
     @Override
     public Long createStuff(StuffRequestDto requestDto) {
+        // 하나의 String으로 받아온 categories를 분리
+        List<String> categories = splitCategories(requestDto.getCategories());
+        // 분리된 categories 검증
+        categories.forEach(category -> validateCategory(category));
+
         return stuffRepository.save(requestDto.toEntity()).getId();
     }
 
     @Transactional
     @Override
     public Long updateStuff(Long stuff_id, StuffRequestDto requestDto) {
-        stuffRepository.findById(stuff_id)
+        // 하나의 String으로 받아온 categories를 분리
+        List<String> categories = splitCategories(requestDto.getCategories());
+        // 분리된 categories 검증
+        categories.forEach(category -> validateCategory(category));
+
+        Stuff stuff = stuffRepository.findById(stuff_id)
                 .orElseThrow(() -> new CustomException(ErrorCode.STUFF_NOT_FOUND));
-        Stuff newStuff = Stuff.builder()
-                .id(stuff_id)
-                .stuffName(requestDto.getStuffName())
-                .stuffNameKor(requestDto.getStuffNameKor())
-                .price(requestDto.getPrice())
-                .stuffType(StuffType.valueOf(requestDto.getStuffType()))
-                .category(Category.valueOf(requestDto.getCategory()))
-                .build();
-        return stuffRepository.save(newStuff).getId();
+        stuff.updateStuff(requestDto.getStuffName(), requestDto.getStuffNameKor(), requestDto.getPrice(),
+                requestDto.getCategories(), requestDto.getStuffType(),
+                requestDto.getGeometry(), requestDto.getMaterials());
+        return stuff.getId();
     }
 
     @Override
@@ -63,11 +69,27 @@ public class StuffServiceImpl implements StuffService {
     @Transactional
     @Override
     public void removeStuff(Long stuff_id) {
-        validationStuffId(stuff_id);
+        validateStuffId(stuff_id);
         stuffRepository.deleteById(stuff_id);
     }
 
-    private void validationStuffId(Long stuff_id) {
+    private void validateStuffId(Long stuff_id) {
         if(!stuffRepository.existsById(stuff_id)) throw new CustomException(ErrorCode.STUFF_NOT_FOUND);
+    }
+
+    // String categories 분리
+    private List<String> splitCategories(String categories) {
+        List<String> splitCategories = Arrays.stream(categories.split(",")).collect(Collectors.toList());
+        if(splitCategories.size() > 5) throw new CustomException(ErrorCode.____THE_NUM_OF_CATEGORY);
+
+        return splitCategories;
+    }
+
+    // String category 검증
+    private void validateCategory(String category) {
+        for (Category value : Category.values()) {
+            if(category.equals(value.toString())) return;
+        }
+        throw new CustomException(ErrorCode.NOT_VALID_CATEGORY);
     }
 }

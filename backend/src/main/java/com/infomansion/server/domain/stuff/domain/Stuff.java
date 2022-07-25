@@ -22,8 +22,7 @@ public class Stuff {
     private String stuffNameKor;
     private Long price;
 
-    @Enumerated(EnumType.STRING)
-    private Category category;
+    private String categories;
 
     @Enumerated(EnumType.STRING)
     private StuffType stuffType;
@@ -37,15 +36,25 @@ public class Stuff {
 
 
     @Builder
-    public Stuff(Long id, String stuffName, String stuffNameKor, Long price, Category category, StuffType stuffType, String geometry, String materials, StuffFile stuffFile) {
+    public Stuff(Long id, String stuffName, String stuffNameKor, Long price, String categories, StuffType stuffType, String geometry, String materials, StuffFile stuffFile) {
         this.id = id;
         this.stuffName = stuffName;
         this.stuffNameKor = stuffNameKor;
         this.price = price;
-        this.category = category;
+        this.categories = categories;
         this.stuffType = stuffType;
         this.geometry = geometry;
         this.materials = materials;
         this.stuffFile = stuffFile;
+    }
+
+    public void updateStuff(String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String materials) {
+        this.stuffName = stuffName;
+        this.stuffNameKor = stuffNameKor;
+        this.price = price;
+        this.stuffType = StuffType.valueOf(stuffType);
+        this.categories = categories;
+        this.geometry = geometry;
+        this.materials = materials;
     }
 }

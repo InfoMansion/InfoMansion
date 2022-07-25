@@ -12,21 +12,19 @@ import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.global.util.exception.CustomException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserStuffImplTest {
@@ -69,15 +67,17 @@ public class UserStuffImplTest {
             String stuffName = "notebook"+(i+1);
             String stuffNameKor = "노트북"+(i+1);
             Long price = 30L;
-            String category = "IT";
+            String sCategories = "IT,GAME";
             String stuffType = "STUFF";
 
             StuffRequestDto requestDto = StuffRequestDto.builder()
                     .stuffName(stuffName)
                     .stuffNameKor(stuffNameKor)
                     .price(price)
-                    .category(category)
+                    .categories(sCategories)
                     .stuffType(stuffType)
+                    .geometry("geometry")
+                    .materials("materials")
                     .build();
 
             stuffIds.add(stuffRepository.save(requestDto.toEntity()).getId());

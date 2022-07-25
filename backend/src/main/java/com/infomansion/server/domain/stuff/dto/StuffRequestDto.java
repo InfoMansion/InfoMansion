@@ -26,20 +26,25 @@ public class StuffRequestDto {
     @Min(0)
     @NotNull
     private Long price;
-    @ValidEnum(enumClass = Category.class, ignoreCase = true)
     @NotBlank
-    private String category;
+    private String categories;
     @ValidEnum(enumClass = StuffType.class, ignoreCase = true)
     @NotBlank
     private String stuffType;
+    @NotBlank
+    private String geometry;
+    @NotBlank
+    private String materials;
 
     @Builder
-    public StuffRequestDto(String stuffName, String stuffNameKor, Long price, String category, String stuffType) {
+    public StuffRequestDto(String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String materials) {
         this.stuffName = stuffName;
         this.stuffNameKor = stuffNameKor;
         this.price = price;
-        this.category = category;
+        this.categories = categories;
         this.stuffType = stuffType;
+        this.geometry = geometry;
+        this.materials = materials;
     }
 
     public Stuff toEntity() {
@@ -47,8 +52,10 @@ public class StuffRequestDto {
                 .stuffName(stuffName)
                 .stuffNameKor(stuffNameKor)
                 .price(price)
-                .category(Category.valueOf(category))
+                .categories(categories)
                 .stuffType(StuffType.valueOf(stuffType))
+                .geometry(geometry)
+                .materials(materials)
                 .build();
     }
 }

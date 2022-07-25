@@ -25,6 +25,7 @@ public enum ErrorCode {
 
     // CATEGORY
     NOT_VALID_CATEGORY(HttpStatus.BAD_REQUEST, 40040, "유효하지 않은 카테고리입니다."),
+    EXCEEDED_THE_NUMBER_OF_CATEGORIES(HttpStatus.BAD_REQUEST, 40041, "설정 가능한 카테고리 수를 초과하였습니다."),
 
     // STUFF
     STUFF_NOT_FOUND(HttpStatus.BAD_REQUEST, 40050, "해당 Stuff id를 찾을 수 없습니다."),

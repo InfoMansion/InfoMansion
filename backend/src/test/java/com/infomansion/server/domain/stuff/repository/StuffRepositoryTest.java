@@ -1,6 +1,5 @@
 package com.infomansion.server.domain.stuff.repository;
 
-import com.infomansion.server.domain.category.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.domain.StuffType;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
@@ -26,14 +25,14 @@ public class StuffRepositoryTest {
         String stuffName = "laptop";
         String stuffNameKor = "노트북";
         Long price = 30L;
-        Category category = Category.IT;
+        String categories = "IT,GAME";
         StuffType stuffType = StuffType.STUFF;
 
         Stuff stuff = Stuff.builder()
                 .stuffName(stuffName)
                 .stuffNameKor(stuffNameKor)
                 .price(price)
-                .category(category)
+                .categories(categories)
                 .stuffType(stuffType)
                 .build();
 

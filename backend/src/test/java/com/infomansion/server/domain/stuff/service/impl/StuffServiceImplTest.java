@@ -1,8 +1,6 @@
 package com.infomansion.server.domain.stuff.service.impl;
 
-import com.infomansion.server.domain.category.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
-import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
@@ -12,13 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StuffServiceImplTest {
@@ -40,15 +35,17 @@ public class StuffServiceImplTest {
         String stuffName = "notebook";
         String stuffNameKor = "노트북";
         Long price = 30L;
-        String category = "IT";
+        String categories = "IT,GAME";
         String stuffType = "STUFF";
 
         StuffRequestDto requestDto = StuffRequestDto.builder()
                 .stuffName(stuffName)
                 .stuffNameKor(stuffNameKor)
                 .price(price)
-                .category(category)
+                .categories(categories)
                 .stuffType(stuffType)
+                .geometry("geometry")
+                .materials("materials")
                 .build();
 
         // when
@@ -65,7 +62,7 @@ public class StuffServiceImplTest {
         String stuffName = "notebook";
         String stuffNameKor = "노트북";
         Long price = 30L;
-        String category = "IT";
+        String categories = "IT";
         String stuffType = "STUFF";
 
         // DB 저장 용
@@ -73,8 +70,10 @@ public class StuffServiceImplTest {
                 .stuffName(stuffName)
                 .stuffNameKor(stuffNameKor)
                 .price(price)
-                .category(category)
+                .categories(categories)
                 .stuffType(stuffType)
+                .geometry("geometry")
+                .materials("materials")
                 .build();
         Long stuff_id = stuffService.createStuff(requestDto);
 
@@ -84,15 +83,17 @@ public class StuffServiceImplTest {
                 .stuffName(stuffName)
                 .stuffNameKor(stuffNameKor)
                 .price(price)
-                .category("GAME")
+                .categories("IT,GAME")
                 .stuffType(stuffType)
+                .geometry("geometry")
+                .materials("materials")
                 .build();
         Long update_stuff_id = stuffService.updateStuff(stuff_id, updateRequestDto);
 
         // then
         Optional<Stuff> findStuff = stuffRepository.findById(stuff_id);
         assertThat(stuff_id).isEqualTo(update_stuff_id);
-        assertThat(findStuff.get().getCategory()).isEqualTo(Category.GAME);
+        assertThat(findStuff.get().getCategories()).isEqualTo("IT,GAME");
     }
 
     @Test
@@ -102,15 +103,17 @@ public class StuffServiceImplTest {
             String stuffName = "notebook"+(i+1);
             String stuffNameKor = "노트북"+(i+1);
             Long price = 30L;
-            String category = "IT";
+            String categories = "IT";
             String stuffType = "STUFF";
 
             StuffRequestDto requestDto = StuffRequestDto.builder()
                     .stuffName(stuffName)
                     .stuffNameKor(stuffNameKor)
                     .price(price)
-                    .category(category)
+                    .categories(categories)
                     .stuffType(stuffType)
+                    .geometry("geometry")
+                    .materials("materials")
                     .build();
             stuffService.createStuff(requestDto);
         }
@@ -128,15 +131,17 @@ public class StuffServiceImplTest {
         String stuffName = "notebook";
         String stuffNameKor = "노트북";
         Long price = 30L;
-        String category = "IT";
+        String categories = "IT";
         String stuffType = "STUFF";
 
         StuffRequestDto requestDto = StuffRequestDto.builder()
                 .stuffName(stuffName)
                 .stuffNameKor(stuffNameKor)
                 .price(price)
-                .category(category)
+                .categories(categories)
                 .stuffType(stuffType)
+                .geometry("geometry")
+                .materials("materials")
                 .build();
         Long stuff_id = stuffService.createStuff(requestDto);
 
