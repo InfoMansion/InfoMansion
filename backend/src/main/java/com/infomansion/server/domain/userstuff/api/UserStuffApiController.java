@@ -59,7 +59,7 @@ public class UserStuffApiController {
                 .body(new CommonResponse<>(userStuffService.modifyPosAndRot(requestDto)));
     }
 
-    @DeleteMapping("/api/v1/userstuffs/{userStuffId}")
+    @PatchMapping("/api/v1/userstuffs/{userStuffId}")
     public ResponseEntity<CommonResponse<Long>> removeUserStuff(@PathVariable Long userStuffId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userStuffService.removeUserStuff(userStuffId)));

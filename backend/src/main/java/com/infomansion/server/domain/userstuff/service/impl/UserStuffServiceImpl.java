@@ -131,7 +131,7 @@ public class UserStuffServiceImpl implements UserStuffService {
     public Long removeUserStuff(Long userStuffId) {
         UserStuff userStuff = userStuffRepository.findById(userStuffId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
-        userStuffRepository.delete(userStuff);
+        userStuff.deleteUserStuff();
         return userStuffId;
     }
 

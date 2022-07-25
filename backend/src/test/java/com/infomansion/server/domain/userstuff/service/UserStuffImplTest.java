@@ -303,9 +303,8 @@ public class UserStuffImplTest {
         userStuffService.removeUserStuff(userStuffId);
 
         // then
-        assertThatThrownBy(() -> {userStuffService.findUserStuffByUserStuffId(userStuffId);})
-                .isInstanceOf(CustomException.class)
-                .extracting("errorCode").extracting("code").isEqualTo(ErrorCode.USER_STUFF_NOT_FOUND.getCode());
+        Optional<UserStuff> removedUserStuff = userStuffRepository.findById(userStuffId);
+        assertThat(removedUserStuff.isEmpty()).isTrue();
 
     }
 

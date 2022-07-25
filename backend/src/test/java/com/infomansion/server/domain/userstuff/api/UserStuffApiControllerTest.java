@@ -323,7 +323,7 @@ public class UserStuffApiControllerTest {
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
         // when, then
-        mockMvc.perform(delete("/api/v1/userstuffs/"+(userStuffId+2)))
+        mockMvc.perform(patch("/api/v1/userstuffs/"+(userStuffId+999999)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(ErrorCode.USER_STUFF_NOT_FOUND.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.USER_STUFF_NOT_FOUND.getMessage()));
@@ -339,7 +339,7 @@ public class UserStuffApiControllerTest {
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
         // when
-        mockMvc.perform(delete("/api/v1/userstuffs/"+userStuffId));
+        mockMvc.perform(patch("/api/v1/userstuffs/"+userStuffId));
 
         // then
         mockMvc.perform(get("/api/v1/userstuffs/"+userStuffId))
