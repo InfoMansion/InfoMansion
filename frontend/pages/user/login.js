@@ -26,7 +26,6 @@ import { likeCateState } from '../../state/likeCate';
 import { isLoginState } from '../../state/isLogin';
 import { useCookies } from 'react-cookie';
 import moment from 'moment';
-import { borderColor } from '@mui/system';
 
 // const function Logout(){
 //   const [token, setToken] = useRecoilState(tokenState);
@@ -133,25 +132,25 @@ export default function LogIn() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: '100vh' }} spacing={6}>
+      <Grid
+        container
+        component="main"
+        sx={{ height: '100vh' }}
+        spacing={3}
+        alignItems="center"
+      >
         <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: 'url(/LoginTemp.jpg)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: t =>
-              t.palette.mode === 'light'
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: 'contain',
-            backgroundPosition: 'center',
-          }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={7} lg={7}>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+            }}
+          >
+            <CardMedia component="img" image="/LoginTemp.jpg"></CardMedia>
+          </Box>
+        </Grid>
+        <Grid item xs={5} lg={5} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -162,74 +161,89 @@ export default function LogIn() {
             }}
             boxShadow={3}
           >
-            <CardMedia
-              component="img"
-              image="/logo.png"
-              style={{ width: '33%', height: '35%' }}
-            ></CardMedia>
             <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
               sx={{
-                mt: 1,
+                my: 4,
               }}
             >
               <div
                 style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
-                <TextField
-                  margin="normal"
-                  required
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  autoCapitalize="off"
-                  value={inputId}
-                  onChange={handleInput}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  value={inputPw}
-                  onChange={handleInput}
-                />
+                <CardMedia
+                  component="img"
+                  image="/logo.png"
+                  style={{ width: '33%', height: '35%' }}
+                ></CardMedia>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  sx={{ mt: 3, mb: 2 }}
-                  disabled={!(confirmId && confirmPw)}
-                  onClick={handleSubmit}
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                noValidate
+                sx={{
+                  mt: 1,
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
                 >
-                  LOGIN
-                </Button>
-              </div>
-              <Grid container>
-                <Grid item xs>
+                  <TextField
+                    margin="normal"
+                    required
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    autoCapitalize="off"
+                    value={inputId}
+                    onChange={handleInput}
+                    variant="outlined"
+                    color="primary"
+                    focused
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={inputPw}
+                    onChange={handleInput}
+                    variant="outlined"
+                    color="primary"
+                    focused
+                  />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    sx={{ mt: 3, mb: 2 }}
+                    disabled={!(confirmId && confirmPw)}
+                    onClick={handleSubmit}
+                  >
+                    LOGIN
+                  </Button>
+                </div>
+                <Grid container justifyContent="space-around">
                   <Link href="#" variant="body2">
                     Forgot password?
                   </Link>
-                </Grid>
-                <Grid item>
                   <Link href="#" variant="body2" onClick={goSignUp}>
                     {'Sign Up'}
                   </Link>
                 </Grid>
-              </Grid>
+              </Box>
             </Box>
           </Box>
         </Grid>
