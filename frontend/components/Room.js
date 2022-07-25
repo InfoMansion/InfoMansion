@@ -159,30 +159,14 @@ export default function Room( { StuffClick, ...props} ) {
                 {/* 이거 클로저 함수로 컴포넌트 리턴받도록 변경할 것. */}
                 <mesh castShadow>
                     { stuffs.map( stuff => 
-                        <group>
-                            <Stuff
-                                Hover={Hover}
-                                Click={Click}
+                        <Stuff
+                            Hover={Hover}
+                            Click={Click}
 
-                                data={stuff} 
+                            data={stuff} 
 
-                                key={stuff.name}
-
-                                position={[stuff.pos_x, stuff.pos_y, stuff.pos_z]}
-                                rotation={[stuff.rot_x, stuff.rot_y, stuff.rot_z]}
-                            />
-                            <group 
-                                position={[stuff.pos_x + 1, stuff.pos_y + 1.5, stuff.pos_z + 1]}
-                            >
-                                {/* 여기에 hovered를 걸어서 렌더링 여부를 결정 */}
-                                
-                                {
-                                    (stuff.category != "deco" && tagon) ? <StuffTag children={stuff.stuff_name} />
-                                    : <></>
-                                }   
-                            </group>
-
-                        </group>
+                            key={stuff.name}
+                        />
                     )}
                 </mesh>
 
