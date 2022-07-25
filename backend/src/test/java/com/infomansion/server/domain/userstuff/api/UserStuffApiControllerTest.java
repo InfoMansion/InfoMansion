@@ -11,6 +11,7 @@ import com.infomansion.server.domain.userstuff.dto.UserStuffPositionRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,16 +20,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 
-import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,6 +45,9 @@ public class UserStuffApiControllerTest {
     private UserStuffService userStuffService;
 
     @Autowired
+    private UserStuffRepository userStuffRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     private Long userId;
@@ -61,14 +60,14 @@ public class UserStuffApiControllerTest {
         String password = "testPassword1$";
         String tel = "01012345678";
         String username = "infomansion";
-        String categories = "IT,COOK";
+        String uCategories = "IT,COOK";
 
         userId = userRepository.save(User.builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
-                .categories(categories)
+                .categories(uCategories)
                 .build()).getId();
 
         // stuff 생성
@@ -77,19 +76,28 @@ public class UserStuffApiControllerTest {
             String stuffName = "notebook"+(i+1);
             String stuffNameKor = "노트북"+(i+1);
             Long price = 30L;
-            String category = "IT";
+            String categories = "IT";
             String stuffType = "STUFF";
 
             StuffRequestDto requestDto = StuffRequestDto.builder()
                     .stuffName(stuffName)
                     .stuffNameKor(stuffNameKor)
                     .price(price)
-                    .category(category)
+                    .categories(categories)
                     .stuffType(stuffType)
+                    .geometry("geometry")
+                    .materials("materials")
                     .build();
 
             stuffIds.add(stuffRepository.save(requestDto.toEntity()).getId());
         }
+    }
+
+    @AfterEach
+    public void reset() {
+        userStuffRepository.deleteAll();
+        stuffRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
 
