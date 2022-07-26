@@ -126,5 +126,14 @@ public class UserStuffServiceImpl implements UserStuffService {
         return userStuff.getId();
     }
 
+    @Transactional
+    @Override
+    public Long removeUserStuff(Long userStuffId) {
+        UserStuff userStuff = userStuffRepository.findById(userStuffId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+        userStuff.deleteUserStuff();
+        return userStuffId;
+    }
+
 
 }

@@ -12,6 +12,8 @@ import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.global.util.exception.CustomException;
+import com.infomansion.server.global.util.exception.ErrorCode;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -286,6 +288,23 @@ public class UserStuffImplTest {
         assertThatThrownBy(() -> {userStuffService.modifyAliasAndCategory(modifyRequestDto);})
                 .isInstanceOf(CustomException.class)
                 .extracting("errorCode").extracting("code").isEqualTo(40063);
+
+    }
+
+    @DisplayName("userStuffId로 삭제 성공")
+    @Test
+    public void user_stuff_삭제_성공() {
+        // given
+        UserStuffRequestDto requestDtoGiven = UserStuffRequestDto.builder()
+                .stuffId(stuffIds.get(0)).userId(userId).build();
+        Long userStuffId = userStuffService.saveUserStuff(requestDtoGiven);
+
+        // when
+        userStuffService.removeUserStuff(userStuffId);
+
+        // then
+        Optional<UserStuff> removedUserStuff = userStuffRepository.findById(userStuffId);
+        assertThat(removedUserStuff.isEmpty()).isTrue();
 
     }
 
