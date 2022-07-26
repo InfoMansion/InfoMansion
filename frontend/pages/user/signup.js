@@ -19,7 +19,16 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#ff7961',
+      main: '#ff7961',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
+  },
+});
 
 export default function SignUp() {
   const router = useRouter();
@@ -119,6 +128,8 @@ export default function SignUp() {
                   autoComplete="email"
                   onChange={handleInput}
                   autoCapitalize="off"
+                  color="primary"
+                  focused
                 />
               </Grid>
               <Grid item xs={12}>
@@ -131,6 +142,8 @@ export default function SignUp() {
                   id="password"
                   autoComplete="new-password"
                   onChange={handleInput}
+                  color="primary"
+                  focused
                 />
               </Grid>
               <Grid item xs={12}>
@@ -143,6 +156,8 @@ export default function SignUp() {
                   id="password2"
                   autoComplete="new-password"
                   onChange={handleInput}
+                  color="primary"
+                  focused
                 />
               </Grid>
               <Grid item xs={12}>
@@ -154,6 +169,8 @@ export default function SignUp() {
                   name="username"
                   autoComplete="username"
                   onChange={handleInput}
+                  color="primary"
+                  focused
                 />
               </Grid>
             </Grid>
