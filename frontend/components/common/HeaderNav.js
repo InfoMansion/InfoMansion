@@ -1,14 +1,12 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Image from 'next/image';
-import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
-import MoreIcon from '@mui/icons-material/MoreVert';
 import Badge from '@mui/material/Badge';
 import Menu from '@mui/material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -17,7 +15,18 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import Link from 'next/link';
 import { useCookies } from 'react-cookie';
 import AddIcon from '@mui/icons-material/Add';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { useRouter } from 'next/router';
 
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -31,18 +40,8 @@ const Search = styled('div')(({ theme }) => ({
   },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
+  color: 'gray',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -53,13 +52,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       width: '20ch',
     },
   },
+  '&: focus-within': {
+    color: 'black',
+  },
 }));
 
 export default function DenseAppBar() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const { push } = useRouter();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [focus, setFocus] = useState(false);
 
   const [, , removeCookie] = useCookies(['cookie-name']);
   const isMenuOpen = Boolean(anchorEl);
+
+  const [keyword, setKeyword] = useState('');
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -76,6 +82,10 @@ export default function DenseAppBar() {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const handleChange = e => {
+    setKeyword(e.target.value);
   };
 
   const menuId = 'primary-search-account-menu';
@@ -139,15 +149,39 @@ export default function DenseAppBar() {
               </div>
             </div>
           </Link>
-          <Search>
+          <Search style={{ postiion: 'relative' }}>
             <SearchIconWrapper style={{ color: '#9e9e9e' }}>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="검색"
-              inputProps={{ 'aria-label': 'search' }}
-              style={{ color: 'black' }}
+              onChange={handleChange}
+              value={keyword}
+              onKeyPress={event => {
+                event.key === 'Enter'
+                  ? push({
+                      pathname: '/post/SearchPost',
+                      query: { keyword },
+                    })
+                  : '';
+              }}
+              style={{ paddingRight: '25px' }}
             />
+            {keyword.length > 0 && (
+              <HighlightOffIcon
+                style={{
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  right: '5',
+                  position: 'absolute',
+                  color: '#9e9e9e',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setKeyword('');
+                }}
+              ></HighlightOffIcon>
+            )}
           </Search>
           <div
             style={{ display: 'flex', height: '30px', alignItems: 'center' }}
