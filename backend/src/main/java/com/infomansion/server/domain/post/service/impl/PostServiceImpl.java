@@ -1,11 +1,9 @@
 package com.infomansion.server.domain.post.service.impl;
 
-import com.infomansion.server.domain.post.dto.PostRequestDto;
+import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.PostService;
-import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
-import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
@@ -27,7 +25,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Long createPost(PostRequestDto requestDto) {
+    public Long createPost(PostCreateRequestDto requestDto) {
         UserStuff userStuff = userStuffRepository.findById(requestDto.getUserStuffId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
 

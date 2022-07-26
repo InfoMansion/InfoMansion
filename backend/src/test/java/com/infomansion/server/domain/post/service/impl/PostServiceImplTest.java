@@ -1,6 +1,6 @@
 package com.infomansion.server.domain.post.service.impl;
 
-import com.infomansion.server.domain.post.dto.PostRequestDto;
+import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
@@ -109,12 +109,12 @@ public class PostServiceImplTest {
         String title = "notebook의 종류";
         String content = "사실 notebook이 아니라 labtop이 바른 말이다.";
 
-        PostRequestDto postRequestDto = PostRequestDto.builder()
+        PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
                 .userStuffId(userStuffId)
                 .title(title).content(content)
                 .build();
 
-        Long postId = postService.createPost(postRequestDto);
+        Long postId = postService.createPost(postCreateRequestDto);
         assertThat(title).isEqualTo(postRepository.findById(postId).get().getTitle());
 
 

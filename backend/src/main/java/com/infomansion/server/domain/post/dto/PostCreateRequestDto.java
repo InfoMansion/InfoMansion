@@ -5,15 +5,13 @@ import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@ToString
 @Getter
 @NoArgsConstructor
-public class PostRequestDto {
+public class PostCreateRequestDto {
 
     @NotNull
     private Long userId;
@@ -28,7 +26,7 @@ public class PostRequestDto {
     private String content;
 
     @Builder
-    public PostRequestDto(Long userStuffId, String title, String content) {
+    public PostCreateRequestDto(Long userStuffId, String title, String content) {
         this.userStuffId = userStuffId;
         this.title = title;
         this.content = content;

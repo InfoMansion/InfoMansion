@@ -1,9 +1,9 @@
 package com.infomansion.server.domain.post.service;
 
-import com.infomansion.server.domain.post.dto.PostRequestDto;
+import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
 
 public interface PostService {
 
-    Long createPost(PostRequestDto requestDto);
+    Long createPost(PostCreateRequestDto requestDto);
 
 }
