@@ -40,13 +40,11 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void deleteRoom(Long roomId) {
-        validationRoomId(roomId);
-        roomRepository.deleteById(roomId);
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
+        room.deleteRoom();
     }
 
-    private void validationRoomId(Long roomId){
-        if(!roomRepository.existsById(roomId)) throw new CustomException(ErrorCode.ROOM_NOT_FOUND);
-    }
 
     @Override
     public RoomResponseDto findRoombyId(Long userId) {
