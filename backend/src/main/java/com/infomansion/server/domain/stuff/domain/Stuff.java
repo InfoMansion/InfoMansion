@@ -1,5 +1,6 @@
 package com.infomansion.server.domain.stuff.domain;
 
+import com.infomansion.server.domain.base.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Stuff {
+public class Stuff extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "stuff_id")

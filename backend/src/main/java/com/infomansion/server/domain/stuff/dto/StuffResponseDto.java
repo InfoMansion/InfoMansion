@@ -7,6 +7,7 @@ import com.infomansion.server.domain.stuff.domain.StuffType;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,8 @@ public class StuffResponseDto {
     private String geometry;
     private String materials;
     private String stuffGlbPath;
+    private LocalDateTime createdTime;
+    private LocalDateTime modifiedTime;
 
     public StuffResponseDto(Stuff stuff) {
         this.id = stuff.getId();
@@ -36,6 +39,8 @@ public class StuffResponseDto {
         this.materials = stuff.getMaterials();
         if(stuff.getStuffFile() != null)
             this.stuffGlbPath = stuff.getStuffFile().getStuffGlbPath();
+        this.createdTime = stuff.getCreatedDate();
+        this.modifiedTime = stuff.getModifiedDate();
     }
 
     public List<CategoryMapperValue> getCategories(String categories) {

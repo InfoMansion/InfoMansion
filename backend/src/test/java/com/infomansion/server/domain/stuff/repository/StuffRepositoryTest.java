@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,5 +43,30 @@ public class StuffRepositoryTest {
         List<Stuff> stuffList = stuffRepository.findAll();
         assertThat(stuffList.get(0).getStuffName()).isEqualTo(stuffName);
         assertThat(stuffList.get(0).getStuffNameKor()).isEqualTo(stuffNameKor);
+    }
+
+    @DisplayName("Stuff 생성 시간 조회 성공")
+    @Test
+    public void Stuff_생성시간_조회_성공() {
+        String stuffName = "laptop";
+        String stuffNameKor = "노트북";
+        Long price = 30L;
+        String categories = "IT,GAME";
+        StuffType stuffType = StuffType.STUFF;
+
+        Stuff stuff = Stuff.builder()
+                .stuffName(stuffName)
+                .stuffNameKor(stuffNameKor)
+                .price(price)
+                .categories(categories)
+                .stuffType(stuffType)
+                .build();
+
+        LocalDateTime createdTime = LocalDateTime.now();
+
+        stuffRepository.save(stuff);
+        List<Stuff> list = stuffRepository.findAll();
+        assertThat(list.size()).isEqualTo(1);
+        assertThat(list.get(0).getCreatedDate()).isAfterOrEqualTo(createdTime);
     }
 }
