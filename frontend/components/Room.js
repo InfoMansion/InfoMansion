@@ -1,20 +1,18 @@
-import { Circle, Image, OrbitControls, OrthographicCamera, Text } from '@react-three/drei'
-import {Canvas, useThree, useFrame} from '@react-three/fiber'
-import { useEffect, useRef, useState, setState, useLayoutEffect } from 'react'
+import { OrthographicCamera } from '@react-three/drei'
+import {Canvas} from '@react-three/fiber'
+import { useEffect, useState, } from 'react'
 import { useRouter } from 'next/router'
 import { Button } from '@mui/material'
 import { useSpring } from 'react-spring'
 
-import Stuff from './RoomPage/Stuff'
-import MapStuff from './RoomPage/MapStuff'
-
 // data
-import userStuff from './userStuff.json'
+import userStuff from './RoomPage/atoms/userStuff.json'
 import MapStuffs from './RoomPage/MapStuffs'
 import Stuffs from './RoomPage/Stuffs'
 // 이 파일은 나중에 db에 데이터 넣을 때 쓸거라 안지우고 유지하겠습니다.
 // import walltest from './walltest.json'
-import RoomCamera from './RoomPage/RoomCamera'
+import RoomCamera from './RoomPage/atoms/RoomCamera'
+import RoomLight from './RoomPage/atoms/RoomLight'
 
 export default function Room( { StuffClick, ...props} ) {
     // 화면 확대 정도 조정.
@@ -48,15 +46,12 @@ export default function Room( { StuffClick, ...props} ) {
 
     }, [router.isReady]);
 
-    // 마우스가 움직일 때 위치 받기.
-    const [mouseloc, setmouseloc] = useState([325, 375]);
-
     // stuff 호버 이벤트.
     function Hover(e, stuff) { setHovered(); }
     
     // stuff 클릭 이벤트.
     function Click(e, stuff) {
-        if(stuff.category == 'deco') return null;
+        if(stuff.category == 'NONE') return null;
         
         // setClicked 동기처리 되도록 바꿔야 함.
         setClicked(Number(!clicked));
@@ -91,34 +86,12 @@ export default function Room( { StuffClick, ...props} ) {
                 </Button>
 
             {/* 캔버스 영역 */}
-            <Canvas
-                style={{
-                    zIndex : '1'
-                }}
-                shadows
+            <Canvas shadows
+                style={{ zIndex : '1' }}
                 onCreated={state => state.gl.setClearColor("#ffffff")} >
                 
-                {/* light */}
-                {/* 이것도 언젠가 컴포넌트화 할 것 */}
-                <ambientLight intensity={0.2} />
-                <pointLight position={[10, 20, 4]} intensity={0.3}/>
-                <directionalLight 
-                    position={[20, 40, 20]} 
-                    intensity={1}
-                    castShadow
-                    shadow-mapSize-width={10}
-                    shadow-mapSize-height={10}
-                    shadow-camera-far={50}
-                    shadow-camera-left={-100}
-                    shadow-camera-right={100}
-                    shadow-camera-top={100}
-                    shadow-camera-bottom={-100}
-                />
-                {/* 창 밖에서 들어오는 빛 테스트용 */}
-                {/* <pointLight position={[-4, 2, 2]} intensity={0.5} /> */}
-                
+                <RoomLight />
 
-                {/* camera */}
                 <RoomCamera camloc={camloc}/>
                 <OrthographicCamera makeDefault zoom={zoomscale} />
                 
@@ -134,6 +107,7 @@ export default function Room( { StuffClick, ...props} ) {
                     Hover={Hover}
                     Click={Click}
                     status={'view'}
+                    tagon={tagon}
                 />
 
                 {/* <OrbitControls /> */}

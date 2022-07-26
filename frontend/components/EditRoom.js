@@ -1,22 +1,17 @@
-import { Box, Circle, Image, OrbitControls, OrthographicCamera, Text } from '@react-three/drei'
-import {Canvas, useThree, useFrame} from '@react-three/fiber'
-import { useEffect, useRef, useState, setState, useLayoutEffect } from 'react'
+import { OrthographicCamera } from '@react-three/drei'
+import {Canvas} from '@react-three/fiber'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button } from '@mui/material'
 import { useSpring } from 'react-spring'
 
-import Stuff from './RoomPage/Stuff'
-import MapStuff from './RoomPage/MapStuff'
-
 // data
-import userStuff from './userStuff.json'
+import userStuff from './RoomPage/atoms/userStuff.json'
 import MapStuffs from './RoomPage/MapStuffs'
 import Stuffs from './RoomPage/Stuffs'
 // 이 파일은 나중에 db에 데이터 넣을 때 쓸거라 안지우고 유지하겠습니다.
 // import walltest from './walltest.json'
-import RoomCamera from './RoomPage/RoomCamera'
-import EditRoomCamera from './RoomPage/EditRoomCamera'
-import ScreenshotButton from './RoomPage/ScreenShotButton'
+import EditRoomCamera from './RoomPage/atoms/RoomEditCamera'
+import ScreenshotButton from './RoomPage/atoms/ScreenShotButton'
 
 export default function EditRoom( { StuffClick, ...props} ) {
     // 화면 확대 정도 조정.

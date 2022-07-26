@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Box, Text, useGLTF } from '@react-three/drei'
+import { Text, useGLTF } from '@react-three/drei'
 import { animated, config, useSpring } from '@react-spring/three';
 import { Color } from 'three';
 import { useFrame } from '@react-three/fiber';
 
-export default function Model({ status, Hover, Click, data, ...props }) {
+export default function Model({ tagon, status, Hover, Click, data, ...props }) {
   const [geometry] = useState(data.geometry);
   const [material] = useState(data.materials);
   const [glbpath] = useState(data.stuff_glb_path);
+  const [clicked, setClicked] = useState(0);
   
   // component가 하나라도 잘못되었을 때 렌더링이 고장나는 것을 방지.
   if(!glbpath) return null;
@@ -23,17 +24,16 @@ export default function Model({ status, Hover, Click, data, ...props }) {
 
   const [hovered, setHovered] = useState(false);
   const {scale} = useSpring({
-    scale : ( !clicked && hovered && data.category != "deco"  ) ? 1.2 : 1,
+    scale : ( !clicked && hovered && data.category != "NONE"  ) ? 1.2 : 1,
     config : config.wobbly
   })
 
   // 클릭 애니메이션 관리.
-  const [clicked, setClicked] = useState(0);
   const { spring } = useSpring({
     spring : clicked,
     config: {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
   });
-  const positionY = spring.to([0, 1], [0, 5]);
+  const positionY = spring.to([0, 1], [0, 7]);
 
   // Tag 컨트롤
   const color = new Color();
@@ -53,12 +53,12 @@ export default function Model({ status, Hover, Click, data, ...props }) {
     return () => (document.body.style.cursor = 'auto')
   }, [hovered])
   
-  if(status == 'view' && data.category != 'deco'){
-    useFrame(({camera}) => {
+  useFrame(({camera}) => {
+    if(tagon && status == 'view' && data.category != 'NONE'){
       locref.current.quaternion.copy(camera.quaternion);
       textref.current.material.color.lerp(color.set(hovered ? '#ffa0a0' : 'black'), 0.1);
-    })
-  }
+    }
+  }, [tagon])
 
 
   return <group
@@ -80,17 +80,18 @@ export default function Model({ status, Hover, Click, data, ...props }) {
           {...props} dispose={null}
         >
           {
-            // category deco인거 y축 이동 방지하기 위해 동적 렌더링함.
-            (data.category != 'deco') ? 
+            // category NONE인거 y축 이동 방지하기 위해 동적 렌더링함.
+            (data.category != 'NONE') ? 
               <animated.mesh
                 geometry={nodes[geometry].geometry} material={materials[material]} castShadow
                 scale={100}
                 position-y={positionY}
               />
-              :  (<mesh
+              : 
+              <mesh
                 geometry={nodes[geometry].geometry} material={materials[material]} castShadow
                 scale={100}
-              />)
+              />
           }
         </animated.group> 
       : 
@@ -105,9 +106,9 @@ export default function Model({ status, Hover, Click, data, ...props }) {
       </group>
     }
     
-    {/* 태그 */} 
+    {/* 태그 */}
     {
-      (status == 'view' && data.category != 'deco') ?
+      (tagon && status == 'view' && data.category != 'NONE') ?
       <group ref={locref} position={[1, 1.5, 1]}>
         <mesh>
           <circleGeometry attach="geometry" args={[0.3, 20]} />

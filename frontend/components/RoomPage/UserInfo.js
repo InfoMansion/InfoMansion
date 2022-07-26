@@ -1,8 +1,7 @@
 import { Avatar, Box, Card, Divider, Grid, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles'
-import { maxWidth } from "@mui/system";
 import { useState } from "react";
-import RecentPost from "./RecentPost";
+import RecentPost from "./RecentPosts";
 
 const Root = styled('div')(({ theme }) => ({
     padding: theme.spacing(1),
@@ -34,14 +33,9 @@ export default function UserInfo( {...props} ) {
         followcount : 10,
         followingcount : 20,
     })
-    
 
     return (
-        <Card 
-            // sx={{
-            //     m : 2
-            // }}
-        >
+        <Card>
             <Grid 
                 sx={{
                     p : 2
@@ -85,6 +79,7 @@ export default function UserInfo( {...props} ) {
                 {userinfo.introduction}
             </Typography>
             
+            {/* 여기 브레이크포인트에 따라 더보기 버튼과 recentpost 바꿔 사용할 것. */}
             <RecentPost />
                 </Grid>
         </Card>

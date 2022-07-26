@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import StuffPage from "../../components/RoomPage/StuffPage";
 import styles from '../../styles/Room.module.css'
 import { useSpring, animated } from 'react-spring'
-// import { }
+import { styled } from '@mui/material/styles'
 
 export default function RoomPage() {
     const [userID, setUserID] = useState(useRouter().query.userID);
@@ -58,29 +58,26 @@ export default function RoomPage() {
         >
             <Grid 
                 container
-                spacing={2}
+                spacing={0}
                 sx={{
                     flexDirection :'row-reverse',
-                    justifyContent : 'center'
+                    justifyContent : 'center',
                 }}
             >
-                <Grid item 
-                    lg={4}
-                >
+                <Grid item lg={4}>
                     <UserInfo userID = {userID} />
                 </Grid>
 
                 <Grid item lg={7}
                     sx={{
                         display : 'flex',
-                        flexDirection : 'column-reverse'
+                        flexDirection : 'column-reverse',
+                        alignItems : 'center',
+                        p : 1,
+                        my : 2
                     }}
                 >
-                    <Box
-                        sx={{
-                            my : 1 
-                        }}
-                    >
+                    <Box sx={{ my : 1 }} >
                         <Room 
                             StuffClick={StuffClick} 
                             userID={userID} 
@@ -88,10 +85,11 @@ export default function RoomPage() {
                     </Box>
 
                     {
-                        <Box
-                            sx={{
-                                zIndex : 'tooltip',
-                            }}
+                        <Box 
+                            sx={{ 
+                                zIndex : 'tooltip', 
+                                width : 650,
+                            }} 
                         >
                             <animated.div
                                 className={styles.stuffPage}
