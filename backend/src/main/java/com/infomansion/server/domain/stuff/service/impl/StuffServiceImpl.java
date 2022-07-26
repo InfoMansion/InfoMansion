@@ -69,12 +69,9 @@ public class StuffServiceImpl implements StuffService {
     @Transactional
     @Override
     public void removeStuff(Long stuff_id) {
-        validateStuffId(stuff_id);
-        stuffRepository.deleteById(stuff_id);
-    }
-
-    private void validateStuffId(Long stuff_id) {
-        if(!stuffRepository.existsById(stuff_id)) throw new CustomException(ErrorCode.STUFF_NOT_FOUND);
+        Stuff stuff = stuffRepository.findById(stuff_id)
+                .orElseThrow(() -> new CustomException(ErrorCode.STUFF_NOT_FOUND));
+        stuff.deleteStuff();
     }
 
     // String categories 분리

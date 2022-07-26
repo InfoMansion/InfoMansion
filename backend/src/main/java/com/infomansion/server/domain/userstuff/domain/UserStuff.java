@@ -107,6 +107,7 @@ public class UserStuff extends BaseTimeEntity {
      */
     public void deleteUserStuff() {
         this.deleteFlag = true;
+        this.setDeletedDate();
         resetPosAndRot();
     }
 }

@@ -11,10 +11,10 @@ import java.util.Optional;
 public interface StuffRepository extends JpaRepository<Stuff, Long> {
 
     @Override
-    @Query("select s from Stuff s left join fetch s.stuffFile where s.id = :id")
+    @Query("select s from Stuff s left join fetch s.stuffFile where s.deleteFlag = false and s.id = :id")
     Optional<Stuff> findById(@Param("id") Long id);
 
     @Override
-    @Query("select s from Stuff s left join fetch s.stuffFile")
+    @Query("select s from Stuff s left join fetch s.stuffFile where s.deleteFlag = false")
     List<Stuff> findAll();
 }
