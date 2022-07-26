@@ -38,6 +38,27 @@ public class UserRepositoryTest {
         assertThat(result.get().getCreatedDate()).isAfterOrEqualTo(createdTime);
     }
 
+    @DisplayName("User가 수정될 경우에도 생성시간 변화 없음")
+    @Test
+    public void User_생성시간_조회_2() {
+        User user = User.builder()
+                .email("infomansion@test.com")
+                .password("Testtest11!!!")
+                .username("인포멘션 테스트 계정")
+                .tel("010-1234-5678")
+                .categories("IT")
+                .build();
+        User savedUser = userRepository.save(user);
+
+        LocalDateTime modifiedTime = LocalDateTime.now();
+        savedUser.changeCategories("MUSIC,ART");
+        userRepository.flush();
+
+        Optional<User> result = userRepository.findById(savedUser.getId());
+        assertThat(result.get()).isNotNull();
+        assertThat(result.get().getCreatedDate()).isBefore(modifiedTime);
+    }
+
     @DisplayName("User 수정시간 조회 성공")
     @Test
     public void User_수정시간_조회() {

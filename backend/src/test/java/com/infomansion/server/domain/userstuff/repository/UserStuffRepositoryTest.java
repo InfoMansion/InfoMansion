@@ -98,6 +98,26 @@ public class UserStuffRepositoryTest {
         assertThat(result.get().getCreatedDate()).isAfterOrEqualTo(createdTime);
     }
 
+    @DisplayName("UserStuff가 수정될 경우에도 생성시간 변화 없음")
+    @Test
+    public void userstuff_생성시간_조회_2() {
+        // given
+        UserStuff userStuff = UserStuff.builder()
+                .user(user)
+                .stuff(stuff).build();
+        UserStuff savedUserStuff = userStuffRepository.save(userStuff);
+
+        // when
+        LocalDateTime modifiedTime = LocalDateTime.now();
+        savedUserStuff.changeAliasAndCategory("test", "IT");
+        userStuffRepository.flush();
+
+        // then
+        Optional<UserStuff> result = userStuffRepository.findById(savedUserStuff.getId());
+        assertThat(result.get()).isNotNull();
+        assertThat(result.get().getCreatedDate()).isBefore(modifiedTime);
+    }
+
     @DisplayName("UserStuff 수정시간 조회")
     @Test
     public void userstuff_수정시간_조회() {

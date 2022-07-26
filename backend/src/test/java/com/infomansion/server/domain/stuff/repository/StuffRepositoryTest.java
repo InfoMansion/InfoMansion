@@ -70,6 +70,36 @@ public class StuffRepositoryTest {
         assertThat(list.get(0).getCreatedDate()).isAfterOrEqualTo(createdTime);
     }
 
+    @DisplayName("Stuff가 수정될 경우에도 생성시간 변화 없음")
+    @Test
+    public void Stuff_생성시간_조회_성공_2() {
+        // given
+        String stuffName = "laptop";
+        String stuffNameKor = "노트북";
+        Long price = 30L;
+        String categories = "IT,GAME";
+        StuffType stuffType = StuffType.STUFF;
+
+        Stuff stuff = Stuff.builder()
+                .stuffName(stuffName)
+                .stuffNameKor(stuffNameKor)
+                .price(price)
+                .categories(categories)
+                .stuffType(stuffType)
+                .build();
+        stuff = stuffRepository.save(stuff);
+
+        // when
+        LocalDateTime modifiedTime = LocalDateTime.now();
+        stuff.updateStuff("TV", "티비", 50L, stuff.getCategories(), "STUFF", stuff.getGeometry(), stuff.getMaterials());
+        stuffRepository.flush();
+
+        // then
+        List<Stuff> list = stuffRepository.findAll();
+        assertThat(list.size()).isEqualTo(1);
+        assertThat(list.get(0).getCreatedDate()).isBefore(modifiedTime);
+    }
+
     @DisplayName("Stuff 수정 시간 조회 성공")
     @Test
     public void Stuff_수정시간_조회_성공() {
@@ -90,13 +120,13 @@ public class StuffRepositoryTest {
         stuff = stuffRepository.save(stuff);
 
         // when
-        LocalDateTime createdTime = LocalDateTime.now();
+        LocalDateTime modifiedTime = LocalDateTime.now();
         stuff.updateStuff("TV", "티비", 50L, stuff.getCategories(), "STUFF", stuff.getGeometry(), stuff.getMaterials());
         stuffRepository.flush();
 
         // then
         List<Stuff> list = stuffRepository.findAll();
         assertThat(list.size()).isEqualTo(1);
-        assertThat(list.get(0).getModifiedDate()).isAfterOrEqualTo(createdTime);
+        assertThat(list.get(0).getModifiedDate()).isAfterOrEqualTo(modifiedTime);
     }
 }
