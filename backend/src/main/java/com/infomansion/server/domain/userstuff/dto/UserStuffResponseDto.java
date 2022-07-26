@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @ToString
 @Getter
@@ -30,6 +31,9 @@ public class UserStuffResponseDto {
     private BigDecimal rotY;
     private BigDecimal rotZ;
 
+    private LocalDateTime createdTime;
+    private LocalDateTime modifiedTime;
+
     public UserStuffResponseDto(UserStuff userStuff) {
         this.userStuffId = userStuff.getId();
         this.stuffName = userStuff.getStuff().getStuffName();
@@ -44,5 +48,7 @@ public class UserStuffResponseDto {
         this.rotX = userStuff.getRotX();
         this.rotY = userStuff.getRotY();
         this.rotZ = userStuff.getRotZ();
+        this.createdTime = userStuff.getCreatedDate();
+        this.modifiedTime = userStuff.getModifiedDate();
     }
 }
