@@ -13,19 +13,6 @@ export default function RoomPage() {
     const [stuff, setStuff] = useState({});
     const [stuffon, setStuffon] = useState('');
 
-    // 이걸 사용하면, Canvas에서 요소가 클릭할 때 마다 새로고침됨. > 이벤트 적용 안됨.
-    // const RoomBox = styled('div')(({ theme }) => ({
-    //     padding: theme.spacing(1),
-    //     margin : '30px auto',  
-      
-    //     [theme.breakpoints.down('lg')]: {
-    //       width : '638px',
-    //     },
-    //     [theme.breakpoints.up('lg')]: {
-    //       width : '700px',
-    //     },
-    //   }));
-
     function StuffClick(stuff) {
         // 여기서 stuffpage로 변수 전달하면 됨.
         setStuffon(!stuffon);
