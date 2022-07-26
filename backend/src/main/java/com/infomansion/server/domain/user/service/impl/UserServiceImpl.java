@@ -1,6 +1,6 @@
 package com.infomansion.server.domain.user.service.impl;
 
-import com.infomansion.server.domain.category.Category;
+import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.domain.user.repository.UserRepository;
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     public Long join(UserSignUpRequestDto requestDto) {
         validateDuplicateUser(requestDto);
         validateCategory(requestDto.getCategories());
-//        verifyEmailService.sendVerificationMail(requestDto.getEmail());
+        verifyEmailService.sendVerificationMail(requestDto.getEmail());
         return userRepository.save(requestDto.toEntityWithEncryptPassword(passwordEncoder)).getId();
     }
 

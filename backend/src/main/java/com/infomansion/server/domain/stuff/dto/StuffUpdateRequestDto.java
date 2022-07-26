@@ -1,8 +1,5 @@
 package com.infomansion.server.domain.stuff.dto;
 
-import com.infomansion.server.domain.category.Category;
-import com.infomansion.server.domain.stuff.domain.Stuff;
-import com.infomansion.server.domain.stuff.domain.StuffType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,28 +24,24 @@ public class StuffUpdateRequestDto {
     @NotNull
     private Long price;
     @NotBlank
-    private String category;
+    private String categories;
     @NotBlank
     private String stuffType;
+    @NotBlank
+    private String geometry;
+    @NotBlank
+    private String materials;
 
     @Builder
-    public StuffUpdateRequestDto(Long id, String stuffName, String stuffNameKor, Long price, String category, String stuffType) {
+    public StuffUpdateRequestDto(Long id, String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String materials) {
         this.id = id;
         this.stuffName = stuffName;
         this.stuffNameKor = stuffNameKor;
         this.price = price;
-        this.category = category;
+        this.categories = categories;
         this.stuffType = stuffType;
+        this.geometry = geometry;
+        this.materials = materials;
     }
 
-    public Stuff toEntity() {
-        return Stuff.builder()
-                .id(id)
-                .stuffName(stuffName)
-                .stuffNameKor(stuffNameKor)
-                .price(price)
-                .category(Category.valueOf(category))
-                .stuffType(StuffType.valueOf(stuffType))
-                .build();
-    }
 }

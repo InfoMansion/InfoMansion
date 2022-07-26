@@ -19,11 +19,9 @@ public class StuffFile {
     private Long id;
 
     private String stuffGlbPath;
-    private String stuffJsPath;
 
     @Builder
-    public StuffFile(String stuffGlbPath, String stuffJsPath) {
+    public StuffFile(String stuffGlbPath) {
         this.stuffGlbPath = stuffGlbPath;
-        this.stuffJsPath = stuffJsPath;
     }
 }

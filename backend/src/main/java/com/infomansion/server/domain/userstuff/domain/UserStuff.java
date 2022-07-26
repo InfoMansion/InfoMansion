@@ -1,6 +1,7 @@
 package com.infomansion.server.domain.userstuff.domain;
 
-import com.infomansion.server.domain.category.Category;
+import com.infomansion.server.domain.base.BaseTimeEntity;
+import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.user.domain.User;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 @Entity
-public class UserStuff {
+public class UserStuff extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "user_stuff_id")
@@ -42,6 +43,8 @@ public class UserStuff {
     private BigDecimal rotY;
     private BigDecimal rotZ;
 
+    private Boolean deleteFlag;
+
     @Builder
     public UserStuff(Long id, Stuff stuff, User user, String alias, Category category, Boolean selected, BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ) {
         this.id = id;
@@ -56,6 +59,7 @@ public class UserStuff {
         this.rotX = rotX;
         this.rotY = rotY;
         this.rotZ = rotZ;
+        this.deleteFlag = false;
     }
 
     /**
@@ -96,5 +100,13 @@ public class UserStuff {
         this.category = Category.valueOf(category);
         this.selected = true;
         changePosAndRot(posX, posY, posZ, rotX, rotY, rotZ);
+    }
+
+    /**
+     * UserStuff 삭제 시 실제로 데이터를 삭제하지 않고 DeleteFlag를 통해 삭제되었다고 표시
+     */
+    public void deleteUserStuff() {
+        this.deleteFlag = true;
+        resetPosAndRot();
     }
 }

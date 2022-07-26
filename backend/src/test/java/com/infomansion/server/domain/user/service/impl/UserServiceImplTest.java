@@ -133,7 +133,7 @@ class UserServiceImplTest {
     @Test
     public void 카테고리_수정() {
         //given
-        UserChangeCategoriesDto changeCategoriesDto = new UserChangeCategoriesDto("BEAUTY");
+        UserChangeCategoriesDto changeCategoriesDto = new UserChangeCategoriesDto("FASHIONANDBEAUTY");
 
         //when
         Long userId = userService.changeCategories(changeCategoriesDto);
@@ -141,7 +141,7 @@ class UserServiceImplTest {
         //then
         User user = userRepository.findById(userId).get();
 
-        assertThat(user.getCategories()).isEqualTo("BEAUTY");
+        assertThat(user.getCategories()).isEqualTo("FASHIONANDBEAUTY");
 
 
     }
