@@ -137,4 +137,24 @@ public class UserStuffRepositoryTest {
         assertThat(result.get()).isNotNull();
         assertThat(result.get().getModifiedDate()).isAfterOrEqualTo(modifiedTime);
     }
+
+    @DisplayName("UserStuff 삭제시간 조회")
+    @Test
+    public void userstuff_삭제시간_조회() {
+        // given
+        UserStuff userStuff = UserStuff.builder()
+                .user(user)
+                .stuff(stuff).build();
+        UserStuff savedUserStuff = userStuffRepository.save(userStuff);
+
+        // when
+        LocalDateTime deletedDate = LocalDateTime.now();
+        savedUserStuff.setDeletedDate();
+        userStuffRepository.flush();
+
+        // then
+        Optional<UserStuff> result = userStuffRepository.findById(savedUserStuff.getId());
+        assertThat(result.get()).isNotNull();
+        assertThat(result.get().getDeletedDate()).isAfterOrEqualTo(deletedDate);
+    }
 }

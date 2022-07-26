@@ -79,4 +79,25 @@ public class UserRepositoryTest {
         assertThat(result.get()).isNotNull();
         assertThat(result.get().getModifiedDate()).isAfterOrEqualTo(modifiedTime);
     }
+
+    @DisplayName("User 삭제시간 조회 성공")
+    @Test
+    public void User_삭제시간_조회() {
+        User user = User.builder()
+                .email("infomansion@test.com")
+                .password("Testtest11!!!")
+                .username("인포멘션 테스트 계정")
+                .tel("010-1234-5678")
+                .categories("IT")
+                .build();
+        User savedUser = userRepository.save(user);
+
+        LocalDateTime deletedDate = LocalDateTime.now();
+        savedUser.setDeletedDate();
+        userRepository.flush();
+
+        Optional<User> result = userRepository.findById(savedUser.getId());
+        assertThat(result.get()).isNotNull();
+        assertThat(result.get().getDeletedDate()).isAfterOrEqualTo(deletedDate);
+    }
 }
