@@ -14,7 +14,7 @@ public enum ErrorCode {
     DUPLICATE_USER_EMAIL(HttpStatus.BAD_REQUEST,40002, "중복된 사용자 이메일입니다."),
     DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST,40003, "중복된 사용자 닉네임입니다."),
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST, 40004, "비밀번호가 올바르지 않습니다."),
-
+    NOT_VALID_USER(HttpStatus.BAD_REQUEST, 40005, "Room을 생성할 수 없는 권한을 가진 User입니다."),
     // JWT
     NOT_VALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST,40020, "유효하지 않은 Refresh Token입니다."),
     EXPIRED_TOKEN(HttpStatus.BAD_REQUEST, 40021, "만료된 JWT 토큰입니다."),
@@ -35,6 +35,9 @@ public enum ErrorCode {
     EXCLUDED_USER_STUFF(HttpStatus.BAD_REQUEST, 40061, "제외된 Stuff입니다."),
     INCLUDED_USER_STUFF(HttpStatus.BAD_REQUEST, 40062, "배치된 Stuff입니다."),
     NULL_VALUE_OF_ALIAS_AND_CATEGORY(HttpStatus.BAD_REQUEST, 40063, "별칭 또는 카테고리 값이 필요합니다."),
+
+    //ROOM
+    ROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, 40070, "해당 RoomId를 찾을 수 없습니다."),
 
     //== 401 ==//
     TOKEN_WITHOUT_AUTHORITY(HttpStatus.UNAUTHORIZED,40101, "권한 정보가 없는 토큰입니다."),
