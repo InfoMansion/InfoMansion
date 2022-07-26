@@ -74,6 +74,7 @@ export default function LogIn() {
   const handleResize = useCallback(() => {
     setWindowSize({
       width: window.innerWidth,
+      height: window.innerHeight,
     });
   }, []);
 
@@ -131,123 +132,237 @@ export default function LogIn() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Grid
-        container
-        component="main"
-        sx={{ height: '100vh' }}
-        spacing={3}
-        alignItems="center"
-      >
-        <CssBaseline />
-        <Grid item xs={7} lg={7}>
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-            }}
-          >
-            <CardMedia component="img" image="/LoginTemp.jpg"></CardMedia>
-          </Box>
-        </Grid>
-        <Grid item xs={5} lg={5} component={Paper} elevation={6} square>
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-            boxShadow={3}
-          >
-            <Box
-              sx={{
-                my: 4,
-              }}
+    <>
+      {windowSize &&
+        (windowSize.width >= 1200 ? (
+          <ThemeProvider theme={theme}>
+            <Grid
+              container
+              component="main"
+              sx={{ height: '90vh' }}
+              spacing={3}
+              alignItems="center"
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  image="/logo.png"
-                  style={{ width: '33%', height: '35%' }}
-                ></CardMedia>
-              </div>
-              <Box
-                component="form"
-                onSubmit={handleSubmit}
-                noValidate
-                sx={{
-                  mt: 1,
-                }}
-              >
-                <div
-                  style={{
+              <CssBaseline />
+              <Grid item xs={7} lg={7}>
+                <Box
+                  sx={{
+                    my: 8,
+                    mx: 4,
+                  }}
+                >
+                  <CardMedia component="img" image="/LoginTemp.jpg"></CardMedia>
+                </Box>
+              </Grid>
+              <Grid item xs={5} lg={5} component={Paper} elevation={6} square>
+                <Box
+                  sx={{
+                    my: 8,
+                    mx: 4,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                   }}
+                  boxShadow={3}
                 >
-                  <TextField
-                    margin="normal"
-                    required
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    autoCapitalize="off"
-                    value={inputId}
-                    onChange={handleInput}
-                    variant="outlined"
-                    color="primary"
-                    focused
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    value={inputPw}
-                    onChange={handleInput}
-                    variant="outlined"
-                    color="primary"
-                    focused
-                  />
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    sx={{ mt: 3, mb: 2 }}
-                    disabled={!(confirmId && confirmPw)}
-                    onClick={handleSubmit}
+                  <Box
+                    sx={{
+                      my: 4,
+                    }}
                   >
-                    LOGIN
-                  </Button>
-                </div>
-                <Grid container justifyContent="space-around">
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                  <Link href="#" variant="body2" onClick={goSignUp}>
-                    {'Sign Up'}
-                  </Link>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <CardMedia
+                        component="img"
+                        image="/logo.png"
+                        style={{ width: '33%', height: '35%' }}
+                      ></CardMedia>
+                    </div>
+                    <Box
+                      component="form"
+                      onSubmit={handleSubmit}
+                      noValidate
+                      sx={{
+                        mt: 1,
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <TextField
+                          margin="normal"
+                          required
+                          id="email"
+                          label="Email Address"
+                          name="email"
+                          autoComplete="email"
+                          autoFocus
+                          autoCapitalize="off"
+                          value={inputId}
+                          onChange={handleInput}
+                          variant="outlined"
+                          color="primary"
+                          focused
+                        />
+                        <TextField
+                          margin="normal"
+                          required
+                          name="password"
+                          label="Password"
+                          type="password"
+                          id="password"
+                          autoComplete="current-password"
+                          value={inputPw}
+                          onChange={handleInput}
+                          variant="outlined"
+                          color="primary"
+                          focused
+                        />
+                      </div>
+                      <div
+                        style={{ display: 'flex', justifyContent: 'center' }}
+                      >
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          sx={{ mt: 3, mb: 2 }}
+                          disabled={!(confirmId && confirmPw)}
+                          onClick={handleSubmit}
+                        >
+                          LOGIN
+                        </Button>
+                      </div>
+                      <Grid container justifyContent="space-around">
+                        <Link href="#" variant="body2">
+                          Forgot password?
+                        </Link>
+                        <Link href="#" variant="body2" onClick={goSignUp}>
+                          {'Sign Up'}
+                        </Link>
+                      </Grid>
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+          </ThemeProvider>
+        ) : (
+          <>
+            {
+              /*이곳에 줄었을 때 css 작성해주세요  사진은 제외하고 로그인 카드만 넣으시면 됩니다*/
+              <ThemeProvider theme={theme}>
+                <Grid item component={Paper} elevation={6} square>
+                  <Box
+                    sx={{
+                      my: 8,
+                      mx: 4,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                    }}
+                    boxShadow={3}
+                  >
+                    <Box
+                      sx={{
+                        my: 4,
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <CardMedia
+                          component="img"
+                          image="/logo.png"
+                          style={{ width: '33%', height: '35%' }}
+                        ></CardMedia>
+                      </div>
+                      <Box
+                        component="form"
+                        onSubmit={handleSubmit}
+                        noValidate
+                        sx={{
+                          mt: 1,
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <TextField
+                            margin="normal"
+                            required
+                            id="email"
+                            label="Email Address"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                            autoCapitalize="off"
+                            value={inputId}
+                            onChange={handleInput}
+                            variant="outlined"
+                            color="primary"
+                            focused
+                          />
+                          <TextField
+                            margin="normal"
+                            required
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            value={inputPw}
+                            onChange={handleInput}
+                            variant="outlined"
+                            color="primary"
+                            focused
+                          />
+                        </div>
+                        <div
+                          style={{ display: 'flex', justifyContent: 'center' }}
+                        >
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            sx={{ mt: 3, mb: 2 }}
+                            disabled={!(confirmId && confirmPw)}
+                            onClick={handleSubmit}
+                          >
+                            LOGIN
+                          </Button>
+                        </div>
+                        <Grid container justifyContent="space-around">
+                          <Link href="#" variant="body2">
+                            Forgot password?
+                          </Link>
+                          <Link href="#" variant="body2" onClick={goSignUp}>
+                            {'Sign Up'}
+                          </Link>
+                        </Grid>
+                      </Box>
+                    </Box>
+                  </Box>
                 </Grid>
-              </Box>
-            </Box>
-          </Box>
-        </Grid>
-      </Grid>
-    </ThemeProvider>
+              </ThemeProvider>
+            }
+          </>
+        ))}
+    </>
   );
 }
