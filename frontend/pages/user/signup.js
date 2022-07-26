@@ -82,7 +82,7 @@ export default function SignUp() {
         credentials,
       );
       console.log('인증메일이 발송되었습니다.');
-      router.push('user/login');
+      router.push('/user/login');
     } catch (e) {
       console.log(e);
     }

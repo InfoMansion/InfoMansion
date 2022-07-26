@@ -114,6 +114,7 @@ export default function LogIn() {
       const { data } = await axios.post(
         'http://localhost:8080/api/v1/auth/login',
         credentials,
+        { withCredentials: true },
       );
       console.log('res : ', data);
       const accessToken = data.data.accessToken;
