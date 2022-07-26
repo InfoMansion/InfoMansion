@@ -1,7 +1,6 @@
 package com.infomansion.server.domain.userstuff.dto;
 
-import com.infomansion.server.domain.category.Category;
-import com.infomansion.server.domain.userstuff.domain.UserStuff;
+import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
 import lombok.Builder;

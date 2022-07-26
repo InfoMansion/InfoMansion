@@ -1,6 +1,5 @@
 package com.infomansion.server.domain.stuff.domain;
 
-import com.infomansion.server.domain.category.Category;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

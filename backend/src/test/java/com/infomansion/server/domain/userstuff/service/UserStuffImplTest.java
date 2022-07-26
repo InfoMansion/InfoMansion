@@ -1,6 +1,6 @@
 package com.infomansion.server.domain.userstuff.service;
 
-import com.infomansion.server.domain.category.Category;
+import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
@@ -12,8 +12,6 @@ import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.global.util.exception.CustomException;
-import com.infomansion.server.global.util.exception.ErrorCode;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

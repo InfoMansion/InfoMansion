@@ -1,6 +1,6 @@
 package com.infomansion.server.domain.userstuff.domain;
 
-import com.infomansion.server.domain.category.Category;
+import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.user.domain.User;
 import lombok.Builder;
