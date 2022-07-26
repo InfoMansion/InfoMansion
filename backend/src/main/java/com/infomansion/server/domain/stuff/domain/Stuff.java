@@ -34,6 +34,7 @@ public class Stuff extends BaseTimeEntity {
     @JoinColumn(name = "stuff_file_id")
     private StuffFile stuffFile;
 
+    private Boolean deleteFlag;
 
     @Builder
     public Stuff(Long id, String stuffName, String stuffNameKor, Long price, String categories, StuffType stuffType, String geometry, String materials, StuffFile stuffFile) {
@@ -46,6 +47,7 @@ public class Stuff extends BaseTimeEntity {
         this.geometry = geometry;
         this.materials = materials;
         this.stuffFile = stuffFile;
+        this.deleteFlag = false;
     }
 
     public void updateStuff(String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String materials) {
@@ -56,5 +58,13 @@ public class Stuff extends BaseTimeEntity {
         this.categories = categories;
         this.geometry = geometry;
         this.materials = materials;
+    }
+
+    /**
+     * Stuff 삭제 시 실제로 데이터를 삭제하지 않고 DeleteFlag를 통해 삭제되었다고 표시
+     */
+    public void deleteStuff() {
+        this.deleteFlag = true;
+        this.setDeletedDate();
     }
 }
