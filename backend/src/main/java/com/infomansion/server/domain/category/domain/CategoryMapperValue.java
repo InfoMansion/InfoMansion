@@ -1,4 +1,4 @@
-package com.infomansion.server.domain.category;
+package com.infomansion.server.domain.category.domain;
 
 import lombok.Getter;
 
