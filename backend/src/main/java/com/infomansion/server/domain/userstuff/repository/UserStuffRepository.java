@@ -1,6 +1,5 @@
 package com.infomansion.server.domain.userstuff.repository;
 
-import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +17,7 @@ public interface UserStuffRepository extends JpaRepository<UserStuff, Long> {
     @Query("select us from UserStuff us left join fetch us.stuff where us.deleteFlag = false and us.id = :id")
     @Override
     Optional<UserStuff> findById(@Param("id") Long id);
+
+    @Query("select distinct us.category from UserStuff us where us.deleteFlag = false and us.selected = true")
+    List<String> findAllCategory();
 }

@@ -28,11 +28,10 @@ public class UserStuffModifyRequestDto {
         this.alias = alias;
     }
 
-    public void isValidCategory() {
+    public void isValidEnum() {
         if(category == null) return;
-        String upperCategory = category.toUpperCase();
         for (Category c : Category.values()) {
-            if(upperCategory.equals(c.toString())) {
+            if(category.equals(c.toString())) {
                 category = c.toString();
                 return;
             }

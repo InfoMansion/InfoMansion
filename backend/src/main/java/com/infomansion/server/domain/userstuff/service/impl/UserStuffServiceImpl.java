@@ -1,5 +1,7 @@
 package com.infomansion.server.domain.userstuff.service.impl;
 
+import com.infomansion.server.domain.category.domain.Category;
+import com.infomansion.server.domain.category.domain.CategoryAvailability;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
@@ -81,6 +83,8 @@ public class UserStuffServiceImpl implements UserStuffService {
          */
         if(findUserStuff.getSelected()) throw new CustomException(ErrorCode.INCLUDED_USER_STUFF);
 
+        validateCategory(findUserStuff.getStuff(), requestDto.getCategory());
+
         findUserStuff.changeIncludedStatus(requestDto.getAlias(), requestDto.getCategory(),
                 requestDto.getPosX(), requestDto.getPosY(), requestDto.getPosZ(),
                 requestDto.getRotX(), requestDto.getRotY(), requestDto.getRotZ());
@@ -96,9 +100,10 @@ public class UserStuffServiceImpl implements UserStuffService {
         if(requestDto.getCategory() == null && requestDto.getAlias() == null)
             throw new CustomException(ErrorCode.NULL_VALUE_OF_ALIAS_AND_CATEGORY);
 
-        requestDto.isValidCategory();
         UserStuff us = userStuffRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+        requestDto.isValidEnum();
+        if(requestDto.getCategory() != null) validateCategory(us.getStuff(), requestDto.getCategory());
 
         /**
          * 배치되지 않은 Stuff의 Alias나 Category를 변경할 경우 throw
@@ -133,6 +138,32 @@ public class UserStuffServiceImpl implements UserStuffService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
         userStuff.deleteUserStuff();
         return userStuffId;
+    }
+
+    @Override
+    public List<CategoryAvailability> getCategoriesAvailableInUserStuff(Long userStuffId) {
+        UserStuff userStuff = userStuffRepository.findById(userStuffId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        List<String> categoriesInUse = userStuffRepository.findAllCategory();
+        return userStuff.getStuff().getCategoryList()
+                .stream().map(category -> {
+                    if(categoriesInUse.contains(category))
+                        return new CategoryAvailability(Category.valueOf(category), false);
+                    else
+                        return new CategoryAvailability(Category.valueOf(category), true);
+                }).collect(Collectors.toList());
+    }
+
+    /**
+     * 1. 배치된 UserStuff의 카테고리들과 중복된 게 있을 경우 DUPLICATE_CATEGORY error
+     * 2. UserStuff의 Stuff가 가질 수 없는 카테고리일 경우 UNACCEPTABLE_CATEGORY error
+     */
+    private void validateCategory(Stuff stuff, String category) {
+        if(userStuffRepository.findAllCategory().contains(category))
+            throw new CustomException(ErrorCode.DUPLICATE_CATEGORY);
+        if(stuff.getCategoryList().contains(category))
+            throw new CustomException(ErrorCode.UNACCEPTABLE_CATEGORY);
     }
 
 

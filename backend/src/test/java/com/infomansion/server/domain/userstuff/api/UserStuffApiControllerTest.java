@@ -77,7 +77,7 @@ public class UserStuffApiControllerTest {
             String stuffName = "notebook"+(i+1);
             String stuffNameKor = "노트북"+(i+1);
             Long price = 30L;
-            String categories = "IT";
+            String categories = "IT,GAME,DAILY";
             String stuffType = "STUFF";
 
             StuffRequestDto requestDto = StuffRequestDto.builder()

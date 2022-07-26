@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ToString
 @Getter
@@ -35,6 +38,12 @@ public class Stuff extends BaseTimeEntity {
     private StuffFile stuffFile;
 
     private Boolean deleteFlag;
+
+    @Transient
+    public List<String> getCategoryList() {
+        return Arrays.stream(categories.split(",")).collect(Collectors.toList());
+    }
+
 
     @Builder
     public Stuff(Long id, String stuffName, String stuffNameKor, Long price, String categories, StuffType stuffType, String geometry, String materials, StuffFile stuffFile) {

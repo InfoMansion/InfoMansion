@@ -1,6 +1,7 @@
 package com.infomansion.server.domain.userstuff.dto;
 
 import com.infomansion.server.domain.category.domain.Category;
+import com.infomansion.server.domain.category.domain.CategoryMapperValue;
 import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class UserStuffResponseDto {
     private StuffType stuffType;
 
     private String alias;
-    private Category category;
+    private CategoryMapperValue category;
     private Boolean selected;
 
     private BigDecimal posX;
@@ -40,7 +41,7 @@ public class UserStuffResponseDto {
         this.stuffNameKor = userStuff.getStuff().getStuffNameKor();
         this.stuffType = userStuff.getStuff().getStuffType();
         this.alias = userStuff.getAlias();
-        this.category = userStuff.getCategory();
+        this.category = new CategoryMapperValue(userStuff.getCategory());
         this.selected = userStuff.getSelected();
         this.posX = userStuff.getPosX();
         this.posY = userStuff.getPosY();
