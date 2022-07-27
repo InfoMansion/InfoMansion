@@ -18,6 +18,6 @@ public interface UserStuffRepository extends JpaRepository<UserStuff, Long> {
     @Override
     Optional<UserStuff> findById(@Param("id") Long id);
 
-    @Query("select distinct us.category from UserStuff us where us.deleteFlag = false and us.selected = true")
-    List<String> findAllCategory();
+    @Query("select distinct us.category from UserStuff us where us.user.id = :user_id and us.deleteFlag = false and us.selected = true")
+    List<String> findAllCategoryByUserId(@Param("user_id") Long userId);
 }
