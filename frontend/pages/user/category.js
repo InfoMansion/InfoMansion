@@ -15,83 +15,99 @@ import { useRouter } from 'next/router';
 
 const images = [
   {
-    url: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format',
+    url: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=164&h=164&fit=crop&auto=format',
     title: 'IT',
+    name: 'IT',
     width: '25%',
   },
   {
-    url: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=164&h=164&fit=crop&auto=format',
+    url: 'https://images.unsplash.com/photo-1528712306091-ed0763094c98?w=164&h=164&fit=crop&auto=format',
     title: 'COOK',
+    name: '쿠킹',
     width: '25%',
   },
   {
-    url: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45?w=164&h=164&fit=crop&auto=format',
+    url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=164&h=164&fit=crop&auto=format',
     title: 'MUSIC',
+    name: '음악',
     width: '25%',
   },
   {
-    url: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c?w=164&h=164&fit=crop&auto=format',
+    url: 'https://images.unsplash.com/photo-1605899435973-ca2d1a8861cf?w=164&h=164&fit=crop&auto=format',
     title: 'GAME',
+    name: '게임',
+    width: '25%',
+  },
+  {
+    url: 'https://images.unsplash.com/photo-1471295253337-3ceaaedca402?w=164&h=164&fit=crop&auto=format',
+    title: 'SPORTS',
+    name: '스포츠',
     width: '25%',
   },
   {
     url: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8?w=164&h=164&fit=crop&auto=format',
-    title: 'Hats',
+    title: 'FASHION',
+    name: '패션',
     width: '25%',
   },
   {
-    url: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=164&h=164&fit=crop&auto=format',
-    title: 'Honey',
-    width: '25%',
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format',
-    title: 'SPORTS',
-    width: '25%',
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f?w=164&h=164&fit=crop&auto=format',
-    title: 'Fern',
-    width: '25%',
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25?w=164&h=164&fit=crop&auto=format',
-    title: 'Mushrooms',
-    width: '25%',
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=164&h=164&fit=crop&auto=format',
-    title: 'Tomato basil',
-    width: '25%',
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1?w=164&h=164&fit=crop&auto=format',
+    url: 'https://images.unsplash.com/photo-1488085061387-422e29b40080?w=164&h=164&fit=crop&auto=format',
     title: 'TRAVEL',
+    name: '여행',
     width: '25%',
   },
   {
-    url: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6?w=164&h=164&fit=crop&auto=format',
-    title: 'Bike',
+    url: 'https://images.unsplash.com/photo-1511871893393-82e9c16b81e3?w=164&h=164&fit=crop&auto=format',
+    title: 'DAILY',
+    name: '데일리',
     width: '25%',
   },
   {
-    url: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25?w=164&h=164&fit=crop&auto=format',
-    title: 'Mushrooms',
+    url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=164&h=164&fit=crop&auto=format',
+    title: 'NATURE',
+    name: '자연',
     width: '25%',
   },
   {
-    url: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=164&h=164&fit=crop&auto=format',
-    title: 'Tomato basil',
+    url: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=164&h=164&fit=crop&auto=format',
+    title: 'ART',
+    name: '미술',
     width: '25%',
   },
   {
-    url: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1?w=164&h=164&fit=crop&auto=format',
-    title: 'TRAVEL',
+    url: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=164&h=164&fit=crop&auto=format',
+    title: 'INTERIOR',
+    name: '인테리어',
     width: '25%',
   },
   {
-    url: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6?w=164&h=164&fit=crop&auto=format',
-    title: 'Bike',
+    url: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=164&h=164&fit=crop&auto=format',
+    title: 'BEAUTY',
+    name: '뷰티',
+    width: '25%',
+  },
+  {
+    url: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=164&h=164&fit=crop&auto=format',
+    title: 'CLEANING',
+    name: '청소',
+    width: '25%',
+  },
+  {
+    url: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=164&h=164&fit=crop&auto=format',
+    title: 'STUDY',
+    name: '공부',
+    width: '25%',
+  },
+  {
+    url: 'https://images.unsplash.com/photo-1588473158757-afdb399558d6?w=164&h=164&fit=crop&auto=format',
+    title: 'HOMEAPPLIANCES',
+    name: '가전제품',
+    width: '25%',
+  },
+  {
+    url: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=164&h=164&fit=crop&auto=format',
+    title: 'CULTURE',
+    name: '시사/문화',
     width: '25%',
   },
 ];
@@ -99,9 +115,9 @@ const images = [
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
   position: 'relative',
   height: 200,
-  [theme.breakpoints.down('md')]: {
-    width: '100% !important', // Overrides inline-style
-    height: 100,
+  [theme.breakpoints.down('lg')]: {
+    width: '50% !important', // Overrides inline-style
+    height: 200,
   },
   '&:hover, &.Mui-focusVisible': {
     zIndex: 1,
@@ -178,17 +194,18 @@ export default function Category() {
   function clickCategory(event) {
     const selected = event.target.getAttribute('value') + ',';
     const count = likeCate.split(',').length - 1;
+    const opacityTarget = event.currentTarget;
     if (likeCate.includes(selected)) {
       const updateCateState = likeCate.replace(selected, '');
       setlikeCate(updateCateState);
-      event.target.style.removeProperty('opacity');
+      opacityTarget.style.removeProperty('opacity');
     } else {
       if (count >= 100) {
         alert('100개 이상은 선택이 불가능 합니다');
       } else {
         const updateCateState = likeCate + selected;
         setlikeCate(updateCateState);
-        event.target.style.opacity = 0.4;
+        opacityTarget.style.opacity = 0.4;
       }
     }
     console.log(likeCate);
@@ -240,9 +257,15 @@ export default function Category() {
                 }}
                 onClick={clickCategory}
               >
-                <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
-                <ImageBackdrop className="MuiImageBackdrop-root" />
-                <Image value={image.title}>
+                <ImageSrc
+                  style={{ backgroundImage: `url(${image.url})` }}
+                  value={image.title}
+                />
+                <ImageBackdrop
+                  className="MuiImageBackdrop-root"
+                  value={image.title}
+                />
+                <Image value={image.title} ido="child">
                   <Typography
                     component="span"
                     variant="subtitle1"
@@ -255,7 +278,7 @@ export default function Category() {
                     }}
                     value={image.title}
                   >
-                    {image.title}
+                    {image.name}
                     <ImageMarked className="MuiImageMarked-root" />
                   </Typography>
                 </Image>
@@ -265,7 +288,7 @@ export default function Category() {
           <Button
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 3, mb: 2, color: 'white' }}
             disabled={!likeCate.includes(',')}
             onClick={nextPage}
             color="primary"
