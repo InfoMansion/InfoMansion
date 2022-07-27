@@ -131,6 +131,6 @@ public class RoomServiceImplTest {
 
         //then
         Optional<Room> findRoom = roomRepository.findById(roomId);
-        assertThat(findRoom.isEmpty()).isEqualTo(true);
+        assertThat(findRoom.get().isDeleteFlag()).isEqualTo(true);
     }
 }
