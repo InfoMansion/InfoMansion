@@ -1,5 +1,6 @@
 package com.infomansion.server.domain.post.domain;
 
+import com.infomansion.server.domain.base.BaseTimeEntity;
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Post {
+public class Post extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "post_id")
@@ -42,5 +43,9 @@ public class Post {
         this.category = userStuff.getCategory();
         this.likes = 0L;
         this.deleteFlag = false;
+    }
+
+    public void postLikes(){
+        likes++;
     }
 }
