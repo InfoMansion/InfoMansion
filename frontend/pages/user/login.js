@@ -2,8 +2,6 @@ import React from 'react';
 import { useState, useCallback, useEffect } from 'react';
 import {
   Button,
-  Checkbox,
-  FormControlLabel,
   Grid,
   Link,
   TextField,
@@ -11,39 +9,14 @@ import {
   Card,
   CardMedia,
 } from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Paper from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { atom, useRecoilState } from 'recoil';
-import { tokenState } from '../../state/token';
+import { useRecoilState } from 'recoil';
 import { likeCateState } from '../../state/likeCate';
-import { isLoginState } from '../../state/isLogin';
-import { useCookies } from 'react-cookie';
-import moment from 'moment';
-
-// const function Logout(){
-//   const [token, setToken] = useRecoilState(tokenState);
-//   Axios.defaults.header.common['Authorization'] = 'Bearer' + token;
-//   const handleSubmit = (event) => {
-//     event.preventDefault()
-
-// Axios({
-//   url: 'http://localhost:8080/api/v1/logout',
-//   method: 'post',
-//   headers: ''
-// })
-// .then(res => {
-//   console.log('logout')
-//   setToken('')
-// })
-//   }
-// }
 
 const theme = createTheme({
   palette: {
@@ -57,10 +30,7 @@ const theme = createTheme({
 });
 
 export default function LogIn() {
-  const [isLogin, setisLogin] = useRecoilState(isLoginState);
   const [likeCate, setlikeCate] = useRecoilState(likeCateState);
-  const [token, setToken] = useRecoilState(tokenState);
-  const [cookies, setCookie] = useCookies(['cookie-name']);
   const [inputId, setInputId] = useState('');
   const [inputPw, setInputPw] = useState('');
 
@@ -103,7 +73,6 @@ export default function LogIn() {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    //const data = new FormData(event.target);
     const credentials = {
       email: inputId,
       password: inputPw,
@@ -116,16 +85,9 @@ export default function LogIn() {
         credentials,
         { withCredentials: true },
       );
-      console.log('res : ', data);
-      const accessToken = data.data.accessToken;
-      const expiresAt = data.data.expirestAt;
-      setCookie('cookie-name', accessToken, {
-        path: '/',
-        expires: expiresAt,
-      });
-      setisLogin(true);
-      // userState 업데이트 할 axios 요청 추가로 보내기
-      //axios.defaults.header.common['Authorization'] = 'Bearer' + accessToken;
+      console.log('data : ', data);
+      const expiresAt = data.data.expiresAt;
+      localStorage.setItem('expiresAt', expiresAt);
       router.push('/');
     } catch (e) {
       console.log('error', e);
