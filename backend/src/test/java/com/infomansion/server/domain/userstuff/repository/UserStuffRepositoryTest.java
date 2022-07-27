@@ -111,7 +111,7 @@ public class UserStuffRepositoryTest {
         // then
         Optional<UserStuff> result = userStuffRepository.findById(savedUserStuff.getId());
         assertThat(result.get()).isNotNull();
-        assertThat(result.get().getCreatedDate()).isBefore(modifiedTime);
+        assertThat(result.get().getCreatedDate()).isBeforeOrEqualTo(modifiedTime);
     }
 
     @DisplayName("UserStuff 수정시간 조회")
