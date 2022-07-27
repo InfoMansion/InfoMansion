@@ -18,11 +18,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from 'axios';
 import { useRouter } from 'next/router';
 import { atom, useRecoilState } from 'recoil';
-import tokenState from '../../state/token';
-
-function TokenInput() {
-  const [token, setToken] = useRecoilState(tokenState);
-}
 
 const theme = createTheme();
 
@@ -77,7 +72,7 @@ export default function Change() {
               required
               fullWidth
               name="password"
-              label="Old Password"
+              label="New Password"
               type="password"
               id="password1"
               autoComplete="current-password"
@@ -87,7 +82,7 @@ export default function Change() {
               required
               fullWidth
               name="password"
-              label="New Password"
+              label="Confirm Password"
               type="password"
               id="password2"
               autoComplete="new-password"
