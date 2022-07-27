@@ -3,6 +3,11 @@ import { styled } from '@mui/material/styles';
 import { Box, Paper } from '@mui/material';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import { useCallback, useEffect, useState } from 'react';
+import moment from 'moment';
+import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { likeCateState } from '../state/likeCate';
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(1),
@@ -16,21 +21,49 @@ const Root = styled('div')(({ theme }) => ({
   },
 }));
 
-export default function Mainframe({ children }) {
+const guestPages = ['/user/login', '/user/signup', '/user/category'];
+
+export default function Layout({ children }) {
   const [cookies] = useCookies(['cookie-name']);
-  const handleSubmit = async () => {
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const { pathname, push } = useRouter();
+
+  const reissueToken = useCallback(async () => {
     try {
-      console.log(cookies['InfoMansionAccessToken']);
       const { data } = await axios.post(
         'http://localhost:8080/api/v1/auth/reissue',
         { accessToken: cookies['InfoMansionAccessToken'] },
         { withCredentials: true },
       );
       console.log('res : ', data);
+      const expiresAt = data.data.expiresAt;
+      localStorage.setItem('expiresAt', expiresAt);
+      setIsAuthorized(true);
     } catch (e) {
-      console.log('error', e);
+      console.log('error : ', e);
+      setIsAuthorized(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!cookies['InfoMansionAccessToken']) {
+      setIsAuthorized(false);
+      return;
+    }
+    const expiresAt = localStorage.getItem('expiresAt');
+    if (moment(expiresAt).diff(moment(new Date()), 'minutes') < 5) {
+      reissueToken();
+      return;
+    }
+    setIsAuthorized(true);
+  }, [pathname, cookies, reissueToken]);
+
+  useEffect(() => {
+    if (!isAuthorized && !guestPages.includes(pathname)) {
+      push('/user/login');
+    }
+  }, [pathname, isAuthorized]);
+
   return (
     <Box
       style={{
@@ -40,7 +73,6 @@ export default function Mainframe({ children }) {
         minHeight: '1500px',
       }}
     >
-      <button onClick={handleSubmit}>test</button>
       <Paper elevation={2}>
         <HeaderNav />
       </Paper>
