@@ -27,13 +27,17 @@
   bottom: 0;
   left: 0;
   right: 0;
+  opacity: 0.6;
   background-color: goldenrod;
   clip-path: polygon(50% 0, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
   transform: scale(1.077);
   transition: transform 0.3s;
 }
 .item:hover::before {
-  transform: scale(1.154);
+  opacity: 1;
+  z-index: 99999;
+  transform: scale(1.8);
+  /*transform: scale(1.154);*/
 }
 .item A {
   position: absolute;
