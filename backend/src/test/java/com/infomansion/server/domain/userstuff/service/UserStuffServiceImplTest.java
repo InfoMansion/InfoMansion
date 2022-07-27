@@ -12,6 +12,7 @@ import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.global.util.exception.CustomException;
+import com.infomansion.server.global.util.exception.ErrorCode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserStuffImplTest {
+public class UserStuffServiceImplTest {
 
     @Autowired
     private UserStuffService userStuffService;
@@ -67,7 +68,7 @@ public class UserStuffImplTest {
             String stuffName = "notebook"+(i+1);
             String stuffNameKor = "노트북"+(i+1);
             Long price = 30L;
-            String sCategories = "IT,GAME";
+            String sCategories = "IT,GAME,SPORTS";
             String stuffType = "STUFF";
 
             StuffRequestDto requestDto = StuffRequestDto.builder()
@@ -93,7 +94,7 @@ public class UserStuffImplTest {
 
     @DisplayName("사용자가 보유하는 Stuff 목록에 새로운 Stuff를 추가한 뒤 조회")
     @Test
-    public void user_stuff_생성_및_조회() {
+    public void user_stuff_생성_및_조회_성공() {
         // given
 
         // when
@@ -108,7 +109,7 @@ public class UserStuffImplTest {
 
     @DisplayName("사용자가 보유하고 있는 모든 Stuff 조회")
     @Test
-    public void user_stuff_전체_조회() {
+    public void user_stuff_전체_조회_성공() {
         // given
 
         // when
@@ -229,9 +230,9 @@ public class UserStuffImplTest {
                 .extracting("errorCode").extracting("code").isEqualTo(40061);
     }
 
-    @DisplayName("배치된 Stuff의 Alias나 Category 변경")
+    @DisplayName("배치된 Stuff의 Alias나 Category 변경 성공")
     @Test
-    public void user_stuff_alias_category_변경() {
+    public void user_stuff_alias_category_변경_성공() {
         // given
         UserStuffRequestDto requestDtoGiven = UserStuffRequestDto.builder()
                 .stuffId(stuffIds.get(0)).userId(userId).build();
@@ -304,6 +305,74 @@ public class UserStuffImplTest {
         Optional<UserStuff> removedUserStuff = userStuffRepository.findById(userStuffId);
         assertThat(removedUserStuff.isEmpty()).isTrue();
 
+    }
+
+    @DisplayName("이미 방에 배치된 category가 입력되면 실패")
+    @Test
+    public void user_stuff_이미_배치된_카테고리로_수정_실패() {
+        // given
+        Long[] userStuffId = new Long[2];
+        for(int i = 0; i < 2; i++) {
+            UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
+                    .stuffId(stuffIds.get(i)).userId(userId).build();
+            userStuffId[i] = userStuffService.saveUserStuff(requestDto);
+        }
+        UserStuffIncludeRequestDto requestDto = UserStuffIncludeRequestDto.builder()
+                .id(userStuffId[0]).category("IT").alias("Java 모음집1")
+                .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
+        userStuffId[0] = userStuffService.includeUserStuff(requestDto);
+
+        // when
+        UserStuffIncludeRequestDto requestDto2 = UserStuffIncludeRequestDto.builder()
+                .id(userStuffId[1]).category("IT").alias("Java 모음집2")
+                .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
+
+        // then
+        assertThatThrownBy(() -> { userStuffService.includeUserStuff(requestDto2);})
+                .isInstanceOf(CustomException.class)
+                .extracting("errorCode").isEqualTo(ErrorCode.DUPLICATE_CATEGORY);
+    }
+
+    @DisplayName("stuff에 적용할 수 없는 category가 입력될 경우 실패")
+    @Test
+    public void user_stuff_stuff에_적용할_수_없는_카테고리로_수정_실패() {
+        // given
+        UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
+                .stuffId(stuffIds.get(0)).userId(userId).build();
+        Long userStuffId = userStuffService.saveUserStuff(requestDto);
+
+        // when
+        UserStuffIncludeRequestDto includeRequestDto = UserStuffIncludeRequestDto.builder()
+                .id(userStuffId).category("BEAUTY").alias("Java 모음집2")
+                .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
+
+        // then
+        assertThatThrownBy(() -> { userStuffService.includeUserStuff(includeRequestDto);})
+                .isInstanceOf(CustomException.class)
+                .extracting("errorCode").isEqualTo(ErrorCode.UNACCEPTABLE_CATEGORY);
+    }
+
+    @DisplayName("UserStuff의 category 변경 시, 유효하지 않은 category를 입력할 경우 실패")
+    @Test
+    public void user_stuff_category_변경_실패_1() {
+        // given
+        UserStuffRequestDto requestDtoGiven = UserStuffRequestDto.builder()
+                .stuffId(stuffIds.get(0)).userId(userId).build();
+        Long userStuffId = userStuffService.saveUserStuff(requestDtoGiven);
+
+        UserStuffIncludeRequestDto requestDto = UserStuffIncludeRequestDto.builder()
+                .id(userStuffId).category("IT").alias("Java 모음집")
+                .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
+        userStuffService.includeUserStuff(requestDto);
+
+        // when
+        UserStuffModifyRequestDto modifyRequestDto = UserStuffModifyRequestDto.builder()
+                .id(userStuffId).category("JAVA").build();
+
+        // then
+        assertThatThrownBy(() -> {userStuffService.modifyAliasAndCategory(modifyRequestDto);})
+                .isInstanceOf(CustomException.class)
+                .extracting("errorCode").isEqualTo(ErrorCode.NOT_VALID_CATEGORY);
     }
 
 }

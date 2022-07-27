@@ -41,7 +41,8 @@ public class UserStuffResponseDto {
         this.stuffNameKor = userStuff.getStuff().getStuffNameKor();
         this.stuffType = userStuff.getStuff().getStuffType();
         this.alias = userStuff.getAlias();
-        this.category = new CategoryMapperValue(userStuff.getCategory());
+        if(userStuff.getCategory() != null)
+            this.category = new CategoryMapperValue(userStuff.getCategory());
         this.selected = userStuff.getSelected();
         this.posX = userStuff.getPosX();
         this.posY = userStuff.getPosY();

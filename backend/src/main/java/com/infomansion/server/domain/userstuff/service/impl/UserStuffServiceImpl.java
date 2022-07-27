@@ -162,7 +162,7 @@ public class UserStuffServiceImpl implements UserStuffService {
     private void validateCategory(Stuff stuff, String category) {
         if(userStuffRepository.findAllCategory().contains(category))
             throw new CustomException(ErrorCode.DUPLICATE_CATEGORY);
-        if(stuff.getCategoryList().contains(category))
+        if(!stuff.getCategoryList().contains(category))
             throw new CustomException(ErrorCode.UNACCEPTABLE_CATEGORY);
     }
 
