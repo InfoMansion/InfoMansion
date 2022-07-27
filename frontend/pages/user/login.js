@@ -139,8 +139,8 @@ export default function LogIn() {
             <Grid
               container
               component="main"
-              sx={{ height: '90vh' }}
-              spacing={3}
+              sx={{ height: '100%' }}
+              spacing={1}
               alignItems="center"
             >
               <CssBaseline />
@@ -151,7 +151,11 @@ export default function LogIn() {
                     mx: 4,
                   }}
                 >
-                  <CardMedia component="img" image="/LoginTemp.jpg"></CardMedia>
+                  <CardMedia
+                    component="img"
+                    image="/LoginTemp.jpg"
+                    style={{ width: '80%', height: '80%' }}
+                  ></CardMedia>
                 </Box>
               </Grid>
               <Grid item xs={5} lg={5} component={Paper} elevation={6} square>
