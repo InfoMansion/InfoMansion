@@ -35,8 +35,8 @@
 }
 .item:hover::before {
   opacity: 1;
-  z-index: 99999;
-  transform: scale(1.8);
+  z-index: 2;
+  transform: scale(1.7);
   /*transform: scale(1.154);*/
 }
 .item A {
