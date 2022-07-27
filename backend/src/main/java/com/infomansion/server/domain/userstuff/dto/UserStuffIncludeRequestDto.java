@@ -22,6 +22,7 @@ public class UserStuffIncludeRequestDto {
 
     private String alias;
 
+    @ValidEnum(enumClass = Category.class, ignoreCase = true)
     @NotBlank
     private String category;
 

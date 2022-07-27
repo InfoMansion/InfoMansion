@@ -98,9 +98,9 @@ public class UserStuffServiceImpl implements UserStuffService {
         if(requestDto.getCategory() == null && requestDto.getAlias() == null)
             throw new CustomException(ErrorCode.NULL_VALUE_OF_ALIAS_AND_CATEGORY);
 
+        requestDto.isValidEnum();
         UserStuff us = userStuffRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
-        requestDto.isValidEnum();
         if(requestDto.getCategory() != null) validateCategory(us.getStuff(), us.getUser().getId(), requestDto.getCategory());
 
         /**

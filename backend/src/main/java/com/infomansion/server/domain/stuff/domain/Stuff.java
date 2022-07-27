@@ -39,12 +39,6 @@ public class Stuff extends BaseTimeEntity {
 
     private Boolean deleteFlag;
 
-    @Transient
-    public List<String> getCategoryList() {
-        return Arrays.stream(categories.split(",")).collect(Collectors.toList());
-    }
-
-
     @Builder
     public Stuff(Long id, String stuffName, String stuffNameKor, Long price, String categories, StuffType stuffType, String geometry, String materials, StuffFile stuffFile) {
         this.id = id;
@@ -57,6 +51,10 @@ public class Stuff extends BaseTimeEntity {
         this.materials = materials;
         this.stuffFile = stuffFile;
         this.deleteFlag = false;
+    }
+
+    public List<String> getCategoryList() {
+        return Arrays.stream(categories.split(",")).collect(Collectors.toList());
     }
 
     public void updateStuff(String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String materials) {
