@@ -1,9 +1,10 @@
-import { OrthographicCamera } from '@react-three/drei'
+import { OrbitControls, OrthographicCamera } from '@react-three/drei'
 import {Canvas} from '@react-three/fiber'
 import { useEffect, useState, } from 'react'
 import { useRouter } from 'next/router'
 import { Button } from '@mui/material'
-import { useSpring } from 'react-spring'
+import { easings, useSpring } from 'react-spring'
+import { animated } from '@react-spring/three'
 
 // data
 import userStuff from './RoomPage/atoms/userStuff.json'
@@ -19,17 +20,12 @@ export default function Room( { StuffClick, ...props} ) {
     const [zoomscale] = useState(90);
 
     const [userID, setUserID] = useState(0);
-
+    
     // 사용자 가구들.
     const [mapstuffs, setMapstuffs] = useState([]);
     const [stuffs, setStuffs] = useState([]);
     const [hovered, setHovered] = useState(0);
     const [clicked, setClicked] = useState(0);
-    const { spring } = useSpring({
-        spring : clicked,
-        config : {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
-    })
-    const positionY = spring.to([0, 1], [0, 10]);
 
     const [tagon, setTagon] = useState(true);
     const [camloc, setCamloc] = useState([0, 0, 0]);
@@ -54,14 +50,19 @@ export default function Room( { StuffClick, ...props} ) {
         if(stuff.category == 'NONE') return null;
         
         // setClicked 동기처리 되도록 바꿔야 함.
-        setClicked(Number(!clicked));
-        if(!clicked) { setCamloc([0,5, 0]); }
-        else { setCamloc([0, 0, 0]); }
+        setClicked(() => {
+            if(clicked) return 0;
+            else return stuff.stuff_name;
+        });
+
+        // 카메라 위치 처리.
+        // if(!clicked) { setCamloc([0,5, 0]); }
+        // else { setCamloc([0, 0, 0]); }
+        
         // RoomPage의 stuffClick 함수 실행시키기.
         StuffClick(stuff);
     }
 
-    // 카메라 위치 세팅
     return (
         <div 
             style={{ 
@@ -84,7 +85,6 @@ export default function Room( { StuffClick, ...props} ) {
                         : <div>태그 보기.</div>
                     }
                 </Button>
-
             {/* 캔버스 영역 */}
             <Canvas shadows
                 style={{ zIndex : '1' }}
@@ -92,8 +92,11 @@ export default function Room( { StuffClick, ...props} ) {
                 
                 <RoomLight />
 
-                <RoomCamera camloc={camloc}/>
-                <OrthographicCamera makeDefault zoom={zoomscale} />
+                <RoomCamera 
+                    camloc={camloc}
+                    clicked={clicked}
+                    zoomscale={zoomscale}
+                />
                 
                 {/* 벽, 바닥 */}
                 <MapStuffs 
@@ -110,7 +113,7 @@ export default function Room( { StuffClick, ...props} ) {
                     tagon={tagon}
                 />
 
-                {/* <OrbitControls /> */}
+                <OrbitControls />
             </Canvas>
         </div>
       ) 
