@@ -1,0 +1,66 @@
+[
+    {
+        "name" : "SPORTS",
+        "alias" : "스포츠"
+    },
+    {
+        "name" : "DAILY",
+        "alias" : "데일리"
+    },
+    {
+        "name" : "FASHION",
+        "alias" : "패션"
+    },
+    {
+        "name" : "BEAUTY",
+        "alias" : "뷰티"
+    },
+    {
+        "name" : "TRAVEL",
+        "alias" : "여행"
+    },
+    {
+        "name" : "COOK",
+        "alias" : "쿠킹"
+    },
+    {
+        "name" : "ART",
+        "alias" : "미술"
+    },
+    {
+        "name" : "MUSIC",
+        "alias" : "음악"
+    },
+    {
+        "name" : "INTERIOR",
+        "alias" : "인테리어"
+    },
+    {
+        "name" : "NATURE",
+        "alias" : "자연"
+    },
+    {
+        "name" : "IT",
+        "alias" : "IT"
+    },
+    {
+        "name" : "GAME",
+        "alias" : "게임"
+    },
+    {
+        "name" : "CLEANING",
+        "alias" : "청소"
+    },
+    {
+        "name" : "CULTURE",
+        "alias" : "문화/시사"
+    },
+    {
+        "name" : "STUDY",
+        "alias" : "공부"
+    },
+    {
+        "name" : "HOMEAPPLIANCES",
+        "alias" : "가전제품"
+    }
+]

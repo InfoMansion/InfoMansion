@@ -1,0 +1,34 @@
+[
+    {
+        "name" : "ball",
+        "alias" : "공"
+    },
+    {
+        "name" : "table",
+        "alias" : "책상"
+    },
+    {
+        "name" : "chair",
+        "alias" : "의자"
+    },
+    {
+        "name" : "sofa",
+        "alias" : "쇼파"
+    },
+    {
+        "name" : "toilet",
+        "alias" : "변기"
+    },
+    {
+        "name" : "closet",
+        "alias" : "옷장"
+    },
+    {
+        "name" : "bed",
+        "alias" : "침대"
+    },
+    {
+        "name" : "instruments",
+        "alias" : "악기"
+    }
+]
