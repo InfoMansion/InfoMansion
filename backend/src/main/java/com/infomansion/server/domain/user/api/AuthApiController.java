@@ -18,11 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.Duration;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @RestController
@@ -77,11 +77,41 @@ public class AuthApiController {
                 .body(new CommonResponse<>(new AccessTokenResponseDto(tokenDto)));
     }
 
+    @GetMapping("/api/v1/auth/logout")
+    public ResponseEntity<? extends  BasicResponse> userLogout() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.SET_COOKIE, removeAccessTokenCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, removeRefreshTokenCookie().toString())
+                .body(new CommonResponse<>(userService.logout()));
+    }
+
+    private ResponseCookie removeRefreshTokenCookie() {
+        return ResponseCookie.from("InfoMansionRefreshToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/api/v1/auth/")
+                .maxAge(0L)
+                .sameSite("Strict")
+                .domain("localhost")
+                .build();
+    }
+
+    private ResponseCookie removeAccessTokenCookie() {
+        return ResponseCookie.from("InfoMansionAccessToken", "")
+                .httpOnly(false)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .domain("localhost")
+                .build();
+    }
+
     private ResponseCookie createRefreshTokenCookie(TokenDto tokenDto) {
         return ResponseCookie.from("InfoMansionRefreshToken", tokenDto.getRefreshToken())
                 .httpOnly(true)
                 .secure(true)
-                .path("/api/v1/auth/reissue")
+                .path("/api/v1/auth/")
                 .maxAge(Duration.ofMillis(tokenDto.getRefreshTokenExpiresTime()))
                 .sameSite("Strict")
                 .domain("localhost")

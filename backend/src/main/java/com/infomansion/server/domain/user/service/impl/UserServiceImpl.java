@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService {
         return user.getId();
     }
 
+    @Override
     @Transactional
     public Long changeCategories(UserChangeCategoriesDto requestDto) {
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
@@ -128,6 +129,18 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.grantFromTempToUser();
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean logout() {
+        String data = redisUtil.getData("RT:" + SecurityUtil.getCurrentUserId());
+        if(data == null) {
+            // 유효하지 않은 accessToken을 통한 로그아웃 요청
+            throw new CustomException(ErrorCode.EXPIRED_TOKEN);
+        }
+        redisUtil.deleteData("RT:"+SecurityUtil.getCurrentUserId());
         return true;
     }
 

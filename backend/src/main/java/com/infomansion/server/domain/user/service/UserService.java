@@ -13,4 +13,5 @@ public interface UserService {
     Long changePasswordAfterAuth(UserChangePasswordDto requestDto);
     Long changeCategories(UserChangeCategoriesDto requestDto);
     boolean verifiedByEmail(String key);
+    boolean logout();
 }
