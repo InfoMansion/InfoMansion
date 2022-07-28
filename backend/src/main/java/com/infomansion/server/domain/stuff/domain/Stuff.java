@@ -1,6 +1,7 @@
 package com.infomansion.server.domain.stuff.domain;
 
 import com.infomansion.server.domain.base.BaseTimeEntity;
+import com.infomansion.server.domain.base.DeleteTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Stuff extends BaseTimeEntity {
+public class Stuff extends DeleteTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "stuff_id")

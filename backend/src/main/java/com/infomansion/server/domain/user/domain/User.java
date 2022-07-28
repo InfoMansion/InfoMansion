@@ -1,6 +1,7 @@
 package com.infomansion.server.domain.user.domain;
 
 import com.infomansion.server.domain.base.BaseTimeEntity;
+import com.infomansion.server.domain.base.DeleteTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class User extends BaseTimeEntity {
+public class User extends DeleteTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "user_id")

@@ -1,6 +1,7 @@
 package com.infomansion.server.domain.userstuff.domain;
 
 import com.infomansion.server.domain.base.BaseTimeEntity;
+import com.infomansion.server.domain.base.DeleteTimeEntity;
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.user.domain.User;
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 @Entity
-public class UserStuff extends BaseTimeEntity {
+public class UserStuff extends DeleteTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "user_stuff_id")

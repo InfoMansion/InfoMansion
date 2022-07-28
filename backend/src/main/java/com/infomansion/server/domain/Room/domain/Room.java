@@ -36,6 +36,5 @@ public class Room extends BaseTimeEntity {
 
     public void deleteRoom(){
         this.deleteFlag = true;
-        this.setDeletedDate();
     }
 }
