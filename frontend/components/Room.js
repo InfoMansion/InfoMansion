@@ -2,9 +2,10 @@ import { OrbitControls, OrthographicCamera } from '@react-three/drei'
 import {Canvas} from '@react-three/fiber'
 import { useEffect, useState, } from 'react'
 import { useRouter } from 'next/router'
-import { Button } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { easings, useSpring } from 'react-spring'
 import { animated } from '@react-spring/three'
+import  RoomManageMenu from './RoomPage/RoomManageMenu'
 
 // data
 import userStuff from './RoomPage/atoms/userStuff.json'
@@ -69,7 +70,7 @@ export default function Room( { StuffClick, ...props} ) {
                 width : "600px", 
                 height : "700px",
                 // margin : '30px auto'
-                }}
+            }}
             >
                 {/* 태그 토글 버튼 */}
                 <Button variant="outlined"
@@ -113,8 +114,19 @@ export default function Room( { StuffClick, ...props} ) {
                     tagon={tagon}
                 />
 
-                <OrbitControls />
+                {/* <OrbitControls /> */}
             </Canvas>
+
+            {/* 추후 오른쪽정렬 추가 예정 */}
+            <Box
+                sx={{
+                    position : 'absolute',
+                    zIndex : '2',
+                    width : '100%',
+                }}
+            >
+                <RoomManageMenu />
+            </Box>
         </div>
       ) 
 }

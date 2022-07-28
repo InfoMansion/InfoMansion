@@ -8,6 +8,8 @@ import styles from '../../styles/Room.module.css'
 import { useSpring, animated } from 'react-spring'
 import { styled } from '@mui/material/styles'
 
+import RoomManageMenu from '../../components/RoomPage/RoomManageMenu'
+
 export default function RoomPage() {
     const [userID, setUserID] = useState(useRouter().query.userID);
     const [stuff, setStuff] = useState({});
@@ -65,7 +67,7 @@ export default function RoomPage() {
                 }}
             >
                 <Grid item lg={4}>
-                    <UserInfo userID = {userID} />
+                    <UserInfo userID={userID} />
                 </Grid>
 
                 <Grid item lg={7}
@@ -84,28 +86,27 @@ export default function RoomPage() {
                         />
                     </Box>
 
-                    {
-                        <Box 
-                            sx={{ 
-                                zIndex : 'tooltip', 
-                                width : 650,
-                            }} 
+                    
+                    <Box 
+                        sx={{ 
+                            zIndex : 'tooltip', 
+                            width : 650,
+                        }} 
+                    >
+                        <animated.div
+                            className={styles.stuffPage}
+                            style={StuffAnimation}
                         >
-                            <animated.div
-                                className={styles.stuffPage}
-                                style={StuffAnimation}
-                            >
-                                <StuffPage data={stuff}/>
-                            </animated.div>
+                            <StuffPage data={stuff}/>
+                        </animated.div>
 
-                            <animated.div
-                                className={styles.stuffPage}
-                                style={openAnimation}
-                            >
-                            </animated.div>
+                        <animated.div
+                            className={styles.stuffPage}
+                            style={openAnimation}
+                        >
+                        </animated.div>
 
-                        </Box>
-                    }
+                    </Box>            
                 </Grid>
             </Grid>
         </Container>
