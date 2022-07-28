@@ -92,27 +92,30 @@ public class UserStuffServiceImpl implements UserStuffService {
 
     @Transactional
     @Override
-    public Long modifyAliasAndCategory(UserStuffModifyRequestDto requestDto) {
-        /**
-         * Alias와 Category 둘 다 입력하지 않았다면 throw
-         */
+    public Long modifyAliasOrCategory(UserStuffModifyRequestDto requestDto) {
+         // Alias와 Category 둘 다 입력하지 않았다면 throw
         if(requestDto.getCategory() == null && requestDto.getAlias() == null)
             throw new CustomException(ErrorCode.NULL_VALUE_OF_ALIAS_AND_CATEGORY);
 
+        // category가 null이 아닐 경우 Category Enum에 존재하는 값인지 체크
+        // Category가 null일 경우 Alias만 변경하는 경우이기 때문에 아무런 오류처리를 하지 않는다.
         requestDto.isValidEnum();
+
         UserStuff us = userStuffRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        // 배치되지 않은 UserStuff의 Alias나 Category를 변경할 경우 throw
+        if(!us.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
+
+        // category가 null이 아닐 경우 새로운 category로 변경할 수 있는지 검증
         if(requestDto.getCategory() != null) {
             checkDuplicatePlacedCategory(us.getUser().getId(), requestDto.getCategory());
             checkAcceptableCategory(us.getStuff(), requestDto.getCategory());
         }
 
-        /**
-         * 배치되지 않은 Stuff의 Alias나 Category를 변경할 경우 throw
-         */
-        if(!us.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
-
-        us.changeAliasAndCategory(requestDto.getAlias(), requestDto.getCategory());
+        // category가 null일 경우 changeAliasOrCategory에서 변경이 일어나지 않고 기존 category를 사용한다.
+        // alias가 null일 경우 changeAliasOrCategory에서 변경이 일어나지 않고 기존 alias를 사용한다.
+        us.changeAliasOrCategory(requestDto.getAlias(), requestDto.getCategory());
         return us.getId();
     }
 
