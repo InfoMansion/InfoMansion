@@ -37,8 +37,7 @@ public class StuffResponseDto {
         this.stuffType = stuff.getStuffType();
         this.geometry = stuff.getGeometry();
         this.materials = stuff.getMaterials();
-        if(stuff.getStuffFile() != null)
-            this.stuffGlbPath = stuff.getStuffFile().getStuffGlbPath();
+        this.stuffGlbPath = stuff.getStuffGlbPath();
         this.createdTime = stuff.getCreatedDate();
         this.modifiedTime = stuff.getModifiedDate();
     }
