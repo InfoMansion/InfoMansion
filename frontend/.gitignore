@@ -12,7 +12,7 @@
 /.next/
 /out/
 
-/public/stuffAssets/*
+/public/stuffAssets/*.glb
 
 # production
 /build
