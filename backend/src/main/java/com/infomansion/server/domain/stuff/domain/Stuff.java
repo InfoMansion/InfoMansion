@@ -29,15 +29,12 @@ public class Stuff extends BaseTimeEntity {
 
     private String geometry;
     private String materials;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stuff_file_id")
-    private StuffFile stuffFile;
+    private String stuffGlbPath;
 
     private Boolean deleteFlag;
 
     @Builder
-    public Stuff(Long id, String stuffName, String stuffNameKor, Long price, String categories, StuffType stuffType, String geometry, String materials, StuffFile stuffFile) {
+    public Stuff(Long id, String stuffName, String stuffNameKor, Long price, String categories, StuffType stuffType, String geometry, String materials, String stuffGlbPath) {
         this.id = id;
         this.stuffName = stuffName;
         this.stuffNameKor = stuffNameKor;
@@ -46,7 +43,7 @@ public class Stuff extends BaseTimeEntity {
         this.stuffType = stuffType;
         this.geometry = geometry;
         this.materials = materials;
-        this.stuffFile = stuffFile;
+        this.stuffGlbPath = stuffGlbPath;
         this.deleteFlag = false;
     }
 
