@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
-public abstract class DeleteTimeEntity extends BaseTimeEntity {
+public abstract class BaseTimeEntityAtSoftDelete extends BaseTimeEntity {
 
     private LocalDateTime deletedDate;
 
