@@ -97,7 +97,7 @@ public class StuffRepositoryTest {
         // then
         List<Stuff> list = stuffRepository.findAll();
         assertThat(list.size()).isEqualTo(1);
-        assertThat(list.get(0).getCreatedDate()).isBefore(modifiedTime);
+        assertThat(list.get(0).getCreatedDate()).isBeforeOrEqualTo(modifiedTime);
     }
 
     @DisplayName("Stuff 수정 시간 조회 성공")

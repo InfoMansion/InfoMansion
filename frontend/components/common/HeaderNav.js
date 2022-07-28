@@ -105,7 +105,6 @@ export default function DenseAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>프로필</MenuItem>
       <Link href="/RoomPage/1">
         <MenuItem onClick={handleMenuClose}>마이룸</MenuItem>
       </Link>

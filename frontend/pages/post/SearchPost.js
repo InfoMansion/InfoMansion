@@ -6,6 +6,7 @@ export default function searchPost() {
   return (
     <>
       <h1>searchPost</h1>
+      <div>{query}</div>
     </>
   );
 }
