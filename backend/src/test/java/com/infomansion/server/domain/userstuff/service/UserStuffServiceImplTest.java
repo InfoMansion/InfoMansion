@@ -253,7 +253,7 @@ public class UserStuffServiceImplTest {
                 .alias("메이플 공략 모음")
                 .build();
 
-        userStuffService.modifyAliasAndCategory(modifyRequestDto);
+        userStuffService.modifyAliasOrCategory(modifyRequestDto);
 
         // then
         Optional<UserStuff> findUS = userStuffRepository.findById(userStuffId);
@@ -284,7 +284,7 @@ public class UserStuffServiceImplTest {
                 .build();
 
         // then
-        assertThatThrownBy(() -> {userStuffService.modifyAliasAndCategory(modifyRequestDto);})
+        assertThatThrownBy(() -> {userStuffService.modifyAliasOrCategory(modifyRequestDto);})
                 .isInstanceOf(CustomException.class)
                 .extracting("errorCode").extracting("code").isEqualTo(40063);
 
@@ -370,7 +370,7 @@ public class UserStuffServiceImplTest {
                 .id(userStuffId).category("JAVA").build();
 
         // then
-        assertThatThrownBy(() -> {userStuffService.modifyAliasAndCategory(modifyRequestDto);})
+        assertThatThrownBy(() -> {userStuffService.modifyAliasOrCategory(modifyRequestDto);})
                 .isInstanceOf(CustomException.class)
                 .extracting("errorCode").isEqualTo(ErrorCode.NOT_VALID_CATEGORY);
     }

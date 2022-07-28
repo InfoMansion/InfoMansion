@@ -50,7 +50,7 @@ public class UserStuffApiController {
     @PutMapping("/api/v1/userstuffs/option")
     public ResponseEntity<CommonResponse<Long>> modifyAliasAndCategory(@Valid @RequestBody UserStuffModifyRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userStuffService.modifyAliasAndCategory(requestDto)));
+                .body(new CommonResponse<>(userStuffService.modifyAliasOrCategory(requestDto)));
     }
 
     @PutMapping("/api/v1/userstuffs/position")

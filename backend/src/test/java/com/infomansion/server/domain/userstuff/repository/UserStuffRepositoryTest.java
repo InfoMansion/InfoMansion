@@ -105,7 +105,7 @@ public class UserStuffRepositoryTest {
 
         // when
         LocalDateTime modifiedTime = LocalDateTime.now();
-        savedUserStuff.changeAliasAndCategory("test", "IT");
+        savedUserStuff.changeAliasOrCategory("test", "IT");
         userStuffRepository.flush();
 
         // then
@@ -125,7 +125,7 @@ public class UserStuffRepositoryTest {
 
         // when
         LocalDateTime modifiedTime = LocalDateTime.now();
-        savedUserStuff.changeAliasAndCategory("test", "IT");
+        savedUserStuff.changeAliasOrCategory("test", "IT");
         userStuffRepository.flush();
 
         // then
