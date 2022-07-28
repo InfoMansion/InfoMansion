@@ -87,7 +87,7 @@ public class UserStuff extends BaseTimeEntity {
     /**
      * 배치된 UserStuff의 Alias 또는 Category 변경
      */
-    public void changeAliasAndCategory(String alias, String category) {
+    public void changeAliasOrCategory(String alias, String category) {
         this.alias = alias == null ? this.alias : alias;
         this.category = category == null ? this.category : Category.valueOf(category);
     }

@@ -16,7 +16,7 @@ public interface UserStuffService {
 
     Long includeUserStuff(UserStuffIncludeRequestDto requestDto);
 
-    Long modifyAliasAndCategory(UserStuffModifyRequestDto requestDto);
+    Long modifyAliasOrCategory(UserStuffModifyRequestDto requestDto);
 
     Long modifyPosAndRot(UserStuffPositionRequestDto requestDto);
 

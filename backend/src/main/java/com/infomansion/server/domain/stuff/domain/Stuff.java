@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ToString
 @Getter
@@ -48,6 +51,10 @@ public class Stuff extends BaseTimeEntity {
         this.materials = materials;
         this.stuffFile = stuffFile;
         this.deleteFlag = false;
+    }
+
+    public List<String> getCategoryList() {
+        return Arrays.stream(categories.split(",")).collect(Collectors.toList());
     }
 
     public void updateStuff(String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String materials) {
