@@ -1,18 +1,14 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import tokenState from '../../state/token';
 import { useRecoilState } from 'recoil';
 import { likeCateState } from '../../state/likeCate';
 import { useState } from 'react';
@@ -82,16 +78,22 @@ export default function SignUp() {
         credentials,
       );
       console.log('인증메일이 발송되었습니다.');
-      router.push('user/login');
+      router.push('/user/login');
     } catch (e) {
       console.log(e);
     }
   };
 
-  function prevPage() {
+  const prevPage = () => {
     setlikeCate('');
     router.push('/user/category');
-  }
+  };
+
+  useEffect(() => {
+    if (likeCate === '') {
+      prevPage();
+    }
+  }, [likeCate]);
 
   return (
     <ThemeProvider theme={theme}>

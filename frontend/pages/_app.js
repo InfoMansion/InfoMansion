@@ -3,6 +3,7 @@ import Layout from '../components/Layout';
 import '../styles/globals.css';
 import { RecoilRoot } from 'recoil';
 import { CookiesProvider } from 'react-cookie';
+import { AuthProvider } from '../context/AuthProvider';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -12,11 +13,13 @@ function MyApp({ Component, pageProps }) {
         <title>InfoMansion</title>
       </Head>
       <RecoilRoot>
-        <CookiesProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </CookiesProvider>
+        <AuthProvider>
+          <CookiesProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </CookiesProvider>
+        </AuthProvider>
       </RecoilRoot>
     </>
   );
