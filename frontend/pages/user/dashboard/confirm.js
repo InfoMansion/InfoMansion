@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { Button, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,6 +9,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from 'axios';
 import { useRouter } from 'next/router';
+import { pwConfirmState } from '../../../state/pwConfirm';
+import { useRecoilState } from 'recoil';
 
 const theme = createTheme({
   palette: {
@@ -20,8 +23,19 @@ const theme = createTheme({
   },
 });
 
-export default function Introduction() {
+export default function Confirm() {
   const router = useRouter();
+  const [inputPassword, setInputPassword] = useState('');
+  const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
+    inputPassword,
+  );
+  const [pwConfirm, setPwConfirmState] = useRecoilState(pwConfirmState);
+
+  const inputUnFinish = !confirmPassword;
+
+  function handleInput(event) {
+    setInputPassword(event.target.value);
+  }
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -30,6 +44,8 @@ export default function Introduction() {
       email: data.get('email'),
       password: data.get('password'),
     };
+    // test용 코드 실제로는  Axios요청 성공 한 이후에 바꿔야 함.
+    setPwConfirmState(true);
     // Axios({
     //   url: 'http://localhost:8080/accounts/login',
     //   method: 'post',
@@ -43,13 +59,7 @@ export default function Introduction() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container
-        component="main"
-        maxWidth="sm"
-        sx={{
-          backgroundColor: 'white',
-        }}
-      >
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
@@ -57,13 +67,14 @@ export default function Introduction() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            backgroundColor: 'white',
           }}
         >
-          <Avatar src="/logo.png">
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            자기소개를 입력하세요!
+            Change Password
           </Typography>
           <Box
             component="form"
@@ -75,19 +86,21 @@ export default function Introduction() {
               margin="normal"
               required
               fullWidth
-              name="introduction"
-              type="text"
-              id="introduction"
-              multiline
-              maxRows={5}
+              name="password"
+              label="Password"
+              type="password"
+              id="password1"
+              autoComplete="current-password"
+              onChange={handleInput}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, color: 'white' }}
+              sx={{ mt: 3, mb: 2 }}
+              disabled={inputUnFinish}
             >
-              UPDATE
+              Confirm Password
             </Button>
           </Box>
         </Box>

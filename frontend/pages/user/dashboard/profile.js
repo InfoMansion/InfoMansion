@@ -17,7 +17,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRecoilState } from 'recoil';
-import { likeCateState } from '../../../state/likeCate';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -34,20 +33,76 @@ const theme = createTheme({
 });
 
 export default function Profile() {
-  const [likeCate, setlikeCate] = useRecoilState(likeCateState);
+  const [state, setState] = React.useState({
+    IT: false,
+    COOK: false,
+    MUSIC: false,
+    GAME: false,
+    SPORTS: false,
+    FASHION: false,
+    DAILY: false,
+    TRAVEL: false,
+    NATURE: false,
+    ART: false,
+    INTERIOR: false,
+    CULTURE: false,
+    BEAUTY: false,
+    CLEANING: false,
+    HOMEAPPLIANCES: false,
+    STUDY: false,
+  });
 
   const [inputUsername, setInputUsername] = useState('');
+  const [changeCate, setChangeCate] = useState('');
 
-  const inputUnFinish = !inputUsername;
+  const inputUnFinish = !(inputUsername && changeCate);
 
-  const handleChange = () => {};
+  const handleChange = event => {
+    setState({
+      ...state,
+      [event.target.name]: event.target.checked,
+    });
+    if (event.target.checked) {
+      const addCate = event.target.name;
+      const updateCate = changeCate + addCate + ',';
+      setChangeCate(updateCate);
+      console.log(changeCate);
+    } else {
+      const removeCate = event.target.name + ',';
+      const updateCate = changeCate.replace(removeCate, '');
+      setChangeCate(updateCate);
+      console.log(changeCate);
+    }
+  };
+
+  const {
+    IT,
+    COOK,
+    MUSIC,
+    GAME,
+    DAILY,
+    FASHION,
+    NATURE,
+    TRAVEL,
+    ART,
+    INTERIOR,
+    CULTURE,
+    BEAUTY,
+    CLEANING,
+    HOMEAPPLIANCES,
+    STUDY,
+    SPORTS,
+  } = state;
 
   function handleInput(event) {
+    console.log(event.target.value);
+    const { name, value } = event.target;
     setInputUsername(value);
   }
 
   const handleSubmit = async event => {
     event.preventDefault();
+    console.log(event);
     const credentials = {
       email: 'inputEmail',
       password: 'inputPassword',
@@ -56,18 +111,18 @@ export default function Profile() {
       tel: '01012345678',
     };
 
-    try {
-      console.log(credentials);
+    // try {
+    //   console.log(credentials);
 
-      const res = await axios.post(
-        'http://localhost:8080/api/v1/auth/signup',
-        credentials,
-      );
-      console.log('인증메일이 발송되었습니다.');
-      router.push('user/login');
-    } catch (e) {
-      console.log(e);
-    }
+    //   const res = await axios.post(
+    //     'http://localhost:8080/api/v1/auth/signup',
+    //     credentials,
+    //   );
+    //   console.log('인증메일이 발송되었습니다.');
+    //   router.push('user/login');
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   return (
@@ -122,7 +177,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={gilad}
+                          checked={IT}
                           onChange={handleChange}
                           name="IT"
                         />
@@ -133,7 +188,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={jason}
+                          checked={COOK}
                           onChange={handleChange}
                           name="COOK"
                         />
@@ -144,7 +199,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={MUSIC}
                           onChange={handleChange}
                           name="MUSIC"
                         />
@@ -155,7 +210,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={GAME}
                           onChange={handleChange}
                           name="GAME"
                         />
@@ -166,7 +221,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={SPORTS}
                           onChange={handleChange}
                           name="SPORTS"
                         />
@@ -177,7 +232,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={FASHION}
                           onChange={handleChange}
                           name="FASHION"
                         />
@@ -188,7 +243,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={TRAVEL}
                           onChange={handleChange}
                           name="TRAVEL"
                         />
@@ -199,7 +254,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={DAILY}
                           onChange={handleChange}
                           name="DAILY"
                         />
@@ -210,7 +265,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={NATURE}
                           onChange={handleChange}
                           name="NATURE"
                         />
@@ -221,7 +276,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={ART}
                           onChange={handleChange}
                           name="ART"
                         />
@@ -232,7 +287,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={INTERIOR}
                           onChange={handleChange}
                           name="INTERIOR"
                         />
@@ -243,7 +298,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={BEAUTY}
                           onChange={handleChange}
                           name="BEAUTY"
                         />
@@ -254,7 +309,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={CLEANING}
                           onChange={handleChange}
                           name="CLEANING"
                         />
@@ -265,7 +320,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={STUDY}
                           onChange={handleChange}
                           name="STUDY"
                         />
@@ -276,7 +331,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={HOMEAPPLIANCES}
                           onChange={handleChange}
                           name="HOMEAPPLIANCES"
                         />
@@ -287,7 +342,7 @@ export default function Profile() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          // checked={antoine}
+                          checked={CULTURE}
                           onChange={handleChange}
                           name="CULTURE"
                         />

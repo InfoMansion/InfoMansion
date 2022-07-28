@@ -1,14 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
 import Avatar from '@mui/material/Avatar';
@@ -17,12 +9,36 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from 'axios';
 import { useRouter } from 'next/router';
-import { atom, useRecoilState } from 'recoil';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#ff7961',
+      main: '#ff7961',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
+  },
+});
 
 export default function Change() {
   const router = useRouter();
+  const [inputPassword, setInputPassword] = useState('');
+  const [inputPassword2, setInputPassword2] = useState('');
+  const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
+    inputPassword,
+  );
+  const confirmPwSame = !!(inputPassword === inputPassword2);
+  const inputUnFinish = !(confirmPassword && confirmPwSame);
+
+  function handleInput(event) {
+    const { name, value } = event.target;
+    if (name === 'password') {
+      setInputPassword(value);
+    } else if (name === 'password2') {
+      setInputPassword2(value);
+    }
+  }
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -53,6 +69,7 @@ export default function Change() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            backgroundColor: 'white',
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -76,22 +93,25 @@ export default function Change() {
               type="password"
               id="password1"
               autoComplete="current-password"
+              onChange={handleInput}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="password"
+              name="password2"
               label="Confirm Password"
               type="password"
               id="password2"
               autoComplete="new-password"
+              onChange={handleInput}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={inputUnFinish}
             >
               Change Password
             </Button>

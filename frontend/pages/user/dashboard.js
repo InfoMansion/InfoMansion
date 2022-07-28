@@ -21,6 +21,7 @@ import Change from './dashboard/change.js';
 import Alarm from '../user/dashboard/alarm';
 import Privacy from './dashboard/privacy.js';
 import Introduction from './dashboard/introduction.js';
+import PasswordChange from './dashboard/PasswordChange.js';
 
 const drawerWidth = 240;
 
@@ -62,7 +63,7 @@ function DashboardContent() {
   if (dashNum === 0) {
     content = <Profile></Profile>;
   } else if (dashNum === 1) {
-    content = <Change></Change>;
+    content = <PasswordChange></PasswordChange>;
   } else if (dashNum === 2) {
     content = <Alarm></Alarm>;
   } else if (dashNum === 3) {
