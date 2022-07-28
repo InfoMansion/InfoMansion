@@ -39,6 +39,10 @@ public enum ErrorCode {
     //ROOM
     ROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, 40070, "해당 RoomId를 찾을 수 없습니다."),
 
+    //POST
+    POST_NOT_FOUND(HttpStatus.BAD_REQUEST, 40080, "해당 Post가 존재하지 않습니다."),
+
+
     //== 401 ==//
     TOKEN_WITHOUT_AUTHORITY(HttpStatus.UNAUTHORIZED,40101, "권한 정보가 없는 토큰입니다."),
     EMPTY_CREDENTIALS(HttpStatus.UNAUTHORIZED,40102, "인증 정보가 없습니다."),

@@ -9,5 +9,5 @@ import java.util.Collection;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findByCategoryInOrderByLikesDesc(List<Category> categories);
+    List<Post> findDistinctByUserByCategoryInOrderByLikesDesc(List<Category> categories);
 }

@@ -2,6 +2,7 @@ package com.infomansion.server.domain.post.domain;
 
 import com.infomansion.server.domain.base.BaseTimeEntity;
 import com.infomansion.server.domain.category.domain.Category;
+import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,10 @@ public class Post extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_stuff_id")
     private UserStuff userStuff;
 
@@ -30,22 +35,18 @@ public class Post extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Category category;
 
-    private Long likes;
 
     private boolean deleteFlag;
 
     @Builder
-    public Post(Long id, UserStuff userStuff, String title, String content) {
+    public Post(Long id, User user, UserStuff userStuff, String title, String content) {
         this.id = id;
+        this.user = user;
         this.userStuff = userStuff;
         this.title = title;
         this.content = content;
         this.category = userStuff.getCategory();
-        this.likes = 0L;
         this.deleteFlag = false;
     }
 
-    public void postLikes(){
-        likes++;
-    }
 }

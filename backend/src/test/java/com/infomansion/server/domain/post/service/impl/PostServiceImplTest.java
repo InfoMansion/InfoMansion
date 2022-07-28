@@ -1,6 +1,7 @@
 package com.infomansion.server.domain.post.service.impl;
 
 import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
+import com.infomansion.server.domain.post.repository.LikesPostRepository;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
@@ -40,6 +41,8 @@ public class PostServiceImplTest {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private LikesPostRepository likesPostRepository;
     private Long userId;
     private Long stuffId;
     private Long userStuffId;
@@ -94,6 +97,7 @@ public class PostServiceImplTest {
     @AfterEach
     public void cleanUp() {
         postRepository.deleteAll();
+        likesPostRepository.deleteAll();
         userStuffRepository.deleteAll();
         stuffRepository.deleteAll();
         userRepository.deleteAll();
@@ -116,8 +120,6 @@ public class PostServiceImplTest {
 
         Long postId = postService.createPost(postCreateRequestDto);
         assertThat(title).isEqualTo(postRepository.findById(postId).get().getTitle());
-
-
 
     }
 

@@ -121,14 +121,14 @@ public class PostRepositoryTest {
                     .title("IT에 대하여" + i)
                     .content("내 포스트는 IT에 관한 것이다. " + i)
                     .build();
-            for(int j=0;j<=i+1;j++){
-                post.postLikes();
-            }
+//            for(int j=0;j<=i+1;j++){
+//                post.postLikes();
+//            }
             postRepository.save(post);
         }
 
         //then
-        List<Post> postList = postRepository.findByCategoryInOrderByLikesDesc(categories);
+        List<Post> postList = postRepository.findDistinctByUserByCategoryInOrderByLikesDesc(categories);
 
         assertThat(postList.size()).isEqualTo(2);
         assertThat(postList.get(0).getTitle()).isEqualTo("IT에 대하여1");
@@ -168,7 +168,7 @@ public class PostRepositoryTest {
         }
 
         //then
-        List<Post> postList = postRepository.findByCategoryInOrderByLikesDesc(categories);
+        List<Post> postList = postRepository.findDistinctByUserByCategoryInOrderByLikesDesc(categories);
 
         assertThat(postList.size()).isEqualTo(0);
     }
