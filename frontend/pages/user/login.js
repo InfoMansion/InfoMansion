@@ -13,10 +13,12 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from 'axios';
+import axios from '../../utils/axios';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { likeCateState } from '../../state/likeCate';
+import { useCookies } from 'react-cookie';
+import useAuth from '../../hooks/useAuth';
 
 const theme = createTheme({
   palette: {
@@ -30,9 +32,11 @@ const theme = createTheme({
 });
 
 export default function LogIn() {
+  const [, setCookie] = useCookies(['cookie-name']);
   const [likeCate, setlikeCate] = useRecoilState(likeCateState);
   const [inputId, setInputId] = useState('');
   const [inputPw, setInputPw] = useState('');
+  const { setAuth } = useAuth();
 
   const confirmId = /^[\w+_]\w+@\w+\.\w+/.test(inputId);
   const confirmPw = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(inputPw);
@@ -80,14 +84,12 @@ export default function LogIn() {
 
     try {
       console.log(credentials);
-      const { data } = await axios.post(
-        'http://localhost:8080/api/v1/auth/login',
-        credentials,
-        { withCredentials: true },
-      );
+      const { data } = await axios.post('/api/v1/auth/login', credentials, {
+        withCredentials: true,
+      });
+      setAuth({ isAuthorized: true, accessToken: data.data.accessToken });
       console.log('data : ', data);
-      const expiresAt = data.data.expiresAt;
-      localStorage.setItem('expiresAt', expiresAt);
+      localStorage.setItem('expiresAt', data.data.expiresAt);
       router.push('/');
     } catch (e) {
       console.log('error', e);
