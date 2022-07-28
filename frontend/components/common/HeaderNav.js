@@ -17,6 +17,7 @@ import { useCookies } from 'react-cookie';
 import AddIcon from '@mui/icons-material/Add';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useRouter } from 'next/router';
+import useAuth from '../../hooks/useAuth';
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -57,11 +58,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function DenseAppBar() {
+export default function HeaderNav() {
   const { push } = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [focus, setFocus] = useState(false);
 
+  const { setAuth } = useAuth();
   const [, , removeCookie] = useCookies(['cookie-name']);
   const isMenuOpen = Boolean(anchorEl);
 
@@ -77,7 +79,7 @@ export default function DenseAppBar() {
 
   const handleLogout = event => {
     try {
-      removeCookie('cookie-name', { path: '/' });
+      setAuth({ isAuthroized: false, accessToken: undefined });
       window.location.replace('/user/login');
     } catch (e) {
       console.log(e);

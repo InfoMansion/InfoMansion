@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -84,10 +84,16 @@ export default function SignUp() {
     }
   };
 
-  function prevPage() {
+  const prevPage = () => {
     setlikeCate('');
     router.push('/user/category');
-  }
+  };
+
+  useEffect(() => {
+    if (likeCate === '') {
+      prevPage();
+    }
+  }, [likeCate]);
 
   return (
     <ThemeProvider theme={theme}>
