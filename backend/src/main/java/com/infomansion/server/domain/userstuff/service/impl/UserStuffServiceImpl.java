@@ -81,7 +81,8 @@ public class UserStuffServiceImpl implements UserStuffService {
          */
         if(findUserStuff.getSelected()) throw new CustomException(ErrorCode.INCLUDED_USER_STUFF);
 
-        validateCategory(findUserStuff.getStuff(), findUserStuff.getUser().getId(), requestDto.getCategory());
+        checkDuplicatePlacedCategory(findUserStuff.getUser().getId(), requestDto.getCategory());
+        checkAcceptableCategory(findUserStuff.getStuff(), requestDto.getCategory());
 
         findUserStuff.changeIncludedStatus(requestDto.getAlias(), requestDto.getCategory(),
                 requestDto.getPosX(), requestDto.getPosY(), requestDto.getPosZ(),
@@ -101,7 +102,10 @@ public class UserStuffServiceImpl implements UserStuffService {
         requestDto.isValidEnum();
         UserStuff us = userStuffRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
-        if(requestDto.getCategory() != null) validateCategory(us.getStuff(), us.getUser().getId(), requestDto.getCategory());
+        if(requestDto.getCategory() != null) {
+            checkDuplicatePlacedCategory(us.getUser().getId(), requestDto.getCategory());
+            checkAcceptableCategory(us.getStuff(), requestDto.getCategory());
+        }
 
         /**
          * 배치되지 않은 Stuff의 Alias나 Category를 변경할 경우 throw
@@ -138,13 +142,12 @@ public class UserStuffServiceImpl implements UserStuffService {
         return userStuffId;
     }
 
-    /**
-     * 1. 배치된 UserStuff의 카테고리들과 중복된 게 있을 경우 DUPLICATE_CATEGORY error
-     * 2. UserStuff의 Stuff가 가질 수 없는 카테고리일 경우 UNACCEPTABLE_CATEGORY error
-     */
-    private void validateCategory(Stuff stuff, Long userId, String category) {
+    private void checkDuplicatePlacedCategory(Long userId, String category) {
         if(userStuffRepository.findAllCategoryByUserId(userId).contains(category))
             throw new CustomException(ErrorCode.DUPLICATE_CATEGORY);
+    }
+
+    private void checkAcceptableCategory(Stuff stuff, String category) {
         if(!stuff.getCategoryList().contains(category))
             throw new CustomException(ErrorCode.UNACCEPTABLE_CATEGORY);
     }
