@@ -254,6 +254,7 @@ Temporary Items
 application-dev.yml
 application-local.yml
 application-prod.yml
+application-s3.yml
 jwt.yml
 mail.yml
 
