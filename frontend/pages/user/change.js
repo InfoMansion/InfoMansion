@@ -15,14 +15,8 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Axios from 'axios';
+import axios from '../../utils/axios';
 import { useRouter } from 'next/router';
-import { atom, useRecoilState } from 'recoil';
-import tokenState from '../../state/token';
-
-function TokenInput() {
-  const [token, setToken] = useRecoilState(tokenState);
-}
 
 const theme = createTheme();
 
