@@ -11,6 +11,7 @@ spring:
     import:
       - optional:classpath:/jwt.yml
       - optional:classpath:/mail.yml
+      - optional:classpath:/application-s3.yml
 
 logging:
   level:
