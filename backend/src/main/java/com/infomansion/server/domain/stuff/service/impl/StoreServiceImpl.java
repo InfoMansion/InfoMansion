@@ -33,17 +33,18 @@ public class StoreServiceImpl implements StoreService {
 
         StuffType stuffType = null;
         List<StoreResponseDto> stuffs = new ArrayList<>();
-
         for (Stuff stuff : list) {
-            if(stuffType == null) {
-                stuffType = stuff.getStuffType();
-            }
+            if(stuffType == null) stuffType = stuff.getStuffType();
 
+            // 같은 stuffType인 경우 stuffs 목록에 responseDto 형태로 추가
             if(stuffType == stuff.getStuffType()) {
                 stuffs.add(new StoreResponseDto(stuff));
-            } else {
+            }
+            // 다른 stuffType일 경우 현재까지의 stuffs를 Slice로 만들어 responseDtoList에 추가
+            else {
                 responseDtoList.add(entityToResponseDto(pageSize, stuffs, stuffType));
 
+                // 현재 stuffType으로 초기화
                 stuffType = stuff.getStuffType();
                 stuffs = new ArrayList<>();
                 stuffs.add(new StoreResponseDto(stuff));
@@ -59,7 +60,7 @@ public class StoreServiceImpl implements StoreService {
         Long userId = SecurityUtil.getCurrentUserId();
         List<StoreResponseDto> content = new ArrayList<>();
 
-        stuffRepository.findStuffWithStuffTypeInStore(userId, stuffType.getEnum(), pageable.getOffset(), pageable.getPageSize())
+        stuffRepository.findStuffWithStuffTypeInStore(userId, stuffType.getEnum(), pageable.getOffset(), pageable.getPageSize()+1)
                 .forEach(stuff -> content.add(new StoreResponseDto(stuff)));
 
         boolean hasNext = false;
@@ -72,11 +73,15 @@ public class StoreServiceImpl implements StoreService {
     }
 
     private StoreGroupResponseDto entityToResponseDto(int pageSize, List<StoreResponseDto> stuffs, StuffType stuffType) {
+        // stuffs를 가져올 때 pageSize + 1 만큼 요청했다.
+        // 만약 pageSize보다 1개가 더 들어왔다면 다음 페이지가 존재하므로 hasNext = true
+        // pageSize보다 작거나 같은 경우 다음 페이지가 존재하지 않기 때문에 hasNext = false
         boolean hasNext = false;
         if(stuffs.size() > pageSize) {
             hasNext = true;
             stuffs.remove(pageSize);
         }
+        // 현재 페이지가 첫 페이지라는 것을 설정
         Pageable pageable = Pageable.ofSize(pageSize).first();
         SliceImpl<StoreResponseDto> slice = new SliceImpl<>(stuffs, pageable, hasNext);
 
