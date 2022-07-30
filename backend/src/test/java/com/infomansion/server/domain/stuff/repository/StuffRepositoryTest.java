@@ -28,7 +28,7 @@ public class StuffRepositoryTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT,GAME";
-        StuffType stuffType = StuffType.STUFF;
+        StuffType stuffType = StuffType.OTHER;
 
         Stuff stuff = Stuff.builder()
                 .stuffName(stuffName)
@@ -52,7 +52,7 @@ public class StuffRepositoryTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT,GAME";
-        StuffType stuffType = StuffType.STUFF;
+        StuffType stuffType = StuffType.OTHER;
 
         Stuff stuff = Stuff.builder()
                 .stuffName(stuffName)
@@ -78,7 +78,7 @@ public class StuffRepositoryTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT,GAME";
-        StuffType stuffType = StuffType.STUFF;
+        StuffType stuffType = StuffType.OTHER;
 
         Stuff stuff = Stuff.builder()
                 .stuffName(stuffName)
@@ -91,7 +91,7 @@ public class StuffRepositoryTest {
 
         // when
         LocalDateTime modifiedTime = LocalDateTime.now();
-        stuff.updateStuff("TV", "티비", 50L, stuff.getCategories(), "STUFF", stuff.getGeometry(), stuff.getMaterials());
+        stuff.updateStuff("TV", "티비", 50L, stuff.getCategories(), "OTHER", stuff.getGeometry(), stuff.getMaterials());
         stuffRepository.flush();
 
         // then
@@ -108,7 +108,7 @@ public class StuffRepositoryTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT,GAME";
-        StuffType stuffType = StuffType.STUFF;
+        StuffType stuffType = StuffType.OTHER;
 
         Stuff stuff = Stuff.builder()
                 .stuffName(stuffName)
@@ -121,7 +121,7 @@ public class StuffRepositoryTest {
 
         // when
         LocalDateTime modifiedTime = LocalDateTime.now();
-        stuff.updateStuff("TV", "티비", 50L, stuff.getCategories(), "STUFF", stuff.getGeometry(), stuff.getMaterials());
+        stuff.updateStuff("TV", "티비", 50L, stuff.getCategories(), "OTHER", stuff.getGeometry(), stuff.getMaterials());
         stuffRepository.flush();
 
         // then
@@ -138,7 +138,7 @@ public class StuffRepositoryTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT,GAME";
-        StuffType stuffType = StuffType.STUFF;
+        StuffType stuffType = StuffType.OTHER;
 
         Stuff stuff = Stuff.builder()
                 .stuffName(stuffName)

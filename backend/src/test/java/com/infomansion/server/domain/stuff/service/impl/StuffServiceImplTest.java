@@ -36,7 +36,7 @@ public class StuffServiceImplTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT,GAME";
-        String stuffType = "STUFF";
+        String stuffType = "OTHER";
 
         StuffRequestDto requestDto = StuffRequestDto.builder()
                 .stuffName(stuffName)
@@ -63,7 +63,7 @@ public class StuffServiceImplTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT";
-        String stuffType = "STUFF";
+        String stuffType = "OTHER";
 
         // DB 저장 용
         StuffRequestDto requestDto = StuffRequestDto.builder()
@@ -104,7 +104,7 @@ public class StuffServiceImplTest {
             String stuffNameKor = "노트북"+(i+1);
             Long price = 30L;
             String categories = "IT";
-            String stuffType = "STUFF";
+            String stuffType = "OTHER";
 
             StuffRequestDto requestDto = StuffRequestDto.builder()
                     .stuffName(stuffName)
@@ -132,7 +132,7 @@ public class StuffServiceImplTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT";
-        String stuffType = "STUFF";
+        String stuffType = "OTHER";
 
         StuffRequestDto requestDto = StuffRequestDto.builder()
                 .stuffName(stuffName)
