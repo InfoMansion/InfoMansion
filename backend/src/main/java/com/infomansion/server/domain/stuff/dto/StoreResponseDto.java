@@ -10,7 +10,6 @@ public class StoreResponseDto {
     private Long id;
     private String stuffNameKor;
     private Long price;
-    private StuffType stuffType;
     private String geometry;
     private String materials;
     private String stuffGlbPath;
@@ -19,7 +18,6 @@ public class StoreResponseDto {
         this.id = stuff.getId();
         this.stuffNameKor = stuff.getStuffNameKor();
         this.price = stuff.getPrice();
-        this.stuffType = stuff.getStuffType();
         this.geometry = stuff.getGeometry();
         this.materials = stuff.getMaterials();
         this.stuffGlbPath = stuff.getStuffGlbPath();
