@@ -2,6 +2,8 @@ import { Avatar, Box, Card, Divider, Grid, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles'
 import { useState } from "react";
 import RecentPost from "./RecentPosts";
+import SettingsIcon from '@mui/icons-material/Settings';
+import Link from 'next/link';
 
 const Root = styled('div')(({ theme }) => ({
     padding: theme.spacing(1),
@@ -57,11 +59,25 @@ export default function UserInfo( {...props} ) {
 
                 </Grid>
                 <Grid item xs={9}>
-                    <Typography
-                        variant='h4'
+                    <Box
+                        sx={{
+                            display : 'flex',
+                            alignItems : 'center'
+                        }}
                     >
-                        {userinfo.username}
-                    </Typography>
+                        <Typography
+                            variant='h4'
+                        >
+                            {userinfo.username}
+                        </Typography>
+
+                        <Link href="/MyPage">
+                            <SettingsIcon  
+                                sx={{mx : 2}}
+                                style={{color : '#777777'}}
+                            />
+                        </Link>
+                    </Box>
                     <Typography
                         variant="body2"
                         color="text.secondary"

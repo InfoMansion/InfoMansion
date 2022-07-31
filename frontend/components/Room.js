@@ -2,14 +2,16 @@ import { OrbitControls, OrthographicCamera } from '@react-three/drei'
 import {Canvas} from '@react-three/fiber'
 import { useEffect, useState, } from 'react'
 import { useRouter } from 'next/router'
-import { Button } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { easings, useSpring } from 'react-spring'
 import { animated } from '@react-spring/three'
+import  RoomManageMenu from './RoomPage/RoomManageMenu'
 
 // data
 import userStuff from './RoomPage/atoms/userStuff.json'
 import MapStuffs from './RoomPage/MapStuffs'
 import Stuffs from './RoomPage/Stuffs'
+
 // 이 파일은 나중에 db에 데이터 넣을 때 쓸거라 안지우고 유지하겠습니다.
 // import walltest from './walltest.json'
 import RoomCamera from './RoomPage/atoms/RoomCamera'
@@ -54,12 +56,6 @@ export default function Room( { StuffClick, ...props} ) {
             if(clicked) return 0;
             else return stuff.stuff_name;
         });
-
-        // 카메라 위치 처리.
-        // if(!clicked) { setCamloc([0,5, 0]); }
-        // else { setCamloc([0, 0, 0]); }
-        
-        // RoomPage의 stuffClick 함수 실행시키기.
         StuffClick(stuff);
     }
 
@@ -69,7 +65,7 @@ export default function Room( { StuffClick, ...props} ) {
                 width : "600px", 
                 height : "700px",
                 // margin : '30px auto'
-                }}
+            }}
             >
                 {/* 태그 토글 버튼 */}
                 <Button variant="outlined"
@@ -113,8 +109,19 @@ export default function Room( { StuffClick, ...props} ) {
                     tagon={tagon}
                 />
 
-                <OrbitControls />
+                {/* <OrbitControls /> */}
             </Canvas>
+
+            {/* 추후 오른쪽정렬 추가 예정 */}
+            <Box
+                sx={{
+                    position : 'absolute',
+                    zIndex : '2',
+                    width : '100%',
+                }}
+            >
+                <RoomManageMenu />
+            </Box>
         </div>
       ) 
 }

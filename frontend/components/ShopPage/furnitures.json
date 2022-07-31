@@ -1,0 +1,150 @@
+{
+    "wall" : [
+        {
+            "id" : 1,
+            "stuffNameKor" : "벽",
+            "price" : 30,
+            "furnitureType" : "wall",
+            "geometry" : "low_poly_interior1468",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/wall_1468.glb"
+        },
+        {
+            "id" : 2,
+            "stuffNameKor" : "벽",
+            "price" : 30,
+            "furnitureType" : "wall",
+            "geometry" : "low_poly_interior1502",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/wall_1502.glb"
+        },
+        {
+            "id" : 5,
+            "stuffNameKor" : "벽",
+            "price" : 30,
+            "furnitureType" : "wall",
+            "geometry" : "low_poly_interior1549",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/wall_1549.glb"
+        },
+        {
+            "id" : 6,
+            "stuffNameKor" : "벽",
+            "price" : 30,
+            "furnitureType" : "wall",
+            "geometry" : "low_poly_interior1645",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/wall_1645.glb"
+        },
+        {
+            "id" : 7,
+            "stuffNameKor" : "벽",
+            "price" : 30,
+            "furnitureType" : "wall",
+            "geometry" : "low_poly_interior1705",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/wall_1705.glb"
+        },
+        {
+            "id" : 8,
+            "stuffNameKor" : "벽",
+            "price" : 30,
+            "furnitureType" : "wall",
+            "geometry" : "low_poly_interior1729",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/wall_1729.glb"
+        }
+    ],
+    "floor" : [
+        {
+            "id" : 3,
+            "stuffNameKor" : "바닥",
+            "price" : 30,
+            "furnitureType" : "floor",
+            "geometry" : "low_poly_interior1469",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/floor_1469.glb"
+        },
+        {
+            "id" : 4,
+            "stuffNameKor" : "바닥",
+            "price" : 30,
+            "furnitureType" : "floor",
+            "geometry" : "low_poly_interior1503",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/floor_1503.glb"
+        },
+        {
+            "id" : 9,
+            "stuffNameKor" : "바닥",
+            "price" : 30,
+            "furnitureType" : "floor",
+            "geometry" : "low_poly_interior1550",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/floor_1550.glb"
+        },
+        {
+            "id" : 10,
+            "stuffNameKor" : "바닥",
+            "price" : 30,
+            "furnitureType" : "floor",
+            "geometry" : "low_poly_interior1646",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/floor_1646.glb"
+        },
+        {
+            "id" : 11,
+            "stuffNameKor" : "바닥",
+            "price" : 30,
+            "furnitureType" : "floor",
+            "geometry" : "low_poly_interior1709",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/floor_1709.glb"
+        },
+        {
+            "id" : 12,
+            "stuffNameKor" : "바닥",
+            "price" : 30,
+            "furnitureType" : "floor",
+            "geometry" : "low_poly_interior1709",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/floor_1709.glb"
+        },
+        {
+            "id" : 13,
+            "stuffNameKor" : "바닥",
+            "price" : 30,
+            "furnitureType" : "floor",
+            "geometry" : "low_poly_interior1730",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/floor_1730.glb"
+        },
+        {
+            "id" : 14,
+            "stuffNameKor" : "바닥",
+            "price" : 30,
+            "furnitureType" : "floor",
+            "geometry" : "low_poly_interior1764",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/floor_1764.glb"
+        },
+        {
+            "id" : 15,
+            "stuffNameKor" : "바닥",
+            "price" : 30,
+            "furnitureType" : "floor",
+            "geometry" : "low_poly_interior1797",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/floor_1797.glb"
+        },
+        {
+            "id" : 16,
+            "stuffNameKor" : "바닥",
+            "price" : 30,
+            "furnitureType" : "floor",
+            "geometry" : "low_poly_interior1830",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/floor_1830.glb"
+        }
+    ]
+}
