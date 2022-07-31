@@ -89,7 +89,7 @@ export default function HeaderNav() {
       console.log('data : ', data);
       removeCookies('InfoMansionAccessToken', { path: '/' });
       setAuth({ isAuthorized: false, accessToken: undefined });
-      window.location.replace('/user/login');
+      router.push('/');
     } catch (e) {
       console.log(e);
     }

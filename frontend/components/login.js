@@ -13,12 +13,12 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from '../../utils/axios';
+import axios from '../utils/axios';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
-import { likeCateState } from '../../state/likeCate';
+import { likeCateState } from '../state/likeCate';
 import { useCookies } from 'react-cookie';
-import useAuth from '../../hooks/useAuth';
+import useAuth from '../hooks/useAuth';
 
 const theme = createTheme({
   palette: {

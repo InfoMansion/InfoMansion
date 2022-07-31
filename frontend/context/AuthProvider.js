@@ -16,6 +16,14 @@ export const AuthProvider = ({ children }) => {
     }
   }, [cookies]);
 
+  useEffect(() => {
+    const handleBeforeUnload = event => {
+      console.log(event);
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       {auth !== undefined && children}

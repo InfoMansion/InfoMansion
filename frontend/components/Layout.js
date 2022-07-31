@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import { Box, Paper } from '@mui/material';
 import { useRouter } from 'next/router';
 import useAuth from '../hooks/useAuth';
-import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 
 const Root = styled('div')(({ theme }) => ({
@@ -18,28 +17,11 @@ const Root = styled('div')(({ theme }) => ({
   },
 }));
 
-const guestPages = ['/user/login', '/user/category', '/user/signup'];
-
 export default function Layout({ children }) {
   const [cookies] = useCookies(['cookie-name']);
   const { pathname, push } = useRouter();
   const { auth } = useAuth();
 
-  useEffect(() => {
-    if (!auth.isAuthorized && !guestPages.includes(pathname)) {
-      push('/user/login');
-      return;
-    }
-    /*console.log(cookies);
-    if (!cookies['accessToken'] && !guestPages.includes(pathname)) {
-      push('/user/login');
-      return;
-    }
-    if (cookies['accessToken'] && guestPages.includes(pathname)) {
-      push('/');
-      return;
-    }*/
-  }, [pathname, auth]);
   return (
     <Box
       style={{

@@ -30,16 +30,6 @@ export default function Change() {
       email: data.get('email'),
       password: data.get('password'),
     };
-
-    // Axios({
-    //   url: 'http://localhost:8080/accounts/login',
-    //   method: 'post',
-    //   data: credentials
-    // })
-    // .then(res => {
-    //   const token = res.data.key
-    //   setToken(token)
-    // })
   };
 
   return (

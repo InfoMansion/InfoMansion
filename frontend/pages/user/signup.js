@@ -77,8 +77,8 @@ export default function SignUp() {
         'http://localhost:8080/api/v1/auth/signup',
         credentials,
       );
-      console.log('인증메일이 발송되었습니다.');
-      router.push('/user/login');
+      alert('인증메일이 발송되었습니다.');
+      router.push('/');
     } catch (e) {
       console.log(e);
     }
