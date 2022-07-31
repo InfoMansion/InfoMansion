@@ -35,7 +35,6 @@ public class Post extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Category category;
 
-
     private boolean deleteFlag;
 
     @Builder
@@ -49,4 +48,12 @@ public class Post extends BaseTimeEntity {
         this.deleteFlag = false;
     }
 
+    public void updatePost(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
+
+    public void deletePost(){
+        this.deleteFlag = true;
+    }
 }

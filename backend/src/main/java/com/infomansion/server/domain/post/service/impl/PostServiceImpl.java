@@ -1,13 +1,14 @@
 package com.infomansion.server.domain.post.service.impl;
 
+import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.dto.LikesPostCreateRequestDto;
 import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
+import com.infomansion.server.domain.post.dto.PostRecommendResponseDto;
 import com.infomansion.server.domain.post.repository.LikesPostRepository;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
-import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
@@ -18,7 +19,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -28,13 +33,13 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final UserStuffRepository userStuffRepository;
     private final PostRepository postRepository;
-
+    private final LikesPostRepository likesPostRepository;
     private final LikesPostService likesPostService;
 
     @Transactional
     @Override
     public Long createPost(PostCreateRequestDto requestDto) {
-        User user = userRepository.findById(requestDto.getUserStuffId())
+        User user = userRepository.findById(requestDto.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         UserStuff userStuff = userStuffRepository.findById(requestDto.getUserStuffId())
@@ -44,7 +49,33 @@ public class PostServiceImpl implements PostService {
 
         LikesPostCreateRequestDto likeCreaterequestDto= LikesPostCreateRequestDto.builder()
                 .postId(postId).build();
-        return likesPostService.createLikesPost(likeCreaterequestDto);
+
+       likesPostService.createLikesPost(likeCreaterequestDto);
+       return postId;
+    }
+
+    @Override
+    public List<PostRecommendResponseDto> findRecommendPost(Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        String userCategories = user.getCategories();
+
+        List<Category> categories = Arrays.asList(userCategories.split(","))
+                .stream().map(Category::valueOf)
+                .collect(Collectors.toList());
+
+        LocalDateTime start = LocalDateTime.now().minusDays(7);
+        LocalDateTime end = LocalDateTime.now();
+
+        List<PostRecommendResponseDto> recommendPosts = new ArrayList<>();
+
+        //내 userID 제외
+        postRepository.findTop13ByCategoryInAndModifiedDateBetween(userId, categories, start, end)
+                .forEach(recommendUserId -> recommendPosts.add(new PostRecommendResponseDto(recommendUserId)));
+
+        return recommendPosts;
     }
 
 }

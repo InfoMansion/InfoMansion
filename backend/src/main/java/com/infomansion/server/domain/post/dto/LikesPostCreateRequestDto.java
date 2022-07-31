@@ -2,7 +2,6 @@ package com.infomansion.server.domain.post.dto;
 
 import com.infomansion.server.domain.post.domain.LikesPost;
 import com.infomansion.server.domain.post.domain.Post;
-import com.infomansion.server.domain.post.service.LikesPostService;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,9 +14,6 @@ public class LikesPostCreateRequestDto {
 
     @NotNull
     private Long postId;
-
-    @NotNull
-    private Long likes;
 
     @Builder
     public LikesPostCreateRequestDto(Long postId){

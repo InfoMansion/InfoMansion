@@ -12,14 +12,19 @@ import javax.persistence.*;
 public class LikesPost {
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name ="post_id")
+    private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
     @JoinColumn(name = "post_id")
-    private Post post;
+    private Post  post;
 
     private Long likes;
 
     @Builder
-    public LikesPost(Post post){
+    public LikesPost(Long id, Post post) {
+        this.id = id;
         this.post = post;
         this.likes = 0L;
     }
