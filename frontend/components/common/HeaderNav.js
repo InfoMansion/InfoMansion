@@ -18,6 +18,7 @@ import AddIcon from '@mui/icons-material/Add';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useRouter } from 'next/router';
 import useAuth from '../../hooks/useAuth';
+import axios from '../../utils/axios';
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -64,7 +65,7 @@ export default function HeaderNav() {
   const [focus, setFocus] = useState(false);
 
   const { setAuth } = useAuth();
-  const [, , removeCookie] = useCookies(['cookie-name']);
+  const [cookies, , removeCookies] = useCookies(['cookie-name']);
   const isMenuOpen = Boolean(anchorEl);
 
   const [keyword, setKeyword] = useState('');
@@ -77,9 +78,17 @@ export default function HeaderNav() {
     setAnchorEl(null);
   };
 
-  const handleLogout = event => {
+  const handleLogout = async () => {
     try {
-      setAuth({ isAuthroized: false, accessToken: undefined });
+      console.log('cookie : ', cookies['InfoMansionAccessToken']);
+      const { data } = await axios.get('/api/v1/auth/logout', {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+        },
+      });
+      console.log('data : ', data);
+      removeCookies('InfoMansionAccessToken', { path: '/' });
+      setAuth({ isAuthorized: false, accessToken: undefined });
       window.location.replace('/user/login');
     } catch (e) {
       console.log(e);
