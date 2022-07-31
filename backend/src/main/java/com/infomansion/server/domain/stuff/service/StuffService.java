@@ -9,7 +9,7 @@ import java.util.List;
 public interface StuffService {
 
     // 관리자가 Stuff를 추가
-    Long createStuff(StuffRequestDto requestDto);
+    Long createStuff(StuffRequestDto requestDto, String stuffGlbPath);
 
     // 관리자가 Stuff를 수정
     Long updateStuff(Long stuff_id, StuffRequestDto requestDto);

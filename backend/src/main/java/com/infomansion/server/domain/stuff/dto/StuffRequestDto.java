@@ -46,13 +46,14 @@ public class StuffRequestDto {
         this.materials = materials;
     }
 
-    public Stuff toEntity() {
+    public Stuff toEntity(String stuffGlbPath) {
         return Stuff.builder()
                 .stuffName(stuffName)
                 .stuffNameKor(stuffNameKor)
                 .price(price)
                 .categories(categories)
                 .stuffType(StuffType.valueOf(stuffType))
+                .stuffGlbPath(stuffGlbPath)
                 .geometry(geometry)
                 .materials(materials)
                 .build();

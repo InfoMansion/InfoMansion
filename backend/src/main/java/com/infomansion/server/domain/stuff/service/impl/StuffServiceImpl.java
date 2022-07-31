@@ -26,13 +26,13 @@ public class StuffServiceImpl implements StuffService {
 
     @Transactional
     @Override
-    public Long createStuff(StuffRequestDto requestDto) {
+    public Long createStuff(StuffRequestDto requestDto, String stuffGlbPath) {
         // 하나의 String으로 받아온 categories를 분리
         List<String> categories = splitCategories(requestDto.getCategories());
         // 분리된 categories 검증
         categories.forEach(category -> validateCategory(category));
 
-        return stuffRepository.save(requestDto.toEntity()).getId();
+        return stuffRepository.save(requestDto.toEntity(stuffGlbPath)).getId();
     }
 
     @Transactional
