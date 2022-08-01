@@ -2,7 +2,6 @@ package com.infomansion.server.domain.post.service.impl;
 
 import com.infomansion.server.domain.post.domain.LikesPost;
 import com.infomansion.server.domain.post.domain.Post;
-import com.infomansion.server.domain.post.dto.LikesPostCreateRequestDto;
 import com.infomansion.server.domain.post.repository.LikesPostRepository;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.LikesPostService;
@@ -20,13 +19,7 @@ public class LikesPostServiceImpl implements LikesPostService {
     private final PostRepository postRepository;
     private final LikesPostRepository likesPostRepository;
 
-    @Override
-    public Long createLikesPost(LikesPostCreateRequestDto requestDto) {
-        Post post = postRepository.findById(requestDto.getPostId())
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-        return likesPostRepository.save(requestDto.toEntity(post)).getPost().getId();
-    }
-
+    @Transactional
     @Override
     public void addLikes(Long postId) {
         LikesPost likesPost = likesPostRepository.findById(postId)

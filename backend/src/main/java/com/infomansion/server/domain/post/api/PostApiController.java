@@ -4,6 +4,7 @@ import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
 import com.infomansion.server.domain.post.dto.PostRecommendResponseDto;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.global.apispec.CommonResponse;
+import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,9 @@ public class PostApiController {
                 .body(new CommonResponse<>(postService.createPost(requestDto)));
     }
 
-    @GetMapping("api/v1/posts/recommend/{userId}")
-    public ResponseEntity<CommonResponse<List<PostRecommendResponseDto>>> findRecommendPostUser(@PathVariable Long userId) {
+    @GetMapping("api/v1/posts/recommend")
+    public ResponseEntity<CommonResponse<List<PostRecommendResponseDto>>> findRecommendPostUser() {
+        Long userId = SecurityUtil.getCurrentUserId();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postService.findRecommendPost(userId)));
     }

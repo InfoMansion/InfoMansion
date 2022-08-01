@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long>{
-    @Query("select distinct p.user.id from Post p left join LikesPost l on p.id = l.id where (p.category in :categories and p.modifiedDate between :start and :end and not p.user.id = :userId) group by p.user.id order by l.likes desc")
-    List<Long> findTop13ByCategoryInAndModifiedDateBetween(@Param("userId") Long userId, @Param("categories") List<Category> categories, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    @Query("select count(p.id), p from Post p left join LikesPost l on p.id = l.id where (p.category in :categories and p.modifiedDate between :start and :end and not p.user.id = :userId) group by p.user.id order by l.likes desc")
+    List<Post> findTop13ByCategoryInAndModifiedDateBetween(@Param("userId") Long userId, @Param("categories") List<Category> categories, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
 
 }

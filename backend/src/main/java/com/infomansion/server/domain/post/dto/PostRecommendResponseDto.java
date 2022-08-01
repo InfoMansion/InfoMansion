@@ -1,14 +1,16 @@
 package com.infomansion.server.domain.post.dto;
 
+import com.infomansion.server.domain.post.domain.Post;
+
 import javax.validation.constraints.NotNull;
 
 public class PostRecommendResponseDto {
 
 
     @NotNull
-    Long userId;
+    Post post;
 
-    public PostRecommendResponseDto(Long userId){
-        this.userId = userId;
+    public PostRecommendResponseDto(Post post){
+        this.post = post;
     }
 }

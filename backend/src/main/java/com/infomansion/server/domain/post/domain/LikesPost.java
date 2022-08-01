@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Getter
 @NoArgsConstructor
 @Entity
 public class LikesPost {
 
-    @Id
-    @Column(name ="post_id")
+    @Id @Column(name = "post_id")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -23,8 +23,7 @@ public class LikesPost {
     private Long likes;
 
     @Builder
-    public LikesPost(Long id, Post post) {
-        this.id = id;
+    public LikesPost(Post post) {
         this.post = post;
         this.likes = 0L;
     }

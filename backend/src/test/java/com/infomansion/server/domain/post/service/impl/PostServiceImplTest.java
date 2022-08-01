@@ -1,5 +1,6 @@
 package com.infomansion.server.domain.post.service.impl;
 
+import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
 import com.infomansion.server.domain.post.dto.PostRecommendResponseDto;
 import com.infomansion.server.domain.post.repository.LikesPostRepository;
@@ -138,13 +139,11 @@ public class PostServiceImplTest {
 
         Long postId = postService.createPost(postCreateRequestDto);
         assertThat(title).isEqualTo(postRepository.findById(postId).get().getTitle());
-
     }
 
     @DisplayName("Post 추천을 통해 1명의 User만 추천된다.")
     @Test
     public void post_생성_및_조회2(){
-
         // given
         for(int i=0;i<4;i++){
             String title = "Post" + i;
@@ -185,17 +184,16 @@ public class PostServiceImplTest {
     public void post_생성_및_조회3(){
 
         // given
-        for(int i=0;i<4;i++){
-            String title = "Post" + i;
-            String content = "comment";
+        String title0 = "Post";
+        String content0 = "comment";
 
-            PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
-                    .userId(userId).userStuffId(userStuffId)
-                    .title(title).content(content)
-                    .build();
-            Long postId = postService.createPost(postCreateRequestDto);
-            likesPostRepository.findById(postId).get().addPostLikes();
-        }
+        PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
+                .userId(userId).userStuffId(userStuffId)
+                .title(title0).content(content0)
+                .build();
+        Long postId0 = postService.createPost(postCreateRequestDto);
+        Post post0 = postRepository.findById(postId0).get();
+        likesPostRepository.findById(postId0).get().addPostLikes();
 
         // Target User  생성
         String email = "infomansion@test.com2";
@@ -234,7 +232,7 @@ public class PostServiceImplTest {
         String title = "TargetPost";
         String content = "comment123";
 
-        PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
+        postCreateRequestDto = PostCreateRequestDto.builder()
                 .userId(userId).userStuffId(userStuffId)
                 .title(title).content(content)
                 .build();
@@ -245,6 +243,6 @@ public class PostServiceImplTest {
         }
 
         List<PostRecommendResponseDto> RecommendPostList = postService.findRecommendPost(userId);
-        assertThat(RecommendPostList.get(0)).isNotEqualTo(new PostRecommendResponseDto(userId));
+        assertThat(RecommendPostList.get(0)).isNotEqualTo(new PostRecommendResponseDto(post0));
     }
 }
