@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Box, Button, Container, Grid } from '@mui/material'
 import { useRouter } from 'next/router'
 import EditRoom from "../../components/EditRoom";
+import MyStuffList from "../../components/RoomPage/MyStuffList";
 
 
 export default function RoomEdit() {
@@ -34,7 +35,7 @@ export default function RoomEdit() {
                         backgroundColor : 'red'
                     }}
                     >
-                    편집 페이지 입니다. 캡쳐 테스트를 위해 사용됩니다.
+                        <MyStuffList />
                 </Grid>
 
 
