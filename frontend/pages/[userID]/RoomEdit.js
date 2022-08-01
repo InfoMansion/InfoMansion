@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import { Box, Button, Container, Grid } from '@mui/material'
 import { useRouter } from 'next/router'
-import EditRoom from "../../../components/EditRoom";
+import EditRoom from "../../components/EditRoom";
 
 
-export default function RoomPage() {
+export default function RoomEdit() {
     const [userID, setUserID] = useState(useRouter().query.userID);
     const [stuff, setStuff] = useState({});
     const [stuffon, setStuffon] = useState('');

@@ -5,9 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useRouter } from "next/router";
 
-export default function ManageButton() {
-    const [userID] = useState(useRouter().query.userID);
-    
+export default function ManageButton({userID}) {    
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {

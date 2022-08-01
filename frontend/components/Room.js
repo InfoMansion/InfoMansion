@@ -120,7 +120,7 @@ export default function Room( { StuffClick, ...props} ) {
                     width : '100%',
                 }}
             >
-                <RoomManageMenu />
+                <RoomManageMenu userID={userID}/>
             </Box>
         </div>
       ) 

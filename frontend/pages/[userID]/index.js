@@ -6,9 +6,6 @@ import { useRouter } from 'next/router'
 import StuffPage from "../../components/RoomPage/StuffPage";
 import styles from '../../styles/Room.module.css'
 import { useSpring, animated } from 'react-spring'
-import { styled } from '@mui/material/styles'
-
-import RoomManageMenu from '../../components/RoomPage/RoomManageMenu'
 
 export default function RoomPage() {
     const [userID, setUserID] = useState(useRouter().query.userID);

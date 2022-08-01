@@ -116,7 +116,7 @@ export default function HeaderNav() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <Link href="/RoomPage/1">
+      <Link href="/1">
         <MenuItem onClick={handleMenuClose}>마이룸</MenuItem>
       </Link>
 
