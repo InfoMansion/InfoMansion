@@ -47,11 +47,15 @@ export default function Confirm() {
     // setPwConfirmState(true);
     try {
       console.log(credentials);
-      const { data } = await axios.get('/api/v1/users/password', credentials, {
-        headers: {
-          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+      const { data } = await axios.get(
+        '/api/v1/users/password',
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
         },
-      });
+        credentials,
+      );
       console.log(data);
       setPwConfirmState(true);
     } catch (e) {
