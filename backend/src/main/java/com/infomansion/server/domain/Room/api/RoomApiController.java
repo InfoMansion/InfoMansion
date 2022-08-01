@@ -34,7 +34,7 @@ public class RoomApiController {
     }
 
 
-    @DeleteMapping("/api/v1/rooms/{roomId}")
+    @PatchMapping("/api/v1/rooms/{roomId}")
     private ResponseEntity<CommonResponse<Long>> deleteRoom(@Valid @PathVariable Long roomId){
         roomService.deleteRoom(roomId);
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomId));

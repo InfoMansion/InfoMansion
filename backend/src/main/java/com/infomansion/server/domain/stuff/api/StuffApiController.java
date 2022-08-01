@@ -44,7 +44,7 @@ public class StuffApiController {
                 .body(new CommonResponse<>(stuffService.updateStuff(stuffId, requestDto)));
     }
 
-    @DeleteMapping("/api/v1/stuffs/{stuffId}")
+    @PatchMapping("/api/v1/stuffs/{stuffId}")
     public ResponseEntity<CommonResponse<Long>> removeStuff(@Valid @PathVariable Long stuffId) {
         stuffService.removeStuff(stuffId);
         return ResponseEntity.status(HttpStatus.OK)

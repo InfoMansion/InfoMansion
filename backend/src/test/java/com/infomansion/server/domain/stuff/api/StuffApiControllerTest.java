@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -130,6 +130,66 @@ public class StuffApiControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(ErrorCode.EXCEEDED_THE_NUMBER_OF_CATEGORIES.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.EXCEEDED_THE_NUMBER_OF_CATEGORIES.getMessage()));
+    }
+
+    @DisplayName("유효한 stuff_id로 Stuff 삭제 시 성공")
+    @Test
+    public void stuff_삭제_성공() throws Exception {
+        // given
+        String stuffName = "laptop";
+        String stuffNameKor = "노트북";
+        Long price = 30L;
+        String categories = "IT";
+        String stuffType = "STUFF";
+
+        StuffRequestDto requestDto = StuffRequestDto.builder()
+                .stuffName(stuffName)
+                .stuffNameKor(stuffNameKor)
+                .price(price)
+                .categories(categories)
+                .stuffType(stuffType)
+                .geometry("geometry")
+                .materials("materials")
+                .build();
+
+        Long stuffId = stuffRepository.save(requestDto.toEntity()).getId();
+
+        // when
+        mockMvc.perform(patch("/api/v1/stuffs/"+stuffId))
+                .andExpect(status().isOk());
+
+        // then
+        mockMvc.perform(get("/api/v1/stuffs/"+stuffId))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(ErrorCode.STUFF_NOT_FOUND.getCode()));
+    }
+
+    @DisplayName("유효하지 않은 stuff_id로 Stuff 삭제 요청 시 실패")
+    @Test
+    public void stuff_삭제_실패() throws Exception {
+        // given
+        String stuffName = "laptop";
+        String stuffNameKor = "노트북";
+        Long price = 30L;
+        String categories = "IT";
+        String stuffType = "STUFF";
+
+        StuffRequestDto requestDto = StuffRequestDto.builder()
+                .stuffName(stuffName)
+                .stuffNameKor(stuffNameKor)
+                .price(price)
+                .categories(categories)
+                .stuffType(stuffType)
+                .geometry("geometry")
+                .materials("materials")
+                .build();
+
+        Long stuffId = stuffRepository.save(requestDto.toEntity()).getId();
+
+        // when, then
+        mockMvc.perform(patch("/api/v1/stuffs/"+(stuffId+9999)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(ErrorCode.STUFF_NOT_FOUND.getCode()));
     }
 
 }
