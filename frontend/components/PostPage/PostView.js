@@ -2,10 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import styles from '../../styles/Editor.module.css';
 import dynamic from 'next/dynamic';
-import { EditorState, convertToRaw } from 'draft-js';
-import styled from 'styled-components';
-import draftToHtml from 'draftjs-to-html';
-import { Input, Button, Autocomplete, TextField } from '@mui/material';
+import { Input, Autocomplete, TextField, styled } from '@mui/material';
+import { MAIN_COLOR } from '../../constants';
 
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then(mod => mod.Editor),
@@ -30,22 +28,14 @@ const categoryList = [
   { label: 'Home Appliance' },
 ];
 
-export default function PostEditor(props) {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [title, setTitle] = useState('');
-  const onEditorStateChange = editorState => {
-    // editorState에 값 설정
-    setEditorState(editorState);
-  };
-
-  const onTitleStateChange = e => {
-    setTitle(e.target.value);
-  };
-
-  const editorToHtml = draftToHtml(
-    convertToRaw(editorState.getCurrentContent()),
-  );
-
+export default function PostEditor({
+  title,
+  onTitleChange,
+  content,
+  onContentChange,
+  category,
+  onCategoryChange,
+}) {
   const [windowSize, setWindowSize] = useState();
 
   const handleResize = useCallback(() => {
@@ -65,48 +55,57 @@ export default function PostEditor(props) {
   return (
     <>
       {windowSize && (
-        <div style={{ height: windowSize.height * 0.8, padding: '20px' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateRows: 'auto auto 1fr',
+            height: windowSize.height * 0.8,
+            padding: '20px',
+          }}
+        >
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Autocomplete
               id="combo-box-demo"
               options={categoryList}
+              disableClearable
               style={{ flexWrap: 'nowrap !important' }}
-              sx={{ width: 150, height: 1 }}
+              sx={{
+                width: 200,
+                height: 1,
+                '.MuiOutlinedInput-root': {
+                  '&:hover fieldset, &.Mui-focused fieldset': {
+                    borderColor: MAIN_COLOR,
+                  },
+                },
+                '.MuiInputLabel-root': {
+                  '&.Mui-focused': {
+                    color: 'black',
+                  },
+                },
+              }}
+              value={category}
+              onChange={(_, v) => {
+                onCategoryChange(v.label);
+              }}
               sy={{ height: 1 }}
               renderInput={params => (
                 <TextField {...params} label="카테고리" size="small" />
               )}
             />
-            <Button
-              type="submit"
-              variant="contained"
-              style={{
-                backgroundColor: '#fc7a71',
-                display: 'block',
-                marginBottom: '0px',
-              }}
-              onClick={() => {
-                console.log({ titlt: { title }, text: { editorToHtml } });
-              }}
-            >
-              저장
-            </Button>
           </div>
-          <br />
-
           <Input
             placeholder="제목을 입력하세요"
             inputProps={title}
-            disableClearable
-            onChange={onTitleStateChange}
+            onChange={onTitleChange}
             disableUnderline={true} //here
             style={{
-              fontSize: '6vh',
+              fontSize: '30px',
               width: '100%',
+              margin: '16px 0 8px',
             }}
           />
           <Editor
-            dwrapperClassName={styles.wrapper}
+            wrapperClassName={styles.wrapper}
             // 에디터 주변에 적용된 클래스
             // 툴바 주위에 적용된 클래스
             toolbarClassName={styles.toolbar}
@@ -125,9 +124,9 @@ export default function PostEditor(props) {
               locale: 'ko',
             }}
             // 초기값 설정
-            editorState={editorState}
+            editorState={content}
             // 에디터의 값이 변경될 때마다 onEditorStateChange 호출
-            onEditorStateChange={onEditorStateChange}
+            onEditorStateChange={onContentChange}
           />
         </div>
         /* <IntroduceContent
