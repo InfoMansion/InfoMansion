@@ -24,7 +24,7 @@ const theme = createTheme({
   palette: {
     primary: {
       light: '#ff7961',
-      main: '#ff7961',
+      main: '#fc7a71',
       dark: '#ba000d',
       contrastText: '#000',
     },
@@ -203,7 +203,7 @@ export default function LogIn() {
                           type="submit"
                           variant="contained"
                           color="primary"
-                          sx={{ mt: 3, mb: 2 }}
+                          sx={{ mt: 3, mb: 2, color: 'white' }}
                           disabled={!(confirmId && confirmPw)}
                           onClick={handleSubmit}
                         >

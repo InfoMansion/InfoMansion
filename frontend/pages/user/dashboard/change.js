@@ -14,7 +14,7 @@ const theme = createTheme({
   palette: {
     primary: {
       light: '#ff7961',
-      main: '#ff7961',
+      main: '#fc7a71',
       dark: '#ba000d',
       contrastText: '#000',
     },
@@ -72,7 +72,7 @@ export default function Change() {
             backgroundColor: 'white',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -94,6 +94,8 @@ export default function Change() {
               id="password1"
               autoComplete="current-password"
               onChange={handleInput}
+              color="primary"
+              focused
             />
             <TextField
               margin="normal"
@@ -105,13 +107,16 @@ export default function Change() {
               id="password2"
               autoComplete="new-password"
               onChange={handleInput}
+              color="primary"
+              focused
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, color: 'white' }}
               disabled={inputUnFinish}
+              color="primary"
             >
               Change Password
             </Button>
