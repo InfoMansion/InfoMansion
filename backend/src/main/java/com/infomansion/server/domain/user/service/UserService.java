@@ -14,4 +14,5 @@ public interface UserService {
     Long changeCategories(UserChangeCategoriesDto requestDto);
     boolean verifiedByEmail(String key);
     boolean logout();
+    UserInfoResponseDto findByUsername(String username);
 }

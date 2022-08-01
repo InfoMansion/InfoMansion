@@ -2,6 +2,7 @@ package com.infomansion.server.domain.user.service.impl;
 
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.UserChangeCategoriesDto;
+import com.infomansion.server.domain.user.dto.UserInfoResponseDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.user.service.UserService;
@@ -166,6 +167,22 @@ class UserServiceImplTest {
 
         //then
         assertThat(userRepository.findById(userId).get().getProfileImage()).isEqualTo("/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png");
+    }
+
+    @Test
+    public void 사용자이름으로_회원조회시_UserInfoResponseDto_반환 () {
+        //given&when
+        UserInfoResponseDto responseDto = userService.findByUsername("infomansion");
+
+        //then
+        assertThat(responseDto.getUsername()).isEqualTo("infomansion");
+        assertThat(responseDto.getCategories().size()).isEqualTo(2);
+        assertThat(responseDto.getCategories().get(0)).isEqualTo("IT");
+        assertThat(responseDto.getCategories().get(1)).isEqualTo("COOK");
+        assertThat(responseDto.getProfileImage()).isNotNull();
+        assertThat(responseDto.getUserId()).isNotNull();
+        assertThat(responseDto.getIntroduce()).isNotNull();
+
     }
 
 }

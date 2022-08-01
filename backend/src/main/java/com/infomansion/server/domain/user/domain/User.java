@@ -14,7 +14,6 @@ public class User extends BaseTimeEntityAtSoftDelete {
     @Id @GeneratedValue
     @Column(name = "user_id")
     private Long id;
-
     private String email;
     private String password;
     private String username;
@@ -28,6 +27,9 @@ public class User extends BaseTimeEntityAtSoftDelete {
 
     private String profileImage;
 
+    @Column(length = 200)
+    private String introduce;
+
     @Builder
     public User(String email, String password, String username, String tel, String categories) {
         this.email = email;
@@ -37,6 +39,7 @@ public class User extends BaseTimeEntityAtSoftDelete {
         this.authority = UserAuthority.ROLE_TEMP;
         this.categories = categories;
         this.profileImage = "/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png";
+        this.introduce = "";
     }
 
     /**
