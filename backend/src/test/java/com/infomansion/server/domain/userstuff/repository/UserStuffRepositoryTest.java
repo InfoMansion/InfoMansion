@@ -65,7 +65,7 @@ public class UserStuffRepositoryTest {
                 .categories(categories)
                 .stuffType(StuffType.STUFF)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
 
         stuff = stuffRepository.save(requestStuff);

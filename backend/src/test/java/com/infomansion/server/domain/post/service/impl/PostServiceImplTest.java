@@ -61,7 +61,7 @@ public class PostServiceImplTest {
                 .categories(sCategories)
                 .stuffType(stuffType)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
 
         // User 생성

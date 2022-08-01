@@ -78,7 +78,7 @@ public class UserStuffServiceImplTest {
                     .categories(sCategories)
                     .stuffType(stuffType)
                     .geometry("geometry")
-                    .materials("materials")
+                    .material("materials")
                     .build();
 
             stuffIds.add(stuffRepository.save(requestDto.toEntity()).getId());

@@ -31,13 +31,13 @@ public class Stuff extends BaseTimeEntityAtSoftDelete {
     private StuffType stuffType;
 
     private String geometry;
-    private String materials;
+    private String material;
     private String stuffGlbPath;
 
     private Boolean deleteFlag;
 
     @Builder
-    public Stuff(Long id, String stuffName, String stuffNameKor, Long price, String categories, StuffType stuffType, String geometry, String materials, String stuffGlbPath) {
+    public Stuff(Long id, String stuffName, String stuffNameKor, Long price, String categories, StuffType stuffType, String geometry, String material, String stuffGlbPath) {
         this.id = id;
         this.stuffName = stuffName;
         this.stuffNameKor = stuffNameKor;
@@ -45,7 +45,7 @@ public class Stuff extends BaseTimeEntityAtSoftDelete {
         this.categories = categories;
         this.stuffType = stuffType;
         this.geometry = geometry;
-        this.materials = materials;
+        this.material = material;
         this.stuffGlbPath = stuffGlbPath;
         this.deleteFlag = false;
     }
@@ -54,14 +54,14 @@ public class Stuff extends BaseTimeEntityAtSoftDelete {
         return Arrays.stream(categories.split(",")).collect(Collectors.toList());
     }
 
-    public void updateStuff(String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String materials) {
+    public void updateStuff(String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String material) {
         this.stuffName = stuffName;
         this.stuffNameKor = stuffNameKor;
         this.price = price;
         this.stuffType = StuffType.valueOf(stuffType);
         this.categories = categories;
         this.geometry = geometry;
-        this.materials = materials;
+        this.material = material;
     }
 
     /**

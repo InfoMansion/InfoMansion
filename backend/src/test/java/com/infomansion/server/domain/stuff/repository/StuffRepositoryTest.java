@@ -91,7 +91,7 @@ public class StuffRepositoryTest {
 
         // when
         LocalDateTime modifiedTime = LocalDateTime.now();
-        stuff.updateStuff("TV", "티비", 50L, stuff.getCategories(), "STUFF", stuff.getGeometry(), stuff.getMaterials());
+        stuff.updateStuff("TV", "티비", 50L, stuff.getCategories(), "STUFF", stuff.getGeometry(), stuff.getMaterial());
         stuffRepository.flush();
 
         // then
@@ -121,7 +121,7 @@ public class StuffRepositoryTest {
 
         // when
         LocalDateTime modifiedTime = LocalDateTime.now();
-        stuff.updateStuff("TV", "티비", 50L, stuff.getCategories(), "STUFF", stuff.getGeometry(), stuff.getMaterials());
+        stuff.updateStuff("TV", "티비", 50L, stuff.getCategories(), "STUFF", stuff.getGeometry(), stuff.getMaterial());
         stuffRepository.flush();
 
         // then

@@ -47,7 +47,7 @@ public class StuffServiceImpl implements StuffService {
                 .orElseThrow(() -> new CustomException(ErrorCode.STUFF_NOT_FOUND));
         stuff.updateStuff(requestDto.getStuffName(), requestDto.getStuffNameKor(), requestDto.getPrice(),
                 requestDto.getCategories(), requestDto.getStuffType(),
-                requestDto.getGeometry(), requestDto.getMaterials());
+                requestDto.getGeometry(), requestDto.getMaterial());
         return stuff.getId();
     }
 

@@ -30,10 +30,10 @@ public class StuffUpdateRequestDto {
     @NotBlank
     private String geometry;
     @NotBlank
-    private String materials;
+    private String material;
 
     @Builder
-    public StuffUpdateRequestDto(Long id, String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String materials) {
+    public StuffUpdateRequestDto(Long id, String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String material) {
         this.id = id;
         this.stuffName = stuffName;
         this.stuffNameKor = stuffNameKor;
@@ -41,7 +41,7 @@ public class StuffUpdateRequestDto {
         this.categories = categories;
         this.stuffType = stuffType;
         this.geometry = geometry;
-        this.materials = materials;
+        this.material = material;
     }
 
 }

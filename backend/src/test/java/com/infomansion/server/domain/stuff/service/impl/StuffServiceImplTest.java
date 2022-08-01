@@ -45,7 +45,7 @@ public class StuffServiceImplTest {
                 .categories(categories)
                 .stuffType(stuffType)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
 
         // when
@@ -73,7 +73,7 @@ public class StuffServiceImplTest {
                 .categories(categories)
                 .stuffType(stuffType)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
         Long stuff_id = stuffService.createStuff(requestDto);
 
@@ -86,7 +86,7 @@ public class StuffServiceImplTest {
                 .categories("IT,GAME")
                 .stuffType(stuffType)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
         Long update_stuff_id = stuffService.updateStuff(stuff_id, updateRequestDto);
 
@@ -113,7 +113,7 @@ public class StuffServiceImplTest {
                     .categories(categories)
                     .stuffType(stuffType)
                     .geometry("geometry")
-                    .materials("materials")
+                    .material("materials")
                     .build();
             stuffService.createStuff(requestDto);
         }
@@ -141,7 +141,7 @@ public class StuffServiceImplTest {
                 .categories(categories)
                 .stuffType(stuffType)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
         Long stuff_id = stuffService.createStuff(requestDto);
 

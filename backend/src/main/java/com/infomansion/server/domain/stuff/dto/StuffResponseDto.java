@@ -23,7 +23,7 @@ public class StuffResponseDto {
     private List<CategoryMapperValue> categories;
     private StuffType stuffType;
     private String geometry;
-    private String materials;
+    private String material;
     private String stuffGlbPath;
     private LocalDateTime createdTime;
     private LocalDateTime modifiedTime;
@@ -36,7 +36,7 @@ public class StuffResponseDto {
         this.categories = getCategories(stuff.getCategories());
         this.stuffType = stuff.getStuffType();
         this.geometry = stuff.getGeometry();
-        this.materials = stuff.getMaterials();
+        this.material = stuff.getMaterial();
         this.stuffGlbPath = stuff.getStuffGlbPath();
         this.createdTime = stuff.getCreatedDate();
         this.modifiedTime = stuff.getModifiedDate();

@@ -50,7 +50,7 @@ public class StuffApiControllerTest {
                 .categories(categories)
                 .stuffType(stuffType)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -83,7 +83,7 @@ public class StuffApiControllerTest {
                 .categories(categories)
                 .stuffType(stuffType)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -116,7 +116,7 @@ public class StuffApiControllerTest {
                 .categories(categories)
                 .stuffType(stuffType)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();

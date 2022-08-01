@@ -30,7 +30,7 @@ public class ValidationTest {
                 .categories(categories)
                 .stuffType(stuffType)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
 
         Set<ConstraintViolation<StuffRequestDto>> validate = Validation.buildDefaultValidatorFactory()

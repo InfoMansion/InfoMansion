@@ -33,17 +33,17 @@ public class StuffRequestDto {
     @NotBlank
     private String geometry;
     @NotBlank
-    private String materials;
+    private String material;
 
     @Builder
-    public StuffRequestDto(String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String materials) {
+    public StuffRequestDto(String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String material) {
         this.stuffName = stuffName;
         this.stuffNameKor = stuffNameKor;
         this.price = price;
         this.categories = categories;
         this.stuffType = stuffType;
         this.geometry = geometry;
-        this.materials = materials;
+        this.material = material;
     }
 
     public Stuff toEntity() {
@@ -54,7 +54,7 @@ public class StuffRequestDto {
                 .categories(categories)
                 .stuffType(StuffType.valueOf(stuffType))
                 .geometry(geometry)
-                .materials(materials)
+                .material(material)
                 .build();
     }
 }
