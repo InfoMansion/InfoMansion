@@ -142,8 +142,30 @@ class UserServiceImplTest {
         User user = userRepository.findById(userId).get();
 
         assertThat(user.getCategories()).isEqualTo("FASHIONANDBEAUTY");
+    }
 
+    @Test
+    public void 회원가입시_기본프로필이미지제공() {
+        //given
+        String email = "test@test.com";
+        String password = "testPassword";
+        String tel = "01012345678";
+        String username = "testUsername1";
+        String categories = "IT,COOK";
 
+        UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username(username)
+                .categories(categories)
+                .build();
+
+        //when
+        Long userId = userService.join(requestDto);
+
+        //then
+        assertThat(userRepository.findById(userId).get().getProfileImage()).isEqualTo("/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png");
     }
 
 }

@@ -26,6 +26,8 @@ public class User extends BaseTimeEntityAtSoftDelete {
     @Enumerated(EnumType.STRING)
     private UserAuthority authority;
 
+    private String profileImage;
+
     @Builder
     public User(String email, String password, String username, String tel, String categories) {
         this.email = email;
@@ -34,6 +36,7 @@ public class User extends BaseTimeEntityAtSoftDelete {
         this.tel = tel;
         this.authority = UserAuthority.ROLE_TEMP;
         this.categories = categories;
+        this.profileImage = "/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png";
     }
 
     /**
