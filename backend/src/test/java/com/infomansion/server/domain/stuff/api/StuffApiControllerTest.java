@@ -149,7 +149,7 @@ public class StuffApiControllerTest {
                 .categories(categories)
                 .stuffType(stuffType)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
 
         Long stuffId = stuffRepository.save(requestDto.toEntity()).getId();
@@ -181,7 +181,7 @@ public class StuffApiControllerTest {
                 .categories(categories)
                 .stuffType(stuffType)
                 .geometry("geometry")
-                .materials("materials")
+                .material("materials")
                 .build();
 
         Long stuffId = stuffRepository.save(requestDto.toEntity()).getId();
