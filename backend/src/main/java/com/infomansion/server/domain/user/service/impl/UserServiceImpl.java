@@ -144,6 +144,12 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    public UserInfoResponseDto findByUsername(String username) {
+        return UserInfoResponseDto.toDto(userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)));
+    }
+
     private void validateCategory(String requestCategories) {
         List<String> categories = new ArrayList<>();
         for (Category value : Category.values()) {
