@@ -123,11 +123,15 @@ export default function Profile({ ...props }) {
 
   const handleSubmit = event => {
     event.preventDefault();
+    const profileInfoJson = {
+      username: inputUsername,
+      categories: changeCate,
+      introduce: inputIntroduction,
+    };
+    const profileInfo = JSON.stringify(profileInfoJson);
     const formData = new FormData();
-    formData.append('profile_image', profileImage);
-    formData.append('username', inputUsername);
-    formData.append('categories', changeCate);
-    formData.append('introduction', inputIntroduction);
+    formData.append('profileImage', profileImage);
+    formData.append('profileInfo', profileInfo);
   };
 
   const {
