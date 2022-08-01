@@ -7,7 +7,7 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Axios from 'axios';
+import axios from '../../../utils/axios';
 import { useRouter } from 'next/router';
 import { pwConfirmState } from '../../../state/pwConfirm';
 import { useRecoilState } from 'recoil';
@@ -37,24 +37,26 @@ export default function Confirm() {
     setInputPassword(event.target.value);
   }
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const credentials = {
-      email: data.get('email'),
-      password: data.get('password'),
+      currentPassword: data.get('password'),
     };
-    // test용 코드 실제로는  Axios요청 성공 한 이후에 바꿔야 함.
-    setPwConfirmState(true);
-    // Axios({
-    //   url: 'http://localhost:8080/accounts/login',
-    //   method: 'post',
-    //   data: credentials
-    // })
-    // .then(res => {
-    //   const token = res.data.key
-    //   setToken(token)
-    // })
+    // 통신 없이 dashboard 접근 필요할 시 주석 해제
+    // setPwConfirmState(true);
+    try {
+      console.log(credentials);
+      const { data } = await axios.get('/api/v1/users/password', credentials, {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+        },
+      });
+      console.log(data);
+      setPwConfirmState(true);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
