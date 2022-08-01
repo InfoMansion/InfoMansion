@@ -14,8 +14,18 @@
   padding: 1rem;
   border: 1px solid #ccc;
 }
+@media (min-width: 1200px) {
+  .editor {
+    height: 50vh;
+  }
+}
+@media (max-width: 1200px) {
+  .editor {
+    height: 40vh;
+  }
+}
+
 .editor {
-  background-color: lightgray;
   padding: 1rem;
   border: 1px solid #ccc;
 }
