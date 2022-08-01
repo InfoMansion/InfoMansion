@@ -1,27 +1,41 @@
 import React from 'react';
 import { useState } from 'react';
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from '../../utils/axios';
+import Axios from 'axios';
 import { useRouter } from 'next/router';
+import { pwConfirmState } from '../../../state/pwConfirm';
+import { useRecoilState } from 'recoil';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#ff7961',
+      main: '#ff7961',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
+  },
+});
 
-export default function Change() {
+export default function Confirm() {
   const router = useRouter();
+  const [inputPassword, setInputPassword] = useState('');
+  const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
+    inputPassword,
+  );
+  const [pwConfirm, setPwConfirmState] = useRecoilState(pwConfirmState);
+
+  const inputUnFinish = !confirmPassword;
+
+  function handleInput(event) {
+    setInputPassword(event.target.value);
+  }
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -30,6 +44,17 @@ export default function Change() {
       email: data.get('email'),
       password: data.get('password'),
     };
+    // test용 코드 실제로는  Axios요청 성공 한 이후에 바꿔야 함.
+    setPwConfirmState(true);
+    // Axios({
+    //   url: 'http://localhost:8080/accounts/login',
+    //   method: 'post',
+    //   data: credentials
+    // })
+    // .then(res => {
+    //   const token = res.data.key
+    //   setToken(token)
+    // })
   };
 
   return (
@@ -42,6 +67,7 @@ export default function Change() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            backgroundColor: 'white',
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -61,28 +87,20 @@ export default function Change() {
               required
               fullWidth
               name="password"
-              label="Old Password"
+              label="Password"
               type="password"
               id="password1"
               autoComplete="current-password"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="New Password"
-              type="password"
-              id="password2"
-              autoComplete="new-password"
+              onChange={handleInput}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={inputUnFinish}
             >
-              Change Password
+              Confirm Password
             </Button>
           </Box>
         </Box>
