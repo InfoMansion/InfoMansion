@@ -53,6 +53,15 @@
             "geometry" : "low_poly_interior1729",
             "materials" : "low_poly_interior",
             "stuffGlbPath" : "/wall_1729.glb"
+        },
+        {
+            "id" : 12,
+            "stuffNameKor" : "벽",
+            "price" : 30,
+            "furnitureType" : "wall",
+            "geometry" : "low_poly_interior1763",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/wall_1763.glb"
         }
     ],
     "floor" : [
@@ -102,15 +111,6 @@
             "stuffGlbPath" : "/floor_1709.glb"
         },
         {
-            "id" : 12,
-            "stuffNameKor" : "바닥",
-            "price" : 30,
-            "furnitureType" : "floor",
-            "geometry" : "low_poly_interior1709",
-            "materials" : "low_poly_interior",
-            "stuffGlbPath" : "/floor_1709.glb"
-        },
-        {
             "id" : 13,
             "stuffNameKor" : "바닥",
             "price" : 30,
@@ -145,6 +145,35 @@
             "geometry" : "low_poly_interior1830",
             "materials" : "low_poly_interior",
             "stuffGlbPath" : "/floor_1830.glb"
+        }
+    ],
+    "desk" : [
+        {
+            "id" : 17,
+            "stuffNameKor" : "책상",
+            "price" : 50,
+            "furnitureType" : "desk",
+            "geometry" : "low_poly_interior210",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/desk_black_large_210.glb"
+        },
+        {
+            "id" : 18,
+            "stuffNameKor" : "책상",
+            "price" : 50,
+            "furnitureType" : "desk",
+            "geometry" : "low_poly_interior212",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/desk_brown_large_withcomputer_212.glb"
+        },
+        {
+            "id" : 19,
+            "stuffNameKor" : "책상",
+            "price" : 50,
+            "furnitureType" : "desk",
+            "geometry" : "low_poly_interior1901",
+            "materials" : "low_poly_interior",
+            "stuffGlbPath" : "/desk_brown_medium_1901.glb"
         }
     ]
 }
