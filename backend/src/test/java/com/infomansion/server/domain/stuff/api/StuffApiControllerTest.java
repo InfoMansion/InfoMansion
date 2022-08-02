@@ -74,7 +74,7 @@ public class StuffApiControllerTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT,BOOK";
-        String stuffType = "STUFF";
+        String stuffType = "OTHER";
 
         StuffRequestDto requestDto = StuffRequestDto.builder()
                 .stuffName(stuffName)
@@ -107,7 +107,7 @@ public class StuffApiControllerTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT,GAME,SPORTS,DAILY,ART,MUSIC";
-        String stuffType = "STUFF";
+        String stuffType = "OTHER";
 
         StuffRequestDto requestDto = StuffRequestDto.builder()
                 .stuffName(stuffName)
@@ -140,7 +140,7 @@ public class StuffApiControllerTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT";
-        String stuffType = "STUFF";
+        String stuffType = "OTHER";
 
         StuffRequestDto requestDto = StuffRequestDto.builder()
                 .stuffName(stuffName)
@@ -172,7 +172,7 @@ public class StuffApiControllerTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT";
-        String stuffType = "STUFF";
+        String stuffType = "OTHER";
 
         StuffRequestDto requestDto = StuffRequestDto.builder()
                 .stuffName(stuffName)

@@ -20,4 +20,7 @@ public interface UserStuffRepository extends JpaRepository<UserStuff, Long> {
 
     @Query("select distinct us.category from UserStuff us where us.user.id = :userId and us.deleteFlag = false and us.selected = true")
     List<String> findAllCategoryByUserId(@Param("userId") Long userId);
+
+    @Query("select us.stuff.id from UserStuff us where us.user.id = :userId and us.deleteFlag = false")
+    List<Long> findByUserId(@Param("userId") Long userId);
 }

@@ -1,6 +1,5 @@
 package com.infomansion.server.domain.stuff.service;
 
-import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 

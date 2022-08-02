@@ -1,9 +1,10 @@
 package com.infomansion.server.domain.category.domain;
 
+import com.infomansion.server.global.util.common.EnumMapperType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum Category implements CategoryMapperType {
+public enum Category implements EnumMapperType {
     IT("IT"),
     COOK("요리"),
     FASHIONANDBEAUTY("패션/뷰티"),
@@ -24,12 +25,12 @@ public enum Category implements CategoryMapperType {
     private final String categoryName;
 
     @Override
-    public String getCategory() {
+    public String getEnum() {
         return this.name();
     }
 
     @Override
-    public String getCategoryName() {
+    public String getEnumName() {
         return this.categoryName;
     }
 }

@@ -63,7 +63,7 @@ public class UserStuffRepositoryTest {
                 .stuffNameKor(stuffNameKor)
                 .price(price)
                 .categories(categories)
-                .stuffType(StuffType.STUFF)
+                .stuffType(StuffType.OTHER)
                 .geometry("geometry")
                 .material("materials")
                 .build();

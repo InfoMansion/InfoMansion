@@ -69,7 +69,7 @@ public class UserStuffServiceImplTest {
             String stuffNameKor = "노트북"+(i+1);
             Long price = 30L;
             String sCategories = "IT,GAME,SPORTS";
-            String stuffType = "STUFF";
+            String stuffType = "OTHER";
 
             StuffRequestDto requestDto = StuffRequestDto.builder()
                     .stuffName(stuffName)
