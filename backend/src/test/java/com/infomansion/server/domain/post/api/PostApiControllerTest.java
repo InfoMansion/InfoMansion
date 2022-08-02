@@ -80,7 +80,7 @@ public class PostApiControllerTest {
         String stuffNameKor = "노트북";
         Long price = 30L;
         String categories = "IT,GAME,DAILY";
-        String stuffType = "STUFF";
+        String stuffType = "DESK";
 
         StuffRequestDto requestDto = StuffRequestDto.builder()
                 .stuffName(stuffName)
