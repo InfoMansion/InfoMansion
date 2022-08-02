@@ -1,7 +1,9 @@
 package com.infomansion.server.domain.post.dto;
 
 import com.infomansion.server.domain.post.domain.Post;
+import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
+import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +14,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 public class PostCreateRequestDto {
-
-    @NotNull
-    private Long userId;
 
     @NotNull
     private Long userStuffId;
@@ -32,8 +31,9 @@ public class PostCreateRequestDto {
         this.content = content;
     }
 
-    public Post toEntity(UserStuff userStuff){
+    public Post toEntity(User user, UserStuff userStuff){
         return Post.builder()
+                .user(user)
                 .userStuff(userStuff)
                 .title(title)
                 .content(content)

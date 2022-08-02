@@ -1,6 +1,8 @@
 package com.infomansion.server.domain.post.domain;
 
+import com.infomansion.server.domain.base.BaseTimeEntityAtSoftDelete;
 import com.infomansion.server.domain.category.domain.Category;
+import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,11 +13,15 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Post {
+public class Post extends BaseTimeEntityAtSoftDelete {
 
     @Id @GeneratedValue
     @Column(name = "post_id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_stuff_id")
@@ -29,18 +35,34 @@ public class Post {
     @Enumerated(value = EnumType.STRING)
     private Category category;
 
-    private Long likes;
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
+    private LikesPost likesPost;
 
     private boolean deleteFlag;
 
     @Builder
-    public Post(Long id, UserStuff userStuff, String title, String content) {
+    public Post(Long id, User user, UserStuff userStuff, String title, String content) {
         this.id = id;
-        this.userStuff = userStuff;
         this.title = title;
         this.content = content;
-        this.category = userStuff.getCategory();
-        this.likes = 0L;
         this.deleteFlag = false;
+        this.likesPost = LikesPost.builder().post(this).build();
+        setUserAndUserStuff(user, userStuff);
+    }
+
+    public void updatePost(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
+
+    public void deletePost(){
+        this.deleteFlag = true;
+        setDeletedDate();
+    }
+
+    public void setUserAndUserStuff(User user, UserStuff userStuff){
+        this.user = user;
+        this.userStuff = userStuff;
+        this.category = userStuff.getCategory();
     }
 }
