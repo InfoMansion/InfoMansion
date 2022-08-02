@@ -1,8 +1,8 @@
 package com.infomansion.server.domain.user.api;
 
 import com.infomansion.server.domain.user.dto.UserAuthRequestDto;
-import com.infomansion.server.domain.user.dto.UserChangeCategoriesDto;
 import com.infomansion.server.domain.user.dto.UserChangePasswordDto;
+import com.infomansion.server.domain.user.dto.UserModifyProfileDto;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -31,12 +32,6 @@ public class UserApiController {
                 .body(new CommonResponse<>(userService.changePasswordAfterAuth(requestDto)));
     }
 
-    @PatchMapping("/api/v1/users/categories")
-    public ResponseEntity<? extends BasicResponse> userChangeCategories(@Valid @RequestBody UserChangeCategoriesDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userService.changeCategories(requestDto)));
-    }
-
     @GetMapping("/api/v1/users/{username}")
     public ResponseEntity<? extends BasicResponse> findUserByUsername(@Valid @PathVariable String username) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -44,8 +39,14 @@ public class UserApiController {
     }
 
     @GetMapping("/api/v1/users/info/simple")
-    public ResponseEntity<? extends BasicResponse> findProfileImage() {
+    public ResponseEntity<? extends BasicResponse> getUserSimpleProfile() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userService.findProfileImage()));
+                .body(new CommonResponse<>(userService.findSimpleProfile()));
+    }
+
+    @PatchMapping("/api/v1/users/profile")
+    public ResponseEntity<? extends BasicResponse> modifyUserProfile(@RequestPart(value = "profileImage", required = false) MultipartFile profileImage,@RequestPart(value = "profileInfo") UserModifyProfileDto profileInfo) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userService.modifyUserProfile(profileImage, profileInfo)));
     }
 }

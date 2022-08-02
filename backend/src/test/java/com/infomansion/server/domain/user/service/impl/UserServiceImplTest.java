@@ -1,10 +1,8 @@
 package com.infomansion.server.domain.user.service.impl;
 
+import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
-import com.infomansion.server.domain.user.dto.UserChangeCategoriesDto;
-import com.infomansion.server.domain.user.dto.UserInfoResponseDto;
-import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
-import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
+import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.domain.user.service.VerifyEmailService;
@@ -17,10 +15,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserServiceImplTest {
@@ -33,6 +33,9 @@ class UserServiceImplTest {
 
     @MockBean
     private VerifyEmailService verifyEmailService;
+
+    @MockBean
+    private S3Uploader s3Uploader;
 
     @BeforeEach
     public void setUp() {
@@ -127,23 +130,6 @@ class UserServiceImplTest {
 
     }
 
-
-
-    @WithCustomUserDetails
-    @Test
-    public void 카테고리_수정() {
-        //given
-        UserChangeCategoriesDto changeCategoriesDto = new UserChangeCategoriesDto("FASHIONANDBEAUTY");
-
-        //when
-        Long userId = userService.changeCategories(changeCategoriesDto);
-
-        //then
-        User user = userRepository.findById(userId).get();
-
-        assertThat(user.getCategories()).isEqualTo("FASHIONANDBEAUTY");
-    }
-
     @Test
     public void 회원가입시_기본프로필이미지제공() {
         //given
@@ -188,12 +174,54 @@ class UserServiceImplTest {
     @Test
     public void 로그인된_회원의_프로필이미지_조회 () {
         //given&when
-        UserSimpleProfileResponseDto responseDto = userService.findProfileImage();
+        UserSimpleProfileResponseDto responseDto = userService.findSimpleProfile();
 
         //then
         assertThat(responseDto.getUsername()).isEqualTo("infomansion");
         assertThat(responseDto.getProfileImage()).isNotNull();
         assertThat(responseDto.getProfileImage()).isEqualTo("/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png");
+    }
+
+    @WithCustomUserDetails
+    @Test
+    public void 사용자_프로필_수정() {
+        //given
+        UserModifyProfileDto requestDto = new UserModifyProfileDto("testUsername", "GAME", "simple introduce");
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("hi", new byte[]{});
+
+        //when
+        Long userId = userService.modifyUserProfile(mockMultipartFile, requestDto);
+
+        //then
+        User findUser = userRepository.findById(userId).get();
+
+        assertThat(findUser.getCategories()).isEqualTo("GAME");
+        assertThat(findUser.getUsername()).isEqualTo("testUsername");
+        assertThat(findUser.getIntroduce()).isEqualTo("simple introduce");
+    }
+
+    @Test
+    public void 사용자_프로필_수정_실패_존재하지않는카테고리() {
+        //given
+        UserModifyProfileDto requestDto = new UserModifyProfileDto("testUsername", "NOCATEGORY", "simple introduce");
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("hi", new byte[]{});
+
+        //when&then
+        assertThatThrownBy(() -> userService.modifyUserProfile(mockMultipartFile, requestDto))
+                .isInstanceOf(CustomException.class);
+
+    }
+
+    @Test
+    public void 사용자_프로필_수정_실패_중복된유저네임() {
+        //given
+        UserModifyProfileDto requestDto = new UserModifyProfileDto("infomansion", "NOCATEGORY", "simple introduce");
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("hi", new byte[]{});
+
+        //when&then
+        assertThatThrownBy(() -> userService.modifyUserProfile(mockMultipartFile, requestDto))
+                .isInstanceOf(CustomException.class);
+
     }
 
 }

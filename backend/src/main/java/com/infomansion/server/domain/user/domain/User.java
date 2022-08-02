@@ -1,9 +1,13 @@
 package com.infomansion.server.domain.user.domain;
 
 import com.infomansion.server.domain.base.BaseTimeEntityAtSoftDelete;
+import com.infomansion.server.domain.upload.service.S3Uploader;
+import com.infomansion.server.domain.user.dto.UserModifyProfileDto;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.IOException;
 
 @ToString
 @Getter
@@ -68,5 +72,20 @@ public class User extends BaseTimeEntityAtSoftDelete {
      */
     public void changePassword(String newPassword) {
         this.password = newPassword;
+    }
+
+    /**
+     * User 프로필 정보 변경 [username, categories, introduce]
+     */
+    public void modifyProfile(UserModifyProfileDto profileDto) {
+        this.username = profileDto.getUsername();
+        this.categories = profileDto.getCategories();
+        this.introduce = profileDto.getIntroduce();
+    }
+
+    public void changeProfileImage(S3Uploader s3Uploader, MultipartFile multipartFile) throws IOException {
+        if(multipartFile != null) {
+            this.profileImage = s3Uploader.uploadFiles(multipartFile, "profile");
+        }
     }
 }

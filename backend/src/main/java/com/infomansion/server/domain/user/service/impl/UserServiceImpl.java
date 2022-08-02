@@ -1,6 +1,7 @@
 package com.infomansion.server.domain.user.service.impl;
 
 import com.infomansion.server.domain.category.domain.Category;
+import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.domain.user.repository.UserRepository;
@@ -20,11 +21,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -38,13 +43,14 @@ public class UserServiceImpl implements UserService {
     private final TokenProvider tokenProvider;
     private final RedisUtil redisUtil;
     private final VerifyEmailService verifyEmailService;
+    private final S3Uploader s3Uploader;
 
 
     @Override
     @Transactional
     public Long join(UserSignUpRequestDto requestDto) {
         validateDuplicateUser(requestDto);
-        validateCategory(requestDto.getCategories());
+        splitCategories(requestDto.getCategories()).forEach(this::validateCategory);
         verifyEmailService.sendVerificationMail(requestDto.getEmail());
         return userRepository.save(requestDto.toEntityWithEncryptPassword(passwordEncoder)).getId();
     }
@@ -110,18 +116,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Long changeCategories(UserChangeCategoriesDto requestDto) {
-        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        validateCategory(requestDto.getCategories());
-        user.changeCategories(requestDto.getCategories());
-
-        return user.getId();
-    }
-
-    @Override
-    @Transactional
     public boolean verifiedByEmail(String key) {
         String email = verifyEmailService.verifyEmail(key);
 
@@ -151,21 +145,44 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserSimpleProfileResponseDto findProfileImage() {
+    public UserSimpleProfileResponseDto findSimpleProfile() {
         return UserSimpleProfileResponseDto.toDto(userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)));
     }
 
-    private void validateCategory(String requestCategories) {
-        List<String> categories = new ArrayList<>();
-        for (Category value : Category.values()) {
-            categories.add(value.name());
+    @Override
+    @Transactional
+    public Long modifyUserProfile(MultipartFile profileImage, UserModifyProfileDto profileInfo) {
+        if (userRepository.existsByUsername(profileInfo.getUsername()))
+            throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
+
+        splitCategories(profileInfo.getCategories()).forEach(this::validateCategory);
+
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        try {
+            user.changeProfileImage(s3Uploader, profileImage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
-        StringTokenizer st = new StringTokenizer(requestCategories,",");
-        while(st.hasMoreTokens()) {
-            if(!categories.contains(st.nextToken())) throw new CustomException(ErrorCode.NOT_VALID_CATEGORY);
+        user.modifyProfile(profileInfo);
+        return user.getId();
+    }
+
+    private List<String> splitCategories(String categories) {
+        List<String> splitCategories = Arrays.stream(categories.split(",")).collect(Collectors.toList());
+        if(splitCategories.size() > 5) throw new CustomException(ErrorCode.EXCEEDED_THE_NUMBER_OF_CATEGORIES);
+
+        return splitCategories;
+    }
+
+    private void validateCategory(String category) {
+        for (Category value : Category.values()) {
+            if(category.equals(value.toString())) return;
         }
+        throw new CustomException(ErrorCode.NOT_VALID_CATEGORY);
     }
 
     private void validateDuplicateUser(UserSignUpRequestDto requestDto) {
