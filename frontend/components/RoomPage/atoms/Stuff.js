@@ -83,7 +83,9 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
             // category NONE인거 y축 이동 방지하기 위해 동적 렌더링함.
             (data.category != 'NONE') ? 
               <animated.mesh
-                geometry={nodes[geometry].geometry} material={materials[material]} castShadow
+                geometry={nodes[geometry].geometry} 
+                material={materials[material]} 
+                castShadow
                 scale={100}
                 position-y={positionY}
               />
@@ -100,7 +102,10 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
         scale={1}
       >
         <mesh
-          geometry={nodes[geometry].geometry} material={materials[material]} castShadow
+          geometry={nodes[geometry].geometry} 
+          material={materials[material]} 
+          castShadow
+          onPointerDown={(e) => onClick(e)}
           scale={100}
         />
       </group>

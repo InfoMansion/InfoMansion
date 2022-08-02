@@ -18,9 +18,6 @@ export default function Model({ Hover, Click, data, ...props }) {
   const { nodes, materials } = useGLTF(`/stuffAssets/${glb}.glb`)
   return (
     <animated.group 
-      onPointerOver={(e) => onHover(e)}
-      onPointerDown={(e) => onClick(e)}
-
       castShadow
       ref={group} 
       {...props} 

@@ -12,6 +12,7 @@ import Stuffs from './RoomPage/Stuffs'
 // import walltest from './walltest.json'
 import EditRoomCamera from './RoomPage/atoms/RoomEditCamera'
 import ScreenshotButton from './RoomPage/atoms/ScreenShotButton'
+import RoomLight from './RoomPage/atoms/RoomLight'
 
 export default function EditRoom( { StuffClick, ...props} ) {
     // 화면 확대 정도 조정.
@@ -47,13 +48,9 @@ export default function EditRoom( { StuffClick, ...props} ) {
     
     // stuff 클릭 이벤트.
     function Click(e, stuff) {
-        if(stuff.category == 'deco') return null;
+        console.log(stuff.category + "클릭");
+        if(stuff.category == 'NONE') return null;
         
-        // setClicked 동기처리 되도록 바꿔야 함.
-        setClicked(Number(!clicked));
-        if(!clicked) { setCamloc([0,5, 0]); }
-        else { setCamloc([0, 0, 0]); }
-        // RoomPage의 stuffClick 함수 실행시키기.
         StuffClick(stuff);
     }
 
@@ -74,26 +71,7 @@ export default function EditRoom( { StuffClick, ...props} ) {
                 }}
                 shadows
                 onCreated={state => state.gl.setClearColor("#ffffff")} >
-                
-                {/* light */}
-                {/* 이것도 언젠가 컴포넌트화 할 것 */}
-                <ambientLight intensity={0.2} />
-                <pointLight position={[10, 20, 4]} intensity={0.3}/>
-                <directionalLight 
-                    position={[20, 40, 20]} 
-                    intensity={1}
-                    castShadow
-                    shadow-mapSize-width={10}
-                    shadow-mapSize-height={10}
-                    shadow-camera-far={50}
-                    shadow-camera-left={-100}
-                    shadow-camera-right={100}
-                    shadow-camera-top={100}
-                    shadow-camera-bottom={-100}
-                />
-                {/* 창 밖에서 들어오는 빛 테스트용 */}
-                {/* <pointLight position={[-4, 2, 2]} intensity={0.5} /> */}
-
+                <RoomLight />
                 {/* camera */}
 
                 <ScreenshotButton />
