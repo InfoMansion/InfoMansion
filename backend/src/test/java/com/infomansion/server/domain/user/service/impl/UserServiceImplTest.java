@@ -3,13 +3,13 @@ package com.infomansion.server.domain.user.service.impl;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.UserChangeCategoriesDto;
 import com.infomansion.server.domain.user.dto.UserInfoResponseDto;
+import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.domain.user.service.VerifyEmailService;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.security.WithCustomUserDetails;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +21,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserServiceImplTest {
@@ -183,6 +182,18 @@ class UserServiceImplTest {
         assertThat(responseDto.getUserId()).isNotNull();
         assertThat(responseDto.getIntroduce()).isNotNull();
 
+    }
+
+    @WithCustomUserDetails
+    @Test
+    public void 로그인된_회원의_프로필이미지_조회 () {
+        //given&when
+        UserSimpleProfileResponseDto responseDto = userService.findProfileImage();
+
+        //then
+        assertThat(responseDto.getUsername()).isEqualTo("infomansion");
+        assertThat(responseDto.getProfileImage()).isNotNull();
+        assertThat(responseDto.getProfileImage()).isEqualTo("/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png");
     }
 
 }

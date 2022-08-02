@@ -42,4 +42,10 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userService.findByUsername(username)));
     }
+
+    @GetMapping("/api/v1/users/info/simple")
+    public ResponseEntity<? extends BasicResponse> findProfileImage() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userService.findProfileImage()));
+    }
 }

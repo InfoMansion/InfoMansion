@@ -15,4 +15,5 @@ public interface UserService {
     boolean verifiedByEmail(String key);
     boolean logout();
     UserInfoResponseDto findByUsername(String username);
+    UserSimpleProfileResponseDto findProfileImage();
 }

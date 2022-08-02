@@ -150,6 +150,12 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)));
     }
 
+    @Override
+    public UserSimpleProfileResponseDto findProfileImage() {
+        return UserSimpleProfileResponseDto.toDto(userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)));
+    }
+
     private void validateCategory(String requestCategories) {
         List<String> categories = new ArrayList<>();
         for (Category value : Category.values()) {
