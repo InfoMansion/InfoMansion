@@ -8,7 +8,7 @@ import userStuffSave from '../../components/RoomEditPage/userStuffsSave.json'
 import Link from "next/link";
 export default function RoomEdit() {
     const router = useRouter();
-    const [userID, setUserID] = useState(0);
+    const [userName, setuserName] = useState(0);
     const [stuff, setStuff] = useState({});
     const [stuffon, setStuffon] = useState('');
 
@@ -18,10 +18,9 @@ export default function RoomEdit() {
     useEffect(() => {
         if(!router.isReady) return;
 
-        setUserID(router.query.userID);
-
         // stuff 가져오기.
-        setInistuffs(userStuffSave[router.query.userID])
+        setuserName(router.query.userName);
+        setInistuffs(userStuffSave[router.query.userName])
     }, [router.isReady])
 
     function StuffClick(stuff) {
@@ -69,7 +68,7 @@ export default function RoomEdit() {
                             }}
                         >
                             {/* 추후에 변경된 사항 저장할지 묻는 기능 필요. */}
-                            <Link href={`/${userID}`}>
+                            <Link href={`/${userName}`}>
                                 편집 종료
                             </Link>
                         </Button>
@@ -80,7 +79,7 @@ export default function RoomEdit() {
                     <Box sx={{ my : 1 }} >
                         <EditRoom 
                             StuffClick={StuffClick} 
-                            userID={userID} 
+                            userName={userName} 
                         >
 
                         </EditRoom>

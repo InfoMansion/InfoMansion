@@ -46,7 +46,6 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 export default function Profile({ ...props }) {
-  const [userID] = useState(props.userID);
   const [profileImage, setProfileImage] = useState('/profile.jpg');
   const fileInput = useRef(null);
   const onChange = e => {

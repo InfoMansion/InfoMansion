@@ -18,10 +18,8 @@ const Root = styled('div')(({ theme }) => ({
     },
 }));
 
-export default function UserInfo( {...props} ) {
-    const [userID] = useState(props.userID);
-
-    // userID 가지고 userinfo 가져와야 함.
+export default function UserInfo( {userName} ) {
+    // username 가지고 userinfo 가져와야 함.
     const [userinfo, setuserinfo] = useState({
         email : 'hellossafy@ssafy.com',
         profile_image : 'profile.jpg',

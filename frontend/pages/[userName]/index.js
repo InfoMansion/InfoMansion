@@ -9,7 +9,7 @@ import { useSpring, animated } from 'react-spring'
 
 
 export default function RoomPage() {
-    const [userID, setUserID] = useState(useRouter().query.userID);
+    const [userName, setuserName] = useState(useRouter().query.userName);
     const [stuff, setStuff] = useState({});
     const [stuffon, setStuffon] = useState(false);
     const [useron, setUseron] = useState(true);
@@ -17,7 +17,6 @@ export default function RoomPage() {
     function StuffClick(stuff) {
         // 여기서 stuffpage로 변수 전달하면 됨.
         setStuffon(!stuffon);
-        console.log(stuffon);
         setStuff(stuff);
     }
 
@@ -30,11 +29,14 @@ export default function RoomPage() {
     })
 
     const spaceAnimation = useSpring({
-        from: { opacity : 1, height : '100%' },
+        from: { 
+            opacity : 1, 
+            height : window.innerWidth > 1200 ? "0px" : "200px" 
+        },
         to : {  
             opacity : stuffon ? 0 : 1,
-            maxHeight: stuffon ? "400px" : "100%",
-            height : stuffon ? '350px' : '100%',
+            maxHeight: stuffon ? "400px" : window.innerWidth > 1200 ? "0px" : "200px",
+            height : stuffon ? '350px' : window.innerWidth > 1200 ? "0px" : "200px",
         },
         config: { 
             mass : 5,
@@ -80,7 +82,7 @@ export default function RoomPage() {
             >
                 <Grid item lg={4}>
                     {useron ?
-                        <UserInfo userID={userID} />
+                        <UserInfo userName={userName} />
                         : <></>
                     }
                 </Grid>
@@ -97,7 +99,7 @@ export default function RoomPage() {
                     <Box sx={{ my : 1 }} >
                         <Room 
                             StuffClick={StuffClick} 
-                            userID={userID} 
+                            userName={userName} 
                         />
                     </Box>
 
@@ -121,8 +123,12 @@ export default function RoomPage() {
                             className={styles.stuffPage}
                             style={spaceAnimation}
                         >
-                            {stuffon || useron ? <></>
-                                : <UserInfo userID={userID} />    
+                            {stuffon || useron ? 
+                                <></>
+                                : 
+                                <Grid item>
+                                    <UserInfo userName={userName} />    
+                                </Grid>
                             }
                         </animated.div>
 

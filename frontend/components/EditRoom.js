@@ -17,7 +17,6 @@ import RoomLight from './RoomPage/atoms/RoomLight'
 export default function EditRoom( { StuffClick, ...props} ) {
     // 화면 확대 정도 조정.
     const [zoomscale] = useState(90);
-    const [userID, setUserID] = useState(0);
 
     // 사용자 가구들.
     const [mapstuffs, setMapstuffs] = useState([]);
@@ -35,11 +34,9 @@ export default function EditRoom( { StuffClick, ...props} ) {
     // 마운트시 stuff 로드
     useEffect(() => {
         if(!router.isReady) return;
-
-        setUserID(router.query.userID);     
         // stuff 가져오기
-        setMapstuffs(userStuff[router.query.userID].slice(0, 2));
-        setStuffs(userStuff[router.query.userID].slice(2));
+        setMapstuffs(userStuff[router.query.userName].slice(0, 2));
+        setStuffs(userStuff[router.query.userName].slice(2));
 
     }, [router.isReady]);
 
@@ -54,7 +51,6 @@ export default function EditRoom( { StuffClick, ...props} ) {
         StuffClick(stuff);
     }
 
-    // 카메라 위치 세팅
     return (
         <div 
             style={{ 

@@ -17,31 +17,31 @@ import Stuffs from './RoomPage/Stuffs'
 import RoomCamera from './RoomPage/atoms/RoomCamera'
 import RoomLight from './RoomPage/atoms/RoomLight'
 
-export default function Room( { StuffClick, ...props} ) {
+export default function Room( { StuffClick, userName} ) {
     // 화면 확대 정도 조정.
     const [zoomscale] = useState(90);
+    // 내 방인지 판단하는 변수
+    const [myroom] = useState(true);
 
-    const [userID, setUserID] = useState(0);
+    // 쿼리에서 가져오기.
     
     // 사용자 가구들.
     const [mapstuffs, setMapstuffs] = useState([]);
     const [stuffs, setStuffs] = useState([]);
     const [hovered, setHovered] = useState(0);
     const [clicked, setClicked] = useState(0);
-
+    
     const [tagon, setTagon] = useState(true);
     const [camloc, setCamloc] = useState([0, 0, 0]);
-
-    const router = useRouter();
+    
     // 마운트시 stuff 로드
+    const router = useRouter();
     useEffect(() => {
         if(!router.isReady) return;
-
-        setUserID(router.query.userID);     
         // stuff 가져오기
-        setMapstuffs(userStuff[router.query.userID].slice(0, 2));
-        setStuffs(userStuff[router.query.userID].slice(2));
-
+        console.log(userName);
+        setMapstuffs(userStuff[router.query.userName].slice(0, 2));
+        setStuffs(userStuff[router.query.userName].slice(2));
     }, [router.isReady]);
 
     // stuff 호버 이벤트.
@@ -83,17 +83,22 @@ export default function Room( { StuffClick, ...props} ) {
                     }
                 </Button>
                 {/* 내 방일 때만 표시 */}
-                <Box
-                    userID={userID}
-                    style={{
-                        position : 'absolute',
-                        bottom : 0,
-                        right : 0,
-                        zIndex : '2'
-                    }}
-                >
-                    <RoomManageMenu />
-                </Box>
+
+                {myroom ?
+                    <Box
+                        style={{
+                            position : 'absolute',
+                            bottom : 0,
+                            right : 0,
+                            zIndex : '2'
+                        }}
+                        >
+                        <RoomManageMenu 
+                            userName={userName}
+                        />
+                    </Box>
+                    : <></>
+                }
     
             {/* 캔버스 영역 */}
             <Canvas shadows

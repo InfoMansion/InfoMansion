@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useRouter } from "next/router";
 
-export default function ManageButton({userID}) {    
+export default function ManageButton({userName}) {    
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -49,7 +49,7 @@ export default function ManageButton({userID}) {
                 }}
             >
                 <MenuItem onClick={handleClose}>
-                    <Link href={userID + "/RoomEdit"}>
+                    <Link href={useRouter().query.userName + "/RoomEdit"}>
                         방 편집
                     </Link>
                 </MenuItem>
