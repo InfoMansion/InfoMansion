@@ -49,8 +49,10 @@ export default function Confirm() {
       console.log(credentials);
       console.log(`Bearer ${cookies.InfoMansionAccessToken}`);
       const { data } = await axios.post('/api/v1/users/password', credentials, {
-          Authorization : `Bearer ${cookies.InfoMansionAccessToken}`,
-          withCredentials : true ,
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          withCredentials: true,
+        },
       });
       console.log(data);
       setPwConfirmState(true);
