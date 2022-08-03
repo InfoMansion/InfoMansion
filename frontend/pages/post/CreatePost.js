@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { useState } from 'react';
-import PostView from '../../components/PostPage/PostView';
+import PostEditor from '../../components/PostPage/PostEditor';
 import { MAIN_COLOR } from '../../constants';
 
 const contentToHtml = content => {
@@ -33,7 +33,7 @@ export default function CreatePost() {
       >
         저장
       </Button>
-      <PostView
+      <PostEditor
         title={title}
         onTitleChange={e => setTitle(e.target.value)}
         content={content}
