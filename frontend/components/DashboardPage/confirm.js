@@ -7,9 +7,9 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from '../../../utils/axios';
+import axios from '../../utils/axios';
 import { useRouter } from 'next/router';
-import { pwConfirmState } from '../../../state/pwConfirm';
+import { pwConfirmState } from '../../state/pwConfirm';
 import { useRecoilState } from 'recoil';
 import { useCookies } from 'react-cookie';
 
@@ -47,10 +47,10 @@ export default function Confirm() {
     };
     try {
       console.log(credentials);
+      console.log(`Bearer ${cookies.InfoMansionAccessToken}`);
       const { data } = await axios.post('/api/v1/users/password', credentials, {
-        headers: {
-          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-        },
+          Authorization : `Bearer ${cookies.InfoMansionAccessToken}`,
+          withCredentials : true ,
       });
       console.log(data);
       setPwConfirmState(true);

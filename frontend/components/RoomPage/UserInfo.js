@@ -68,7 +68,7 @@ export default function UserInfo( {userName} ) {
                             {userinfo.username}
                         </Typography>
 
-                        <Link href="/MyPage">
+                        <Link href={userName + "/dashboard"}>
                             <SettingsIcon  
                                 sx={{mx : 2}}
                                 style={{color : '#777777'}}

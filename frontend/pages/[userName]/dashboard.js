@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState, useEffect} from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -13,15 +13,17 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import MainListItems from './mainlist.js';
 import { useRecoilState } from 'recoil';
+
 import { dashNumState } from '../../state/dashNum';
 import { pwConfirmState } from '../../state/pwConfirm';
-import Profile from '../user/dashboard/profile';
-import Change from './dashboard/change.js';
-import Alarm from '../user/dashboard/alarm';
-import Privacy from './dashboard/privacy.js';
-import Confirm from './dashboard/confirm.js';
+
+import MainListItems from '../../components/DashboardPage/mainlist.js';
+import Profile from '../../components/DashboardPage/profile';
+import Change from '../../components/DashboardPage/change';
+import Alarm from '../../components/DashboardPage/alarm';
+import Privacy from '../../components/DashboardPage/privacy.js';
+import Confirm from '../../components/DashboardPage/confirm.js';
 
 const drawerWidth = 240;
 
@@ -55,7 +57,7 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
   const [dashNum, setDashNum] = useRecoilState(dashNumState);
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -115,6 +117,10 @@ function DashboardContent() {
 export default function Dashboard() {
   const [pwConfirm, setPwConfirmState] = useRecoilState(pwConfirmState);
   let dashContent;
+
+  useEffect(() => {
+    console.log("렌더");
+  })
 
   if (pwConfirm) {
     dashContent = <DashboardContent></DashboardContent>;

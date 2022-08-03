@@ -9,7 +9,9 @@ import LockIcon from '@mui/icons-material/Lock';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRecoilState } from 'recoil';
 import { dashNumState } from '../../state/dashNum';
-import { useRouter } from 'next/dist/client/router';
+import Router, { useRouter } from 'next/router';
+
+
 
 export default function MainListItems() {
   const [dashNum, setDashNum] = useRecoilState(dashNumState);
@@ -27,7 +29,11 @@ export default function MainListItems() {
   function changeDashNumThree(event) {
     setDashNum(3);
   }
-  function changePage(event) {}
+  function changePage(event) {
+    console.log(router.query.userName);
+    Router.push("/" + router.query.userName);
+  }
+
   return (
     <React.Fragment>
       <ListItemButton onClick={changeDashNumZero}>
