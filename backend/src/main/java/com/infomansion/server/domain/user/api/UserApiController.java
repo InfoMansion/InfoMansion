@@ -2,7 +2,7 @@ package com.infomansion.server.domain.user.api;
 
 import com.infomansion.server.domain.user.dto.UserAuthRequestDto;
 import com.infomansion.server.domain.user.dto.UserChangePasswordDto;
-import com.infomansion.server.domain.user.dto.UserModifyProfileDto;
+import com.infomansion.server.domain.user.dto.UserModifyProfileRequestDto;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
@@ -20,7 +20,7 @@ public class UserApiController {
 
     private final UserService userService;
 
-    @GetMapping("/api/v1/users/password")
+    @PostMapping("/api/v1/users/password")
     public ResponseEntity<? extends BasicResponse> userAuthBeforeChangePassword(@Valid @RequestBody UserAuthRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userService.authBeforeChangePassword(requestDto)));
@@ -45,7 +45,7 @@ public class UserApiController {
     }
 
     @PatchMapping("/api/v1/users/profile")
-    public ResponseEntity<? extends BasicResponse> modifyUserProfile(@RequestPart(value = "profileImage", required = false) MultipartFile profileImage,@RequestPart(value = "profileInfo") UserModifyProfileDto profileInfo) {
+    public ResponseEntity<? extends BasicResponse> modifyUserProfile(@RequestPart(value = "profileImage", required = false) MultipartFile profileImage,@RequestPart(value = "profileInfo") UserModifyProfileRequestDto profileInfo) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userService.modifyUserProfile(profileImage, profileInfo)));
     }

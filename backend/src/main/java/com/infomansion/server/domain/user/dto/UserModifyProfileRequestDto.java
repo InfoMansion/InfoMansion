@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserModifyProfileDto {
+public class UserModifyProfileRequestDto {
 
     @NotBlank
     private String username;

@@ -2,7 +2,7 @@ package com.infomansion.server.domain.user.domain;
 
 import com.infomansion.server.domain.base.BaseTimeEntityAtSoftDelete;
 import com.infomansion.server.domain.upload.service.S3Uploader;
-import com.infomansion.server.domain.user.dto.UserModifyProfileDto;
+import com.infomansion.server.domain.user.dto.UserModifyProfileRequestDto;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -77,7 +77,7 @@ public class User extends BaseTimeEntityAtSoftDelete {
     /**
      * User 프로필 정보 변경 [username, categories, introduce]
      */
-    public void modifyProfile(UserModifyProfileDto profileDto) {
+    public void modifyProfile(UserModifyProfileRequestDto profileDto) {
         this.username = profileDto.getUsername();
         this.categories = profileDto.getCategories();
         this.introduce = profileDto.getIntroduce();

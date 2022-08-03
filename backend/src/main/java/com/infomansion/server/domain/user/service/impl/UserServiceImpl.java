@@ -24,10 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -92,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean authBeforeChangePassword(UserAuthRequestDto requestDto) {
+    public UserModifyProfileResponseDto authBeforeChangePassword(UserAuthRequestDto requestDto) {
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -100,7 +98,7 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(ErrorCode.WRONG_PASSWORD);
         }
 
-        return true;
+        return UserModifyProfileResponseDto.toDto(user);
     }
 
     @Override
@@ -152,7 +150,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Long modifyUserProfile(MultipartFile profileImage, UserModifyProfileDto profileInfo) {
+    public Long modifyUserProfile(MultipartFile profileImage, UserModifyProfileRequestDto profileInfo) {
         if (userRepository.existsByUsername(profileInfo.getUsername()))
             throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
 

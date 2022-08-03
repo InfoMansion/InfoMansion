@@ -45,13 +45,23 @@ class UserServiceImplTest {
         String username = "infomansion";
         String categories = "IT,COOK";
 
-        userRepository.save(User.builder()
+        UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
                 .categories(categories)
-                .build());
+                .build();
+
+        userService.join(requestDto);
+
+//        userRepository.save(User.builder()
+//                .email(email)
+//                .password(password)
+//                .tel(tel)
+//                .username(username)
+//                .categories(categories)
+//                .build());
     }
 
     @AfterEach
@@ -186,7 +196,7 @@ class UserServiceImplTest {
     @Test
     public void 사용자_프로필_수정() {
         //given
-        UserModifyProfileDto requestDto = new UserModifyProfileDto("testUsername", "GAME", "simple introduce");
+        UserModifyProfileRequestDto requestDto = new UserModifyProfileRequestDto("testUsername", "GAME", "simple introduce");
         MockMultipartFile mockMultipartFile = new MockMultipartFile("hi", new byte[]{});
 
         //when
@@ -203,7 +213,7 @@ class UserServiceImplTest {
     @Test
     public void 사용자_프로필_수정_실패_존재하지않는카테고리() {
         //given
-        UserModifyProfileDto requestDto = new UserModifyProfileDto("testUsername", "NOCATEGORY", "simple introduce");
+        UserModifyProfileRequestDto requestDto = new UserModifyProfileRequestDto("testUsername", "NOCATEGORY", "simple introduce");
         MockMultipartFile mockMultipartFile = new MockMultipartFile("hi", new byte[]{});
 
         //when&then
@@ -215,13 +225,41 @@ class UserServiceImplTest {
     @Test
     public void 사용자_프로필_수정_실패_중복된유저네임() {
         //given
-        UserModifyProfileDto requestDto = new UserModifyProfileDto("infomansion", "NOCATEGORY", "simple introduce");
+        UserModifyProfileRequestDto requestDto = new UserModifyProfileRequestDto("infomansion", "NOCATEGORY", "simple introduce");
         MockMultipartFile mockMultipartFile = new MockMultipartFile("hi", new byte[]{});
 
         //when&then
         assertThatThrownBy(() -> userService.modifyUserProfile(mockMultipartFile, requestDto))
                 .isInstanceOf(CustomException.class);
 
+    }
+
+    @WithCustomUserDetails
+    @Test
+    public void 사용자정보변경_전_비밀번호인증_성공() {
+        //given
+        UserAuthRequestDto requestDto = new UserAuthRequestDto("testPassword1$");
+
+        //when
+        UserModifyProfileResponseDto responseDto = userService.authBeforeChangePassword(requestDto);
+
+        //then
+        assertThat(responseDto.getEmail()).isEqualTo("infomansion@test.com");
+        assertThat(responseDto.getUsername()).isEqualTo("infomansion");
+        assertThat(responseDto.getCategories().size()).isEqualTo(2);
+        assertThat(responseDto.getCategories().get(0)).isEqualTo("IT");
+        assertThat(responseDto.getCategories().get(1)).isEqualTo("COOK");
+    }
+
+    @WithCustomUserDetails
+    @Test
+    public void 사용자정보변경_전_비밀번호인증_실패_올바르지않은_비밀번호() {
+        //given
+        UserAuthRequestDto requestDto = new UserAuthRequestDto("testPassword1@");
+
+        //when&then
+        assertThatThrownBy(() -> userService.authBeforeChangePassword(requestDto))
+                .isInstanceOf(CustomException.class);
     }
 
 }

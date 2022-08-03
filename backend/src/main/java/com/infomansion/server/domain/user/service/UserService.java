@@ -10,11 +10,11 @@ public interface UserService {
     Long join(UserSignUpRequestDto requestDto);
     TokenDto login(UserLoginRequestDto requestDto);
     TokenDto reissue(ReissueDto reissueDto);
-    boolean authBeforeChangePassword(UserAuthRequestDto requestDto);
+    UserModifyProfileResponseDto authBeforeChangePassword(UserAuthRequestDto requestDto);
     Long changePasswordAfterAuth(UserChangePasswordDto requestDto);
     boolean verifiedByEmail(String key);
     boolean logout();
     UserInfoResponseDto findByUsername(String username);
     UserSimpleProfileResponseDto findSimpleProfile();
-    Long modifyUserProfile(MultipartFile profileImage, UserModifyProfileDto profileInfo);
+    Long modifyUserProfile(MultipartFile profileImage, UserModifyProfileRequestDto profileInfo);
 }
