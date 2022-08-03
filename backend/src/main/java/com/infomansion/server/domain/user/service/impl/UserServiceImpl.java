@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.infomansion.server.domain.category.util.CategoryUtil.validateCategories;
+
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -48,7 +50,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Long join(UserSignUpRequestDto requestDto) {
         validateDuplicateUser(requestDto);
-        splitCategories(requestDto.getCategories()).forEach(this::validateCategory);
+        validateCategories(requestDto.getCategories());
         verifyEmailService.sendVerificationMail(requestDto.getEmail());
         return userRepository.save(requestDto.toEntityWithEncryptPassword(passwordEncoder)).getId();
     }
@@ -154,7 +156,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByUsername(profileInfo.getUsername()))
             throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
 
-        splitCategories(profileInfo.getCategories()).forEach(this::validateCategory);
+        validateCategories(profileInfo.getCategories());
 
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -167,20 +169,6 @@ public class UserServiceImpl implements UserService {
 
         user.modifyProfile(profileInfo);
         return user.getId();
-    }
-
-    private List<String> splitCategories(String categories) {
-        List<String> splitCategories = Arrays.stream(categories.split(",")).collect(Collectors.toList());
-        if(splitCategories.size() > 5) throw new CustomException(ErrorCode.EXCEEDED_THE_NUMBER_OF_CATEGORIES);
-
-        return splitCategories;
-    }
-
-    private void validateCategory(String category) {
-        for (Category value : Category.values()) {
-            if(category.equals(value.toString())) return;
-        }
-        throw new CustomException(ErrorCode.NOT_VALID_CATEGORY);
     }
 
     private void validateDuplicateUser(UserSignUpRequestDto requestDto) {

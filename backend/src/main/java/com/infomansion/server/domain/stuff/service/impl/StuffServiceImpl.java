@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.infomansion.server.domain.category.util.CategoryUtil.validateCategories;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -27,21 +29,14 @@ public class StuffServiceImpl implements StuffService {
     @Transactional
     @Override
     public Long createStuff(StuffRequestDto requestDto) {
-        // 하나의 String으로 받아온 categories를 분리
-        List<String> categories = splitCategories(requestDto.getCategories());
-        // 분리된 categories 검증
-        categories.forEach(category -> validateCategory(category));
-
+        validateCategories(requestDto.getCategories());
         return stuffRepository.save(requestDto.toEntity()).getId();
     }
 
     @Transactional
     @Override
     public Long updateStuff(Long stuff_id, StuffRequestDto requestDto) {
-        // 하나의 String으로 받아온 categories를 분리
-        List<String> categories = splitCategories(requestDto.getCategories());
-        // 분리된 categories 검증
-        categories.forEach(category -> validateCategory(category));
+        validateCategories(requestDto.getCategories());
 
         Stuff stuff = stuffRepository.findById(stuff_id)
                 .orElseThrow(() -> new CustomException(ErrorCode.STUFF_NOT_FOUND));
@@ -72,21 +67,5 @@ public class StuffServiceImpl implements StuffService {
         Stuff stuff = stuffRepository.findById(stuff_id)
                 .orElseThrow(() -> new CustomException(ErrorCode.STUFF_NOT_FOUND));
         stuff.deleteStuff();
-    }
-
-    // String categories 분리
-    private List<String> splitCategories(String categories) {
-        List<String> splitCategories = Arrays.stream(categories.split(",")).collect(Collectors.toList());
-        if(splitCategories.size() > 5) throw new CustomException(ErrorCode.EXCEEDED_THE_NUMBER_OF_CATEGORIES);
-
-        return splitCategories;
-    }
-
-    // String category 검증
-    private void validateCategory(String category) {
-        for (Category value : Category.values()) {
-            if(category.equals(value.toString())) return;
-        }
-        throw new CustomException(ErrorCode.NOT_VALID_CATEGORY);
     }
 }
