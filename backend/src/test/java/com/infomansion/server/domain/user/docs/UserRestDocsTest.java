@@ -17,6 +17,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 import static com.infomansion.server.global.util.restdocs.FieldDescription.*;
 import static com.infomansion.server.global.util.restdocs.RestDocsUtil.common;
@@ -146,7 +147,7 @@ public class UserRestDocsTest {
         UserModifyProfileDto requestDto = new UserModifyProfileDto("infomansion", "DAILY,SPORTS", "자기소개");
 
         MockMultipartFile profileImage = new MockMultipartFile("profileImage", "imagefile.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
-        MockMultipartFile profileInfo = new MockMultipartFile("profileInfo", "profileInfo", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsString(requestDto).getBytes());
+        MockMultipartFile profileInfo = new MockMultipartFile("profileInfo", "profileInfo", "application/json", objectMapper.writeValueAsString(requestDto).getBytes(StandardCharsets.UTF_8));
         given(userService.modifyUserProfile(profileImage, requestDto)).willReturn(responseId);
 
         // when, then
