@@ -75,3 +75,33 @@ a {
   background: transparent;
   margin-bottom: 10px;
 }
+
+.MuiInputBase-inputMultiline {
+  position: relative;
+  width: 100%;
+  height: 60%;
+  padding: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: #fff;
+}
+
+.MuiInputBase-inputMultiline::-webkit-scrollbar {
+  display: block;
+  width: 5px;
+}
+
+.MuiInputBase-inputMultiline::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.MuiInputBase-inputMultiline::-webkit-scrollbar-thumb {
+  background-color: #fc7a71;
+  border-right: none;
+  border-left: none;
+}
+
+.MuiInputBase-inputMultiline::-webkit-scrollbar-track-piece:end {
+  background: transparent;
+  margin-bottom: 10px;
+}

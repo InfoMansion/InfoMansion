@@ -79,9 +79,10 @@ export default function Profile({ ...props }) {
         `,
     followcount: 10,
     followingcount: 20,
+    categories: ['IT', 'COOK', 'GAME'],
   });
 
-  const [state, setState] = React.useState({
+  const allCategories = {
     IT: false,
     COOK: false,
     MUSIC: false,
@@ -98,9 +99,18 @@ export default function Profile({ ...props }) {
     CLEANING: false,
     HOMEAPPLIANCES: false,
     STUDY: false,
+  };
+
+  let selectedCate = '';
+
+  userinfo.categories.forEach(function (category) {
+    allCategories[category] = true;
+    selectedCate = selectedCate + category + ',';
   });
 
-  const [changeCate, setChangeCate] = useState('');
+  const [state, setState] = React.useState(allCategories);
+
+  const [changeCate, setChangeCate] = useState(selectedCate);
 
   const handleChange = event => {
     setState({
@@ -122,11 +132,15 @@ export default function Profile({ ...props }) {
 
   const handleSubmit = event => {
     event.preventDefault();
+    const profileInfoJson = {
+      username: inputUsername,
+      categories: changeCate,
+      introduce: inputIntroduction,
+    };
+    const profileInfo = JSON.stringify(profileInfoJson);
     const formData = new FormData();
-    formData.append('profile_image', profileImage);
-    formData.append('username', inputUsername);
-    formData.append('categories', changeCate);
-    formData.append('introduction', inputIntroduction);
+    formData.append('profileImage', profileImage);
+    formData.append('profileInfo', profileInfo);
   };
 
   const {

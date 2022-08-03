@@ -7,10 +7,11 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Axios from 'axios';
+import axios from '../../../utils/axios';
 import { useRouter } from 'next/router';
 import { pwConfirmState } from '../../../state/pwConfirm';
 import { useRecoilState } from 'recoil';
+import { useCookies } from 'react-cookie';
 
 const theme = createTheme({
   palette: {
@@ -24,6 +25,7 @@ const theme = createTheme({
 });
 
 export default function Confirm() {
+  const [cookies] = useCookies(['cookie-name']);
   const router = useRouter();
   const [inputPassword, setInputPassword] = useState('');
   const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
@@ -37,24 +39,24 @@ export default function Confirm() {
     setInputPassword(event.target.value);
   }
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
     const credentials = {
-      email: data.get('email'),
-      password: data.get('password'),
+      currentPassword: formData.get('password'),
     };
-    // test용 코드 실제로는  Axios요청 성공 한 이후에 바꿔야 함.
-    setPwConfirmState(true);
-    // Axios({
-    //   url: 'http://localhost:8080/accounts/login',
-    //   method: 'post',
-    //   data: credentials
-    // })
-    // .then(res => {
-    //   const token = res.data.key
-    //   setToken(token)
-    // })
+    try {
+      console.log(credentials);
+      const { data } = await axios.post('/api/v1/users/password', credentials, {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+        },
+      });
+      console.log(data);
+      setPwConfirmState(true);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
