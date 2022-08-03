@@ -1,7 +1,8 @@
-import { Box, Button, Menu, MenuItem } from "@mui/material";
+import { Box, Button, IconButton, Menu, MenuItem } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
+import AddIcon from '@mui/icons-material/Add';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useRouter } from "next/router";
 
@@ -19,30 +20,33 @@ export default function ManageButton({userID}) {
         <Box
             sx={{display : 'flex'}}
         >
-            <Button sx={{color : '#111111'}}>
-                <Link href="/Shop">
+            <Link href="/Shop">
+                <IconButton 
+                    size="large"
+                    style={{ color : '#9e9e9e'}}
+                >
                     <ShoppingCartIcon />
-                </Link>
-            </Button>
-            <Button
+                </IconButton>
+            </Link>
+            <IconButton
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-expanded={open ? 'true' : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
+                style={{color : '#9e9e9e'}}
+                size="large"
             >
                 <MenuIcon />
-            </Button>
+            </IconButton>
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
                 MenuListProps={{
-                'aria-labelledby': 'basic-button',
+                    'aria-labelledby': 'basic-button',
                 }}
-                // 이거 왜 색깔 안바뀔까요?
-                sx={{color : 'black'}}
             >
                 <MenuItem onClick={handleClose}>
                     <Link href={userID + "/RoomEdit"}>
@@ -52,6 +56,17 @@ export default function ManageButton({userID}) {
                 <MenuItem onClick={handleClose}>Post 관리</MenuItem>
                 <MenuItem onClick={handleClose}>방명록 관리</MenuItem>
             </Menu>
+            <Link href="/post/CreatePost">
+              <IconButton
+                baseClassName="fas"
+                className="fa-plus-circle"
+                size="large"
+                color="inherit"
+                style={{ color: '#9e9e9e' }}
+              >
+                <AddIcon />
+              </IconButton>
+            </Link>
         </Box>
     )
 }

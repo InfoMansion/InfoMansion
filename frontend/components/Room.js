@@ -65,6 +65,7 @@ export default function Room( { StuffClick, ...props} ) {
                 width : "600px", 
                 height : "700px",
                 // margin : '30px auto'
+                position : 'relative'
             }}
             >
                 {/* 태그 토글 버튼 */}
@@ -81,6 +82,19 @@ export default function Room( { StuffClick, ...props} ) {
                         : <div>태그 보기.</div>
                     }
                 </Button>
+                {/* 내 방일 때만 표시 */}
+                <Box
+                    userID={userID}
+                    style={{
+                        position : 'absolute',
+                        bottom : 0,
+                        right : 0,
+                        zIndex : '2'
+                    }}
+                >
+                    <RoomManageMenu />
+                </Box>
+    
             {/* 캔버스 영역 */}
             <Canvas shadows
                 style={{ zIndex : '1' }}
@@ -111,17 +125,6 @@ export default function Room( { StuffClick, ...props} ) {
 
                 {/* <OrbitControls /> */}
             </Canvas>
-
-            {/* 추후 오른쪽정렬 추가 예정 */}
-            <Box
-                sx={{
-                    position : 'absolute',
-                    zIndex : '2',
-                    width : '100%',
-                }}
-            >
-                <RoomManageMenu userID={userID}/>
-            </Box>
         </div>
       ) 
 }
