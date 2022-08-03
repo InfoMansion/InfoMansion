@@ -1,5 +1,4 @@
 .stuffPage {
-    transition : 0.4s ease-in-out;
     overflow: hidden;
     max-height: 0px;
 }

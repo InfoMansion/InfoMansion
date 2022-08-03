@@ -14,9 +14,6 @@ export default function ManageButton({userID}) {
     const handleClose = () => {
       setAnchorEl(null);
     };
-
-    console.log(userID);
-
     // 이거 버튼 아니고 나중에는 오픈형 메뉴로 바뀌어야 합니다.
     return (
         <Box

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Room from "../../components/Room";
 import { Box, Container, Grid } from '@mui/material'
 import UserInfo from "../../components/RoomPage/UserInfo";
@@ -7,27 +7,42 @@ import StuffPage from "../../components/RoomPage/StuffPage";
 import styles from '../../styles/Room.module.css'
 import { useSpring, animated } from 'react-spring'
 
+
 export default function RoomPage() {
     const [userID, setUserID] = useState(useRouter().query.userID);
     const [stuff, setStuff] = useState({});
-    const [stuffon, setStuffon] = useState('');
-
+    const [stuffon, setStuffon] = useState(false);
+    const [useron, setUseron] = useState(true);
+    
     function StuffClick(stuff) {
         // 여기서 stuffpage로 변수 전달하면 됨.
         setStuffon(!stuffon);
+        console.log(stuffon);
         setStuff(stuff);
     }
-    const openAnimation = useSpring({
-        from: { opacity: "0.3", maxHeight: "0px" },
-        to : { 
-            opacity : stuffon ? "1" : "0.3", 
-            maxHeight: stuffon ? "400px" : "0px",
-            height : stuffon ? '350px' : '0px',
+
+    function handleResize() {
+        if(window.innerWidth >= 1200) setUseron(true);
+        else setUseron(false);
+    }
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);   
+    })
+
+    const spaceAnimation = useSpring({
+        from: { opacity : 1, height : '100%' },
+        to : {  
+            opacity : stuffon ? 0 : 1,
+            maxHeight: stuffon ? "400px" : "100%",
+            height : stuffon ? '350px' : '100%',
         },
         config: { 
-            // easing : easeQuadInOut,
-            duration: "500" 
-        }
+            mass : 5,
+            tension : 400,
+            friction : 70, 
+            precision : 0.0001,
+            duration: "500",
+        },
     });
     const StuffAnimation = useSpring({
         from : { opacity : "0.3", maxHeight : "0px" },
@@ -38,12 +53,12 @@ export default function RoomPage() {
                 height : stuffon ? '600px' : '0px',
                 position : 'absolute',
             })
-            await next({
-                // position : stuffon ? 'absolute' : 'static',
-            })
         },
         config: { 
-            // easing : easeQuadInOut,
+            mass : 5,
+            tension : 400,
+            friction : 70, 
+            precision : 0.0001,
             duration: "500" 
         },
 
@@ -64,7 +79,10 @@ export default function RoomPage() {
                 }}
             >
                 <Grid item lg={4}>
-                    <UserInfo userID={userID} />
+                    {useron ?
+                        <UserInfo userID={userID} />
+                        : <></>
+                    }
                 </Grid>
 
                 <Grid item lg={7}
@@ -90,6 +108,7 @@ export default function RoomPage() {
                             width : 650,
                         }} 
                     >
+                        {/* 페이지 */}
                         <animated.div
                             className={styles.stuffPage}
                             style={StuffAnimation}
@@ -97,10 +116,14 @@ export default function RoomPage() {
                             <StuffPage data={stuff}/>
                         </animated.div>
 
+                        {/* 공간 먹기 */}
                         <animated.div
                             className={styles.stuffPage}
-                            style={openAnimation}
+                            style={spaceAnimation}
                         >
+                            {stuffon || useron ? <></>
+                                : <UserInfo userID={userID} />    
+                            }
                         </animated.div>
 
                     </Box>            

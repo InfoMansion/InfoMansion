@@ -33,7 +33,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
     spring : clicked,
     config: {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
   });
-  const positionY = spring.to([0, 1], [0, 7]);
+  const positionY = spring.to([0, 1], [0, 5 + (data.pos_x + data.pos_z)/2]);
 
   // Tag 컨트롤
   const color = new Color();
@@ -78,6 +78,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
           rotation={[data.rot_x, data.rot_y, data.rot_z]}
           scale={scale}
           {...props} dispose={null}
+          position-y={positionY}
         >
           {
             // category NONE인거 y축 이동 방지하기 위해 동적 렌더링함.
@@ -87,7 +88,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
                 material={materials[material]} 
                 castShadow
                 scale={100}
-                position-y={positionY}
+
               />
               : 
               <mesh
