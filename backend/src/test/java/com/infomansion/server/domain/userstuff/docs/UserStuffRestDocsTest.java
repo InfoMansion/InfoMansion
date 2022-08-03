@@ -26,6 +26,7 @@ import java.util.List;
 
 import static com.infomansion.server.global.util.restdocs.FieldDescription.*;
 import static com.infomansion.server.global.util.restdocs.RestDocsUtil.common;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -56,7 +57,7 @@ public class UserStuffRestDocsTest {
         Long userStuffId = 20L;
         UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
                 .userId(10L).stuffId(999L).build();
-        given(userStuffService.saveUserStuff(requestDto)).willReturn(userStuffId);
+        given(userStuffService.saveUserStuff(any(UserStuffRequestDto.class))).willReturn(userStuffId);
 
         // when, then
         mockMvc.perform(post("/api/v1/userstuffs")
@@ -99,7 +100,7 @@ public class UserStuffRestDocsTest {
                         .selected(true)
                         .posX(BigDecimal.ONE).posY(BigDecimal.ONE).posZ(BigDecimal.ONE)
                         .rotX(BigDecimal.ZERO).rotY(BigDecimal.ZERO).rotZ(BigDecimal.ZERO).build());
-        given(userStuffService.findUserStuffByUserStuffId(userStuffId)).willReturn(responseDto);
+        given(userStuffService.findUserStuffByUserStuffId(any(Long.class))).willReturn(responseDto);
 
         // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/userstuffs/{userstuffId}", userStuffId))
@@ -142,7 +143,7 @@ public class UserStuffRestDocsTest {
                             .posX(BigDecimal.ONE).posY(BigDecimal.ONE).posZ(BigDecimal.ONE)
                             .rotX(BigDecimal.ZERO).rotY(BigDecimal.ZERO).rotZ(BigDecimal.ZERO).build()));
         }
-        given(userStuffService.findAllUserStuff(userId)).willReturn(responseDtoList);
+        given(userStuffService.findAllUserStuff(any(Long.class))).willReturn(responseDtoList);
 
         // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/userstuffs/list/{userId}", userId))
@@ -162,7 +163,7 @@ public class UserStuffRestDocsTest {
     public void 방에_배치된_userStuff_제외() throws Exception {
         // given
         Long userStuffId = 20L;
-        given(userStuffService.excludeUserStuff(userStuffId)).willReturn(userStuffId);
+        given(userStuffService.excludeUserStuff(any(Long.class))).willReturn(userStuffId);
 
         // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/userstuffs/{userStuffId}", userStuffId))
@@ -187,7 +188,7 @@ public class UserStuffRestDocsTest {
                 .category("DAILY")
                 .posX(1.5).posY(3.0).posZ(2.7)
                 .rotX(0.0).rotY(0.0).rotZ(0.0).build();
-        given(userStuffService.includeUserStuff(requestDto)).willReturn(userStuffId);
+        given(userStuffService.includeUserStuff(any(UserStuffIncludeRequestDto.class))).willReturn(userStuffId);
 
         // when, then
         mockMvc.perform(put("/api/v1/userstuffs")
@@ -218,7 +219,7 @@ public class UserStuffRestDocsTest {
         Long userStuffId = 20L;
         UserStuffModifyRequestDto requestDto = UserStuffModifyRequestDto.builder()
                         .id(userStuffId).alias("alias").category("NONE").build();
-        given(userStuffService.modifyAliasOrCategory(requestDto)).willReturn(userStuffId);
+        given(userStuffService.modifyAliasOrCategory(any(UserStuffModifyRequestDto.class))).willReturn(userStuffId);
 
         // when, then
         mockMvc.perform(put("/api/v1/userstuffs/option")
@@ -245,7 +246,7 @@ public class UserStuffRestDocsTest {
                         .id(userStuffId)
                         .posX(0.0).posY(0.0).posZ(0.0)
                         .rotX(0.0).rotY(0.0).rotZ(0.0).build();
-        given(userStuffService.modifyPosAndRot(requestDto)).willReturn(userStuffId);
+        given(userStuffService.modifyPosAndRot(any(UserStuffPositionRequestDto.class))).willReturn(userStuffId);
 
         // when, then
         mockMvc.perform(put("/api/v1/userstuffs/position")
@@ -272,7 +273,7 @@ public class UserStuffRestDocsTest {
     public void userSutff_삭제() throws Exception {
         // given
         Long userStuffId = 20L;
-        given(userStuffService.removeUserStuff(userStuffId)).willReturn(userStuffId);
+        given(userStuffService.removeUserStuff(any(Long.class))).willReturn(userStuffId);
 
         // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/userstuffs/{userStuffId}", userStuffId))

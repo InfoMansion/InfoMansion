@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.infomansion.server.global.util.restdocs.FieldDescription.USER_ID;
 import static com.infomansion.server.global.util.restdocs.RestDocsUtil.common;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -50,7 +51,7 @@ public class PostRestDocsTest {
                 .userStuffId(10L)
                 .title("Post Title")
                 .content("Post Content").build();
-        given(postService.createPost(requestDto)).willReturn(responseId);
+        given(postService.createPost(any(PostCreateRequestDto.class))).willReturn(responseId);
 
         // when, then
         mockMvc.perform(post("/api/v1/posts")

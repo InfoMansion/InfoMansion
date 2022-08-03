@@ -15,12 +15,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static com.infomansion.server.global.util.restdocs.FieldDescription.USER_ID;
 import static com.infomansion.server.global.util.restdocs.RestDocsUtil.common;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
@@ -56,7 +56,7 @@ public class AuthRestDocsTest {
                 .username(username)
                 .categories(categories)
                 .build();
-        given(userService.join(signUpRequestDto)).willReturn(responseID);
+        given(userService.join(any(UserSignUpRequestDto.class))).willReturn(responseID);
 
         mockMvc.perform(post("/api/v1/auth/signup")
                 .content(objectMapper.writeValueAsString(signUpRequestDto))

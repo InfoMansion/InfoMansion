@@ -25,6 +25,7 @@ import java.util.List;
 
 import static com.infomansion.server.global.util.restdocs.FieldDescription.*;
 import static com.infomansion.server.global.util.restdocs.RestDocsUtil.common;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -125,7 +126,7 @@ public class StuffRestDocsTest {
                 .geometry("geometry")
                 .material("material")
                 .build();
-        given(stuffService.updateStuff(responseId, stuffRequestDto)).willReturn(responseId);
+        given(stuffService.updateStuff(any(Long.class), any(StuffRequestDto.class))).willReturn(responseId);
 
         // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/stuffs/{stuffId}", responseId)

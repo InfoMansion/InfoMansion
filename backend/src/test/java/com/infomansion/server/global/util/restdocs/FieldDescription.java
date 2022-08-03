@@ -35,6 +35,7 @@ public enum FieldDescription {
     // user
     USER_ID(JsonFieldType.NUMBER, "사용자 id"),
     USERNAME(JsonFieldType.STRING, "사용자 닉네임"),
+    USER_EMAIL(JsonFieldType.STRING, "사용자 이메일"),
     USER_CATEGORIES(JsonFieldType.ARRAY, "사용자가 설정한 관심 카테고리"),
     PROFILE_IMAGE(JsonFieldType.STRING, "사용자 프로필 이미지 url"),
     INTRODUCE(JsonFieldType.STRING, "사용자 자기소개"),

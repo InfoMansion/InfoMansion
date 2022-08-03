@@ -394,20 +394,20 @@ include::{snippets}/user-chang-pw/http-response.adoc[]
 ---
 
 [[User-비밀번호로인증]]
-== User 비밀번호 변경 전 인증
+== User 정보 변경 전 인증
 
-사용자의 비밀번호를 변경하기 전 인증하는 API
+사용자의 정보를 변경하기 전 인증하는 API
 
 === Http Request
-include::{snippets}/user-auth-before-change-pw/http-request.adoc[]
+include::{snippets}/user-auth-before-change-info/http-request.adoc[]
 
 === Request fields
-include::{snippets}/user-auth-before-change-pw/request-fields.adoc[]
+include::{snippets}/user-auth-before-change-info/request-fields.adoc[]
 
 === Http Response
-include::{snippets}/user-auth-before-change-pw/http-response.adoc[]
+include::{snippets}/user-auth-before-change-info/http-response.adoc[]
 
 === Response fields
-include::{snippets}/user-auth-before-change-pw/response-fields.adoc[]
+include::{snippets}/user-auth-before-change-info/response-fields.adoc[]
 
 ---
