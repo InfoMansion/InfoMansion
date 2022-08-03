@@ -1,0 +1,413 @@
+= Info`Mansion API Docs
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[introduction]]
+== 소개
+
+SSAFY 7기 공통6반 A607팀
+
+Info`Mansion REST API 명세서입니다.
+
+[[commont]]
+== 공통사항
+
+=== Header
+
+|===
+| name | 설명
+
+| `Authorization`
+| API를 사용하기 위한 인증 키
+|===
+
+=== 공통 Response Body
+
+|===
+| field | 설명
+
+| `code`
+| 응답 코드
+
+| `message`
+| 예외사항 내용 등 응답 메세지
+
+| `data`
+| 실제 반환될 데이터
+|===
+
+
+---
+
+[[Stuff-API]]
+= Stuff API
+
+
+[[Stuff-조회1]]
+== Stuff 조회
+
+stuffId로 Stuff를 조회하는 API
+
+=== Http Request
+include::{snippets}/userstuff-get/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/stuff-get-by-stuffid/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/stuff-get-by-stuffid/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/stuff-get-by-stuffid/response-fields.adoc[]
+
+---
+
+[[Stuff-조회2]]
+== Stuff 전체 조회
+
+모든 Stuff를 조회하는 API
+
+=== Http Request
+include::{snippets}/stuff-all/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/stuff-all/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/stuff-all/response-fields.adoc[]
+
+---
+
+[[Stuff-수정]]
+== Stuff 수정
+
+stuff의 일부를 수정하는 API
+
+=== Http Request
+include::{snippets}/stuff-update/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/stuff-update/path-parameters.adoc[]
+
+=== Request fields
+include::{snippets}/stuff-update/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/stuff-update/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/stuff-update/response-fields.adoc[]
+
+---
+
+[[Stuff-삭제]]
+== Stuff 삭제
+
+stuffId로 Stuff를 삭제하는 API
+
+=== Http Request
+include::{snippets}/stuff-delete/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/stuff-delete/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/stuff-delete/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/stuff-delete/response-fields.adoc[]
+
+---
+
+[[UserStuff-API]]
+= UserStuff API
+
+
+[[UserStuff-생성]]
+== UserStuff 생성
+
+userId와 stuffId로 userStuff를 생성하는 API
+
+=== Http Request
+include::{snippets}/userstuff-create/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/userstuff-create/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/userstuff-create/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/userstuff-create/response-fields.adoc[]
+
+---
+
+[[UserStuff-조회1]]
+== UserStuff 조회
+
+userStuffId로 UserStuff를 조회하는 API
+
+=== Http Request
+include::{snippets}/userstuff-get/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/userstuff-get/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/userstuff-get/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/userstuff-get/response-fields.adoc[]
+
+
+---
+
+[[UserStuff-조회2]]
+== User의 UserStuff 조회
+
+사용자의 UserStuff를 모두 조회
+
+=== Http Request
+include::{snippets}/userstuff-getall-with-userid/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/userstuff-getall-with-userid/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/userstuff-getall-with-userid/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/userstuff-getall-with-userid/response-fields.adoc[]
+
+---
+
+[[UserStuff-삭제]]
+== UserStuff 삭제
+
+userStuffId로 UserStuff를 삭제하는 API
+
+=== Http Request
+include::{snippets}/userstuff-delete/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/userstuff-delete/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/userstuff-delete/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/userstuff-delete/response-fields.adoc[]
+
+---
+
+[[UserStuff-제외]]
+== UserStuff를 방에서 제외
+
+배치된 UserStuff를 방에서 제외시키는 API
+
+=== Http Request
+include::{snippets}/userstuff-exclude-in-room/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/userstuff-exclude-in-room/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/userstuff-exclude-in-room/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/userstuff-exclude-in-room/response-fields.adoc[]
+
+---
+
+[[UserStuff-배치]]
+== UserStuff를 방에 배치
+
+UserStuff를 방에 배치하는 API
+
+=== Http Request
+include::{snippets}/userstuff-include-in-room/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/userstuff-include-in-room/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/userstuff-include-in-room/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/userstuff-include-in-room/request-fields.adoc[]
+
+---
+
+[[UserStuff-별칭또는카테고리수정]]
+== UserStuff의 별칭 또는 카테고리 수정
+
+UserStuff의 별칭 또는 카테고리를 수정하는 API
+
+=== Http Request
+include::{snippets}/userstuff-modify-alias-or-category/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/userstuff-modify-alias-or-category/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/userstuff-modify-alias-or-category/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/userstuff-modify-alias-or-category/request-fields.adoc[]
+
+---
+
+[[UserStuff-위치수정]]
+== UserStuff의 위치나 회전각 수정
+
+UserStuff의 Position이나 Rotation을 수정하는 API
+
+=== Http Request
+include::{snippets}/userstuff-modify-pos-or-rot/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/userstuff-modify-pos-or-rot/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/userstuff-modify-pos-or-rot/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/userstuff-modify-pos-or-rot/request-fields.adoc[]
+
+---
+
+[[Post-API]]
+= Post API
+
+
+[[Post-생성]]
+== Post 생성
+
+userId와 userStuffId를 기반으로 Post를 작성하는 API
+
+=== Http Request
+include::{snippets}/post-create/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/post-create/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/post-create/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-create/request-fields.adoc[]
+
+---
+
+[[Post-추천]]
+== Post를 이용한 사용자 추천
+
+로그인한 사용자의 카테고리와 Post의 카테고리, 좋아요, 작성시간을 분석하여 다른 사용자를 추천하는 API
+
+=== Http Request
+include::{snippets}/post-recommend/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/post-recommend/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-recommend/response-fields.adoc[]
+
+---
+
+[[User-API]]
+= User API
+
+
+[[User-생성]]
+== User 생성
+
+회원가입 API
+
+=== Http Request
+include::{snippets}/user-create/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/user-create/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/user-create/http-response.adoc[]
+
+---
+
+[[User-간단정보조회]]
+== User Simple Info 조회
+
+로그인한 사용자의 프로필 사진 URL과 사용자이름을 조회하는 API
+
+=== Http Request
+include::{snippets}/user-simple-info/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/user-simple-info/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/user-simple-info/response-fields.adoc[]
+
+---
+
+[[User-정보수정]]
+== User 정보 수정
+
+사용자의 프로필이미지나 기본정보를 수정하는 API
+
+=== Http Request
+include::{snippets}/user-modify-profile/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/user-modify-profile/request-parts.adoc[]
+
+=== Http Response
+include::{snippets}/user-modify-profile/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/user-modify-profile/response-fields.adoc[]
+
+---
+
+[[User-비밀번호변경]]
+== User 비밀번호 변경
+
+사용자의 비밀번호를 변경하는 API
+
+=== Http Request
+include::{snippets}/user-chang-pw/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/user-chang-pw/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/user-chang-pw/http-response.adoc[]
+
+== Response fields
+include::{snippets}/user-chang-pw/http-response.adoc[]
+
+---
+
+[[User-비밀번호로인증]]
+== User 비밀번호 변경 전 인증
+
+사용자의 비밀번호를 변경하기 전 인증하는 API
+
+=== Http Request
+include::{snippets}/user-auth-before-change-pw/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/user-auth-before-change-pw/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/user-auth-before-change-pw/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/user-auth-before-change-pw/response-fields.adoc[]
+
+---
