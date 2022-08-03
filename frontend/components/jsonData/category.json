@@ -62,5 +62,9 @@
     {
         "name" : "HOMEAPPLIANCES",
         "alias" : "가전제품"
+    }, 
+    {
+        "name" : "PET",
+        "alias" : "애완동물"
     }
 ]

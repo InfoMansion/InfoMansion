@@ -24,5 +24,13 @@
     "frame",
     "light",
     "console",
-    "other"    
+    "other",
+    "camera",
+    "electronics",
+    "food",
+    "restroom",
+    "toy",
+    "deco",
+    "pet",
+    "shoes"
 ]

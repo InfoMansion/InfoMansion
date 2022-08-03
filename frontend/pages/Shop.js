@@ -3,8 +3,8 @@ import { useState } from "react";
 import ShowWindow from "../components/ShopPage/ShowWindow";
 
 // furniture.json안에 stuff종류와 스터프들이 다 들어가야 함.
-import furnitures from '../components/ShopPage/furnitures.json'
-import furnitureTypes from '../components/ShopPage/furnitureTypes.json'
+import furnitures from '../components/jsonData/furnitures.json'
+import furnitureTypes from '../components/jsonData/furnitureTypes.json'
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, OrthographicCamera } from "@react-three/drei";
 

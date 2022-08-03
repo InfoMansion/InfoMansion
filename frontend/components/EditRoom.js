@@ -1,11 +1,11 @@
 import { OrthographicCamera } from '@react-three/drei'
-import {Canvas} from '@react-three/fiber'
-import { useEffect, useState } from 'react'
+import {Canvas, useThree} from '@react-three/fiber'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useSpring } from 'react-spring'
 
 // data
-import userStuff from './RoomPage/atoms/userStuff.json'
+import userStuff from './jsonData/userStuffs.json'
 import MapStuffs from './RoomPage/MapStuffs'
 import Stuffs from './RoomPage/Stuffs'
 // 이 파일은 나중에 db에 데이터 넣을 때 쓸거라 안지우고 유지하겠습니다.
@@ -14,7 +14,17 @@ import EditRoomCamera from './RoomPage/atoms/RoomEditCamera'
 import ScreenshotButton from './RoomPage/atoms/ScreenShotButton'
 import RoomLight from './RoomPage/atoms/RoomLight'
 
-export default function EditRoom( { StuffClick, ...props} ) {
+
+const EditRoom = forwardRef(( props, ref ) => {
+    useImperativeHandle(ref, () => ({
+        ScreenShot
+    }))
+
+    const ScreenShotButtonRef = useRef();
+    function ScreenShot() {
+        ScreenShotButtonRef.current.ScreenShot();
+    }
+
     // 화면 확대 정도 조정.
     const [zoomscale] = useState(90);
 
@@ -48,48 +58,43 @@ export default function EditRoom( { StuffClick, ...props} ) {
         console.log(stuff.category + "클릭");
         if(stuff.category == 'NONE') return null;
         
-        StuffClick(stuff);
+        props.StuffClick(stuff);
     }
 
+
     return (
-        <div 
-            style={{ 
+        <Canvas
+            style={{
+                zIndex : '1',
                 width : "610px", 
                 height : "610px",
-                // margin : '30px auto'
-                }}
-            >
+            }}
+            shadows
+            onCreated={state => state.gl.setClearColor("#ffffff")} >
+            <RoomLight />
+            {/* camera */}
 
-            {/* 캔버스 영역 */}
-            <Canvas
-                style={{
-                    zIndex : '1'
-                }}
-                shadows
-                onCreated={state => state.gl.setClearColor("#ffffff")} >
-                <RoomLight />
-                {/* camera */}
+            <ScreenshotButton ref={ScreenShotButtonRef} />
+            
+            {/* <Box></Box> */}
+            <EditRoomCamera camloc={camloc}/>
+            <OrthographicCamera makeDefault zoom={zoomscale} />
+            
+            {/* 벽, 바닥 */}
+            <MapStuffs 
+                stuffs={mapstuffs}
+                Hover={Hover}
+                Click={Click}    
+            />
+            {/* stuffs */}
+            <Stuffs 
+                stuffs={stuffs}
+                Hover={Hover}
+                Click={Click}
+                status={'edit'}
+            />
+        </Canvas>
+      )
+});
 
-                <ScreenshotButton />
-                
-                {/* <Box></Box> */}
-                <EditRoomCamera camloc={camloc}/>
-                <OrthographicCamera makeDefault zoom={zoomscale} />
-                
-                {/* 벽, 바닥 */}
-                <MapStuffs 
-                    stuffs={mapstuffs}
-                    Hover={Hover}
-                    Click={Click}    
-                />
-                {/* stuffs */}
-                <Stuffs 
-                    stuffs={stuffs}
-                    Hover={Hover}
-                    Click={Click}
-                    status={'edit'}
-                />
-            </Canvas>
-        </div>
-      ) 
-}
+export default EditRoom;

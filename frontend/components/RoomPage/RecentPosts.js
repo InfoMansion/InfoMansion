@@ -1,7 +1,7 @@
 import { Divider, Typography } from '@mui/material';
 import { useState } from 'react'
 import Post from './atoms/Post';
-import postdata from './atoms/posts.json'
+import postdata from '../jsonData/posts.json'
 
 export default function RecentPost() {
 

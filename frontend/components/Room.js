@@ -8,7 +8,7 @@ import { animated } from '@react-spring/three'
 import  RoomManageMenu from './RoomPage/RoomManageMenu'
 
 // data
-import userStuff from './RoomPage/atoms/userStuff.json'
+import userStuffs from './jsonData/userStuffs.json'
 import MapStuffs from './RoomPage/MapStuffs'
 import Stuffs from './RoomPage/Stuffs'
 
@@ -40,8 +40,8 @@ export default function Room( { StuffClick, userName} ) {
         if(!router.isReady) return;
         // stuff 가져오기
         console.log(userName);
-        setMapstuffs(userStuff[router.query.userName].slice(0, 2));
-        setStuffs(userStuff[router.query.userName].slice(2));
+        setMapstuffs(userStuffs[router.query.userName].slice(0, 2));
+        setStuffs(userStuffs[router.query.userName].slice(2));
     }, [router.isReady]);
 
     // stuff 호버 이벤트.

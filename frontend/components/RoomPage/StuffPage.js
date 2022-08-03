@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Card, CardActionArea, CardContent, CardMedia, CssBaseline, Divider, Paper, Slide, Toolbar, Typography, useScrollTrigger } from '@mui/material'
 import { Container } from "@mui/system";
 import Post from "./atoms/Post";
-import postdata from './atoms/posts.json'
+import postdata from '../jsonData/posts.json'
 
 function ElevationScroll(props) {
     const { children, window } = props;

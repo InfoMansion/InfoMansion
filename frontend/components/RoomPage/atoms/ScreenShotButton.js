@@ -1,7 +1,12 @@
 import { useThree } from "@react-three/fiber";
+import { forwardRef, useImperativeHandle } from "react";
 import * as THREE from 'three'
+import { isPowerOfTwo } from "three/src/math/MathUtils";
 
-export default function ScreenshotButton({...props}) {
+const ScreenshotButton = forwardRef((props, ref) => {
+    useImperativeHandle(ref, () => ({
+        ScreenShot
+    }))
     const { gl, scene, camera } = useThree();
 
     function ScreenShot() {
@@ -25,7 +30,7 @@ export default function ScreenshotButton({...props}) {
         )
     }
     return (
-        <sprite {...props} position={[4, 4, 0]} scale={[1, 1, 1]} onClick={ScreenShot}>
+        <sprite {...props} position={[10, 10, 0]} scale={[1, 1, 1]} onClick={ScreenShot}>
             <spriteMaterial
                 attach="material"
                 color={'lightblue'}
@@ -37,4 +42,6 @@ export default function ScreenshotButton({...props}) {
             />
          </sprite>
     )
-}
+});
+
+export default ScreenshotButton;

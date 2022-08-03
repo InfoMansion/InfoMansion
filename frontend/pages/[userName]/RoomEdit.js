@@ -4,9 +4,11 @@ import { useRouter } from 'next/router'
 import EditRoom from "../../components/EditRoom";
 import MyStuffList from "../../components/RoomEditPage/MyStuffList";
 
-import userStuffSave from '../../components/RoomEditPage/userStuffsSave.json'
+import userStuffSave from '../../components/jsonData/userStuffsAll.json'
 import Link from "next/link";
 export default function RoomEdit() {
+    const editRoomRef = useRef();
+
     const router = useRouter();
     const [userName, setuserName] = useState(0);
     const [stuff, setStuff] = useState({});
@@ -27,6 +29,11 @@ export default function RoomEdit() {
         // 여기서 stuffpage로 변수 전달하면 됨.
         setStuffon(!stuffon);
         setStuff(stuff);
+    }
+
+    function EndEdit() {
+        // 편집여부가 있는지 판단.
+        editRoomRef.current.ScreenShot();
     }
 
     return (
@@ -66,6 +73,7 @@ export default function RoomEdit() {
                                 right : 10,
                                 bottom : 10
                             }}
+                            onClick={EndEdit}
                         >
                             {/* 추후에 변경된 사항 저장할지 묻는 기능 필요. */}
                             <Link href={`/${userName}`}>
@@ -76,14 +84,13 @@ export default function RoomEdit() {
 
 
                 <Grid item lg={7}>
-                    <Box sx={{ my : 1 }} >
-                        <EditRoom 
-                            StuffClick={StuffClick} 
-                            userName={userName} 
-                        >
+                    <EditRoom
+                        ref={editRoomRef}
+                        StuffClick={StuffClick} 
+                        userName={userName} 
+                    >
 
-                        </EditRoom>
-                    </Box>
+                    </EditRoom>
                 </Grid>
             </Grid>
         </Container>

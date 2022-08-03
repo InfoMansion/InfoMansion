@@ -9,7 +9,6 @@ const Root = styled('div')(({ theme }) => ({
     padding: theme.spacing(1),
     margin : '30px auto',
     
-  
     [theme.breakpoints.down('lg')]: {
       width : '600px'
     },

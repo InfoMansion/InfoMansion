@@ -130,7 +130,7 @@ include::{snippets}/stuff-delete/response-fields.adoc[]
 [[UserStuff-생성]]
 == UserStuff 생성
 
-userId와 stuffId로 userStuff를 생성하는 API
+와 stuffId로 userStuff를 생성하는 API
 
 === Http Request
 include::{snippets}/userstuff-create/http-request.adoc[]
@@ -172,16 +172,16 @@ include::{snippets}/userstuff-get/response-fields.adoc[]
 사용자의 UserStuff를 모두 조회
 
 === Http Request
-include::{snippets}/userstuff-getall-with-userid/http-request.adoc[]
+include::{snippets}/userstuff-getall-with-/http-request.adoc[]
 
 === Path parameters
-include::{snippets}/userstuff-getall-with-userid/path-parameters.adoc[]
+include::{snippets}/userstuff-getall-with-/path-parameters.adoc[]
 
 === Http Response
-include::{snippets}/userstuff-getall-with-userid/http-response.adoc[]
+include::{snippets}/userstuff-getall-with-/http-response.adoc[]
 
 === Response fields
-include::{snippets}/userstuff-getall-with-userid/response-fields.adoc[]
+include::{snippets}/userstuff-getall-with-/response-fields.adoc[]
 
 ---
 
@@ -287,7 +287,7 @@ include::{snippets}/userstuff-modify-pos-or-rot/request-fields.adoc[]
 [[Post-생성]]
 == Post 생성
 
-userId와 userStuffId를 기반으로 Post를 작성하는 API
+와 userStuffId를 기반으로 Post를 작성하는 API
 
 === Http Request
 include::{snippets}/post-create/http-request.adoc[]
