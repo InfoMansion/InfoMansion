@@ -28,7 +28,7 @@ export default function CreatePost() {
           marginBottom: '0px',
         }}
         onClick={() => {
-          console.log({ title, content, category });
+          console.log({ title, content: contentToHtml(content), category });
         }}
       >
         저장
