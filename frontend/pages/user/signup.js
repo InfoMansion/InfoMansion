@@ -13,8 +13,7 @@ import { useRecoilState } from 'recoil';
 import { likeCateState } from '../../state/likeCate';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
-
+import axios from '../../utils/axios';
 const theme = createTheme({
   palette: {
     primary: {
@@ -73,10 +72,7 @@ export default function SignUp() {
     try {
       console.log(credentials);
 
-      const res = await axios.post(
-        'http://localhost:8080/api/v1/auth/signup',
-        credentials,
-      );
+      const res = await axios.post('api/v1/auth/signup', credentials);
       alert('인증메일이 발송되었습니다.');
       router.push('/');
     } catch (e) {

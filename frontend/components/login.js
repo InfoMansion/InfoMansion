@@ -309,7 +309,7 @@ export default function LogIn() {
                             type="submit"
                             variant="contained"
                             color="primary"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{ mt: 3, mb: 2, color: 'white' }}
                             disabled={!(confirmId && confirmPw)}
                             onClick={handleSubmit}
                           >
