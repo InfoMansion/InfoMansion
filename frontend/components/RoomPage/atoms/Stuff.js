@@ -13,8 +13,9 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
   // component가 하나라도 잘못되었을 때 렌더링이 고장나는 것을 방지.
   if(!glbpath) return null;
   // glb 임포트
-  const { nodes, materials } = useGLTF(`/stuffAssets/${glbpath}.glb`)
+  const { nodes, materials } = useGLTF(`https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/stuff-assets/${glbpath}.glb`)
   
+  if(!nodes[geometry]) return
   // stuff 컨트롤
   function onHover(e) { Hover(e, data); }
   function onClick(e) { 

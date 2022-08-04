@@ -6,14 +6,11 @@ export default function EditStuff({data, Click}) {
     const [material] = useState(data.material);
     const [glbpath] = useState(data.stuffGlbPath);
 
-    // 컴포넌트 오류 해결.
-    if(!glbpath) return null;
     function onClick(e) {
         Click(e, data);
     }
-    const { nodes, materials } = useGLTF(`/stuffAssets/${glbpath}.glb`)
-    
-    // geometry가 터지는 게 있어서 임시로 우회시킵니다.
+    const { nodes, materials } = useGLTF(`https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/stuff-assets/${glbpath}.glb`)
+
     if(!nodes[geometry]) return
 
     return (

@@ -15,7 +15,9 @@ export default function Model({ Hover, Click, data, ...props }) {
   // component가 하나라도 잘못되었을 때 렌더링이 고장나는 것을 방지.
   if(!glb) return null;
 
-  const { nodes, materials } = useGLTF(`/stuffAssets/${glb}.glb`)
+  const { nodes, materials } = useGLTF(`https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/stuff-assets/${glb}.glb`)
+
+  if(!nodes[geo]) return
   return (
     <animated.group 
       castShadow
