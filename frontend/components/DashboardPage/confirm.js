@@ -78,7 +78,7 @@ export default function Confirm() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Change Password
+            Confirm Password
           </Typography>
           <Box
             component="form"

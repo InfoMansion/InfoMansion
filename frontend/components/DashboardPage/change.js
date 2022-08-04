@@ -7,8 +7,8 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Axios from 'axios';
-import { useRouter } from 'next/router';
+import axios from '../../utils/axios';
+import { useCookies } from 'react-cookie';
 
 const theme = createTheme({
   palette: {
@@ -22,7 +22,7 @@ const theme = createTheme({
 });
 
 export default function Change() {
-  const router = useRouter();
+  const [cookies] = useCookies(['cookie-name']);
   const [inputPassword, setInputPassword] = useState('');
   const [inputPassword2, setInputPassword2] = useState('');
   const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
@@ -40,23 +40,28 @@ export default function Change() {
     }
   }
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const credentials = {
-      email: data.get('email'),
-      password: data.get('password'),
+      newPassword: data.get('password'),
     };
-
-    // Axios({
-    //   url: 'http://localhost:8080/accounts/login',
-    //   method: 'post',
-    //   data: credentials
-    // })
-    // .then(res => {
-    //   const token = res.data.key
-    //   setToken(token)
-    // })
+    try {
+      console.log(credentials);
+      console.log(`Bearer ${cookies.InfoMansionAccessToken}`);
+      const { data } = await axios.patch(
+        '/api/v1/users/password',
+        credentials,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            withCredentials: true,
+          },
+        },
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
