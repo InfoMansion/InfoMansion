@@ -1,5 +1,7 @@
 import axios from 'axios';
-const BASE_URL = 'http://localhost:8080';
+const HOST = process.env.NEXT_PUBLIC_ENV_HOST;
+const PORT = process.env.NEXT_PUBLIC_ENV_PORT;
+const BASE_URL = `${HOST}:${PORT}`;
 
 export default axios.create({
   baseURL: BASE_URL,

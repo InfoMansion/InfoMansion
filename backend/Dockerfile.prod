@@ -1,0 +1,21 @@
+FROM openjdk:11-jdk-slim AS builder
+
+RUN mkdir -p /server
+
+WORKDIR /server
+
+COPY . .
+
+RUN ./gradlew clean build
+
+FROM openjdk:11-jre-slim AS runner
+
+WORKDIR /server
+
+ARG JAR_FILE=/build/libs/*.jar
+
+COPY --from=builder /server/${JAR_FILE} /server/app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java","-jar","-Dspring.profiles.active=prod","app.jar"]

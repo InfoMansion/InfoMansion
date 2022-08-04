@@ -1,0 +1,104 @@
+version: "3"
+
+networks:
+  front-networks:
+    driver: bridge
+  back-networks:
+    driver: bridge
+
+services:
+  nginx:
+    container_name: nginx-infomansion
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    # volumes:
+    #   - ./nginx/etc/letsencrypt:/etc/letsencrypt
+    #   - ./nginx/var/lib/letsencrypt:/var/lib/letsencrypt
+    # - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    #   - ./content:/var/www
+    networks:
+      - front-networks
+      - back-networks
+    environment:
+      - TZ=Asia/Seoul
+    depends_on:
+      - spring-1
+      - spring-2
+      - react-1
+      - react-2
+
+  spring-1:
+    container_name: spring-infomansion-1
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    restart: always
+    # ports:
+    # - "8080:8080"
+    expose:
+      - "8080"
+    networks:
+      - back-networks
+      - front-networks
+    depends_on:
+      - redis
+
+  spring-2:
+    container_name: spring-infomansion-2
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    restart: always
+    # ports:
+    # - "8081:8080"
+    expose:
+      - "8080"
+    networks:
+      - back-networks
+      - front-networks
+    depends_on:
+      - redis
+
+  redis:
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
+    container_name: redis-infomansion
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - back-networks
+
+  react-1:
+    container_name: react-infomansion-1
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    restart: always
+    # ports:
+    # - "3000:3000"
+    expose:
+      - "3000"
+    networks:
+      - front-networks
+      - back-networks
+
+  react-2:
+    container_name: react-infomansion-2
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    restart: always
+    # ports:
+    # - "3001:3000"
+    expose:
+      - "3000"
+    networks:
+      - front-networks
+      - back-networks
