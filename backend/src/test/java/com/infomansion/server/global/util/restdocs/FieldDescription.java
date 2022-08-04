@@ -53,6 +53,10 @@ public enum FieldDescription {
     USERSTUFF_CREATED(JsonFieldType.STRING, "UserStuff 생성날짜"),
     USERSTUFF_MODIFIED(JsonFieldType.STRING, "UserStuff 마지막 수정날짜"),
 
+    // Token
+    ACCESSTOKEN(JsonFieldType.STRING, "accessToken 정보"),
+    REFRESHTOKEN(JsonFieldType.STRING, "refreshToken 정보"),
+    ACCESSTOKEN_EXPIRE(JsonFieldType.STRING, "accessToken 만료기간"),
     ;
 
     private final JsonFieldType jsonFieldType;

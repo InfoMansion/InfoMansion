@@ -172,16 +172,16 @@ include::{snippets}/userstuff-get/response-fields.adoc[]
 사용자의 UserStuff를 모두 조회
 
 === Http Request
-include::{snippets}/userstuff-getall-with-/http-request.adoc[]
+include::{snippets}/userstuff-getall-with-userid/http-request.adoc[]
 
 === Path parameters
-include::{snippets}/userstuff-getall-with-/path-parameters.adoc[]
+include::{snippets}/userstuff-getall-with-userid/path-parameters.adoc[]
 
 === Http Response
-include::{snippets}/userstuff-getall-with-/http-response.adoc[]
+include::{snippets}/userstuff-getall-with-userid/http-response.adoc[]
 
 === Response fields
-include::{snippets}/userstuff-getall-with-/response-fields.adoc[]
+include::{snippets}/userstuff-getall-with-userid/response-fields.adoc[]
 
 ---
 
@@ -324,7 +324,7 @@ include::{snippets}/post-recommend/response-fields.adoc[]
 
 
 [[User-생성]]
-== User 생성
+== User 회원가입
 
 회원가입 API
 
@@ -336,6 +336,97 @@ include::{snippets}/user-create/request-fields.adoc[]
 
 === Http Response
 include::{snippets}/user-create/http-response.adoc[]
+
+---
+
+[[User-login]]
+== User 로그인
+
+로그인 API
+
+=== Http Request
+include::{snippets}/user-login/http-request.adoc[]
+
+=== Request body
+include::{snippets}/user-login/request-body.adoc[]
+
+=== Request fields
+include::{snippets}/user-login/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/user-login/http-response.adoc[]
+
+=== Response Headers
+include::{snippets}/user-login/response-headers.adoc[]
+
+=== Response fields
+include::{snippets}/user-login/response-fields.adoc[]
+
+---
+
+[[User-reissue]]
+== User Reissue
+
+토큰 갱신 API
+
+=== Http Request
+include::{snippets}/user-reissue/http-request.adoc[]
+
+=== Request Headers
+include::{snippets}/user-reissue/response-headers.adoc[]
+
+=== Request Body
+include::{snippets}/user-reissue/request-body.adoc[]
+
+=== Request fields
+include::{snippets}/user-reissue/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/user-reissue/http-response.adoc[]
+
+=== Response Header
+include::{snippets}/user-reissue/response-headers.adoc[]
+
+=== Response fields
+include::{snippets}/user-reissue/response-fields.adoc[]
+
+---
+
+[[User-logout]]
+== User 로그아웃
+
+로그아웃 API
+
+=== Http Request
+include::{snippets}/user-logout/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/user-logout/http-response.adoc[]
+
+=== Response Headers
+include::{snippets}/user-logout/response-headers.adoc[]
+
+=== Response fields
+include::{snippets}/user-logout/response-fields.adoc[]
+
+---
+
+[[User-상세정보조회]]
+== User 상세 Info 조회
+
+username을 기반으로 사용자의 정보를 조회하는 API
+
+=== Http Request
+include::{snippets}/user-find-by-username/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/user-find-by-username/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/user-find-by-username/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/user-find-by-username/response-fields.adoc[]
 
 ---
 
