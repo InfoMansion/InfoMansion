@@ -17,6 +17,8 @@ import Stuffs from './RoomPage/Stuffs'
 import RoomCamera from './RoomPage/atoms/RoomCamera'
 import RoomLight from './RoomPage/atoms/RoomLight'
 
+import Stuff_s3test from './RoomPage/atoms/Stuff_s3test'
+
 export default function Room( { StuffClick, userName} ) {
     // 화면 확대 정도 조정.
     const [zoomscale] = useState(90);
@@ -128,7 +130,7 @@ export default function Room( { StuffClick, userName} ) {
                     tagon={tagon}
                 />
 
-                {/* <OrbitControls /> */}
+                {/* <Stuff_s3test /> */}
             </Canvas>
         </div>
       ) 
