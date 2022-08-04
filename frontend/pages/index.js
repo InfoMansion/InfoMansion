@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <>
-      {/* {auth.isAuthorized ? ( */}
+      {auth.isAuthorized ? (
         <div style={{ display: 'flex', width: '100%', height: '640px' }}>
           <div style={{ width: '80%', height: '100%' }}>
             <ul className={styles.container}>
@@ -52,9 +52,9 @@ export default function Home() {
             ></div>
           </div>
         </div>
-      {/* ) : (
+      ) : (
         <LoginComponent />
-      )} */}
+      )}
     </>
   );
 }
