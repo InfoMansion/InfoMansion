@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
+import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
@@ -23,11 +24,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.infomansion.server.domain.user.domain.User.builder;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
@@ -50,14 +52,18 @@ public class PostApiControllerTest {
     private UserStuffRepository userStuffRepository;
 
     @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
     private PostService postService;
 
     @Autowired
-    private PostRepository postRepository;
+    private LikesPostService likesPostService;
 
     private Long userId;
     private Long stuffId;
     private Long userStuffId;
+    private User user;
     @BeforeEach
     public void setUp() {
         // user 생성
@@ -67,13 +73,14 @@ public class PostApiControllerTest {
         String username = "infomansion";
         String uCategories = "IT,COOK";
 
-        userId = userRepository.save(builder()
+        user = userRepository.save(builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
                 .categories(uCategories)
-                .build()).getId();
+                .build());
+        userId = user.getId();
 
         // stuff 생성
         String stuffName = "notebook";
@@ -137,6 +144,7 @@ public class PostApiControllerTest {
 
     @DisplayName("post 추천에 성공했습니다.")
     @WithCustomUserDetails
+    @Transactional
     @Test
     public void Post_추천_성공() throws Exception{
         // 다른 User 생성
@@ -146,18 +154,18 @@ public class PostApiControllerTest {
         String username = "infomansion1";
         String uCategories = "IT,COOK";
 
-        User PostCreateUser = userRepository.save(builder()
+        User postCreateUser = userRepository.save(builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
                 .categories(uCategories)
                 .build());
-        Long PostCreateUserId = PostCreateUser.getId();
+        Long postCreateUserId = postCreateUser.getId();
 
         // 다른 User의 UserStuff 생성 및 배치
         UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(PostCreateUserId)
+                .userId(postCreateUserId)
                 .stuffId(stuffId).build();
 
         userStuffId = userStuffService.saveUserStuff(createDto);
@@ -172,14 +180,75 @@ public class PostApiControllerTest {
 
         //post 작성
 
-        Post post = Post.builder().user(PostCreateUser).userStuff(userStuffRepository.findById(userStuffId).get())
+        Post post = Post.builder().user(postCreateUser).userStuff(userStuffRepository.findById(userStuffId).get())
                         .title("EffectiveJava").content("자바개발자 필독서").build();
         postRepository.saveAndFlush(post);
 
         mockMvc.perform(get("/api/v1/posts/recommend"))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andExpect((ResultMatcher) jsonPath("$.data.userIds.length()").value(1));
     }
 
+    @DisplayName("UserStuff 안에있는 Post를 모두 반환한다.")
+    @WithCustomUserDetails
+    @Transactional
+    @Test
+    public void post_UserStuff로_검색() throws Exception{
+
+        //UserStuff 배치
+        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
+                .id(userStuffId).alias("Java 정리").category("IT")
+                .posX(0.2).posY(0.3).posZ(3.1)
+                .rotX(1.5).rotY(0.0).rotZ(0.9)
+                .build();
+
+        userStuffId = userStuffService.includeUserStuff(includeDto);
+
+        //post 작성
+        for(int i=0;i<3;i++){
+            Post post = Post.builder().user(user).userStuff(userStuffRepository.findById(userStuffId).get())
+                    .title("EffectiveJava ver." + (i+1)).content("자바개발자 필독서 ver."+ (i+1)).build();
+            postRepository.saveAndFlush(post);
+            for(int j=0;j<i+1;j++) post.getLikesPost().addPostLikes();
+        }
+
+        mockMvc.perform(get("/api/v1/posts/"+userStuffId))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.data[0].['title']").value("EffectiveJava ver.1"));
+    }
+
+    @DisplayName("좋아요 버튼을 누르면 Post의 Likes가 증가한다.")
+    @WithCustomUserDetails
+    @Transactional
+    @Test
+    public void Post_좋아요_성공() throws Exception{
+
+        //UserStuff 배치
+        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
+                .id(userStuffId).alias("Java 정리").category("IT")
+                .posX(0.2).posY(0.3).posZ(3.1)
+                .rotX(1.5).rotY(0.0).rotZ(0.9)
+                .build();
+
+        userStuffId = userStuffService.includeUserStuff(includeDto);
+
+        //post 작성
+        PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
+                .userStuffId(userStuffId)
+                .title("EffectiveJava")
+                .content("자바개발자 필독서")
+                .build();
+
+        Long postId = postService.createPost(postCreateDto);
+
+
+        mockMvc.perform(put("/api/v1/posts/likes/"+postId))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/v1/posts/"+userStuffId))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.data[0].['likes']").value(1));
+
+    }
 
 }

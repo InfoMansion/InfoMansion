@@ -64,5 +64,6 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         this.user = user;
         this.userStuff = userStuff;
         this.category = userStuff.getCategory();
+        userStuff.getPostList().add(this);
     }
 }

@@ -18,9 +18,10 @@ public class LikesPostServiceImpl implements LikesPostService {
 
     @Transactional
     @Override
-    public void addLikes(Long postId) {
+    public Long addLikes(Long postId) {
         LikesPost likesPost = likesPostRepository.findById(postId)
                         .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         likesPost.addPostLikes();
+        return likesPost.getPostId();
     }
 }

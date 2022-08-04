@@ -2,6 +2,7 @@ package com.infomansion.server.domain.userstuff.domain;
 
 import com.infomansion.server.domain.base.BaseTimeEntityAtSoftDelete;
 import com.infomansion.server.domain.category.domain.Category;
+import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.user.domain.User;
 import lombok.Builder;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -42,6 +45,9 @@ public class UserStuff extends BaseTimeEntityAtSoftDelete {
     private BigDecimal rotX;
     private BigDecimal rotY;
     private BigDecimal rotZ;
+
+    @OneToMany(mappedBy = "userStuff")
+    private List<Post> postList = new ArrayList<>();
 
     private Boolean deleteFlag;
 
