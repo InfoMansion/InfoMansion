@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 public enum Category implements EnumMapperType {
     IT("IT"),
     COOK("요리"),
-    FASHIONANDBEAUTY("패션/뷰티"),
+    FASHION("패션"),
+    BEAUTY("뷰티"),
     GAME("게임"),
     SPORTS("스포츠"),
     DAILY("데일리"),
