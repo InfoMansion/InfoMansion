@@ -399,4 +399,38 @@ public class UserStuffServiceImplTest {
         assertThat(responseList.size()).isEqualTo(5);
     }
 
+    @DisplayName("카테고리 타입이 NONE인 경우 여러개 배치 가능 성공")
+    @Test
+    public void userstuff_category_none_배치_성공() {
+        // given
+        for(int i = 0; i < 3; i++) {
+            String stuffName = "notebook" + (i + 1);
+            String stuffNameKor = "노트북" + (i + 1);
+            Long price = 30L;
+            String sCategories = "NONE";
+            String stuffType = "OTHER";
+
+            StuffRequestDto requestDto = StuffRequestDto.builder()
+                    .stuffName(stuffName)
+                    .stuffNameKor(stuffNameKor)
+                    .price(price)
+                    .categories(sCategories)
+                    .stuffType(stuffType)
+                    .geometry("geometry")
+                    .material("materials")
+                    .build();
+            Long stuffId = stuffRepository.save(requestDto.toEntity()).getId();
+            Long userStuffId = userStuffService.saveUserStuff(UserStuffRequestDto.builder()
+                    .userId(userId).stuffId(stuffId).build());
+            userStuffService.includeUserStuff(UserStuffIncludeRequestDto.builder()
+                    .id(userStuffId).category("NONE").alias("NONE배치")
+                    .posX(0.0).posY(0.0).posZ(0.0)
+                    .rotX(0.0).rotY(0.0).rotZ(0.0).build());
+        }
+
+        // when, then
+        List<UserStuffArrangedResponeDto> responseList = userStuffService.findArrangedUserStuffByUsername(username);
+        assertThat(responseList.size()).isEqualTo(3);
+    }
+
 }

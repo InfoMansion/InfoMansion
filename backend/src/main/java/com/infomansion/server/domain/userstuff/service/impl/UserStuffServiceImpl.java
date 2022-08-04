@@ -156,6 +156,8 @@ public class UserStuffServiceImpl implements UserStuffService {
     }
 
     private void checkDuplicatePlacedCategory(Long userId, String category) {
+        // NONE 카테고리는 중복배치가 가능할 수 있게 함
+        if(category.equals("NONE")) return;
         if(userStuffRepository.findAllCategoryByUserId(userId).contains(category))
             throw new CustomException(ErrorCode.DUPLICATE_CATEGORY);
     }
