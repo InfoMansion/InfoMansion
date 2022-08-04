@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
+import { Tabs, Tab, Box, Divider, Typography } from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
 import TabPanel from '../../components/PostPage/TabPanel';
-
+import Post from '../../components/RoomPage/atoms/Post';
+import postData from '../../components/jsonData/posts.json';
+import PostViewModal from '../../components/PostPage/PostViewModal';
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -16,8 +16,10 @@ function a11yProps(index) {
 export default function SearchPost() {
   //검색 결과가 담기는 query입니다.
   const { query } = useRouter();
-  const [value, setValue] = React.useState(0);
-
+  const [value, setValue] = useState(0);
+  const [posts] = useState(postData.slice(0, 5));
+  const [showModal, setShowModal] = useState(false);
+  const [post, setPost] = useState('');
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -26,8 +28,18 @@ export default function SearchPost() {
       backgroundColor: 'white',
     },
   });
+
+  const openModal = post => {
+    setPost(post);
+    setShowModal(true);
+  };
   return (
     <Box sx={{ width: '100%' }}>
+      <PostViewModal
+        post={post}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      ></PostViewModal>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
@@ -52,7 +64,18 @@ export default function SearchPost() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        제목 관련 검색 결과의 포스트들이 오겠죠?
+        <Divider />
+        {posts.map(post => (
+          <div>
+            <Post
+              post={post}
+              totheight={150}
+              picwidth={150}
+              maxcontent={150}
+              openModal={openModal}
+            />
+          </div>
+        ))}{' '}
       </TabPanel>
       <TabPanel value={value} index={1}>
         내용 관련 검색 결과의 포스트들이 오겠죠?

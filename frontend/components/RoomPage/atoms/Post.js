@@ -8,7 +8,13 @@ import {
   Typography,
 } from '@mui/material';
 
-export default function Post({ post, totheight, picwidth, maxcontent }) {
+export default function Post({
+  post,
+  totheight,
+  picwidth,
+  maxcontent,
+  openModal,
+}) {
   return (
     <Card
       key={post.title}
@@ -23,7 +29,7 @@ export default function Post({ post, totheight, picwidth, maxcontent }) {
           display: 'flex',
           alignItems: 'flex-start',
         }}
-        onClick={() => console.log(post.title)}
+        onClick={() => openModal(post)}
       >
         <CardMedia
           component="img"
