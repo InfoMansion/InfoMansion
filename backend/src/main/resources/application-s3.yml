@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: AKIASJRN5KGTJSDN3WXL
+      secret-key: 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
+    s3:
+      bucket: infomansion-webservice-s3

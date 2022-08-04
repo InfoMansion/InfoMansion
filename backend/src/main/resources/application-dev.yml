@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://host.docker.internal:3309/infomansion?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: infomansion
+    password: infomansion
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    database-platform: org.hibernate.dialect.MariaDB106Dialect
+
+  redis:
+    host: host.docker.internal
+    port: 6380
+
+  mail:
+    redirectURI: http://localhost:3000

@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://infomansion-webservice-database.ct0x0yhiwnnn.ap-northeast-2.rds.amazonaws.com:3306/infomansion_webservice_database
+    username: infomansion_admin
+    password: dlsvhaostusdjemalsqlalfqjsghdlqslek
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    database-platform: org.hibernate.dialect.MariaDB106Dialect
+
+  redis:
+    host: host.docker.internal
+    port: 6379
+
+  mail:
+    redirectURI: http://i7a607.p.ssafy.io/
