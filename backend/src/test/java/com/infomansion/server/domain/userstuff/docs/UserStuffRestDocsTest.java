@@ -288,6 +288,57 @@ public class UserStuffRestDocsTest {
                 ));
     }
 
+    @Test
+    public void username으로_방에_배치된_userstuff_조회() throws Exception {
+        // given
+        String username = "infomansion";
+        List<StuffType> list = Arrays.asList(StuffType.WALL, StuffType.FLOOR, StuffType.DESK, StuffType.CLOSET, StuffType.DRAWER);
+        List<UserStuffArrangedResponeDto> responseDtoList = new ArrayList<>();
+        for(int i = 1; i < 5; i+=2) {
+            String categories = "DAILY,STUDY,INTERIOR";
+            Stuff stuff = Stuff.builder()
+                    .id(10L+i).stuffName("desk"+i).stuffNameKor("책상"+i).price(50L+i)
+                    .categories(categories).stuffType(list.get(i))
+                    .geometry("geometry").material("material").stuffGlbPath("glbPath")
+                    .build();
+            responseDtoList.add(UserStuffArrangedResponeDto.toDto(
+                    UserStuff.builder()
+                            .id(Long.valueOf(i))
+                            .stuff(stuff)
+                            .alias("info팀의 Daily")
+                            .category(Category.DAILY)
+                            .posX(BigDecimal.ONE).posY(BigDecimal.ONE).posZ(BigDecimal.ONE)
+                            .rotX(BigDecimal.ZERO).rotY(BigDecimal.ZERO).rotZ(BigDecimal.ZERO).build()));
+        }
+        given(userStuffService.findArrangedUserStuffByUsername(any(String.class))).willReturn(responseDtoList);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/userstuffs/room/{username}", username))
+                .andExpect(status().isOk())
+                .andDo(document("userstuff-get-arranged-userstuff-with-username",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("username").description("사용자 이름")
+                        ),
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("사용자 방에 배치된 모든 UserStuff")))
+                                .andWithPrefix("data.[].",
+                                        fieldWithPath("id").type(USERSTUFF_ID.getJsonFieldType()).description(USERSTUFF_ID.getDescription()),
+                                        fieldWithPath("stuffNameKor").type(STUFF_NAME_KOR.getJsonFieldType()).description(STUFF_NAME_KOR.getDescription()),
+                                        fieldWithPath("alias").type(ALIAS.getJsonFieldType()).description(ALIAS.getDescription()),
+                                        fieldWithPath("category").type(JsonFieldType.OBJECT).description("Category"),
+                                        fieldWithPath("category.category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
+                                        fieldWithPath("category.categoryName").type(CATEGORY_NAME.getJsonFieldType()).description(CATEGORY_NAME.getDescription()),
+                                        fieldWithPath("posX").type(POS_X.getJsonFieldType()).description(POS_X.getDescription()),
+                                        fieldWithPath("posY").type(POS_Y.getJsonFieldType()).description(POS_Y.getDescription()),
+                                        fieldWithPath("posZ").type(POS_Z.getJsonFieldType()).description(POS_Z.getDescription()),
+                                        fieldWithPath("rotX").type(ROT_X.getJsonFieldType()).description(ROT_X.getDescription()),
+                                        fieldWithPath("rotY").type(ROT_Y.getJsonFieldType()).description(ROT_Y.getDescription()),
+                                        fieldWithPath("rotZ").type(ROT_Z.getJsonFieldType()).description(ROT_Z.getDescription())
+                                )
+                ));
+    }
+
     private List<FieldDescriptor> getUserStuffResponse() {
         return Arrays.asList(
                 fieldWithPath("userStuffId").type(USERSTUFF_ID.getJsonFieldType()).description(USERSTUFF_ID.getDescription()),

@@ -22,4 +22,6 @@ public interface UserStuffService {
 
     Long removeUserStuff(Long userStuffId);
 
+    List<UserStuffArrangedResponeDto> findArrangedUserStuffByUsername(String username);
+
 }

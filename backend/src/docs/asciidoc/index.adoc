@@ -130,7 +130,7 @@ include::{snippets}/stuff-delete/response-fields.adoc[]
 [[UserStuff-생성]]
 == UserStuff 생성
 
-와 stuffId로 userStuff를 생성하는 API
+userId와 stuffId로 userStuff를 생성하는 API
 
 === Http Request
 include::{snippets}/userstuff-create/http-request.adoc[]
@@ -182,6 +182,28 @@ include::{snippets}/userstuff-getall-with-userid/http-response.adoc[]
 
 === Response fields
 include::{snippets}/userstuff-getall-with-userid/response-fields.adoc[]
+
+---
+
+
+[[UserStuff-조회3]]
+== User의 배치된 UserStuff 조회
+
+username으로 배치된 UserStuff를 모두 조회
+
+StuffType.WALL이 data의 첫번째, StuffType.FLOOR이 data의 두번째 인덱스에 존재
+
+=== Http Request
+include::{snippets}/userstuff-get-arranged-userstuff-with-username/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/userstuff-get-arranged-userstuff-with-username/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/userstuff-get-arranged-userstuff-with-username/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/userstuff-get-arranged-userstuff-with-username/response-fields.adoc[]
 
 ---
 

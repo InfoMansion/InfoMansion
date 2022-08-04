@@ -2,6 +2,7 @@ package com.infomansion.server.domain.userstuff.api;
 
 import com.infomansion.server.domain.userstuff.dto.*;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
+import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -63,5 +64,11 @@ public class UserStuffApiController {
     public ResponseEntity<CommonResponse<Long>> removeUserStuff(@PathVariable Long userStuffId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userStuffService.removeUserStuff(userStuffId)));
+    }
+
+    @GetMapping("/api/v1/userstuffs/room/{username}")
+    public ResponseEntity<? extends BasicResponse> findArrangedUserStuffByUsername(@Valid @PathVariable String username) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userStuffService.findArrangedUserStuffByUsername(username)));
     }
 }

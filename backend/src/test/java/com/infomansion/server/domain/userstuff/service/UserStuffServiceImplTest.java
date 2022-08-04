@@ -6,10 +6,7 @@ import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
-import com.infomansion.server.domain.userstuff.dto.UserStuffIncludeRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffModifyRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffResponseDto;
+import com.infomansion.server.domain.userstuff.dto.*;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
@@ -21,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +41,7 @@ public class UserStuffServiceImplTest {
     private UserRepository userRepository;
 
     private Long userId;
+    private String username;
     private List<Long> stuffIds;
 
     @BeforeEach
@@ -51,25 +50,26 @@ public class UserStuffServiceImplTest {
         String email = "infomansion@test.com";
         String password = "testPassword1$";
         String tel = "01012345678";
-        String username = "infomansion";
-        String categories = "IT,COOK";
+        username = "infomansion";
+        String userCategories = "IT,COOK";
 
         userId = userRepository.save(User.builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
-                .categories(categories)
+                .categories(userCategories)
                 .build()).getId();
 
         // stuff 생성
         stuffIds = new ArrayList<>();
+        List<String> stuffTypes = Arrays.asList("DESK", "CLOSET", "DRAWER", "WALL", "FLOOR");
         for(int i = 0; i < 10; i++) {
             String stuffName = "notebook"+(i+1);
             String stuffNameKor = "노트북"+(i+1);
             Long price = 30L;
-            String sCategories = "IT,GAME,SPORTS";
-            String stuffType = "OTHER";
+            String sCategories = "IT,GAME,SPORTS,DAILY,INTERIOR";
+            String stuffType = stuffTypes.get(i % stuffTypes.size());
 
             StuffRequestDto requestDto = StuffRequestDto.builder()
                     .stuffName(stuffName)
@@ -373,6 +373,30 @@ public class UserStuffServiceImplTest {
         assertThatThrownBy(() -> {userStuffService.modifyAliasOrCategory(modifyRequestDto);})
                 .isInstanceOf(CustomException.class)
                 .extracting("errorCode").isEqualTo(ErrorCode.NOT_VALID_CATEGORY);
+    }
+
+    @DisplayName("사용자가 보유하고 있는 UserStuff 중 배치된 UserStuff만 조회")
+    @Test
+    public void 배치된_user_stuff_조회_성공() {
+        // given
+        List<String> categories = Arrays.asList("IT", "GAME", "SPORTS", "DAILY", "INTERIOR");
+        for(int i = 0; i < stuffIds.size(); i++) {
+            UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
+                    .stuffId(stuffIds.get(i)).userId(userId).build();
+            Long userStuffId = userStuffService.saveUserStuff(requestDto);
+            if(i < stuffIds.size()/2) { // 5개만 배치
+                UserStuffIncludeRequestDto arrangedDto = UserStuffIncludeRequestDto.builder()
+                        .id(userStuffId).category(categories.get(i % categories.size())).alias("Java 모음집")
+                        .posX(1.1).posY(0.5).posZ(0.0)
+                        .rotX(0.0).rotY(0.2).rotZ(2.2)
+                        .build();
+                userStuffService.includeUserStuff(arrangedDto);
+            }
+        }
+
+        // when,then
+        List<UserStuffArrangedResponeDto> responseList = userStuffService.findArrangedUserStuffByUsername(username);
+        assertThat(responseList.size()).isEqualTo(5);
     }
 
 }

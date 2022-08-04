@@ -145,6 +145,16 @@ public class UserStuffServiceImpl implements UserStuffService {
         return userStuffId;
     }
 
+    @Override
+    public List<UserStuffArrangedResponeDto> findArrangedUserStuffByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        return userStuffRepository.findArrangedByUser(user).stream()
+                .map(userStuff -> UserStuffArrangedResponeDto.toDto(userStuff))
+                .collect(Collectors.toList());
+    }
+
     private void checkDuplicatePlacedCategory(Long userId, String category) {
         if(userStuffRepository.findAllCategoryByUserId(userId).contains(category))
             throw new CustomException(ErrorCode.DUPLICATE_CATEGORY);
