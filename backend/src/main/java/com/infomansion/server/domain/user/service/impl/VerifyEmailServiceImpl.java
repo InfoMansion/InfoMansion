@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 public class VerifyEmailServiceImpl implements VerifyEmailService {
 
-    private final String VERIFICATION_LINK = "http://localhost:8080/api/v1/auth/verify?key=";
+    private final String VERIFICATION_LINK = "http://localhost:8080/api/v1/auth/verification?key=";
     private final Long EXPIRATION_TIME = 60 * 30L;
 
 
