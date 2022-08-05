@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface UserStuffService {
 
-    Long saveUserStuff(UserStuffRequestDto requestDto);
+    Long saveUserStuff(UserStuffSaveRequestDto requestDto);
 
-    List<UserStuffResponseDto> findAllUserStuff(Long userId);
+    List<UserStuffResponseDto> findAllUserStuff();
 
     UserStuffResponseDto findUserStuffByUserStuffId(Long userStuffId);
 

@@ -10,6 +10,7 @@ import com.infomansion.server.domain.userstuff.dto.*;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
+import com.infomansion.server.global.util.security.WithCustomUserDetails;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -93,13 +94,14 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("사용자가 보유하는 Stuff 목록에 새로운 Stuff를 추가한 뒤 조회")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_생성_및_조회_성공() {
         // given
 
         // when
-        UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
-                .stuffId(stuffIds.get(0)).userId(userId).build();
+        UserStuffSaveRequestDto requestDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(requestDto);
 
         // then
@@ -108,30 +110,32 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("사용자가 보유하고 있는 모든 Stuff 조회")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_전체_조회_성공() {
         // given
 
         // when
         for(int i = 0; i < stuffIds.size(); i+=2) {
-            UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
-                    .stuffId(stuffIds.get(i)).userId(userId).build();
+            UserStuffSaveRequestDto requestDto = UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffIds.get(i)).build();
             userStuffService.saveUserStuff(requestDto);
         }
 
         // then
-        List<UserStuffResponseDto> list = userStuffService.findAllUserStuff(userId);
+        List<UserStuffResponseDto> list = userStuffService.findAllUserStuff();
         assertThat(list.size()).isEqualTo(5);
     }
 
     @DisplayName("사용자가 보유하고 있는 Stuff 하나를 배치된 상태로 변경")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_배치_상태로_변경() {
         // given
         Long userStuffId = 12L;
         for(int i = 0; i < stuffIds.size(); i+=2) {
-            UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
-                    .stuffId(stuffIds.get(i)).userId(userId).build();
+            UserStuffSaveRequestDto requestDto = UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffIds.get(i)).build();
             userStuffId = userStuffService.saveUserStuff(requestDto);
         }
 
@@ -153,13 +157,14 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("이미 배치된 Stuff를 다시 배치된 상태로 변경할 경우 오류")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_배치_상태로_변경_오류() {
         // given
         Long userStuffId = 12L;
         for(int i = 0; i < stuffIds.size(); i+=2) {
-            UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
-                    .stuffId(stuffIds.get(i)).userId(userId).build();
+            UserStuffSaveRequestDto requestDto = UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffIds.get(i)).build();
             userStuffId = userStuffService.saveUserStuff(requestDto);
         }
 
@@ -188,13 +193,14 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("사용자가 보유하고 있는 Stuff 하나를 제외된 상태로 변경")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_제외_상태로_변경() {
         // given
         Long userStuffId = 12L;
         for(int i = 0; i < stuffIds.size(); i+=2) {
-            UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
-                    .stuffId(stuffIds.get(i)).userId(userId).build();
+            UserStuffSaveRequestDto requestDto = UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffIds.get(i)).build();
             userStuffId = userStuffService.saveUserStuff(requestDto);
         }
         UserStuffIncludeRequestDto requestDto = UserStuffIncludeRequestDto.builder()
@@ -217,11 +223,12 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("이미 제외된 Stuff를 다시 제외된 상태로 변경 요청할 경우 오류")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_제외_상태로_변경_오류() {
         // given
-        UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
-                .stuffId(stuffIds.get(0)).userId(userId).build();
+        UserStuffSaveRequestDto requestDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(requestDto);
 
         // when, then
@@ -231,11 +238,12 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("배치된 Stuff의 Alias나 Category 변경 성공")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_alias_category_변경_성공() {
         // given
-        UserStuffRequestDto requestDtoGiven = UserStuffRequestDto.builder()
-                .stuffId(stuffIds.get(0)).userId(userId).build();
+        UserStuffSaveRequestDto requestDtoGiven = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(requestDtoGiven);
 
         UserStuffIncludeRequestDto requestDto = UserStuffIncludeRequestDto.builder()
@@ -263,11 +271,12 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("Alias, Category 수정 시 둘 다 미입력할 경우 오류 발생")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_alias_category_변경_오류() {
         // given
-        UserStuffRequestDto requestDtoGiven = UserStuffRequestDto.builder()
-                .stuffId(stuffIds.get(0)).userId(userId).build();
+        UserStuffSaveRequestDto requestDtoGiven = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(requestDtoGiven);
 
         UserStuffIncludeRequestDto requestDto = UserStuffIncludeRequestDto.builder()
@@ -291,11 +300,12 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("userStuffId로 삭제 성공")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_삭제_성공() {
         // given
-        UserStuffRequestDto requestDtoGiven = UserStuffRequestDto.builder()
-                .stuffId(stuffIds.get(0)).userId(userId).build();
+        UserStuffSaveRequestDto requestDtoGiven = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(requestDtoGiven);
 
         // when
@@ -308,13 +318,14 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("이미 방에 배치된 category가 입력되면 실패")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_이미_배치된_카테고리로_수정_실패() {
         // given
         Long[] userStuffId = new Long[2];
         for(int i = 0; i < 2; i++) {
-            UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
-                    .stuffId(stuffIds.get(i)).userId(userId).build();
+            UserStuffSaveRequestDto requestDto = UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffIds.get(i)).build();
             userStuffId[i] = userStuffService.saveUserStuff(requestDto);
         }
         UserStuffIncludeRequestDto requestDto = UserStuffIncludeRequestDto.builder()
@@ -334,11 +345,12 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("stuff에 적용할 수 없는 category가 입력될 경우 실패")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_stuff에_적용할_수_없는_카테고리로_수정_실패() {
         // given
-        UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
-                .stuffId(stuffIds.get(0)).userId(userId).build();
+        UserStuffSaveRequestDto requestDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(requestDto);
 
         // when
@@ -353,11 +365,12 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("UserStuff의 category 변경 시, 유효하지 않은 category를 입력할 경우 실패")
+    @WithCustomUserDetails
     @Test
     public void user_stuff_category_변경_실패_1() {
         // given
-        UserStuffRequestDto requestDtoGiven = UserStuffRequestDto.builder()
-                .stuffId(stuffIds.get(0)).userId(userId).build();
+        UserStuffSaveRequestDto requestDtoGiven = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(requestDtoGiven);
 
         UserStuffIncludeRequestDto requestDto = UserStuffIncludeRequestDto.builder()
@@ -376,13 +389,14 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("사용자가 보유하고 있는 UserStuff 중 배치된 UserStuff만 조회")
+    @WithCustomUserDetails
     @Test
     public void 배치된_user_stuff_조회_성공() {
         // given
         List<String> categories = Arrays.asList("IT", "GAME", "SPORTS", "DAILY", "INTERIOR");
         for(int i = 0; i < stuffIds.size(); i++) {
-            UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
-                    .stuffId(stuffIds.get(i)).userId(userId).build();
+            UserStuffSaveRequestDto requestDto = UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffIds.get(i)).build();
             Long userStuffId = userStuffService.saveUserStuff(requestDto);
             if(i < stuffIds.size()/2) { // 5개만 배치
                 UserStuffIncludeRequestDto arrangedDto = UserStuffIncludeRequestDto.builder()
@@ -400,6 +414,7 @@ public class UserStuffServiceImplTest {
     }
 
     @DisplayName("카테고리 타입이 NONE인 경우 여러개 배치 가능 성공")
+    @WithCustomUserDetails
     @Test
     public void userstuff_category_none_배치_성공() {
         // given
@@ -420,8 +435,8 @@ public class UserStuffServiceImplTest {
                     .material("materials")
                     .build();
             Long stuffId = stuffRepository.save(requestDto.toEntity()).getId();
-            Long userStuffId = userStuffService.saveUserStuff(UserStuffRequestDto.builder()
-                    .userId(userId).stuffId(stuffId).build());
+            Long userStuffId = userStuffService.saveUserStuff(UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffId).build());
             userStuffService.includeUserStuff(UserStuffIncludeRequestDto.builder()
                     .id(userStuffId).category("NONE").alias("NONE배치")
                     .posX(0.0).posY(0.0).posZ(0.0)

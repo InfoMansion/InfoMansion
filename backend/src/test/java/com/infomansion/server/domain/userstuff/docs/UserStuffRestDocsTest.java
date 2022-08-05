@@ -55,12 +55,12 @@ public class UserStuffRestDocsTest {
     public void userStuff_저장() throws Exception{
         // given
         Long userStuffId = 20L;
-        UserStuffRequestDto requestDto = UserStuffRequestDto.builder()
-                .userId(10L).stuffId(999L).build();
-        given(userStuffService.saveUserStuff(any(UserStuffRequestDto.class))).willReturn(userStuffId);
+        UserStuffSaveRequestDto requestDto = UserStuffSaveRequestDto.builder()
+                .stuffId(999L).build();
+        given(userStuffService.saveUserStuff(any(UserStuffSaveRequestDto.class))).willReturn(userStuffId);
 
         // when, then
-        mockMvc.perform(post("/api/v1/userstuffs")
+        mockMvc.perform(post("/api/v1/userstuffs/list")
                     .content(objectMapper.writeValueAsString(requestDto))
                     .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -68,7 +68,6 @@ public class UserStuffRestDocsTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
-                                fieldWithPath("userId").description("사용자 Id"),
                                 fieldWithPath("stuffId").description("stuff Id")
                         ),
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.NUMBER).description(USERSTUFF_ID.getDescription())))
@@ -117,7 +116,7 @@ public class UserStuffRestDocsTest {
     }
 
     @Test
-    public void userId로_사용자의_모든_userStuff_조회() throws Exception {
+    public void 로그인된_사용자의_모든_userStuff_조회() throws Exception {
         // given
         Long userId = 10L;
         List<UserStuffResponseDto> responseDtoList = new ArrayList<>();
@@ -143,17 +142,14 @@ public class UserStuffRestDocsTest {
                             .posX(BigDecimal.ONE).posY(BigDecimal.ONE).posZ(BigDecimal.ONE)
                             .rotX(BigDecimal.ZERO).rotY(BigDecimal.ZERO).rotZ(BigDecimal.ZERO).build()));
         }
-        given(userStuffService.findAllUserStuff(any(Long.class))).willReturn(responseDtoList);
+        given(userStuffService.findAllUserStuff()).willReturn(responseDtoList);
 
         // when, then
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/userstuffs/list/{userId}", userId))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/userstuffs/list"))
                 .andExpect(status().isOk())
-                .andDo(document("userstuff-getall-with-userid",
+                .andDo(document("userstuff-getall-with-token",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("userId").description("사용자 Id")
-                        ),
                         relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("사용자의 모든 UserStuff")))
                                 .andWithPrefix("data.[].", getUserStuffResponse())
                 ));

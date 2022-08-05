@@ -10,6 +10,7 @@ import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
+import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +29,8 @@ public class UserStuffServiceImpl implements UserStuffService {
 
     @Transactional
     @Override
-    public Long saveUserStuff(UserStuffRequestDto requestDto) {
-        User user = userRepository.findById(requestDto.getUserId())
+    public Long saveUserStuff(UserStuffSaveRequestDto requestDto) {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Stuff stuff = stuffRepository.findById(requestDto.getStuffId())
                 .orElseThrow(() -> new CustomException(ErrorCode.STUFF_NOT_FOUND));
@@ -38,8 +39,8 @@ public class UserStuffServiceImpl implements UserStuffService {
     }
 
     @Override
-    public List<UserStuffResponseDto> findAllUserStuff(Long userId) {
-        User user = userRepository.findById(userId)
+    public List<UserStuffResponseDto> findAllUserStuff() {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return userStuffRepository.findByUser(user).stream()
@@ -81,7 +82,7 @@ public class UserStuffServiceImpl implements UserStuffService {
          */
         if(findUserStuff.getSelected()) throw new CustomException(ErrorCode.INCLUDED_USER_STUFF);
 
-        checkDuplicatePlacedCategory(findUserStuff.getUser().getId(), requestDto.getCategory());
+        checkDuplicatePlacedCategory(SecurityUtil.getCurrentUserId(), requestDto.getCategory());
         checkAcceptableCategory(findUserStuff.getStuff(), requestDto.getCategory());
 
         findUserStuff.changeIncludedStatus(requestDto.getAlias(), requestDto.getCategory(),

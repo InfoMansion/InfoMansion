@@ -11,7 +11,7 @@ import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.dto.UserStuffIncludeRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
+import com.infomansion.server.domain.userstuff.dto.UserStuffSaveRequestDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
 import com.infomansion.server.global.util.security.WithCustomUserDetails;
@@ -65,6 +65,7 @@ public class PostApiControllerTest {
     private Long userStuffId;
     private User user;
     @BeforeEach
+    @WithCustomUserDetails
     public void setUp() {
         // user 생성
         String email = "infomansion@test.com";
@@ -99,11 +100,10 @@ public class PostApiControllerTest {
 
         stuffId = stuffRepository.save(requestDto.toEntity()).getId();
 
-        // UserStuff 생성, 배치
-        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(userId)
-                .stuffId(stuffId).build();
-        userStuffId = userStuffService.saveUserStuff(createDto);
+//        // UserStuff 생성, 배치
+//        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
+//                .stuffId(stuffId).build();
+//        userStuffId = userStuffService.saveUserStuff(createDto);
     }
 
     @AfterEach
@@ -118,6 +118,11 @@ public class PostApiControllerTest {
     @WithCustomUserDetails
     @Test
     public void post_생성_성공() throws Exception{
+        // UserStuff 생성, 배치
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffId).build();
+        userStuffId = userStuffService.saveUserStuff(createDto);
+
         //UserStuff 배치
         UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
                 .id(userStuffId).alias("Java 정리").category("IT")
@@ -147,6 +152,11 @@ public class PostApiControllerTest {
     @Transactional
     @Test
     public void Post_추천_성공() throws Exception{
+        // UserStuff 생성, 배치
+        UserStuffSaveRequestDto beforeCreateDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffId).build();
+        userStuffId = userStuffService.saveUserStuff(beforeCreateDto);
+
         // 다른 User 생성
         String email = "infomansion@test.com1";
         String password = "testPassword1$1";
@@ -164,8 +174,7 @@ public class PostApiControllerTest {
         Long postCreateUserId = postCreateUser.getId();
 
         // 다른 User의 UserStuff 생성 및 배치
-        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(postCreateUserId)
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffId).build();
 
         userStuffId = userStuffService.saveUserStuff(createDto);
@@ -194,6 +203,10 @@ public class PostApiControllerTest {
     @Transactional
     @Test
     public void post_UserStuff로_검색() throws Exception{
+        // UserStuff 생성, 배치
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffId).build();
+        userStuffId = userStuffService.saveUserStuff(createDto);
 
         //UserStuff 배치
         UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
@@ -222,6 +235,10 @@ public class PostApiControllerTest {
     @Transactional
     @Test
     public void Post_좋아요_성공() throws Exception{
+        // UserStuff 생성, 배치
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffId).build();
+        userStuffId = userStuffService.saveUserStuff(createDto);
 
         //UserStuff 배치
         UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()

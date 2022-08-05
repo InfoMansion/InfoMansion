@@ -172,16 +172,13 @@ include::{snippets}/userstuff-get/response-fields.adoc[]
 사용자의 UserStuff를 모두 조회
 
 === Http Request
-include::{snippets}/userstuff-getall-with-userid/http-request.adoc[]
-
-=== Path parameters
-include::{snippets}/userstuff-getall-with-userid/path-parameters.adoc[]
+include::{snippets}/userstuff-getall-with-token/http-request.adoc[]
 
 === Http Response
-include::{snippets}/userstuff-getall-with-userid/http-response.adoc[]
+include::{snippets}/userstuff-getall-with-token/http-response.adoc[]
 
 === Response fields
-include::{snippets}/userstuff-getall-with-userid/response-fields.adoc[]
+include::{snippets}/userstuff-getall-with-token/response-fields.adoc[]
 
 ---
 

@@ -18,8 +18,8 @@ public class UserStuffApiController {
 
     private final UserStuffService userStuffService;
 
-    @PostMapping("/api/v1/userstuffs")
-    public ResponseEntity<CommonResponse<Long>> saveUserStuff(@Valid @RequestBody UserStuffRequestDto requestDto) {
+    @PostMapping("/api/v1/userstuffs/list")
+    public ResponseEntity<CommonResponse<Long>> saveUserStuff(@Valid @RequestBody UserStuffSaveRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CommonResponse<>(userStuffService.saveUserStuff(requestDto)));
     }
@@ -30,10 +30,10 @@ public class UserStuffApiController {
                 .body(new CommonResponse<>(userStuffService.findUserStuffByUserStuffId(userStuffId)));
     }
 
-    @GetMapping("/api/v1/userstuffs/list/{userId}")
-    public ResponseEntity<CommonResponse<List<UserStuffResponseDto>>> findAllUserStuff(@PathVariable Long userId) {
+    @GetMapping("/api/v1/userstuffs/list")
+    public ResponseEntity<CommonResponse<List<UserStuffResponseDto>>> findAllUserStuff() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userStuffService.findAllUserStuff(userId)));
+                .body(new CommonResponse<>(userStuffService.findAllUserStuff()));
     }
 
     @PutMapping("/api/v1/userstuffs/{userStuffId}")

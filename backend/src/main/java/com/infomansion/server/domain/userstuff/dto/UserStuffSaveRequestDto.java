@@ -15,17 +15,13 @@ import java.math.BigDecimal;
 @ToString
 @Getter
 @NoArgsConstructor
-public class UserStuffRequestDto {
-
-    @NotNull
-    private Long userId;
+public class UserStuffSaveRequestDto {
 
     @NotNull
     private Long stuffId;
 
     @Builder
-    public UserStuffRequestDto(Long userId, Long stuffId) {
-        this.userId = userId;
+    public UserStuffSaveRequestDto(Long stuffId) {
         this.stuffId = stuffId;
     }
 

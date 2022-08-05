@@ -8,10 +8,11 @@ import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.dto.UserStuffIncludeRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffModifyRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffPositionRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
+import com.infomansion.server.domain.userstuff.dto.UserStuffSaveRequestDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
 import com.infomansion.server.global.util.exception.ErrorCode;
+import com.infomansion.server.global.util.security.WithCustomUserDetails;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -102,23 +103,23 @@ public class UserStuffApiControllerTest {
     }
 
 
-    @DisplayName("유효하지 않은 user_id 또는 stuff_id로 UserStuff 생성 실패")
+    @DisplayName("유효하지 않은 stuff_id로 UserStuff 생성 실패")
+    @WithCustomUserDetails
     @Test
     public void userstuff_생성_실패() throws Exception {
         // given
-        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(100000L)
-                .stuffId(stuffIds.get(0)).build();
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffIds.get(0)+100L).build();
 
         String createDtoJson = objectMapper.writeValueAsString(createDto);
 
         // when, then
-        mockMvc.perform(post("/api/v1/userstuffs")
+        mockMvc.perform(post("/api/v1/userstuffs/list")
                         .content(createDtoJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorCode.USER_NOT_FOUND.getMessage()))
-                .andExpect(jsonPath("$.code").value(ErrorCode.USER_NOT_FOUND.getCode()));
+                .andExpect(jsonPath("$.message").value(ErrorCode.STUFF_NOT_FOUND.getMessage()))
+                .andExpect(jsonPath("$.code").value(ErrorCode.STUFF_NOT_FOUND.getCode()));
     }
 
 
@@ -135,23 +136,6 @@ public class UserStuffApiControllerTest {
                 .andExpect(jsonPath("$.code").value(ErrorCode.USER_STUFF_NOT_FOUND.getCode()));
     }
 
-
-    @DisplayName("유효하지 않은 user_id로 UserStuff 목록 조회 시 실패")
-    @Test
-    public void userstuff_조회_실패_2() throws Exception {
-        // given
-        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(userId)
-                .stuffId(stuffIds.get(0)).build();
-
-        // when, then
-        mockMvc.perform(get("/api/v1/userstuffs/list/"+(userId+99999)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(ErrorCode.USER_NOT_FOUND.getMessage()))
-                .andExpect(jsonPath("$.code").value(ErrorCode.USER_NOT_FOUND.getCode()));
-    }
-
-
     @DisplayName("유효하지 않은 userStuffId로 제외 요청 시 실패")
     @Test
     public void userstuff_제외_실패_1() throws Exception {
@@ -166,11 +150,11 @@ public class UserStuffApiControllerTest {
     }
 
     @DisplayName("이미 제외된 userStuffId로 제외 요청 시 실패")
+    @WithCustomUserDetails
     @Test
     public void userstuff_제외_실패_2() throws Exception {
         // given
-        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(userId)
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
@@ -183,11 +167,11 @@ public class UserStuffApiControllerTest {
     }
 
     @DisplayName("이미 배치된 userStuffId로 배치 요청 시 실패")
+    @WithCustomUserDetails
     @Test
     public void userstuff_배치_실패() throws Exception {
         // given
-        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(userId)
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
@@ -221,11 +205,11 @@ public class UserStuffApiControllerTest {
     }
 
     @DisplayName("alias, category 둘 다 미입력 시 실패")
+    @WithCustomUserDetails
     @Test
     public void userstuff_alias_and_category_수정_실패() throws Exception {
         // given
-        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(userId)
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
@@ -256,11 +240,11 @@ public class UserStuffApiControllerTest {
     }
 
     @DisplayName("유효하지 않은 category 입력 시 실패")
+    @WithCustomUserDetails
     @Test
     public void userstuff_category_수정_실패() throws Exception {
         // given
-        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(userId)
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
@@ -291,11 +275,11 @@ public class UserStuffApiControllerTest {
     }
 
     @DisplayName("배치되지 않은 UserStuff의 Position 변경 시 실패")
+    @WithCustomUserDetails
     @Test
     public void userstuff_pos_and_rot_수정_실패() throws Exception {
         // given
-        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(userId)
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
@@ -314,11 +298,11 @@ public class UserStuffApiControllerTest {
     }
 
     @DisplayName("유효하지 않은 userStuffId로 삭제 요청 시 실패")
+    @WithCustomUserDetails
     @Test
     public void userstuff_삭제_실패() throws Exception {
         // given
-        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(userId)
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
@@ -330,11 +314,11 @@ public class UserStuffApiControllerTest {
     }
 
     @DisplayName("유효한 userStuffId로 삭제 요청 성공")
+    @WithCustomUserDetails
     @Test
     public void userstuff_삭제_성공() throws Exception {
         // given
-        UserStuffRequestDto createDto = UserStuffRequestDto.builder()
-                .userId(userId)
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 

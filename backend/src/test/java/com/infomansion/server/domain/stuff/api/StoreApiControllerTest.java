@@ -5,7 +5,7 @@ import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
-import com.infomansion.server.domain.userstuff.dto.UserStuffRequestDto;
+import com.infomansion.server.domain.userstuff.dto.UserStuffSaveRequestDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.global.util.security.WithCustomUserDetails;
 import org.junit.jupiter.api.AfterEach;
@@ -123,11 +123,11 @@ public class StoreApiControllerTest {
     @Test
     public void find_stuff_in_store_성공() throws Exception {
         for (Long stuffId : stuffIds) {
-            UserStuffRequestDto request = UserStuffRequestDto.builder()
-                    .userId(userId).stuffId(stuffId).build();
+            UserStuffSaveRequestDto request = UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffId).build();
             String requestJson = objectMapper.writeValueAsString(request);
 
-            mockMvc.perform(post("/api/v1/userstuffs")
+            mockMvc.perform(post("/api/v1/userstuffs/list")
                             .content(requestJson)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated());
@@ -146,11 +146,11 @@ public class StoreApiControllerTest {
     @Test
     public void find_stuff_with_stuffType_in_store_성공() throws Exception {
         for (Long stuffId : stuffIds) {
-            UserStuffRequestDto request = UserStuffRequestDto.builder()
-                    .userId(userId).stuffId(stuffId).build();
+            UserStuffSaveRequestDto request = UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffId).build();
             String requestJson = objectMapper.writeValueAsString(request);
 
-            mockMvc.perform(post("/api/v1/userstuffs")
+            mockMvc.perform(post("/api/v1/userstuffs/list")
                             .content(requestJson)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isCreated());
