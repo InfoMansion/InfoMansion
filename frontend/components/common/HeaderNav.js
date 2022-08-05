@@ -60,7 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function HeaderNav() {
-  const { push } = useRouter();
+  const { push, pathname } = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [focus, setFocus] = useState(false);
 
@@ -86,10 +86,10 @@ export default function HeaderNav() {
           Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
         },
       });
-      console.log('data : ', data);
       removeCookies('InfoMansionAccessToken', { path: '/' });
       setAuth({ isAuthorized: false, accessToken: undefined });
-      router.push('/');
+      window.localStorage.removeItem('expiresAt');
+      if (pathname !== '/') window.location.replace('/');
     } catch (e) {
       console.log(e);
     }

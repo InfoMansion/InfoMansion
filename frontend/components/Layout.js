@@ -1,9 +1,7 @@
 import HeaderNav from './common/HeaderNav';
 import { styled } from '@mui/material/styles';
 import { Box, Paper } from '@mui/material';
-import { useRouter } from 'next/router';
 import useAuth from '../hooks/useAuth';
-import { useCookies } from 'react-cookie';
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(1),
@@ -18,8 +16,6 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 export default function Layout({ children }) {
-  const [cookies] = useCookies(['cookie-name']);
-  const { pathname, push } = useRouter();
   const { auth } = useAuth();
 
   return (
