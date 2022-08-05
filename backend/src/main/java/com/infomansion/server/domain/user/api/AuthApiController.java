@@ -33,6 +33,9 @@ public class AuthApiController {
     @Value("${spring.mail.redirectURI}")
     private String redirectURI;
 
+    @Value("${infomansion.cookie.domain}")
+    private String cookieDomain;
+
     @PostMapping("/api/v1/auth/signup")
     public ResponseEntity<CommonResponse<Long>> userSignUp(@Valid @RequestBody UserSignUpRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -92,7 +95,7 @@ public class AuthApiController {
                 .path("/api/v1/auth/")
                 .maxAge(0L)
                 .sameSite("Strict")
-                .domain("localhost")
+                .domain(cookieDomain)
                 .build();
     }
 
@@ -103,7 +106,7 @@ public class AuthApiController {
                 .path("/")
                 .maxAge(0)
                 .sameSite("Strict")
-                .domain("localhost")
+                .domain(cookieDomain)
                 .build();
     }
 
@@ -114,7 +117,7 @@ public class AuthApiController {
                 .path("/api/v1/auth/")
                 .maxAge(Duration.ofMillis(tokenDto.getRefreshTokenExpiresTime()))
                 .sameSite("Strict")
-                .domain("localhost")
+                .domain(cookieDomain)
                 .build();
     }
 
@@ -125,7 +128,7 @@ public class AuthApiController {
                 .path("/")
                 .maxAge(Duration.ofMillis(1000*60*30L))
                 .sameSite("Strict")
-                .domain("localhost")
+                .domain(cookieDomain)
                 .build();
     }
 }

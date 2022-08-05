@@ -20,3 +20,7 @@ spring:
 
   mail:
     redirectURI: http://i7a607.p.ssafy.io/
+
+infomansion:
+  cookie:
+    domain: i7a607.p.ssafy.io

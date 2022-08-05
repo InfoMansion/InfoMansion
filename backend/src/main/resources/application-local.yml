@@ -19,3 +19,7 @@ spring:
 
   mail:
     redirectURI: http://localhost:8080
+
+infomansion:
+  cookie:
+    domain: localhost
