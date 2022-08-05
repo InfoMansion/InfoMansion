@@ -104,6 +104,7 @@ public class UserRestDocsTest {
         // given
         UserInfoResponseDto responseDto = UserInfoResponseDto.builder()
                 .userId(20L)
+                .userEmail("infomansion@test.com")
                 .username("infomansion")
                 .categories("IT,DAILY,STUDY")
                 .profileImage("profileImage")
@@ -123,6 +124,7 @@ public class UserRestDocsTest {
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("사용자 정보")))
                                 .andWithPrefix("data.",
                                         fieldWithPath("userId").type(USER_ID.getJsonFieldType()).description(USER_ID.getDescription()),
+                                        fieldWithPath("userEmail").type(USER_EMAIL.getJsonFieldType()).description(USER_EMAIL.getDescription()),
                                         fieldWithPath("username").type(USERNAME.getJsonFieldType()).description(USERNAME.getDescription()),
                                         fieldWithPath("categories").type(USER_CATEGORIES.getJsonFieldType()).description(USER_CATEGORIES.getDescription()),
                                         fieldWithPath("profileImage").type(PROFILE_IMAGE.getJsonFieldType()).description(PROFILE_IMAGE.getDescription()),
