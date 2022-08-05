@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Long modifyUserProfile(MultipartFile profileImage, UserModifyProfileRequestDto profileInfo) {
+    public UserModifyProfileResponseDto modifyUserProfile(MultipartFile profileImage, UserModifyProfileRequestDto profileInfo) {
         if (userRepository.existsByUsername(profileInfo.getUsername()))
             throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
 
@@ -174,7 +174,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.modifyProfile(profileInfo);
-        return user.getId();
+        return UserModifyProfileResponseDto.toDto(user);
     }
 
     private void validateDuplicateUser(UserSignUpRequestDto requestDto) {

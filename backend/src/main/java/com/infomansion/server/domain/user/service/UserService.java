@@ -16,5 +16,5 @@ public interface UserService {
     boolean logout();
     UserInfoResponseDto findByUsername(String username);
     UserSimpleProfileResponseDto findSimpleProfile();
-    Long modifyUserProfile(MultipartFile profileImage, UserModifyProfileRequestDto profileInfo);
+    UserModifyProfileResponseDto modifyUserProfile(MultipartFile profileImage, UserModifyProfileRequestDto profileInfo);
 }

@@ -157,12 +157,14 @@ public class UserRestDocsTest {
     @Test
     public void 사용자_정보_수정() throws Exception {
         // given
-        Long responseId = 10L;
+        UserModifyProfileResponseDto responseDto = UserModifyProfileResponseDto.builder()
+                .email("infomansion@test.com").username("username")
+                .categories(Arrays.asList("DAILY","SPORTS")).introduce("자기소개!").profileImageUrl("/modifiedProfileImage").build();
         UserModifyProfileRequestDto  requestDto = new UserModifyProfileRequestDto ("infomansion", "DAILY,SPORTS", "자기소개");
 
         MockMultipartFile profileImage = new MockMultipartFile("profileImage", "imagefile.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
         MockMultipartFile profileInfo = new MockMultipartFile("profileInfo", "profileInfo", "application/json", objectMapper.writeValueAsString(requestDto).getBytes(StandardCharsets.UTF_8));
-        given(userService.modifyUserProfile(any(MockMultipartFile.class), any(UserModifyProfileRequestDto.class))).willReturn(responseId);
+        given(userService.modifyUserProfile(any(MockMultipartFile.class), any(UserModifyProfileRequestDto.class))).willReturn(responseDto);
 
         // when, then
         mockMvc.perform(multipart(HttpMethod.POST, URI.create("/api/v1/users/profile"))
@@ -175,9 +177,14 @@ public class UserRestDocsTest {
                                 partWithName("profileImage").description("수정할 사용자 프로필 이미지"),
                                 partWithName("profileInfo").description("수정할 사용자 정보")
                         ),
-                        responseFields(
-                            common(fieldWithPath("data").type(JsonFieldType.NUMBER).description(USER_ID.getDescription()))
-                        )
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("수정된 사용자 정보")))
+                                .andWithPrefix("data.",
+                                        fieldWithPath("email").type(USER_EMAIL.getJsonFieldType()).description(USER_EMAIL.getDescription()),
+                                        fieldWithPath("username").type(USERNAME.getJsonFieldType()).description(USERNAME.getDescription()),
+                                        fieldWithPath("categories").type(USER_CATEGORIES.getJsonFieldType()).description(USER_CATEGORIES.getDescription()),
+                                        fieldWithPath("profileImageUrl").type(PROFILE_IMAGE.getJsonFieldType()).description(PROFILE_IMAGE.getDescription()),
+                                        fieldWithPath("introduce").type(INTRODUCE.getJsonFieldType()).description(INTRODUCE.getDescription())
+                                )
                 ));
     }
 

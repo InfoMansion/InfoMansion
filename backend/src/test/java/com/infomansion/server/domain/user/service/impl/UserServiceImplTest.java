@@ -200,10 +200,10 @@ class UserServiceImplTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("hi", new byte[]{});
 
         //when
-        Long userId = userService.modifyUserProfile(mockMultipartFile, requestDto);
+        UserModifyProfileResponseDto modifiedUser = userService.modifyUserProfile(mockMultipartFile, requestDto);
 
         //then
-        User findUser = userRepository.findById(userId).get();
+        User findUser = userRepository.findByUsername(modifiedUser.getUsername()).get();
 
         assertThat(findUser.getCategories()).isEqualTo("GAME");
         assertThat(findUser.getUsername()).isEqualTo("testUsername");
