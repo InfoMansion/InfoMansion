@@ -313,4 +313,46 @@ public class PostApiControllerTest {
 
     }
 
+    @DisplayName("Post 상세 조회 성공")
+    @WithCustomUserDetails
+    @Transactional
+    @Test
+    public void Post_상세조회_성공() throws Exception{
+
+        // UserStuff 생성
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffId).build();
+        userStuffId = userStuffService.saveUserStuff(createDto);
+
+        //UserStuff 배치
+        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
+                .id(userStuffId).alias("Java 정리").category("IT")
+                .posX(0.2).posY(0.3).posZ(3.1)
+                .rotX(1.5).rotY(0.0).rotZ(0.9)
+                .build();
+
+        userStuffId = userStuffService.includeUserStuff(includeDto);
+
+        //post 작성
+        PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
+                .userStuffId(userStuffId)
+                .title("EffectiveJava")
+                .content("자바개발자 필독서")
+                .build();
+
+        Long postId = postService.createPost(postCreateDto);
+
+        for(int i=0;i<3;i++) likesPostService.addLikes(postId);
+
+        mockMvc.perform(get("/api/v1/posts/detail/"+postId))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.data.['userName']").value("infomansion"))
+                .andExpect((ResultMatcher) jsonPath("$.data.['title']").value("EffectiveJava"))
+                .andExpect((ResultMatcher) jsonPath("$.data.['content']").value("자바개발자 필독서"))
+                .andExpect((ResultMatcher) jsonPath("$.data.['category']").value("IT"))
+                .andExpect((ResultMatcher) jsonPath("$.data.['likes']").value(3));
+
+
+    }
+
 }

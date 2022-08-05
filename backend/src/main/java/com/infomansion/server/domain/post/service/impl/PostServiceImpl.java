@@ -1,10 +1,8 @@
 package com.infomansion.server.domain.post.service.impl;
 
 import com.infomansion.server.domain.category.domain.Category;
-import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
-import com.infomansion.server.domain.post.dto.PostRecommendResponseDto;
-import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
-import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
+import com.infomansion.server.domain.post.domain.Post;
+import com.infomansion.server.domain.post.dto.*;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.user.domain.User;
@@ -85,7 +83,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostSearchResponseDto findPostBySearchWord(String searchWord, Pageable pageable) {
 
-
         Slice<UserSimpleProfileResponseDto> usersByUserName =
                 userRepository.findUserByUserName(searchWord, pageable)
                         .map(UserSimpleProfileResponseDto::toDto);
@@ -99,6 +96,15 @@ public class PostServiceImpl implements PostService {
                         .map(PostSimpleResponseDto::new);
 
         return new PostSearchResponseDto(usersByUserName, postsByTitle, postsByContent);
+    }
+
+    @Override
+    public PostDetailResponseDto findPostWithUser(Long postId) {
+
+        Post post = postRepository.findPostWithUser(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        return new PostDetailResponseDto(post);
     }
 
 }

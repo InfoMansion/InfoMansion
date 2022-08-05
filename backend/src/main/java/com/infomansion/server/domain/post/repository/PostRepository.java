@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long>{
     @Query("select distinct p.user.id from Post p left join LikesPost l on p.id = l.postId where (p.category in :categories and p.modifiedDate between :start and :end and not p.user= :user) group by p.user.id order by l.likes desc")
@@ -25,5 +26,8 @@ public interface PostRepository extends JpaRepository<Post, Long>{
 
     @Query("select p from Post p where p.content like %:searchWord%")
     Slice<Post> findByContent(@Param("searchWord") String searchWord, Pageable pageable);
+
+    @Query("select p from Post p join fetch p.user where p.id=:id ")
+    Optional<Post> findPostWithUser(@Param("id") Long id);
 
 }

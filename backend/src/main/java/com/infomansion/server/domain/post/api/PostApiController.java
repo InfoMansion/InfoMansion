@@ -1,9 +1,6 @@
 package com.infomansion.server.domain.post.api;
 
-import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
-import com.infomansion.server.domain.post.dto.PostRecommendResponseDto;
-import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
-import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
+import com.infomansion.server.domain.post.dto.*;
 import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.global.apispec.CommonResponse;
@@ -51,5 +48,11 @@ public class PostApiController {
     public ResponseEntity<CommonResponse<PostSearchResponseDto>> searchPostByWord(@Valid @PathVariable String searchWord, Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postService.findPostBySearchWord(searchWord, pageable)));
+    }
+
+    @GetMapping("api/v1/posts/detail/{postId}")
+    public ResponseEntity<CommonResponse<PostDetailResponseDto>> findDetailPost(@Valid @PathVariable Long postId){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(postService.findPostWithUser(postId)));
     }
 }
