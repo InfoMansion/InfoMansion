@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -55,7 +55,8 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
+function DashboardContent(props) {
+  console.log('dashboardcontent', props.userInfo);
   const [dashNum, setDashNum] = useRecoilState(dashNumState);
   const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
@@ -63,7 +64,12 @@ function DashboardContent() {
   };
   let content;
   if (dashNum === 0) {
-    content = <Profile></Profile>;
+    content = (
+      <Profile
+        userInfo={props.userInfo}
+        setUserInfo={props.setUserInfo}
+      ></Profile>
+    );
   } else if (dashNum === 1) {
     content = <Change></Change>;
   } else if (dashNum === 2) {
@@ -117,15 +123,24 @@ function DashboardContent() {
 export default function Dashboard() {
   const [pwConfirm, setPwConfirmState] = useRecoilState(pwConfirmState);
   let dashContent;
-
-  useEffect(() => {
-    console.log("렌더");
-  })
+  const [userInfo, setUserInfo] = useState({
+    email: '',
+    username: '',
+    categories: [],
+    introduce: '',
+    profileImageUrl: '',
+  });
+  console.log('dashboard', userInfo);
 
   if (pwConfirm) {
-    dashContent = <DashboardContent></DashboardContent>;
+    dashContent = (
+      <DashboardContent
+        userInfo={userInfo}
+        setUserInfo={setUserInfo}
+      ></DashboardContent>
+    );
   } else {
-    dashContent = <Confirm></Confirm>;
+    dashContent = <Confirm setUserInfo={setUserInfo}></Confirm>;
   }
 
   return <>{dashContent}</>;

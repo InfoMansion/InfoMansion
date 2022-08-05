@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormLabel from '@mui/material/FormLabel';
@@ -9,8 +8,8 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState, useRef } from 'react';
-import axios from 'axios';
+import { useState, useRef, useEffect } from 'react';
+import axios from '../../utils/axios';
 import {
   Avatar,
   Box,
@@ -21,6 +20,7 @@ import {
   TextField,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useCookies } from 'react-cookie';
 
 const theme = createTheme({
   palette: {
@@ -46,41 +46,31 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 export default function Profile({ ...props }) {
-  const [profileImage, setProfileImage] = useState('/profile.jpg');
+  const [cookies] = useCookies(['cookie-name']);
+  const userInfo = props.userInfo;
+  const setUserInfo = props.setUserInfo;
+  const [profileImageUrl, setProfileImageUrl] = useState(
+    userInfo.profileImageUrl,
+  );
+  const [profileImage, setProfileImage] = useState('');
   const fileInput = useRef(null);
   const onChange = e => {
     if (e.target.files[0]) {
       setProfileImage(e.target.files[0]);
     } else {
       //업로드 취소할 시
-      setProfileImage('/profile.jpg');
+      setProfileImageUrl(userInfo.profileImageUrl);
       return;
     }
     //화면에 프로필 사진 표시
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        setProfileImage(reader.result);
+        setProfileImageUrl(reader.result);
       }
     };
     reader.readAsDataURL(e.target.files[0]);
   };
-
-  // userID 가지고 userinfo 가져와야 함.
-  const [userinfo, setuserinfo] = useState({
-    email: 'hellossafy@ssafy.com',
-    profile_image: 'profile.jpg',
-    username: 'hellossafy',
-    introduction: `
-        안녕 나는 한쿡이 너무 좋아서 얼마 전에 한쿡에 온 hellossafy라고 해.
-        다들 반가워 잘 부탁해.
-
-        InfoMansion 너무 좋음거 같아.
-        `,
-    followcount: 10,
-    followingcount: 20,
-    categories: ['IT', 'COOK', 'GAME'],
-  });
 
   const allCategories = {
     IT: false,
@@ -103,12 +93,19 @@ export default function Profile({ ...props }) {
 
   let selectedCate = '';
 
-  userinfo.categories.forEach(function (category) {
-    allCategories[category] = true;
-    selectedCate = selectedCate + category + ',';
-  });
+  useEffect(() => {
+    userInfo.categories.forEach(function (category) {
+      allCategories[category] = true;
+      selectedCate = selectedCate + category + ',';
+    });
+    setState(allCategories);
+    setChangeCate(selectedCate);
+    setInputUsername(props.userInfo.username);
+    setInputIntroduce(props.userInfo.introduce);
+    setProfileImageUrl(props.userInfo.profileImageUrl);
+  }, [props.userInfo]);
 
-  const [state, setState] = React.useState(allCategories);
+  const [state, setState] = useState(allCategories);
 
   const [changeCate, setChangeCate] = useState(selectedCate);
 
@@ -130,17 +127,35 @@ export default function Profile({ ...props }) {
     }
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
     const profileInfoJson = {
       username: inputUsername,
       categories: changeCate,
-      introduce: inputIntroduction,
+      introduce: inputIntroduce,
     };
     const profileInfo = JSON.stringify(profileInfoJson);
     const formData = new FormData();
     formData.append('profileImage', profileImage);
-    formData.append('profileInfo', profileInfo);
+    formData.append(
+      'profileInfo',
+      new Blob([profileInfo], {
+        type: 'application/json',
+      }),
+    );
+    console.log(formData);
+    try {
+      const { response } = await axios.post('/api/v1/users/profile', formData, {
+        headers: {
+          ContentType: 'multipart/form-data',
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          withCredentials: true,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const {
@@ -162,17 +177,16 @@ export default function Profile({ ...props }) {
     SPORTS,
   } = state;
 
-  const [inputUsername, setInputUsername] = useState(userinfo.username);
-  const [inputIntroduction, setInputIntroduction] = useState(
-    userinfo.introduction,
-  );
+  const [inputUsername, setInputUsername] = useState(userInfo.username);
+  const [inputIntroduce, setInputIntroduce] = useState(userInfo.introduce);
   function handleInput(event) {
+    event.preventDefault();
     console.log(event.target.value);
     const { name, value } = event.target;
-    if (name === username) {
+    if (name === 'username') {
       setInputUsername(value);
     } else {
-      setInputIntroduction(value);
+      setInputIntroduce(value);
     }
   }
   return (
@@ -194,7 +208,7 @@ export default function Profile({ ...props }) {
               <Grid item xs={3}>
                 <Avatar
                   alt="profile"
-                  src={profileImage}
+                  src={profileImageUrl}
                   sx={{
                     width: '100%',
                     maxWidth: '80px',
@@ -216,12 +230,12 @@ export default function Profile({ ...props }) {
               </Grid>
               <Grid item xs={9}>
                 <TextField
-                  value={userinfo.username}
+                  value={inputUsername}
                   onChange={handleInput}
                   name="username"
                 ></TextField>
                 <Typography variant="body2" color="text.secondary">
-                  {userinfo.email}
+                  {userInfo.email}
                 </Typography>
               </Grid>
 
@@ -229,8 +243,9 @@ export default function Profile({ ...props }) {
               <TextField
                 multiline
                 maxRows={5}
-                name="introduction"
-                value={userinfo.introduction}
+                name="introduce"
+                value={inputIntroduce}
+                onChange={handleInput}
                 fullWidth
               ></TextField>
             </Grid>

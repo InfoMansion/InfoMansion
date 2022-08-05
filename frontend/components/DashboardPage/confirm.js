@@ -24,7 +24,7 @@ const theme = createTheme({
   },
 });
 
-export default function Confirm() {
+export default function Confirm(props) {
   const [cookies] = useCookies(['cookie-name']);
   const router = useRouter();
   const [inputPassword, setInputPassword] = useState('');
@@ -54,7 +54,8 @@ export default function Confirm() {
           withCredentials: true,
         },
       });
-      console.log(data);
+      console.log('confirm', data);
+      props.setUserInfo(data.data);
       setPwConfirmState(true);
     } catch (e) {
       console.log(e);
