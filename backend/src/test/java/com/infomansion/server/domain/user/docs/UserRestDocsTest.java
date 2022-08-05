@@ -163,7 +163,7 @@ public class UserRestDocsTest {
         given(userService.modifyUserProfile(any(MockMultipartFile.class), any(UserModifyProfileRequestDto.class))).willReturn(responseId);
 
         // when, then
-        mockMvc.perform(multipart(HttpMethod.PATCH, URI.create("/api/v1/users/profile"))
+        mockMvc.perform(multipart(HttpMethod.POST, URI.create("/api/v1/users/profile"))
                         .file(profileImage).file(profileInfo))
                 .andExpect(status().isOk())
                 .andDo(document("user-modify-profile",

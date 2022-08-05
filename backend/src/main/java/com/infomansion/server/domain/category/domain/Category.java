@@ -21,6 +21,8 @@ public enum Category implements EnumMapperType {
     CULTURE("문화/시사"),
     STUDY("공부"),
     HOMEAPPLIANCES("가전제품"),
+    GUESTBOOK("방명록"),
+    PET("애완"),
     NONE("NONE");
 
     private final String categoryName;
