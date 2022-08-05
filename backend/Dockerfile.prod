@@ -1,8 +1,7 @@
 FROM openjdk:11-jdk-slim AS builder
 
-RUN mkdir -p /server
-
-WORKDIR /server
+# FROM openjdk:11-jre-slim
+WORKDIR /app
 
 COPY . .
 
@@ -10,11 +9,11 @@ RUN ./gradlew clean build
 
 FROM openjdk:11-jre-slim AS runner
 
-WORKDIR /server
+WORKDIR /app
 
-ARG JAR_FILE=/build/libs/*.jar
+ARG JAR_FILE=/app/build/libs/server-0.0.1-SNAPSHOT.jar
 
-COPY --from=builder /server/${JAR_FILE} /server/app.jar
+COPY --from=builder ${JAR_FILE} /app/app.jar
 
 EXPOSE 8080
 

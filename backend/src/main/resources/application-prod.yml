@@ -15,7 +15,7 @@ spring:
     database-platform: org.hibernate.dialect.MariaDB106Dialect
 
   redis:
-    host: host.docker.internal
+    host: redis
     port: 6379
 
   mail:
