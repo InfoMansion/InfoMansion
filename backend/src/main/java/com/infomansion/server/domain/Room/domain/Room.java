@@ -27,14 +27,19 @@ public class Room extends BaseTimeEntity {
     private boolean deleteFlag;
 
     @Builder
-    public Room(Long id, User user, String roomImg) {
-        this.id = id;
+    public Room(User user) {
         this.user = user;
-        this.roomImg = roomImg;
+        this.roomImg = "default";
         this.deleteFlag = false;
     }
 
     public void deleteRoom(){
         this.deleteFlag = true;
+    }
+
+    public static Room createRoom(User user){
+        return Room.builder()
+                .user(user)
+                .build();
     }
 }

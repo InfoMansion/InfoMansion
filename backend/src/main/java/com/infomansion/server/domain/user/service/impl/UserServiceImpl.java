@@ -1,8 +1,11 @@
 package com.infomansion.server.domain.user.service.impl;
 
+import com.infomansion.server.domain.Room.domain.Room;
+import com.infomansion.server.domain.Room.repository.RoomRepository;
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.domain.UserAuthority;
 import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.user.service.UserService;
@@ -44,6 +47,7 @@ public class UserServiceImpl implements UserService {
     private final RedisUtil redisUtil;
     private final VerifyEmailService verifyEmailService;
     private final S3Uploader s3Uploader;
+    private final RoomRepository roomRepository;
 
 
     @Override
@@ -123,6 +127,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.grantFromTempToUser();
+
+        roomRepository.save(Room.createRoom(user));
         return true;
     }
 

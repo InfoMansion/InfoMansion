@@ -1,13 +1,12 @@
 package com.infomansion.server.domain.room.service.impl;
 
 import com.infomansion.server.domain.Room.domain.Room;
-import com.infomansion.server.domain.Room.dto.RoomRequestDto;
 import com.infomansion.server.domain.Room.dto.RoomResponseDto;
 import com.infomansion.server.domain.Room.repository.RoomRepository;
 import com.infomansion.server.domain.Room.service.RoomService;
 import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.domain.UserAuthority;
 import com.infomansion.server.domain.user.repository.UserRepository;
-import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.security.SecurityUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RoomServiceImplTest {
@@ -74,21 +71,12 @@ public class RoomServiceImplTest {
         userRepository.save(user);
         userId = user.getId();
 
-        RoomRequestDto requestDto = RoomRequestDto.builder()
-                .userId(userId)
-                .build();
-
         //when
-        Throwable exception = assertThrows(CustomException.class, () -> {
-            Long roomId = roomService.createRoom(requestDto);
-            RoomResponseDto responseDto = roomService.findRoombyId(userId);
-        });
-
+        if(!user.getAuthority().equals(UserAuthority.ROLE_TEMP)){
+            roomRepository.save(Room.builder().user(user).build());
+        }
         //then
-        System.out.println(exception.toString()); //CustomException.
-        List<RoomResponseDto> roomList = roomService.findAllRoom();
-
-        assertThat(roomList.size()).isEqualTo(0);
+        assertThat(roomRepository.findByUser(user).isPresent()).isEqualTo(false);
     }
 
 
@@ -100,12 +88,9 @@ public class RoomServiceImplTest {
         userRepository.save(user);
         userId = user.getId();
 
-        RoomRequestDto requestDto = RoomRequestDto.builder()
-                .userId(userId)
-                .build();
-
-        //when
-        Long roomId = roomService.createRoom(requestDto);
+        if(!user.getAuthority().equals(UserAuthority.ROLE_TEMP)){
+            roomRepository.save(Room.builder().user(user).build());
+        }
 
         //then
         RoomResponseDto responseDto = roomService.findRoombyId(userId);
@@ -121,10 +106,7 @@ public class RoomServiceImplTest {
         userRepository.save(user);
         userId = user.getId();
 
-        RoomRequestDto requestDto = RoomRequestDto.builder()
-                .userId(userId)
-                .build();
-        Long roomId = roomService.createRoom(requestDto);
+        Long roomId = roomRepository.save(Room.builder().user(user).build()).getId();
 
         //when
         roomService.deleteRoom(roomId);

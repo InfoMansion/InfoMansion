@@ -1,6 +1,5 @@
 package com.infomansion.server.domain.Room.api;
 
-import com.infomansion.server.domain.Room.dto.RoomRequestDto;
 import com.infomansion.server.domain.Room.dto.RoomResponseDto;
 import com.infomansion.server.domain.Room.service.RoomService;
 import com.infomansion.server.global.apispec.CommonResponse;
@@ -8,7 +7,10 @@ import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -16,11 +18,6 @@ import javax.validation.Valid;
 @RestController
 public class RoomApiController {
     private final RoomService roomService;
-
-    @PostMapping("/api/v1/rooms")
-    private ResponseEntity<CommonResponse<Long>> createRoom(@Valid @RequestBody RoomRequestDto requestDto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(new CommonResponse<>(roomService.createRoom(requestDto)));
-    }
 
     @GetMapping("/api/v1/rooms/{userId}")
     private ResponseEntity<CommonResponse<RoomResponseDto>> findRoomById(@Valid @PathVariable Long userId){
