@@ -20,8 +20,8 @@ import { clickedStuffCategoryState } from '../state/roomState'
 import { useRecoilState } from 'recoil'
 
 export default function Room( { StuffClick, userName} ) {
-    // 화면 확대 정도 조정.
     const [cookies] = useCookies(['cookie-name']);
+    // 화면 확대 정도 조정.
     const [zoomscale] = useState(90);
     // 내 방인지 판단하는 변수
     const [myroom] = useState(true);
@@ -34,7 +34,6 @@ export default function Room( { StuffClick, userName} ) {
     
     const [tagon, setTagon] = useState(true);
     const [camloc, setCamloc] = useState([0, 0, 0]);
-
     const [, setClickedStuffCategory] = useRecoilState(clickedStuffCategoryState);
     
     // 마운트시 stuff 로드
@@ -49,8 +48,6 @@ export default function Room( { StuffClick, userName} ) {
                 }
             })
             .then( res => {
-                console.log(res.data.data)
-                console.log(res.data.data[0].category)
                 setMapstuffs(res.data.data.slice(0, 2));
                 setStuffs(res.data.data.slice(2));
             })

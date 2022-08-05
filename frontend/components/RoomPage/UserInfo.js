@@ -1,9 +1,12 @@
-import { Avatar, Box, Card, Divider, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Card, Divider, formControlLabelClasses, Grid, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RecentPost from "./RecentPosts";
 import SettingsIcon from '@mui/icons-material/Settings';
 import Link from 'next/link';
+import axios from "../../utils/axios";
+import { useCookies } from "react-cookie";
+import { useRouter } from "next/router";
 
 const Root = styled('div')(({ theme }) => ({
     padding: theme.spacing(1),
@@ -18,20 +21,36 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 export default function UserInfo( {userName} ) {
-    // username 가지고 userinfo 가져와야 함.
-    const [userinfo, setuserinfo] = useState({
-        email : 'hellossafy@ssafy.com',
-        profile_image : 'profile.jpg',
-        username : 'hellossafy',
-        introduction : `
-        안녕 나는 한쿡이 너무 좋아서 얼마 전에 한쿡에 온 hellossafy라고 해.
-        다들 반가워 잘 부탁해.
+    const router = useRouter();
+    const [cookies] = useCookies(['cookie-name']);
 
-        InfoMansion 너무 좋음거 같아.
-        `, 
+    // username 가지고 userinfo 가져와야 함.
+    const [userinfo, setUserinfo] = useState({
+        userEmail : 'infomansion@google.co.kr',
+        profileImage : "/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png",
+        username : 'infomansion',
+        introduce : ``, 
         followcount : 10,
         followingcount : 20,
+        categories : []
     })
+
+    useEffect(() => {
+        if(!router.isReady) return;
+        try{
+            axios.get(`/api/v1/users/${router.query.userName}`, {
+                headers : {
+                    Authorization : `Bearer ${cookies.InfoMansionAccessToken}`,
+                }
+            })
+            .then(res => {
+                setUserinfo(res.data.data);
+            })
+        } catch(e) {
+            console.log(e);
+        }
+    }, [router.isReady]);
+
 
     return (
         <Card>
@@ -41,10 +60,15 @@ export default function UserInfo( {userName} ) {
                 }}
                 container
             >
-                <Grid item xs={3}>
+                <Grid item xs={3}
+                    sx={{
+                        display : 'flex',
+                        justifyContent : 'center'
+                    }}
+                >
                     <Avatar 
                         alt="profile" 
-                        src={`/image/${userinfo.profile_image}`}
+                        src={process.env.NEXT_PUBLIC_S3_PATH + userinfo.profileImage}
                         
                         sx={{ 
                             width : '100%',
@@ -79,17 +103,38 @@ export default function UserInfo( {userName} ) {
                         variant="body2"
                         color="text.secondary"
                     >
-                        {userinfo.email}
+                        {userinfo.userEmail}
                     </Typography>
+                    <Box
+                        sx={{
+                            display : 'flex',
+                            my : 1
+                        }}
+                    >
+                        {userinfo.categories.map((category, index) => (
+                            <Typography
+                                variant="body2"
+                                style={{
+                                    backgroundColor : '#fc7a71',
+                                    color : 'white'
+                                }}
+                                sx={{
+                                    px : 2,
+                                    mr : 1,
+                                    borderRadius : 4
+                                }}
+                            >
+                                {category}
+                            </Typography>
+                        ))}
+                    </Box>
                 </Grid>
             
             <Divider />
             <Typography
-                sx={{
-                    m : 2,
-                }}
+                sx={{ m : 2, }}
                 >
-                {userinfo.introduction}
+                {userinfo.introduce}
             </Typography>
             
             {/* 여기 브레이크포인트에 따라 더보기 버튼과 recentpost 바꿔 사용할 것. */}

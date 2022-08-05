@@ -11,7 +11,7 @@
             "stuffType" : "wall",
             "stuffName" : "wall_2542",
             "stuffNameKor" : "화분이 놓인 창문이 있는 벽",
-            "stuffGlbPath" : "wall_2542",
+            "stuffGlbPath" : "/stuff-assets/wall_2542.glb",
             "geometry" : "low_poly_interior2542",
             "material" : "low_poly_interior"
         },
@@ -23,7 +23,7 @@
             "stuffType" : "wall",
             "stuffName" : "wall_1468",
             "stuffNameKor" : "벽2",
-            "stuffGlbPath" : "wall_1468",
+            "stuffGlbPath" : "/stuff-assets/wall_1468.glb",
             "geometry" : "low_poly_interior1468",
             "material" : "low_poly_interior"
         },
@@ -35,7 +35,7 @@
             "stuffType" : "wall",
             "stuffName" : "wall_1502",
             "stuffNameKor" : "벽2",
-            "stuffGlbPath" : "wall_1502",
+            "stuffGlbPath" : "/stuff-assets/wall_1502.glb",
             "geometry" : "low_poly_interior1502",
             "material" : "low_poly_interior"
         },
@@ -47,7 +47,7 @@
             "stuffType" : "wall",
             "stuffName" : "wall_1549",
             "stuffNameKor" : "벽4",
-            "stuffGlbPath" : "wall_1549",
+            "stuffGlbPath" : "/stuff-assets/wall_1549.glb",
             "geometry" : "low_poly_interior1549",
             "material" : "low_poly_interior"
         },
@@ -59,7 +59,7 @@
             "stuffType" : "wall",
             "stuffName" : "wall_1645",
             "stuffNameKor" : "벽4",
-            "stuffGlbPath" : "wall_1645",
+            "stuffGlbPath" : "/stuff-assets/wall_1645.glb",
             "geometry" : "low_poly_interior1645",
             "material" : "low_poly_interior"
         },
@@ -71,7 +71,7 @@
             "stuffType" : "wall",
             "stuffName" : "wall_1705",
             "stuffNameKor" : "벽4",
-            "stuffGlbPath" : "wall_1705",
+            "stuffGlbPath" : "/stuff-assets/wall_1705.glb",
             "geometry" : "low_poly_interior1705",
             "material" : "low_poly_interior"
         },
@@ -83,7 +83,7 @@
             "stuffType" : "wall",
             "stuffName" : "wall_1729",
             "stuffNameKor" : "벽4",
-            "stuffGlbPath" : "wall_1729",
+            "stuffGlbPath" : "/stuff-assets/wall_1729.glb",
             "geometry" : "low_poly_interior1729",
             "material" : "low_poly_interior"
         },
@@ -95,7 +95,7 @@
             "stuffType" : "floor",
             "stuffName" : "floor_1469",
             "stuffNameKor" : "나무바닥",
-            "stuffGlbPath" : "floor_1469",
+            "stuffGlbPath" : "/stuff-assets/floor_1469.glb",
             "geometry" : "low_poly_interior1469",
             "material" : "low_poly_interior"
         },
@@ -107,7 +107,7 @@
             "stuffType" : "floor",
             "stuffName" : "floor_1503",
             "stuffNameKor" : "나무바닥",
-            "stuffGlbPath" : "floor_1503",
+            "stuffGlbPath" : "/stuff-assets/floor_1503.glb",
             "geometry" : "low_poly_interior1503",
             "material" : "low_poly_interior"
         },
@@ -119,7 +119,7 @@
             "stuffType" : "floor",
             "stuffName" : "floor_1550",
             "stuffNameKor" : "나무바닥",
-            "stuffGlbPath" : "floor_1550",
+            "stuffGlbPath" : "/stuff-assets/floor_1550.glb",
             "geometry" : "low_poly_interior1550",
             "material" : "low_poly_interior"
         },
@@ -131,7 +131,7 @@
             "stuffType" : "floor",
             "stuffName" : "floor_1646",
             "stuffNameKor" : "나무바닥",
-            "stuffGlbPath" : "floor_1646",
+            "stuffGlbPath" : "/stuff-assets/floor_1646.glb",
             "geometry" : "low_poly_interior1646",
             "material" : "low_poly_interior"
         },
@@ -143,7 +143,7 @@
             "stuffType" : "floor",
             "stuffName" : "floor_1709",
             "stuffNameKor" : "나무바닥",
-            "stuffGlbPath" : "floor_1709",
+            "stuffGlbPath" : "/stuff-assets/floor_1709.glb",
             "geometry" : "low_poly_interior1709",
             "material" : "low_poly_interior"
         },
@@ -155,7 +155,7 @@
             "stuffType" : "floor",
             "stuffName" : "floor_1730",
             "stuffNameKor" : "나무바닥",
-            "stuffGlbPath" : "floor_1730",
+            "stuffGlbPath" : "/stuff-assets/floor_1730.glb",
             "geometry" : "low_poly_interior1730",
             "material" : "low_poly_interior"
         },
@@ -167,7 +167,7 @@
             "stuffType" : "floor",
             "stuffName" : "floor_1764",
             "stuffNameKor" : "나무바닥",
-            "stuffGlbPath" : "floor_1764",
+            "stuffGlbPath" : "/stuff-assets/floor_1764.glb",
             "geometry" : "low_poly_interior1764",
             "material" : "low_poly_interior"
         },
@@ -179,7 +179,7 @@
             "stuffType" : "floor",
             "stuffName" : "floor_1797",
             "stuffNameKor" : "나무바닥",
-            "stuffGlbPath" : "floor_1797",
+            "stuffGlbPath" : "/stuff-assets/floor_1797.glb",
             "geometry" : "low_poly_interior1797",
             "material" : "low_poly_interior"
         },
@@ -191,7 +191,7 @@
             "stuffType" : "floor",
             "stuffName" : "floor_2543",
             "stuffNameKor" : "나무바닥",
-            "stuffGlbPath" : "floor_2543",
+            "stuffGlbPath" : "/stuff-assets/floor_2543.glb",
             "geometry" : "low_poly_interior2543",
             "material" : "low_poly_interior"
         },
@@ -203,7 +203,7 @@
             "stuffType" : "desk",
             "stuffName" : "desk_brown_medium_1901",
             "stuffNameKor" : "나무 책상",
-            "stuffGlbPath" : "desk_brown_medium_1901",
+            "stuffGlbPath" : "/stuff-assets/desk_brown_medium_1901.glb",
             "geometry" : "low_poly_interior1901",
             "material" : "low_poly_interior"
         },
@@ -215,7 +215,7 @@
             "stuffType" : "electronics",
             "stuffName" : "printer_1898",
             "stuffNameKor" : "프린터",
-            "stuffGlbPath" : "printer_1898",
+            "stuffGlbPath" : "/stuff-assets/printer_1898.glb",
             "geometry" : "low_poly_interior1898",
             "material" : "low_poly_interior"
         },
@@ -227,7 +227,7 @@
             "stuffType" : "desk",
             "stuffName" : "desk_brown_small_1896",
             "stuffNameKor" : "작고 기여운 나무 책상",
-            "stuffGlbPath" : "desk_brown_small_1896",
+            "stuffGlbPath" : "/stuff-assets/desk_brown_small_1896.glb",
             "geometry" : "low_poly_interior1896",
             "material" : "low_poly_interior"
         },
@@ -239,7 +239,7 @@
             "stuffType" : "chair",
             "stuffName" : "chair_brown_medium_059",
             "stuffNameKor" : "갈색 고급 의자",
-            "stuffGlbPath" : "chair_brown_medium_059",
+            "stuffGlbPath" : "/stuff-assets/chair_brown_medium_059.glb",
             "geometry" : "low_poly_interior059",
             "material" : "low_poly_interior"
         },
@@ -251,7 +251,7 @@
             "stuffType" : "shelf",
             "stuffName" : "shelf_white_1899",
             "stuffNameKor" : "하얀색 선반",
-            "stuffGlbPath" : "shelf_white_1899",
+            "stuffGlbPath" : "/stuff-assets/shelf_white_1899.glb",
             "geometry" : "low_poly_interior1899",
             "material" : "low_poly_interior"
         },
@@ -263,7 +263,7 @@
             "stuffType" : "sofa",
             "stuffName" : "sofa_brown_large_1887",
             "stuffNameKor" : "큰 갈색 쇼파",
-            "stuffGlbPath" : "sofa_brown_large_1887",
+            "stuffGlbPath" : "/stuff-assets/sofa_brown_large_1887.glb",
             "geometry" : "low_poly_interior1887",
             "material" : "low_poly_interior"
         },
@@ -275,7 +275,7 @@
             "stuffType" : "plant",
             "stuffName" : "plant_236",
             "stuffNameKor" : "작고 소중한 식물",
-            "stuffGlbPath" : "plant_236",
+            "stuffGlbPath" : "/stuff-assets/plant_236.glb",
             "geometry" : "low_poly_interior236",
             "material" : "low_poly_interior"
         },
@@ -287,7 +287,7 @@
             "stuffType" : "bed",
             "stuffName" : "bed_black_single_1940",
             "stuffNameKor" : "검은 싱글 침대",
-            "stuffGlbPath" : "bed_black_single_1940",
+            "stuffGlbPath" : "/stuff-assets/bed_black_single_1940.glb",
             "geometry" : "low_poly_interior1940",
             "material" : "low_poly_interior"
         },
@@ -299,7 +299,7 @@
             "stuffType" : "chair",
             "stuffName" : "chair_black_077",
             "stuffNameKor" : "의자",
-            "stuffGlbPath" : "chair_black_077",
+            "stuffGlbPath" : "/stuff-assets/chair_black_077.glb",
             "geometry" : "low_poly_interior077",
             "material" : "low_poly_interior"
         },
@@ -311,7 +311,7 @@
             "stuffType" : "drawer",
             "stuffName" : "drawer_black_small_1939",
             "stuffNameKor" : "수납장",
-            "stuffGlbPath" : "drawer_black_small_1939",
+            "stuffGlbPath" : "/stuff-assets/drawer_black_small_1939.glb",
             "geometry" : "low_poly_interior1939",
             "material" : "low_poly_interior"
         },
@@ -323,7 +323,7 @@
             "stuffType" : "console",
             "stuffName" : "console_brown_large_085",
             "stuffNameKor" : "수납장",
-            "stuffGlbPath" : "console_brown_large_085",
+            "stuffGlbPath" : "/stuff-assets/console_brown_large_085.glb",
             "geometry" : "low_poly_interior085",
             "material" : "low_poly_interior"
         }

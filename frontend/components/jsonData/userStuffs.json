@@ -12,7 +12,7 @@
             "stuffAlias" : "벽",
             "stuffName" : "wall_1873",
             "stuffNameKor" : "벽벽벽",
-            "stuffGlbPath" : "wall_1873",
+            "stuffGlbPath" : "/stuff-assets/wall_1873.glb",
             "geometry" : "low_poly_interior1873",
             "material" : "low_poly_interior"
         },
@@ -28,7 +28,7 @@
             "stuffAlias" : "기본 나무 바닥",
             "stuffName" : "floor_1958",
             "stuffNameKor" : "나무 바다아아아아아아악",
-            "stuffGlbPath" : "floor_1958",
+            "stuffGlbPath" : "/stuff-assets/floor_1958.glb",
             "geometry" : "low_poly_interior1958",
             "material" : "low_poly_interior"
         },
@@ -44,7 +44,7 @@
             "stuffAlias" : "기본 책상",
             "stuffName" : "table_brown_medium_282",
             "stuffNameKor" : "나무 테이블",
-            "stuffGlbPath" : "table_brown_medium_282",
+            "stuffGlbPath" : "/stuff-assets/table_brown_medium_282.glb",
             "geometry" : "low_poly_interior282",
             "material" : "low_poly_interior"
         },
@@ -60,7 +60,7 @@
             "stuffAlias" : "기본 의자",
             "stuffName" : "chair_brown_medium_058",
             "stuffNameKor" : "나무 의자",
-            "stuffGlbPath" : "chair_brown_medium_058",
+            "stuffGlbPath" : "/stuff-assets/chair_brown_medium_058.glb",
             "geometry" : "low_poly_interior058",
             "material" : "low_poly_interior"
         },
@@ -76,7 +76,7 @@
             "stuffAlias" : "기본 책상",
             "stuffName" : "guestbook_367",
             "stuffNameKor" : "방명록",
-            "stuffGlbPath" : "guestbook_367",
+            "stuffGlbPath" : "/stuff-assets/guestbook_367.glb",
             "geometry" : "low_poly_interior367",
             "material" : "low_poly_interior"
         }
@@ -94,7 +94,7 @@
             "stuffAlias" : "화분이 있는 방",
             "stuffName" : "wall_2542",
             "stuffNameKor" : "화분이 놓인 창문이 있는 벽",
-            "stuffGlbPath" : "wall_2542",
+            "stuffGlbPath" : "/stuff-assets/wall_2542.glb",
             "geometry" : "low_poly_interior2542",
             "material" : "low_poly_interior"
         },
@@ -110,7 +110,7 @@
             "stuffAlias" : "나무바닥",
             "stuffName" : "floor_2543",
             "stuffNameKor" : "나무바닥",
-            "stuffGlbPath" : "floor_2543",
+            "stuffGlbPath" : "/stuff-assets/floor_2543.glb",
             "geometry" : "low_poly_interior2543",
             "material" : "low_poly_interior"
         },
@@ -126,7 +126,7 @@
             "stuffAlias" : "책상",
             "stuffName" : "desk_brown_medium_1901",
             "stuffNameKor" : "나무 책상",
-            "stuffGlbPath" : "desk_brown_medium_1901",
+            "stuffGlbPath" : "/stuff-assets/desk_brown_medium_1901.glb",
             "geometry" : "low_poly_interior1901",
             "material" : "low_poly_interior"
         },
@@ -142,7 +142,7 @@
             "stuffAlias" : "읽어볼만한 거리",
             "stuffName" : "printer_1898",
             "stuffNameKor" : "프린터",
-            "stuffGlbPath" : "printer_1898",
+            "stuffGlbPath" : "/stuff-assets/printer_1898.glb",
             "geometry" : "low_poly_interior1898",
             "material" : "low_poly_interior"
         },
@@ -158,7 +158,7 @@
             "stuffAlias" : "작은 책상",
             "stuffName" : "desk_brown_small_1896",
             "stuffNameKor" : "작고 기여운 나무 책상",
-            "stuffGlbPath" : "desk_brown_small_1896",
+            "stuffGlbPath" : "/stuff-assets/desk_brown_small_1896.glb",
             "geometry" : "low_poly_interior1896",
             "material" : "low_poly_interior"
         },
@@ -174,7 +174,7 @@
             "stuffAlias" : "갈색 고급 의자",
             "stuffName" : "chair_brown_medium_059",
             "stuffNameKor" : "갈색 고급 의자",
-            "stuffGlbPath" : "chair_brown_medium_059",
+            "stuffGlbPath" : "/stuff-assets/chair_brown_medium_059.glb",
             "geometry" : "low_poly_interior059",
             "material" : "low_poly_interior"
         },
@@ -190,7 +190,7 @@
             "stuffAlias" : "하얀색 선반",
             "stuffName" : "shelf_white_1899",
             "stuffNameKor" : "하얀색 선반",
-            "stuffGlbPath" : "shelf_white_1899",
+            "stuffGlbPath" : "/stuff-assets/shelf_white_1899.glb",
             "geometry" : "low_poly_interior1899",
             "material" : "low_poly_interior"
         },
@@ -206,7 +206,7 @@
             "stuffAlias" : "큰 갈색 쇼파",
             "stuffName" : "sofa_brown_large_1887",
             "stuffNameKor" : "큰 갈색 쇼파",
-            "stuffGlbPath" : "sofa_brown_large_1887",
+            "stuffGlbPath" : "/stuff-assets/sofa_brown_large_1887.glb",
             "geometry" : "low_poly_interior1887",
             "material" : "low_poly_interior"
         },
@@ -222,7 +222,7 @@
             "stuffAlias" : "식물",
             "stuffName" : "plant_236",
             "stuffNameKor" : "작고 소중한 식물",
-            "stuffGlbPath" : "plant_236",
+            "stuffGlbPath" : "/stuff-assets/plant_236.glb",
             "geometry" : "low_poly_interior236",
             "material" : "low_poly_interior"
         }
@@ -240,7 +240,7 @@
             "stuffAlias" : "심플 벽",
             "stuffName" : "wall_1827",
             "stuffNameKor" : "그림이 있는 벽",
-            "stuffGlbPath" : "wall_1827",
+            "stuffGlbPath" : "/stuff-assets/wall_1827.glb",
             "geometry" : "low_poly_interior1827",
             "material" : "low_poly_interior"
         },
@@ -256,7 +256,7 @@
             "stuffAlias" : "심플 바닥",
             "stuffName" : "floor_1830",
             "stuffNameKor" : "심플 바닥",
-            "stuffGlbPath" : "floor_1830",
+            "stuffGlbPath" : "/stuff-assets/floor_1830.glb",
             "geometry" : "low_poly_interior1830",
             "material" : "low_poly_interior"
         },
@@ -272,7 +272,7 @@
             "stuffAlias" : "내 공부 기록",
             "stuffName" : "desk_corner_brown_large_1810",
             "stuffNameKor" : "코너 책상",
-            "stuffGlbPath" : "desk_corner_brown_large_1810",
+            "stuffGlbPath" : "/stuff-assets/desk_corner_brown_large_1810.glb",
             "geometry" : "low_poly_interior1810",
             "material" : "low_poly_interior"
         },
@@ -288,7 +288,7 @@
             "stuffAlias" : "드라마",
             "stuffName" : "monitor_white_medium_1813",
             "stuffNameKor" : "모니터",
-            "stuffGlbPath" : "monitor_white_medium_1813",
+            "stuffGlbPath" : "/stuff-assets/monitor_white_medium_1813.glb",
             "geometry" : "low_poly_interior1813",
             "material" : "low_poly_interior"
         },
@@ -304,7 +304,7 @@
             "stuffAlias" : "운동기록",
             "stuffName" : "workout_treadmill_brown_1811",
             "stuffNameKor" : "런닝머신",
-            "stuffGlbPath" : "workout_treadmill_brown_1811",
+            "stuffGlbPath" : "/stuff-assets/workout_treadmill_brown_1811.glb",
             "geometry" : "low_poly_interior1811",
             "material" : "low_poly_interior"
         },
@@ -320,7 +320,7 @@
             "stuffAlias" : "검은 의자",
             "stuffName" : "chair_black_082",
             "stuffNameKor" : "검은 의자",
-            "stuffGlbPath" : "chair_black_082",
+            "stuffGlbPath" : "/stuff-assets/chair_black_082.glb",
             "geometry" : "low_poly_interior082",
             "material" : "low_poly_interior"
         },
@@ -336,7 +336,7 @@
             "stuffAlias" : "패션",
             "stuffName" : "drawer_brown_small_1840",
             "stuffNameKor" : "작은 서랍",
-            "stuffGlbPath" : "drawer_brown_small_1840",
+            "stuffGlbPath" : "/stuff-assets/drawer_brown_small_1840.glb",
             "geometry" : "low_poly_interior1840",
             "material" : "low_poly_interior"
         },
@@ -352,7 +352,7 @@
             "stuffAlias" : "큰 침대",
             "stuffName" : "bed_brown_double_185",
             "stuffNameKor" : "더블 침대",
-            "stuffGlbPath" : "bed_brown_double_185",
+            "stuffGlbPath" : "/stuff-assets/bed_brown_double_185.glb",
             "geometry" : "low_poly_interior185",
             "material" : "low_poly_interior"
         },
@@ -368,7 +368,7 @@
             "stuffAlias" : "사진",
             "stuffName" : "camera_black_large_1999",
             "stuffNameKor" : "사진",
-            "stuffGlbPath" : "camera_black_large_1999",
+            "stuffGlbPath" : "/stuff-assets/camera_black_large_1999.glb",
             "geometry" : "low_poly_interior1999",
             "material" : "low_poly_interior"
         }
@@ -386,7 +386,7 @@
             "stuffAlias" : "심플 벽",
             "stuffName" : "wall_1468",
             "stuffNameKor" : "그림이 있는 벽",
-            "stuffGlbPath" : "wall_1468",
+            "stuffGlbPath" : "/stuff-assets/wall_1468.glb",
             "geometry" : "low_poly_interior1468",
             "material" : "low_poly_interior"
         },
@@ -402,7 +402,7 @@
             "stuffAlias" : "심플 바닥",
             "stuffName" : "floor_1469",
             "stuffNameKor" : "심플 바닥",
-            "stuffGlbPath" : "floor_1469",
+            "stuffGlbPath" : "/stuff-assets/floor_1469.glb",
             "geometry" : "low_poly_interior1469",
             "material" : "low_poly_interior"
         },
@@ -418,7 +418,7 @@
             "stuffAlias" : "피아노",
             "stuffName" : "instrument_piano_114",
             "stuffNameKor" : "피아노",
-            "stuffGlbPath" : "instrument_piano_114",
+            "stuffGlbPath" : "/stuff-assets/instrument_piano_114.glb",
             "geometry" : "low_poly_interior114",
             "material" : "low_poly_interior"
         },
@@ -434,7 +434,7 @@
             "stuffAlias" : "드라마",
             "stuffName" : "sofa_black_pianochair_small_309",
             "stuffNameKor" : "모니터",
-            "stuffGlbPath" : "sofa_black_pianochair_small_309",
+            "stuffGlbPath" : "/stuff-assets/sofa_black_pianochair_small_309.glb",
             "geometry" : "low_poly_interior309",
             "material" : "low_poly_interior"
         },
@@ -450,7 +450,7 @@
             "stuffAlias" : "쇼파",
             "stuffName" : "sofa_brown_large_1461",
             "stuffNameKor" : "쇼파",
-            "stuffGlbPath" : "sofa_brown_large_1461",
+            "stuffGlbPath" : "/stuff-assets/sofa_brown_large_1461.glb",
             "geometry" : "low_poly_interior1461",
             "material" : "low_poly_interior"
         },
@@ -466,7 +466,7 @@
             "stuffAlias" : "검은 의자",
             "stuffName" : "plant_brown_large_325",
             "stuffNameKor" : "검은 의자",
-            "stuffGlbPath" : "plant_brown_large_325",
+            "stuffGlbPath" : "/stuff-assets/plant_brown_large_325.glb",
             "geometry" : "low_poly_interior325",
             "material" : "low_poly_interior"
         },
@@ -482,7 +482,7 @@
             "stuffAlias" : "패션",
             "stuffName" : "drawer_black_small_1464",
             "stuffNameKor" : "작은 서랍",
-            "stuffGlbPath" : "drawer_black_small_1464",
+            "stuffGlbPath" : "/stuff-assets/drawer_black_small_1464.glb",
             "geometry" : "low_poly_interior1464",
             "material" : "low_poly_interior"
         },
@@ -498,7 +498,7 @@
             "stuffAlias" : "큰 침대",
             "stuffName" : "table_grey_large_209",
             "stuffNameKor" : "더블 침대",
-            "stuffGlbPath" : "table_grey_large_209",
+            "stuffGlbPath" : "/stuff-assets/table_grey_large_209.glb",
             "geometry" : "low_poly_interior209",
             "material" : "low_poly_interior"
         },
@@ -514,7 +514,7 @@
             "stuffAlias" : "빛",
             "stuffName" : "light_white_large_1463",
             "stuffNameKor" : "빛",
-            "stuffGlbPath" : "light_white_large_1463",
+            "stuffGlbPath" : "/stuff-assets/light_white_large_1463.glb",
             "geometry" : "low_poly_interior1463",
             "material" : "low_poly_interior"
         },
@@ -530,7 +530,7 @@
             "stuffAlias" : "사진",
             "stuffName" : "sofa_ivory_small_183",
             "stuffNameKor" : "사진",
-            "stuffGlbPath" : "sofa_ivory_small_183",
+            "stuffGlbPath" : "/stuff-assets/sofa_ivory_small_183.glb",
             "geometry" : "low_poly_interior183",
             "material" : "low_poly_interior"
         }
@@ -548,7 +548,7 @@
             "stuffAlias" : "심플 벽",
             "stuffName" : "wall_1705",
             "stuffNameKor" : "벽",
-            "stuffGlbPath" : "wall_1705",
+            "stuffGlbPath" : "/stuff-assets/wall_1705.glb",
             "geometry" : "low_poly_interior1705",
             "material" : "low_poly_interior"
         },
@@ -564,7 +564,7 @@
             "stuffAlias" : "심플 바닥",
             "stuffName" : "floor_1709",
             "stuffNameKor" : "심플 바닥",
-            "stuffGlbPath" : "floor_1709",
+            "stuffGlbPath" : "/stuff-assets/floor_1709.glb",
             "geometry" : "low_poly_interior1709",
             "material" : "low_poly_interior"
         },
@@ -580,7 +580,7 @@
             "stuffAlias" : "내 공부 기록",
             "stuffName" : "sofa_pink_small_1689",
             "stuffNameKor" : "코너 책상",
-            "stuffGlbPath" : "sofa_pink_small_1689",
+            "stuffGlbPath" : "/stuff-assets/sofa_pink_small_1689.glb",
             "geometry" : "low_poly_interior1689",
             "material" : "low_poly_interior"
         },
@@ -596,7 +596,7 @@
             "stuffAlias" : "드라마",
             "stuffName" : "sofa_pink_large_1682",
             "stuffNameKor" : "모니터",
-            "stuffGlbPath" : "sofa_pink_large_1682",
+            "stuffGlbPath" : "/stuff-assets/sofa_pink_large_1682.glb",
             "geometry" : "low_poly_interior1682",
             "material" : "low_poly_interior"
         },
@@ -612,7 +612,7 @@
             "stuffAlias" : "운동기록",
             "stuffName" : "light_pink_large_1683",
             "stuffNameKor" : "런닝머신",
-            "stuffGlbPath" : "light_pink_large_1683",
+            "stuffGlbPath" : "/stuff-assets/light_pink_large_1683.glb",
             "geometry" : "low_poly_interior1683",
             "material" : "low_poly_interior"
         },
@@ -628,7 +628,7 @@
             "stuffAlias" : "검은 의자",
             "stuffName" : "table_brown_large_299",
             "stuffNameKor" : "검은 의자",
-            "stuffGlbPath" : "table_brown_large_299",
+            "stuffGlbPath" : "/stuff-assets/table_brown_large_299.glb",
             "geometry" : "low_poly_interior299",
             "material" : "low_poly_interior"
         },
@@ -644,7 +644,7 @@
             "stuffAlias" : "패션",
             "stuffName" : "plant_white_small_339",
             "stuffNameKor" : "작은 서랍",
-            "stuffGlbPath" : "plant_white_small_339",
+            "stuffGlbPath" : "/stuff-assets/plant_white_small_339.glb",
             "geometry" : "low_poly_interior339",
             "material" : "low_poly_interior"
         },
@@ -660,7 +660,7 @@
             "stuffAlias" : "큰 침대",
             "stuffName" : "frame_large_1713",
             "stuffNameKor" : "더블 침대",
-            "stuffGlbPath" : "frame_large_1713",
+            "stuffGlbPath" : "/stuff-assets/frame_large_1713.glb",
             "geometry" : "low_poly_interior1713",
             "material" : "low_poly_interior"
         },
@@ -676,7 +676,7 @@
             "stuffAlias" : "사진",
             "stuffName" : "frame_large_1714",
             "stuffNameKor" : "사진",
-            "stuffGlbPath" : "frame_large_1714",
+            "stuffGlbPath" : "/stuff-assets/frame_large_1714.glb",
             "geometry" : "low_poly_interior1714",
             "material" : "low_poly_interior"
         }
@@ -694,7 +694,7 @@
             "stuffAlias" : "심플 벽",
             "stuffName" : "wall_1729",
             "stuffNameKor" : "그림이 있는 벽",
-            "stuffGlbPath" : "wall_1729",
+            "stuffGlbPath" : "/stuff-assets/wall_1729.glb",
             "geometry" : "low_poly_interior1729",
             "material" : "low_poly_interior"
         },
@@ -710,7 +710,7 @@
             "stuffAlias" : "심플 바닥",
             "stuffName" : "floor_1730",
             "stuffNameKor" : "심플 바닥",
-            "stuffGlbPath" : "floor_1730",
+            "stuffGlbPath" : "/stuff-assets/floor_1730.glb",
             "geometry" : "low_poly_interior1730",
             "material" : "low_poly_interior"
         },
@@ -726,7 +726,7 @@
             "stuffAlias" : "내 공부 기록",
             "stuffName" : "bed_brown_small_1719",
             "stuffNameKor" : "코너 책상",
-            "stuffGlbPath" : "bed_brown_small_1719",
+            "stuffGlbPath" : "/stuff-assets/bed_brown_small_1719.glb",
             "geometry" : "low_poly_interior1719",
             "material" : "low_poly_interior"
         },
@@ -742,7 +742,7 @@
             "stuffAlias" : "드라마",
             "stuffName" : "sofa_whitebrown_medium_1722",
             "stuffNameKor" : "모니터",
-            "stuffGlbPath" : "sofa_whitebrown_medium_1722",
+            "stuffGlbPath" : "/stuff-assets/sofa_whitebrown_medium_1722.glb",
             "geometry" : "low_poly_interior1722",
             "material" : "low_poly_interior"
         },
@@ -758,7 +758,7 @@
             "stuffAlias" : "운동기록",
             "stuffName" : "closet_brown_large_1721",
             "stuffNameKor" : "런닝머신",
-            "stuffGlbPath" : "closet_brown_large_1721",
+            "stuffGlbPath" : "/stuff-assets/closet_brown_large_1721.glb",
             "geometry" : "low_poly_interior1721",
             "material" : "low_poly_interior"
         },
@@ -774,7 +774,7 @@
             "stuffAlias" : "검은 의자",
             "stuffName" : "desk_corner_brown_large_1720",
             "stuffNameKor" : "검은 의자",
-            "stuffGlbPath" : "desk_corner_brown_large_1720",
+            "stuffGlbPath" : "/stuff-assets/desk_corner_brown_large_1720.glb",
             "geometry" : "low_poly_interior1720",
             "material" : "low_poly_interior"
         },
@@ -790,7 +790,7 @@
             "stuffAlias" : "패션",
             "stuffName" : "electronics_computer_1746",
             "stuffNameKor" : "작은 서랍",
-            "stuffGlbPath" : "electronics_computer_1746",
+            "stuffGlbPath" : "/stuff-assets/electronics_computer_1746.glb",
             "geometry" : "low_poly_interior1746",
             "material" : "low_poly_interior"
         },
@@ -806,7 +806,7 @@
             "stuffAlias" : "큰 침대",
             "stuffName" : "chair_white_medium_1724",
             "stuffNameKor" : "더블 침대",
-            "stuffGlbPath" : "chair_white_medium_1724",
+            "stuffGlbPath" : "/stuff-assets/chair_white_medium_1724.glb",
             "geometry" : "low_poly_interior1724",
             "material" : "low_poly_interior"
         },
@@ -822,7 +822,7 @@
             "stuffAlias" : "사진",
             "stuffName" : "table_brown_small_1723",
             "stuffNameKor" : "사진",
-            "stuffGlbPath" : "table_brown_small_1723",
+            "stuffGlbPath" : "/stuff-assets/table_brown_small_1723.glb",
             "geometry" : "low_poly_interior1723",
             "material" : "low_poly_interior"
         },
@@ -838,7 +838,7 @@
             "stuffAlias" : "사진",
             "stuffName" : "shelf_brown_medium_1726",
             "stuffNameKor" : "사진",
-            "stuffGlbPath" : "shelf_brown_medium_1726",
+            "stuffGlbPath" : "/stuff-assets/shelf_brown_medium_1726.glb",
             "geometry" : "low_poly_interior1726",
             "material" : "low_poly_interior"
         },
@@ -854,7 +854,7 @@
             "stuffAlias" : "사진",
             "stuffName" : "docs_wallclock_269",
             "stuffNameKor" : "사진",
-            "stuffGlbPath" : "docs_wallclock_269",
+            "stuffGlbPath" : "/stuff-assets/docs_wallclock_269.glb",
             "geometry" : "low_poly_interior269",
             "material" : "low_poly_interior"
         }
@@ -872,7 +872,7 @@
             "stuffAlias" : "심플 벽",
             "stuffName" : "wall_1502",
             "stuffNameKor" : "그림이 있는 벽",
-            "stuffGlbPath" : "wall_1502",
+            "stuffGlbPath" : "/stuff-assets/wall_1502.glb",
             "geometry" : "low_poly_interior1502",
             "material" : "low_poly_interior"
         },
@@ -888,7 +888,7 @@
             "stuffAlias" : "심플 바닥",
             "stuffName" : "floor_1503",
             "stuffNameKor" : "심플 바닥",
-            "stuffGlbPath" : "floor_1503",
+            "stuffGlbPath" : "/stuff-assets/floor_1503.glb",
             "geometry" : "low_poly_interior1503",
             "material" : "low_poly_interior"
         },
@@ -904,7 +904,7 @@
             "stuffAlias" : "내 공부 기록",
             "stuffName" : "hanger_white_large_1492",
             "stuffNameKor" : "코너 책상",
-            "stuffGlbPath" : "hanger_white_large_1492",
+            "stuffGlbPath" : "/stuff-assets/hanger_white_large_1492.glb",
             "geometry" : "low_poly_interior1492",
             "material" : "low_poly_interior"
         },
@@ -920,7 +920,7 @@
             "stuffAlias" : "드라마",
             "stuffName" : "sofa_brown_large_246",
             "stuffNameKor" : "모니터",
-            "stuffGlbPath" : "sofa_brown_large_246",
+            "stuffGlbPath" : "/stuff-assets/sofa_brown_large_246.glb",
             "geometry" : "low_poly_interior246",
             "material" : "low_poly_interior"
         },
@@ -936,7 +936,7 @@
             "stuffAlias" : "검은 의자",
             "stuffName" : "table_brown_large_299",
             "stuffNameKor" : "검은 의자",
-            "stuffGlbPath" : "table_brown_large_299",
+            "stuffGlbPath" : "/stuff-assets/table_brown_large_299.glb",
             "geometry" : "low_poly_interior299",
             "material" : "low_poly_interior"
         },
@@ -952,7 +952,7 @@
             "stuffAlias" : "패션",
             "stuffName" : "frame_large_312",
             "stuffNameKor" : "작은 서랍",
-            "stuffGlbPath" : "frame_large_312",
+            "stuffGlbPath" : "/stuff-assets/frame_large_312.glb",
             "geometry" : "low_poly_interior312",
             "material" : "low_poly_interior"
         },
@@ -968,7 +968,7 @@
             "stuffAlias" : "큰 침대",
             "stuffName" : "console_brown_medium_021",
             "stuffNameKor" : "더블 침대",
-            "stuffGlbPath" : "console_brown_medium_021",
+            "stuffGlbPath" : "/stuff-assets/console_brown_medium_021.glb",
             "geometry" : "low_poly_interior021",
             "material" : "low_poly_interior"
         },
@@ -984,7 +984,7 @@
             "stuffAlias" : "사진",
             "stuffName" : "carpet_brown_small_1768",
             "stuffNameKor" : "사진",
-            "stuffGlbPath" : "carpet_brown_small_1768",
+            "stuffGlbPath" : "/stuff-assets/carpet_brown_small_1768.glb",
             "geometry" : "low_poly_interior1768",
             "material" : "low_poly_interior"
         }
@@ -1002,7 +1002,7 @@
             "stuffAlias" : "심플 벽",
             "stuffName" : "wall_1796",
             "stuffNameKor" : "그림이 있는 벽",
-            "stuffGlbPath" : "wall_1796",
+            "stuffGlbPath" : "/stuff-assets/wall_1796.glb",
             "geometry" : "low_poly_interior1796",
             "material" : "low_poly_interior"
         },
@@ -1018,7 +1018,7 @@
             "stuffAlias" : "심플 바닥",
             "stuffName" : "floor_1550",
             "stuffNameKor" : "심플 바닥",
-            "stuffGlbPath" : "floor_1550",
+            "stuffGlbPath" : "/stuff-assets/floor_1550.glb",
             "geometry" : "low_poly_interior1550",
             "material" : "low_poly_interior"
         },
@@ -1034,7 +1034,7 @@
             "stuffAlias" : "내 공부 기록",
             "stuffName" : "desk_bed_grey_large_203",
             "stuffNameKor" : "코너 책상",
-            "stuffGlbPath" : "desk_bed_grey_large_203",
+            "stuffGlbPath" : "/stuff-assets/desk_bed_grey_large_203.glb",
             "geometry" : "low_poly_interior203",
             "material" : "low_poly_interior"
         },
@@ -1050,7 +1050,7 @@
             "stuffAlias" : "드라마",
             "stuffName" : "toy_car_small_028",
             "stuffNameKor" : "모니터",
-            "stuffGlbPath" : "toy_car_small_028",
+            "stuffGlbPath" : "/stuff-assets/toy_car_small_028.glb",
             "geometry" : "low_poly_interior028",
             "material" : "low_poly_interior"
         },
@@ -1066,7 +1066,7 @@
             "stuffAlias" : "운동기록",
             "stuffName" : "drawer_skyblue_medium_1781",
             "stuffNameKor" : "런닝머신",
-            "stuffGlbPath" : "drawer_skyblue_medium_1781",
+            "stuffGlbPath" : "/stuff-assets/drawer_skyblue_medium_1781.glb",
             "geometry" : "low_poly_interior1781",
             "material" : "low_poly_interior"
         },
@@ -1082,7 +1082,7 @@
             "stuffAlias" : "검은 의자",
             "stuffName" : "desk_yellow_small_035",
             "stuffNameKor" : "검은 의자",
-            "stuffGlbPath" : "desk_yellow_small_035",
+            "stuffGlbPath" : "/stuff-assets/desk_yellow_small_035.glb",
             "geometry" : "low_poly_interior035",
             "material" : "low_poly_interior"
         },
@@ -1098,7 +1098,7 @@
             "stuffAlias" : "패션",
             "stuffName" : "shelf_skyblue_large_029",
             "stuffNameKor" : "작은 서랍",
-            "stuffGlbPath" : "shelf_skyblue_large_029",
+            "stuffGlbPath" : "/stuff-assets/shelf_skyblue_large_029.glb",
             "geometry" : "low_poly_interior029",
             "material" : "low_poly_interior"
         },
@@ -1114,7 +1114,7 @@
             "stuffAlias" : "큰 침대",
             "stuffName" : "bed_white_small_191",
             "stuffNameKor" : "더블 침대",
-            "stuffGlbPath" : "bed_white_small_191",
+            "stuffGlbPath" : "/stuff-assets/bed_white_small_191.glb",
             "geometry" : "low_poly_interior191",
             "material" : "low_poly_interior"
         },
@@ -1130,7 +1130,7 @@
             "stuffAlias" : "사진",
             "stuffName" : "carpet_green_medium_1805",
             "stuffNameKor" : "사진",
-            "stuffGlbPath" : "carpet_green_medium_1805",
+            "stuffGlbPath" : "/stuff-assets/carpet_green_medium_1805.glb",
             "geometry" : "low_poly_interior1805",
             "material" : "low_poly_interior"
         },
@@ -1146,7 +1146,7 @@
             "stuffAlias" : "사진",
             "stuffName" : "desk_brown_small_023",
             "stuffNameKor" : "사진",
-            "stuffGlbPath" : "desk_brown_small_023",
+            "stuffGlbPath" : "/stuff-assets/desk_brown_small_023.glb",
             "geometry" : "low_poly_interior023",
             "material" : "low_poly_interior"
         },
@@ -1162,7 +1162,7 @@
             "stuffAlias" : "사진",
             "stuffName" : "chair_orange_small_052",
             "stuffNameKor" : "사진",
-            "stuffGlbPath" : "chair_orange_small_052",
+            "stuffGlbPath" : "/stuff-assets/chair_orange_small_052.glb",
             "geometry" : "low_poly_interior052",
             "material" : "low_poly_interior"
         }
@@ -1180,7 +1180,7 @@
             "stuffAlias" : "벽",
             "stuffName" : "wall_1873",
             "stuffNameKor" : "벽벽벽",
-            "stuffGlbPath" : "wall_1873",
+            "stuffGlbPath" : "/stuff-assets/wall_1873.glb",
             "geometry" : "low_poly_interior1873",
             "material" : "low_poly_interior"
         },
@@ -1196,7 +1196,7 @@
             "stuffAlias" : "기본 나무 바닥",
             "stuffName" : "floor_1958",
             "stuffNameKor" : "나무 바다아아아아아아악",
-            "stuffGlbPath" : "floor_1958",
+            "stuffGlbPath" : "/stuff-assets/floor_1958.glb",
             "geometry" : "low_poly_interior1958",
             "material" : "low_poly_interior"
         },
@@ -1212,7 +1212,7 @@
             "stuffAlias" : "기본 책상",
             "stuffName" : "table_brown_medium_282",
             "stuffNameKor" : "나무 테이블",
-            "stuffGlbPath" : "table_brown_medium_282",
+            "stuffGlbPath" : "/stuff-assets/table_brown_medium_282.glb",
             "geometry" : "low_poly_interior282",
             "material" : "low_poly_interior"
         },
@@ -1228,7 +1228,7 @@
             "stuffAlias" : "기본 의자",
             "stuffName" : "chair_brown_medium_058",
             "stuffNameKor" : "나무 의자",
-            "stuffGlbPath" : "chair_brown_medium_058",
+            "stuffGlbPath" : "/stuff-assets/chair_brown_medium_058.glb",
             "geometry" : "low_poly_interior058",
             "material" : "low_poly_interior"
         },
@@ -1244,7 +1244,7 @@
             "stuffAlias" : "기본 책상",
             "stuffName" : "guestbook_367",
             "stuffNameKor" : "방명록",
-            "stuffGlbPath" : "guestbook_367",
+            "stuffGlbPath" : "/stuff-assets/guestbook_367.glb",
             "geometry" : "low_poly_interior367",
             "material" : "low_poly_interior"
         }
@@ -1262,7 +1262,7 @@
             "stuffAlias" : "심플 벽",
             "stuffName" : "wall_2046",
             "stuffNameKor" : "그림이 있는 벽",
-            "stuffGlbPath" : "wall_2046",
+            "stuffGlbPath" : "/stuff-assets/wall_2046.glb",
             "geometry" : "low_poly_interior2046",
             "material" : "low_poly_interior"
         },
@@ -1278,7 +1278,7 @@
             "stuffAlias" : "심플 바닥",
             "stuffName" : "floor_2048",
             "stuffNameKor" : "심플 바닥",
-            "stuffGlbPath" : "floor_2048",
+            "stuffGlbPath" : "/stuff-assets/floor_2048.glb",
             "geometry" : "low_poly_interior2048",
             "material" : "low_poly_interior"
         },
@@ -1294,7 +1294,7 @@
             "stuffAlias" : "내 공부 기록",
             "stuffName" : "sofa_brown_medium_2029",
             "stuffNameKor" : "코너 책상",
-            "stuffGlbPath" : "sofa_brown_medium_2029",
+            "stuffGlbPath" : "/stuff-assets/sofa_brown_medium_2029.glb",
             "geometry" : "low_poly_interior2029",
             "material" : "low_poly_interior"
         },
@@ -1310,7 +1310,7 @@
             "stuffAlias" : "운동기록",
             "stuffName" : "chair_brown_small_2031",
             "stuffNameKor" : "런닝머신",
-            "stuffGlbPath" : "chair_brown_small_2031",
+            "stuffGlbPath" : "/stuff-assets/chair_brown_small_2031.glb",
             "geometry" : "low_poly_interior2031",
             "material" : "low_poly_interior"
         },
@@ -1326,7 +1326,7 @@
             "stuffAlias" : "운동기록",
             "stuffName" : "chair_brown_small_2031",
             "stuffNameKor" : "런닝머신",
-            "stuffGlbPath" : "chair_brown_small_2031",
+            "stuffGlbPath" : "/stuff-assets/chair_brown_small_2031.glb",
             "geometry" : "low_poly_interior2031",
             "material" : "low_poly_interior"
         },
@@ -1342,7 +1342,7 @@
             "stuffAlias" : "검은 의자",
             "stuffName" : "desk_brown_giant_2030",
             "stuffNameKor" : "검은 의자",
-            "stuffGlbPath" : "desk_brown_giant_2030",
+            "stuffGlbPath" : "/stuff-assets/desk_brown_giant_2030.glb",
             "geometry" : "low_poly_interior2030",
             "material" : "low_poly_interior"
         },
@@ -1358,7 +1358,7 @@
             "stuffAlias" : "검은 의자",
             "stuffName" : "docs_hemisphere_271",
             "stuffNameKor" : "검은 의자",
-            "stuffGlbPath" : "docs_hemisphere_271",
+            "stuffGlbPath" : "/stuff-assets/docs_hemisphere_271.glb",
             "geometry" : "low_poly_interior271",
             "material" : "low_poly_interior"
         },
@@ -1374,7 +1374,7 @@
             "stuffAlias" : "검은 의자",
             "stuffName" : "docs_hemisphere_small_2041",
             "stuffNameKor" : "검은 의자",
-            "stuffGlbPath" : "docs_hemisphere_small_2041",
+            "stuffGlbPath" : "/stuff-assets/docs_hemisphere_small_2041.glb",
             "geometry" : "low_poly_interior2041",
             "material" : "low_poly_interior"
         }
