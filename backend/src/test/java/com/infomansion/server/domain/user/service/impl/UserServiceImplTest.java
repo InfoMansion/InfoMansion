@@ -161,7 +161,7 @@ class UserServiceImplTest {
         Long userId = userService.join(requestDto);
 
         //then
-        assertThat(userRepository.findById(userId).get().getProfileImage()).isEqualTo("/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png");
+        assertThat(userRepository.findById(userId).get().getProfileImage()).isEqualTo("https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png");
     }
 
     @Test
@@ -189,7 +189,7 @@ class UserServiceImplTest {
         //then
         assertThat(responseDto.getUsername()).isEqualTo("infomansion");
         assertThat(responseDto.getProfileImage()).isNotNull();
-        assertThat(responseDto.getProfileImage()).isEqualTo("/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png");
+        assertThat(responseDto.getProfileImage()).isEqualTo("https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png");
     }
 
     @WithCustomUserDetails
