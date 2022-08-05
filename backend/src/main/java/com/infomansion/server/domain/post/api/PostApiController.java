@@ -2,11 +2,13 @@ package com.infomansion.server.domain.post.api;
 
 import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
 import com.infomansion.server.domain.post.dto.PostRecommendResponseDto;
+import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
 import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.global.apispec.CommonResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +45,11 @@ public class PostApiController {
     public ResponseEntity<CommonResponse<Long>> addPostLikes(@Valid @PathVariable Long postId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(likesPostService.addLikes(postId)));
+    }
+
+    @GetMapping("api/v1/posts/search/{searchWord}")
+    public ResponseEntity<CommonResponse<PostSearchResponseDto>> searchPostByWord(@Valid @PathVariable String searchWord, Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(postService.findPostBySearchWord(searchWord, pageable)));
     }
 }

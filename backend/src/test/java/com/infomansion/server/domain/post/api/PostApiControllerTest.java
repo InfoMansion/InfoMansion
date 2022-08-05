@@ -268,4 +268,47 @@ public class PostApiControllerTest {
 
     }
 
+    @DisplayName("Post 검색에 성공하였습니다.")
+    @WithCustomUserDetails
+    @Transactional
+    @Test
+    public void Post_검색_성공() throws Exception{
+
+        //UserStuff 배치
+        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
+                .id(userStuffId).alias("Java 정리").category("IT")
+                .posX(0.2).posY(0.3).posZ(3.1)
+                .rotX(1.5).rotY(0.0).rotZ(0.9)
+                .build();
+
+        Long userStuffId = userStuffService.includeUserStuff(includeDto);
+
+        //post 작성
+        PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
+                .userStuffId(userStuffId)
+                .title("EffectiveJava자바")
+                .content("infomansion Java 파이팅!")
+                .build();
+
+        postService.createPost(postCreateDto);
+
+        postCreateDto = PostCreateRequestDto.builder()
+                .userStuffId(userStuffId)
+                .title("킹갓infomansion")
+                .content("Java개발자 필독서")
+                .build();
+
+        postService.createPost(postCreateDto);
+        String searchWord = "Java";
+        int page = 0;
+        int size = 3;
+
+        mockMvc.perform(get("/api/v1/posts/search/"+searchWord+"?page"+page+"&size="+size))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.data.['postsByUserName'].['content'].size()").value(0))
+                .andExpect((ResultMatcher) jsonPath("$.data.['postsByTitle'].['content'][0].['title']").value("EffectiveJava자바"))
+                .andExpect((ResultMatcher) jsonPath("$.data.['postsByContent'].['content'][1].['content']").value("Java개발자 필독서"));
+
+    }
+
 }

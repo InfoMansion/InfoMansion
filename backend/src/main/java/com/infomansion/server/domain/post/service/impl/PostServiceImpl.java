@@ -3,10 +3,12 @@ package com.infomansion.server.domain.post.service.impl;
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
 import com.infomansion.server.domain.post.dto.PostRecommendResponseDto;
+import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
 import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
@@ -14,6 +16,8 @@ import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
 import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +53,7 @@ public class PostServiceImpl implements PostService {
     public PostRecommendResponseDto findRecommendPost() {
 
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         String userCategories = user.getCategories();
 
@@ -76,6 +80,25 @@ public class PostServiceImpl implements PostService {
                 .forEach(post -> simpleResponseDtos.add(new PostSimpleResponseDto(post)));
 
         return simpleResponseDtos;
+    }
+
+    @Override
+    public PostSearchResponseDto findPostBySearchWord(String searchWord, Pageable pageable) {
+
+
+        Slice<UserSimpleProfileResponseDto> usersByUserName =
+                userRepository.findUserByUserName(searchWord, pageable)
+                        .map(UserSimpleProfileResponseDto::toDto);
+
+        Slice<PostSimpleResponseDto> postsByTitle =
+                postRepository.findByTitle(searchWord, pageable)
+                        .map(PostSimpleResponseDto::new);
+
+        Slice<PostSimpleResponseDto> postsByContent =
+                postRepository.findByContent(searchWord, pageable)
+                        .map(PostSimpleResponseDto::new);
+
+        return new PostSearchResponseDto(usersByUserName, postsByTitle, postsByContent);
     }
 
 }

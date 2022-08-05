@@ -4,6 +4,8 @@ import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +19,11 @@ public interface PostRepository extends JpaRepository<Post, Long>{
 
     @Query("select p from Post p where p.userStuff = :userStuff and p.deleteFlag = false order by p.modifiedDate")
     List<Post> findByUserStuffId(@Param("userStuff") UserStuff userStuff);
+
+    @Query("select p from Post p where p.title like %:searchWord%")
+    Slice<Post> findByTitle(@Param("searchWord") String searchWord, Pageable pageable);
+
+    @Query("select p from Post p where p.content like %:searchWord%")
+    Slice<Post> findByContent(@Param("searchWord") String searchWord, Pageable pageable);
+
 }
