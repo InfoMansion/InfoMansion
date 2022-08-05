@@ -32,9 +32,7 @@ public class UserModifyProfileResponseDto {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .introduce(user.getIntroduce())
-                .profileImageUrl(
-                        "https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com" +
-                        user.getProfileImage())
+                .profileImageUrl(user.getProfileImage())
                 .categories(Arrays.stream(user.getCategories().split(",")).collect(Collectors.toList()))
                 .build();
     }

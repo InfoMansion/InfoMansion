@@ -42,7 +42,7 @@ public class User extends BaseTimeEntityAtSoftDelete {
         this.tel = tel;
         this.authority = UserAuthority.ROLE_TEMP;
         this.categories = categories;
-        this.profileImage = "/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png";
+        this.profileImage = "https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png";
         this.introduce = "";
     }
 
