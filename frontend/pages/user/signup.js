@@ -9,11 +9,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { likeCateState } from '../../state/likeCate';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from '../../utils/axios';
+import { pageLoading } from '../../state/pageLoading';
 const theme = createTheme({
   palette: {
     primary: {
@@ -28,7 +29,7 @@ const theme = createTheme({
 export default function SignUp() {
   const router = useRouter();
   const [likeCate, setlikeCate] = useRecoilState(likeCateState);
-
+  const setPageLoading = useSetRecoilState(pageLoading);
   const [inputEmail, setInputEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
   const [inputPassword2, setInputPassword2] = useState('');
@@ -71,11 +72,13 @@ export default function SignUp() {
 
     try {
       console.log(credentials);
-
+      setPageLoading(true);
       const res = await axios.post('api/v1/auth/signup', credentials);
-      alert('인증메일이 발송되었습니다.');
+      setPageLoading(false);
+      alert('인증 메일이 발송됐습니.');
       router.push('/');
     } catch (e) {
+      setPageLoading(false);
       console.log(e);
     }
   };

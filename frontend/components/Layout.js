@@ -2,6 +2,9 @@ import HeaderNav from './common/HeaderNav';
 import { styled } from '@mui/material/styles';
 import { Box, Paper } from '@mui/material';
 import useAuth from '../hooks/useAuth';
+import { useRecoilState } from 'recoil';
+import { pageLoading } from '../state/pageLoading';
+import Loading from './Loading';
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(1),
@@ -17,14 +20,16 @@ const Root = styled('div')(({ theme }) => ({
 
 export default function Layout({ children }) {
   const { auth } = useAuth();
+  const [loading] = useRecoilState(pageLoading);
 
   return (
     <Box
       style={{
         backgroundColor: '#eeeeee',
+        position: 'relative',
       }}
       sx={{
-        minHeight: '1500px',
+        minHeight: '1200px',
       }}
     >
       {auth.isAuthorized && (
@@ -43,6 +48,7 @@ export default function Layout({ children }) {
       >
         {children}
       </Root>
+      {loading && <Loading></Loading>}
     </Box>
   );
 }
