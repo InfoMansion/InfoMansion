@@ -1,10 +1,7 @@
-import { OrbitControls, OrthographicCamera } from '@react-three/drei'
 import {Canvas} from '@react-three/fiber'
 import { useEffect, useState, } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Button } from '@mui/material'
-import { easings, useSpring } from 'react-spring'
-import { animated } from '@react-spring/three'
 import  RoomManageMenu from './RoomPage/RoomManageMenu'
 
 // data
@@ -16,16 +13,18 @@ import Stuffs from './RoomPage/Stuffs'
 // import walltest from './walltest.json'
 import RoomCamera from './RoomPage/atoms/RoomCamera'
 import RoomLight from './RoomPage/atoms/RoomLight'
+import axios from '../utils/axios'
+import { useCookies } from 'react-cookie'
 
-import Stuff_s3test from './RoomPage/atoms/Stuff_s3test'
+import { clickedStuffCategoryState } from '../state/roomState'
+import { useRecoilState } from 'recoil'
 
 export default function Room( { StuffClick, userName} ) {
     // 화면 확대 정도 조정.
+    const [cookies] = useCookies(['cookie-name']);
     const [zoomscale] = useState(90);
     // 내 방인지 판단하는 변수
     const [myroom] = useState(true);
-
-    // 쿼리에서 가져오기.
     
     // 사용자 가구들.
     const [mapstuffs, setMapstuffs] = useState([]);
@@ -35,14 +34,30 @@ export default function Room( { StuffClick, userName} ) {
     
     const [tagon, setTagon] = useState(true);
     const [camloc, setCamloc] = useState([0, 0, 0]);
+
+    const [, setClickedStuffCategory] = useRecoilState(clickedStuffCategoryState);
     
     // 마운트시 stuff 로드
     const router = useRouter();
     useEffect(() => {
         if(!router.isReady) return;
         // stuff 가져오기
-        setMapstuffs(userStuffs[router.query.userName].slice(0, 2));
-        setStuffs(userStuffs[router.query.userName].slice(2));
+        try {
+            axios.get(`/api/v1/userstuffs/room/${router.query.userName}`, {
+                headers : {
+                    Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+                }
+            })
+            .then( res => {
+                console.log(res.data.data)
+                console.log(res.data.data[0].category)
+                setMapstuffs(res.data.data.slice(0, 2));
+                setStuffs(res.data.data.slice(2));
+            })
+        } catch(e) {
+            console.log(e);
+        }
+        
     }, [router.isReady]);
 
     // stuff 호버 이벤트.
@@ -55,8 +70,9 @@ export default function Room( { StuffClick, userName} ) {
         // setClicked 동기처리 되도록 바꿔야 함.
         setClicked(() => {
             if(clicked) return 0;
-            else return stuff.stuffName;
+            else return stuff.stuffNameKor;
         });
+        setClickedStuffCategory(stuff.category);
         StuffClick(stuff);
     }
 

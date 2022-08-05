@@ -16,11 +16,11 @@ public enum StuffType implements EnumMapperType {
     WORKOUT("운동기구"),
     CLOSET("옷장"),
     HANGER("행거"),
-    TVDAI("DAI"),
-    DOCUMENT("문서"),
+    CONSOLE("DAI"),
+    DOCS("문서"),
     SHELF("선반"),
     DRAWER("서랍장"),
-    INSTRUMENTS("악기"),
+    INSTRUMENT("악기"),
     CARPET("카펫/러그"),
     TABLEWARE("식기류"),
     MONITOR("모니터"),
@@ -29,7 +29,15 @@ public enum StuffType implements EnumMapperType {
     BOOK("책"),
     FRAME("액자"),
     LIGHT("전등"),
-    OTHER("기타");
+    OTHER("기타"),
+    CAMERA("카메라"),
+    ELECTRONICS("전자기기"),
+    FOOD("음식"),
+    RESTROOM("화장실"),
+    TOY("장난감"),
+    DECO("꾸미기"),
+    PET("애완동물"),
+    SHOES("신발");
 
     private final String stuffTypeName;
 

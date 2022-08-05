@@ -4,6 +4,9 @@ import { Container } from "@mui/system";
 import Post from "./atoms/Post";
 import postdata from '../jsonData/posts.json'
 
+import {useRecoilState} from 'recoil';
+import {clickedStuffCategoryState} from '../../state/roomState'
+
 function ElevationScroll(props) {
     const { children, window } = props;
     const trigger = useScrollTrigger({
@@ -18,11 +21,7 @@ function ElevationScroll(props) {
 }
 
 export default function StuffPage( {data, ...props} ) {
-    const [stuff, setStuff] = useState(data);
-
-    useEffect(() => {
-        setStuff(data);
-    }, [data])
+    const [clickedStuffCategory] = useRecoilState(clickedStuffCategoryState);
 
     // 사용자 PK, stuffID 같이 넘겨주면 받을 수 있음.
     // 여기서 넘겨주고 받아와야 함.
@@ -55,7 +54,7 @@ export default function StuffPage( {data, ...props} ) {
                         mr : 2
                     }}
                 >
-                    {stuff.stuff_alias}
+                    {data.alias}
                 </Typography>
 
                 <Typography 
@@ -66,7 +65,7 @@ export default function StuffPage( {data, ...props} ) {
                         color : '#ffffff'
                     }}
                 >
-                    {stuff.category}
+                    {clickedStuffCategory.category}
                 </Typography>
             </Toolbar>
 

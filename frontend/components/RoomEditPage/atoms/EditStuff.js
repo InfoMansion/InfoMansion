@@ -5,7 +5,7 @@ export default function EditStuff({data, Click}) {
     const [geometry] = useState(data.geometry);
     const [material] = useState(data.material);
     const [glbpath] = useState(data.stuffGlbPath);
-    const { nodes, materials } = useGLTF(`https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/stuff-assets/${glbpath}.glb`)
+    const { nodes, materials } = useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath);
 
     if(!nodes[geometry]) return
     

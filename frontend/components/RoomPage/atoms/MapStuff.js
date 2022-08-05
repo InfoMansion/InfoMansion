@@ -16,7 +16,7 @@ export default function Model({ Hover, Click, data, ...props }) {
   // component가 하나라도 잘못되었을 때 렌더링이 고장나는 것을 방지.
   if(!glb) return null;
 
-  const [asset, setAsset] = useState(useGLTF(`https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/stuff-assets/${glb}.glb`));
+  const [asset, setAsset] = useState(useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glb));
   let { nodes, materials } = asset
 
 
@@ -28,7 +28,7 @@ export default function Model({ Hover, Click, data, ...props }) {
   }, [data.stuffGlbPath])
   
   useEffect(() => {
-    setAsset(useGLTF(`https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/stuff-assets/${data.stuffGlbPath}.glb`));
+    setAsset(useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glb));
   }, [glb])
 
   useEffect(() => {

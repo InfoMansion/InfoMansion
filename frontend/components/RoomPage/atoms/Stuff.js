@@ -3,17 +3,20 @@ import { Text, useGLTF } from '@react-three/drei'
 import { animated, config, useSpring } from '@react-spring/three';
 import { Color } from 'three';
 import { useFrame } from '@react-three/fiber';
+import { useRecoilState } from 'recoil';
+import { clickedStuffCategoryState } from '../../../state/roomState'
 
 export default function Model({ tagon, status, Hover, Click, data, ...props }) {
   const [geometry] = useState(data.geometry);
   const [material] = useState(data.material);
   const [glbpath] = useState(data.stuffGlbPath);
   const [clicked, setClicked] = useState(0);
-  
+
   // component가 하나라도 잘못되었을 때 렌더링이 고장나는 것을 방지.
   if(!glbpath) return null;
+
   // glb 임포트
-  const { nodes, materials } = useGLTF(`https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/stuff-assets/${glbpath}.glb`)
+  const { nodes, materials } = useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath)
   
   if(!nodes[geometry]) return
   // stuff 컨트롤
@@ -34,7 +37,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
     spring : clicked,
     config: {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
   });
-  const positionY = spring.to([0, 1], [0, 5 + (data.pos_x + data.pos_z)/2 - data.pos_y/1.5]);
+  const positionY = spring.to([0, 1], [0, 5 + (data.posX + data.posZ)/2 - data.posY/1.5]);
 
   // Tag 컨트롤
   const color = new Color();
@@ -55,15 +58,14 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
   }, [hovered])
   
   useFrame(({camera}) => {
-    if(tagon && status == 'view' && data.category != 'NONE'){
+    if(tagon && status == 'view' && data.category.category != 'NONE'){
       locref.current.quaternion.copy(camera.quaternion);
       textref.current.material.color.lerp(color.set(hovered ? '#ffa0a0' : 'black'), 0.1);
     }
   }, [tagon])
 
-
   return <group
-      position={[data.pos_x, data.pos_y, data.pos_z]}
+      position={[data.posX, data.posY, data.posZ]}
     >
     {/* 스터프 */}
     {
@@ -76,13 +78,13 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
           onPointerEnter={() => setHovered(true)}
           onPointerLeave={() => setHovered(false)}
           
-          rotation={[data.rot_x, data.rot_y, data.rot_z]}
+          rotation={[data.rotX, data.rotY, data.rotZ]}
           scale={scale}
           {...props} dispose={null}
-          >
+        >
           {
             // category NONE인거 y축 이동 방지하기 위해 동적 렌더링함.
-            (data.category != 'NONE') ? 
+            (data.category.category != 'NONE') ? 
             <animated.mesh
               geometry={nodes[geometry].geometry} 
               material={materials[material]} 
@@ -99,7 +101,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
         </animated.group> 
       : 
       <group
-        rotation={[data.rot_x, data.rot_y, data.rot_z]}
+        rotation={[data.rotX, data.rotY, data.rotZ]}
         scale={1}
       >
         <mesh
@@ -114,7 +116,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
     
     {/* 태그 */}
     {
-      (tagon && status == 'view' && data.category != 'NONE') ?
+      (tagon && status == 'view' && data.category.category != 'NONE') ?
       <group ref={locref} position={[1, 1.5, 1]}>
         <mesh>
           <circleGeometry attach="geometry" args={[0.3, 20]} />
@@ -125,7 +127,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
         <Text
           ref={textref}
           {...fontProps} 
-          children={data.stuffName}
+          children={data.stuffNameKor}
         
           position={[0, 0, 0.01]}
         />

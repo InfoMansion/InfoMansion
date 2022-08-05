@@ -35,7 +35,7 @@ export default function Home() {
                   (_, idx) => (
                     <li className={styles.item}>
                       <Link
-                        href={`/${idx + 1}`}
+                        href={`/test${idx}`}
                         style={{ zIndex: 2 }}
                       ></Link>
                     </li>
