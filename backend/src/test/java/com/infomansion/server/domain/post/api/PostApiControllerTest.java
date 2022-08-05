@@ -100,10 +100,7 @@ public class PostApiControllerTest {
 
         stuffId = stuffRepository.save(requestDto.toEntity()).getId();
 
-//        // UserStuff 생성, 배치
-//        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
-//                .stuffId(stuffId).build();
-//        userStuffId = userStuffService.saveUserStuff(createDto);
+
     }
 
     @AfterEach
@@ -203,7 +200,7 @@ public class PostApiControllerTest {
     @Transactional
     @Test
     public void post_UserStuff로_검색() throws Exception{
-        // UserStuff 생성, 배치
+        // UserStuff 생성
         UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffId).build();
         userStuffId = userStuffService.saveUserStuff(createDto);
@@ -235,6 +232,7 @@ public class PostApiControllerTest {
     @Transactional
     @Test
     public void Post_좋아요_성공() throws Exception{
+
         // UserStuff 생성, 배치
         UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffId).build();
@@ -274,6 +272,10 @@ public class PostApiControllerTest {
     @Test
     public void Post_검색_성공() throws Exception{
 
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffId).build();
+        Long userStuffId = userStuffService.saveUserStuff(createDto);
+
         //UserStuff 배치
         UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
                 .id(userStuffId).alias("Java 정리").category("IT")
@@ -281,7 +283,7 @@ public class PostApiControllerTest {
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
 
-        Long userStuffId = userStuffService.includeUserStuff(includeDto);
+        userStuffId = userStuffService.includeUserStuff(includeDto);
 
         //post 작성
         PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
