@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum StuffType implements EnumMapperType {
-    GEUSTBOOK("방명록"),
+    GUESTBOOK("방명록"),
     WALL("벽지"),
     FLOOR("바닥"),
     DESK("책상"),
