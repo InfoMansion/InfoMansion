@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 public class Post extends BaseTimeEntityAtSoftDelete {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
 

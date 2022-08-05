@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Entity
 public class Stuff extends BaseTimeEntityAtSoftDelete {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stuff_id")
     private Long id;
 
