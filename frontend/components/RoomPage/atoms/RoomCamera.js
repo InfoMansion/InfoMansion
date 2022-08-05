@@ -24,9 +24,6 @@ export default function RoomCamera({camloc, clicked, zoomscale}) {
                 distance + camloc[2]
             ), 0.05);
         camera.updateProjectionMatrix();
-        // camera.position.x = distance - xoff + camloc[0];
-        // camera.position.y = distance - yoff + camloc[1] + ( clicked ? 2 : 0);
-        // camera.position.z = distance + camloc[2];
 
         camera.lookAt(xoff/20, yoff/100 + camloc[1] + clicky, 0);
     })

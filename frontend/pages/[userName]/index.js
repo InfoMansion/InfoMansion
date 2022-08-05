@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Room from "../../components/Room";
-import { Box, Container, Grid } from '@mui/material'
+import { Box, Card, Container, Grid } from '@mui/material'
 import UserInfo from "../../components/RoomPage/UserInfo";
 import { useRouter } from 'next/router'
 import StuffPage from "../../components/RoomPage/StuffPage";
@@ -82,7 +82,7 @@ export default function RoomPage() {
             >
                 <Grid item lg={4}>
                     {useron ?
-                        <UserInfo userName={userName} />
+                        <UserInfo userName={userName} size="lg"/>
                         : <></>
                     }
                 </Grid>
@@ -126,9 +126,7 @@ export default function RoomPage() {
                             {stuffon || useron ? 
                                 <></>
                                 : 
-                                <Grid item>
-                                    <UserInfo userName={userName} />    
-                                </Grid>
+                                <UserInfo userName={userName} size="md"/>
                             }
                         </animated.div>
 

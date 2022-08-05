@@ -6,8 +6,8 @@ import { useFrame } from '@react-three/fiber';
 
 export default function Model({ tagon, status, Hover, Click, data, ...props }) {
   const [geometry] = useState(data.geometry);
-  const [material] = useState(data.materials);
-  const [glbpath] = useState(data.stuff_glb_path);
+  const [material] = useState(data.material);
+  const [glbpath] = useState(data.stuffGlbPath);
   const [clicked, setClicked] = useState(0);
   
   // component가 하나라도 잘못되었을 때 렌더링이 고장나는 것을 방지.
@@ -34,7 +34,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
     spring : clicked,
     config: {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
   });
-  const positionY = spring.to([0, 1], [0, 5 + (data.pos_x + data.pos_z)/2]);
+  const positionY = spring.to([0, 1], [0, 5 + (data.pos_x + data.pos_z)/2 - data.pos_y/1.5]);
 
   // Tag 컨트롤
   const color = new Color();
@@ -79,23 +79,22 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
           rotation={[data.rot_x, data.rot_y, data.rot_z]}
           scale={scale}
           {...props} dispose={null}
-          position-y={positionY}
-        >
+          >
           {
             // category NONE인거 y축 이동 방지하기 위해 동적 렌더링함.
             (data.category != 'NONE') ? 
-              <animated.mesh
-                geometry={nodes[geometry].geometry} 
-                material={materials[material]} 
-                castShadow
-                scale={100}
-
-              />
-              : 
-              <mesh
-                geometry={nodes[geometry].geometry} material={materials[material]} castShadow
-                scale={100}
-              />
+            <animated.mesh
+              geometry={nodes[geometry].geometry} 
+              material={materials[material]} 
+              castShadow
+              scale={100}            
+              position-y={positionY}
+            />
+            : 
+            <mesh
+              geometry={nodes[geometry].geometry} material={materials[material]} castShadow
+              scale={100}
+            />
           }
         </animated.group> 
       : 
@@ -126,7 +125,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
         <Text
           ref={textref}
           {...fontProps} 
-          children={data.stuff_name}
+          children={data.stuffName}
         
           position={[0, 0, 0.01]}
         />

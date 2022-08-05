@@ -41,7 +41,6 @@ export default function Room( { StuffClick, userName} ) {
     useEffect(() => {
         if(!router.isReady) return;
         // stuff 가져오기
-        console.log(userName);
         setMapstuffs(userStuffs[router.query.userName].slice(0, 2));
         setStuffs(userStuffs[router.query.userName].slice(2));
     }, [router.isReady]);
@@ -56,7 +55,7 @@ export default function Room( { StuffClick, userName} ) {
         // setClicked 동기처리 되도록 바꿔야 함.
         setClicked(() => {
             if(clicked) return 0;
-            else return stuff.stuff_name;
+            else return stuff.stuffName;
         });
         StuffClick(stuff);
     }
@@ -116,7 +115,7 @@ export default function Room( { StuffClick, userName} ) {
                 />
                 
                 {/* 벽, 바닥 */}
-                <MapStuffs 
+                <MapStuffs
                     stuffs={mapstuffs}
                     Hover={Hover}
                     Click={Click}    

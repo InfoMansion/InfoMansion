@@ -5,17 +5,12 @@ export default function EditStuff({data, Click}) {
     const [geometry] = useState(data.geometry);
     const [material] = useState(data.material);
     const [glbpath] = useState(data.stuffGlbPath);
-
-    function onClick(e) {
-        Click(e, data);
-    }
     const { nodes, materials } = useGLTF(`https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/stuff-assets/${glbpath}.glb`)
 
     if(!nodes[geometry]) return
-
+    
     return (
-        <group 
-            onPointerDown={(e) => onClick(e)}
+        <group
             rotation={[0.6, -0.775, 0]}
         >
             <mesh
@@ -24,7 +19,7 @@ export default function EditStuff({data, Click}) {
                 material={materials[material]}
                 scale={50}
             />
-            <pointLight position={[0, 3, 1]} intensity={0.1}/>
+            <pointLight position={[2, 5, 3]} intensity={0.3}/>
         </group>
     )
 }

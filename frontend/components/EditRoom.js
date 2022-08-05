@@ -13,7 +13,7 @@ import Stuffs from './RoomPage/Stuffs'
 import EditRoomCamera from './RoomPage/atoms/RoomEditCamera'
 import ScreenshotButton from './RoomPage/atoms/ScreenShotButton'
 import RoomLight from './RoomPage/atoms/RoomLight'
-
+import MapStuff from './RoomPage/atoms/MapStuff'
 
 const EditRoom = forwardRef(( props, ref ) => {
     useImperativeHandle(ref, () => ({
@@ -72,20 +72,18 @@ const EditRoom = forwardRef(( props, ref ) => {
             shadows
             onCreated={state => state.gl.setClearColor("#ffffff")} >
             <RoomLight />
-            {/* camera */}
 
             <ScreenshotButton ref={ScreenShotButtonRef} />
-            
-            {/* <Box></Box> */}
             <EditRoomCamera camloc={camloc}/>
             <OrthographicCamera makeDefault zoom={zoomscale} />
             
             {/* 벽, 바닥 */}
-            <MapStuffs 
-                stuffs={mapstuffs}
+            <MapStuffs
                 Hover={Hover}
-                Click={Click}    
+                Click={Click}
+                stuffs={props.mapStuffs}
             />
+
             {/* stuffs */}
             <Stuffs 
                 stuffs={stuffs}
