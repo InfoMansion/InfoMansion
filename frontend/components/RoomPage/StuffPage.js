@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Card, CardActionArea, CardContent, CardMedia, CssBaseline, Divider, Paper, Slide, Toolbar, Typography, useScrollTrigger } from '@mui/material'
+import { CssBaseline, Divider, Paper, Slide, Toolbar, Typography, useScrollTrigger } from '@mui/material'
 import { Container } from "@mui/system";
 import Post from "./atoms/Post";
-import postdata from '../jsonData/posts.json'
 
 import {useRecoilState} from 'recoil';
 import {clickedStuffCategoryState} from '../../state/roomState'
+import axios from "../../utils/axios";
+import { useCookies } from "react-cookie";
 
 function ElevationScroll(props) {
     const { children, window } = props;
@@ -20,12 +21,30 @@ function ElevationScroll(props) {
     });
 }
 
-export default function StuffPage( {data, ...props} ) {
+export default function StuffPage( {data} ) {
+    const [cookies] = useCookies(['cookie-name']);
     const [clickedStuffCategory] = useRecoilState(clickedStuffCategoryState);
-
     // 사용자 PK, stuffID 같이 넘겨주면 받을 수 있음.
     // 여기서 넘겨주고 받아와야 함.
-    const [posts, setPosts] = useState(postdata);
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        if(!data.id) return;
+        console.log(data.id);
+        try {
+            axios.get(`/api/v1/posts/${data.id}`, {
+                headers: {
+                    Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+                },
+            })
+            .then( res => {
+                console.log(res.data.data);
+                setPosts(res.data.data);
+            })
+        }catch(e) {
+            console.log(e);
+        }
+    }, [data])
 
     return (
         <Paper

@@ -5,12 +5,9 @@ import { Box, Button } from '@mui/material';
 import RoomManageMenu from './RoomPage/RoomManageMenu';
 
 // data
-import userStuffs from './jsonData/userStuffs.json';
 import MapStuffs from './RoomPage/MapStuffs';
 import Stuffs from './RoomPage/Stuffs';
 
-// 이 파일은 나중에 db에 데이터 넣을 때 쓸거라 안지우고 유지하겠습니다.
-// import walltest from './walltest.json'
 import RoomCamera from './RoomPage/atoms/RoomCamera';
 import RoomLight from './RoomPage/atoms/RoomLight';
 import axios from '../utils/axios';
@@ -34,7 +31,7 @@ export default function Room({ StuffClick, userName }) {
   const [clicked, setClicked] = useState(0);
 
   const [tagon, setTagon] = useState(true);
-  const [camloc, setCamloc] = useState([0, 0, 0]);
+  const [camloc] = useState([0, 0, 0]);
   const [, setClickedStuffCategory] = useRecoilState(clickedStuffCategoryState);
   const setPageLoading = useSetRecoilState(pageLoading);
   // 마운트시 stuff 로드
