@@ -1,6 +1,6 @@
 import { Typography, Box, Card, Divider } from "@mui/material";
 import { useEffect, useState } from "react";
-import ShowWindow from "../components/ShopPage/ShowWindow";
+import ShowWindow from "../components/ShopPage/ShowWindow_t";
 
 import { Canvas } from "@react-three/fiber";
 import { OrthographicCamera } from "@react-three/drei";

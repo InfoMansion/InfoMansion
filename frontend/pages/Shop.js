@@ -1,19 +1,23 @@
-import { Typography, Box, Card, Divider } from "@mui/material";
+import { Typography, Box, Card, Divider, Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import ShowWindow from "../components/ShopPage/ShowWindow";
 
 import { Canvas } from "@react-three/fiber";
-import { OrthographicCamera } from "@react-three/drei";
+import { Circle, OrbitControls, OrthographicCamera } from "@react-three/drei";
 import { useCookies } from "react-cookie";
 import axios from "../utils/axios";
 import { pageLoading } from '../state/pageLoading';
 import { useSetRecoilState } from "recoil";
+import ShopStuff from "../components/ShopPage/atoms/ShopStuff";
 
 export default function Shop() {
     const [cookies] = useCookies(['cookie-name']);
     const [scrollTarget] = useState(0);
     const setPageLoading = useSetRecoilState(pageLoading);
     const [stuffBundles, setStuffBundles] = useState([]);
+
+    const [nowStuff, setNowStuff] = useState({});
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         try {
@@ -33,6 +37,59 @@ export default function Shop() {
             console.log(e);
         }
     }, []);
+
+    function click(e, stuff) {
+        setNowStuff(stuff);
+        console.log(stuff);
+        setOpen(true);
+    }
+    function close() {
+        setOpen(false);
+    }
+
+    function BuyModal() {
+        return (
+            <Modal
+                open={open}
+                onClose={close}
+                aria-labelledby="parent-modal-title"
+                aria-describedby="parent-modal-description"
+                style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,
+                }}
+            >
+                <Box sx={{  width: 400 }}>
+                    <Canvas
+                        style={{
+                            height : '200px',
+                            backgroundColor : '#eeeeee'
+                        }}
+                    >
+
+                        <ShopStuff 
+                            data={nowStuff}
+                            pos={[0, 0, 0]}
+                            dist={0}
+                        />
+                        <ambientLight />
+                        {/* <OrthographicCamera
+                            makeDefault
+                            postion={[8, 8, 9]}
+                            zoom={50}
+                        /> */}
+                    </Canvas>
+                </Box>
+            </Modal>
+        )
+    }
+
     return (
         <Box>
             <Typography variant="h4">
@@ -69,6 +126,7 @@ export default function Shop() {
                             <ShowWindow
                                 ScrollTarget={scrollTarget}
                                 stuffs={stuffBundle.slice.content}
+                                click={click}
                             />
 
                         <OrthographicCamera 
@@ -79,6 +137,7 @@ export default function Shop() {
                         </Canvas>
                 </Card>
                 )}
+            <BuyModal />
         </Box>
     )
 }

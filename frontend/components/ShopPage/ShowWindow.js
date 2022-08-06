@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Suspense, useEffect, useState } from 'react'
 import ShopStuff from './atoms/ShopStuff'
 
-export default function ShowWindow({stuffs, type}) {
+export default function ShowWindow({stuffs, type, click}) {
     let count = -12;
     const [zoomscale] = useState(50);
     // stuff 간 거리.
@@ -16,31 +16,46 @@ export default function ShowWindow({stuffs, type}) {
     })
 
     function Click(e, stuff) {
-        console.log("클릭")
+        click(e, stuff);
     }
 
+    // return (
+    //     <ScrollControls
+    //         horizontal
+    //         damping={4}
+    //         pages={(2 - dist + 4 * dist)}
+    //     >
+    //         <Scroll>
+    //         {/* 임시 빛 */}
+    //         <group>
+    //             <ambientLight />
+    //             {stuffs.map( stuff => 
+    //                 <group key={stuff.id}>
+    //                     <ShopStuff
+    //                         Click={Click}
+    //                         data={stuff} 
+    //                         pos={pos}
+    //                         dist={count += dist}
+    //                     />
+    //                 </group>
+    //             )}
+    //         </group>
+    //         </Scroll>
+    //     </ScrollControls>
+    // )
     return (
-        <ScrollControls
-            horizontal
-            damping={4}
-            pages={(2 - dist + 4 * dist)}
-        >
-            <Scroll>
-            {/* 임시 빛 */}
-                <ambientLight />
-                <Suspense>
-                    {stuffs.map( stuff => 
-                        <group key={stuff.id}>
-                            <ShopStuff
-                                Click={Click}
-                                data={stuff} 
-                                pos={pos}
-                                dist={count += dist}
-                            />
-                        </group>
-                    )}
-                </Suspense>
-            </Scroll>
-        </ScrollControls>
+        <group>
+            <ambientLight />
+            {stuffs.map( stuff => 
+                <group key={stuff.id}>
+                    <ShopStuff
+                        Click={Click}
+                        data={stuff} 
+                        pos={pos}
+                        dist={count += dist}
+                    />
+                </group>
+            )}
+        </group>
     )
 }
