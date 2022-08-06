@@ -41,12 +41,12 @@ axiosApiInstance.interceptors.request.use(
 
 axiosApiInstance.interceptors.response.use(
   response => response,
-  async function (error) {
-    if (error.response.status === 401 && !originalRequest._retry) {
-      alert('세션이 만료됐습니다.');
-      window.location.replace('/');
-    }
-  },
+  // async function (error) {
+  //   if (error.response.status === 401 && !originalRequest._retry) {
+  //     alert('세션이 만료됐습니다.');
+  //     window.location.replace('/');
+  //   }
+  // },
 );
 
 export default axiosApiInstance;

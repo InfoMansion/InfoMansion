@@ -5,13 +5,9 @@ import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useRecoilState } from 'recoil';
 
@@ -56,7 +52,6 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent(props) {
-  console.log('dashboardcontent', props.userInfo);
   const [dashNum, setDashNum] = useRecoilState(dashNumState);
   const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
@@ -124,7 +119,6 @@ export default function Dashboard() {
   const [pwConfirm, setPwConfirmState] = useRecoilState(pwConfirmState);
   let dashContent;
   const [userInfo, setUserInfo] = useState({
-    email: '',
     username: '',
     categories: [],
     introduce: '',

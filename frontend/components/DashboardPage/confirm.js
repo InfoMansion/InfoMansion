@@ -54,11 +54,10 @@ export default function Confirm(props) {
           withCredentials: true,
         },
       });
-      console.log('confirm', data);
       props.setUserInfo(data.data);
       setPwConfirmState(true);
     } catch (e) {
-      console.log(e);
+      alert(e.response.data.message);
     }
   };
 

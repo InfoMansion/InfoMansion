@@ -21,6 +21,8 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useCookies } from 'react-cookie';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { pageLoading } from '../../state/pageLoading';
 
 const theme = createTheme({
   palette: {
@@ -47,6 +49,7 @@ const Root = styled('div')(({ theme }) => ({
 
 export default function Profile({ ...props }) {
   const [cookies] = useCookies(['cookie-name']);
+  const setPageLoading = useSetRecoilState(pageLoading);
   const userInfo = props.userInfo;
   const setUserInfo = props.setUserInfo;
   const [profileImageUrl, setProfileImageUrl] = useState(
@@ -108,7 +111,7 @@ export default function Profile({ ...props }) {
   const [state, setState] = useState(allCategories);
 
   const [changeCate, setChangeCate] = useState(selectedCate);
-
+  const cateCount = changeCate.split(',').length - 1;
   const handleChange = event => {
     setState({
       ...state,
@@ -118,12 +121,10 @@ export default function Profile({ ...props }) {
       const addCate = event.target.name;
       const updateCate = changeCate + addCate + ',';
       setChangeCate(updateCate);
-      console.log(changeCate);
     } else {
       const removeCate = event.target.name + ',';
       const updateCate = changeCate.replace(removeCate, '');
       setChangeCate(updateCate);
-      console.log(changeCate);
     }
   };
 
@@ -143,18 +144,20 @@ export default function Profile({ ...props }) {
         type: 'application/json',
       }),
     );
-    console.log(formData);
     try {
-      const { response } = await axios.post('/api/v1/users/profile', formData, {
+      setPageLoading(true);
+      const { data } = await axios.post('/api/v1/users/profile', formData, {
         headers: {
           ContentType: 'multipart/form-data',
           Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
           withCredentials: true,
         },
       });
-      console.log(response);
+      setPageLoading(false);
+      setUserInfo(data.data);
     } catch (e) {
-      console.log(e);
+      setPageLoading(false);
+      alert(e.response.data.message);
     }
   };
 
@@ -181,7 +184,6 @@ export default function Profile({ ...props }) {
   const [inputIntroduce, setInputIntroduce] = useState(userInfo.introduce);
   function handleInput(event) {
     event.preventDefault();
-    console.log(event.target.value);
     const { name, value } = event.target;
     if (name === 'username') {
       setInputUsername(value);
@@ -234,9 +236,6 @@ export default function Profile({ ...props }) {
                   onChange={handleInput}
                   name="username"
                 ></TextField>
-                <Typography variant="body2" color="text.secondary">
-                  {userInfo.email}
-                </Typography>
               </Grid>
 
               <Divider />
@@ -452,7 +451,9 @@ export default function Profile({ ...props }) {
                           />
                         </Grid>
                       </FormGroup>
-                      <FormHelperText>하나 이상을 골라주세요</FormHelperText>
+                      <FormHelperText>
+                        1개 이상, 5개 이하를 골라주세요
+                      </FormHelperText>
                     </FormControl>
                   </Box>
                 </Box>
@@ -464,6 +465,7 @@ export default function Profile({ ...props }) {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2, color: 'white' }}
+            disabled={cateCount > 5 || cateCount < 1}
           >
             UPDATE
           </Button>
