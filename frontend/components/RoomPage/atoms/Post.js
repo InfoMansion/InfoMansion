@@ -36,7 +36,7 @@ export default function Post({
           sx={{
             width: picwidth,
           }}
-          image={`/image/${post.image}`}
+          //          image={`/image/${post.image}`}
           alt="no img"
         />
 
@@ -63,9 +63,10 @@ export default function Post({
           <Divider sx={{ m: 1 }} />
 
           <Typography variant="body2" color="text.secondary">
-            {post.content.length > maxcontent
+            <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+            {/* {post.content.length > maxcontent
               ? post.content.substring(0, maxcontent - 3) + '...'
-              : mytextvar}
+              : mytextvar} */}
           </Typography>
         </CardContent>
       </CardActionArea>

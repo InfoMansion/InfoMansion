@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Tabs, Tab, Box, Divider, Typography } from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
 import TabPanel from '../../components/PostPage/TabPanel';
 import Post from '../../components/RoomPage/atoms/Post';
-import postData from '../../components/jsonData/posts.json';
 import PostViewModal from '../../components/PostPage/PostViewModal';
+import axios from '../../utils/axios';
+import { useCookies } from 'react-cookie';
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -17,9 +18,11 @@ export default function searchPost() {
   //검색 결과가 담기는 query입니다.
   const { query } = useRouter();
   const [value, setValue] = useState(0);
-  const [posts] = useState(postData.slice(0, 5));
   const [showModal, setShowModal] = useState(false);
   const [post, setPost] = useState('');
+  const [postList, setPostList] = useState('');
+  const [page, setPage] = useState(0);
+  const [cookies] = useCookies(['cookie-name']);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -28,6 +31,27 @@ export default function searchPost() {
       backgroundColor: 'white',
     },
   });
+
+  const init = useCallback(async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/posts/search/${query.keyword}?page${page}&size=${5}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        },
+      );
+      setPostList(data.data.postsByContent.content);
+      console.log(postList);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [query]);
+
+  useEffect(() => {
+    init();
+  }, [init]);
 
   const openModal = post => {
     setPost(post);
@@ -65,17 +89,18 @@ export default function searchPost() {
       </Box>
       <TabPanel value={value} index={0}>
         <Divider />
-        {posts.map(post => (
-          <div>
-            <Post
-              post={post}
-              totheight={150}
-              picwidth={150}
-              maxcontent={150}
-              openModal={openModal}
-            />
-          </div>
-        ))}{' '}
+        {postList &&
+          postList.map(post => (
+            <div>
+              <Post
+                post={post}
+                totheight={150}
+                picwidth={150}
+                maxcontent={150}
+                openModal={openModal}
+              />
+            </div>
+          ))}{' '}
       </TabPanel>
       <TabPanel value={value} index={1}>
         내용 관련 검색 결과의 포스트들이 오겠죠?
