@@ -200,8 +200,8 @@ export default function Category() {
       setlikeCate(updateCateState);
       opacityTarget.style.removeProperty('opacity');
     } else {
-      if (count >= 100) {
-        alert('100개 이상은 선택이 불가능 합니다');
+      if (count > 5) {
+        alert('5개 까지만 선택이 가능 합니다');
       } else {
         const updateCateState = likeCate + selected;
         setlikeCate(updateCateState);
@@ -234,7 +234,7 @@ export default function Category() {
             Select Your Interest
           </Typography>
           <Typography component="h3" variant="h5">
-            하나 이상 선택해주세요!
+            1개 이상 5개 이하를 선택해주세요!
           </Typography>
           <Box
             sx={{

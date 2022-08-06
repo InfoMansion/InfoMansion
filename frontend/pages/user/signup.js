@@ -71,7 +71,6 @@ export default function SignUp() {
     };
 
     try {
-      console.log(credentials);
       setPageLoading(true);
       const res = await axios.post('api/v1/auth/signup', credentials);
       setPageLoading(false);
@@ -79,7 +78,7 @@ export default function SignUp() {
       router.push('/');
     } catch (e) {
       setPageLoading(false);
-      console.log(e);
+      alert(e.response.data.message);
     }
   };
 
