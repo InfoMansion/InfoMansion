@@ -32,6 +32,10 @@ public class UserStuffResponseDto {
     private BigDecimal rotY;
     private BigDecimal rotZ;
 
+    private String geometry;
+    private String material;
+    private String stuffGlbPath;
+
     private LocalDateTime createdTime;
     private LocalDateTime modifiedTime;
 
@@ -50,6 +54,9 @@ public class UserStuffResponseDto {
         this.rotX = userStuff.getRotX();
         this.rotY = userStuff.getRotY();
         this.rotZ = userStuff.getRotZ();
+        this.geometry = userStuff.getStuff().getGeometry();
+        this.material = userStuff.getStuff().getMaterial();
+        this.stuffGlbPath = userStuff.getStuff().getStuffGlbPath();
         this.createdTime = userStuff.getCreatedDate();
         this.modifiedTime = userStuff.getModifiedDate();
     }

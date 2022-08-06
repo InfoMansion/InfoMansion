@@ -148,7 +148,7 @@ public class UserStuffRestDocsTest {
         // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/userstuffs/list"))
                 .andExpect(status().isOk())
-                .andDo(document("userstuff-getall-with-token",
+                .andDo(document("userstuff-list-with-token",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("사용자의 모든 UserStuff")))
@@ -353,6 +353,9 @@ public class UserStuffRestDocsTest {
                 fieldWithPath("rotX").type(ROT_X.getJsonFieldType()).description(ROT_X.getDescription()),
                 fieldWithPath("rotY").type(ROT_Y.getJsonFieldType()).description(ROT_Y.getDescription()),
                 fieldWithPath("rotZ").type(ROT_Z.getJsonFieldType()).description(ROT_Z.getDescription()),
+                fieldWithPath("geometry").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
+                fieldWithPath("material").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
+                fieldWithPath("stuffGlbPath").type(STUFF_GLB_PATH.getJsonFieldType()).description(STUFF_GLB_PATH.getDescription()),
                 fieldWithPath("createdTime").type(USERSTUFF_SELECTED.getJsonFieldType()).description(USERSTUFF_CREATED.getDescription()).optional(),
                 fieldWithPath("modifiedTime").type(USERSTUFF_MODIFIED.getJsonFieldType()).description(USERSTUFF_MODIFIED.getDescription()).optional()
         );

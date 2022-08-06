@@ -53,7 +53,7 @@ Info`Mansion REST API 명세서입니다.
 stuffId로 Stuff를 조회하는 API
 
 === Http Request
-include::{snippets}/userstuff-get/http-request.adoc[]
+include::{snippets}/stuff-get-by-stuffid/http-request.adoc[]
 
 === Path parameters
 include::{snippets}/stuff-get-by-stuffid/path-parameters.adoc[]
@@ -172,13 +172,13 @@ include::{snippets}/userstuff-get/response-fields.adoc[]
 사용자의 UserStuff를 모두 조회
 
 === Http Request
-include::{snippets}/userstuff-getall-with-token/http-request.adoc[]
+include::{snippets}/userstuff-list-with-token/http-request.adoc[]
 
 === Http Response
-include::{snippets}/userstuff-getall-with-token/http-response.adoc[]
+include::{snippets}/userstuff-list-with-token/http-response.adoc[]
 
 === Response fields
-include::{snippets}/userstuff-getall-with-token/response-fields.adoc[]
+include::{snippets}/userstuff-list-with-token/response-fields.adoc[]
 
 ---
 
