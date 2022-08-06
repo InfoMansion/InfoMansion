@@ -63,9 +63,7 @@ export default function Post({
           <Divider sx={{ m: 1 }} />
 
           <Typography variant="body2" color="text.secondary">
-            {post.content.length > maxcontent
-              ? post.content.substring(0, maxcontent - 3) + '...'
-              : mytextvar}
+            <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
           </Typography>
         </CardContent>
       </CardActionArea>
