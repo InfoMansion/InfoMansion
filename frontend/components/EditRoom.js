@@ -47,10 +47,6 @@ const EditRoom = forwardRef(( {mapStuffs, stuffs, StuffClick}, ref ) => {
         StuffClick(stuff);
     }
 
-    useEffect(() => {
-        console.log(stuffs);
-    }, [])
-
     return (
         <Canvas
             style={{

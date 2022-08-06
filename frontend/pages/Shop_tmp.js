@@ -25,7 +25,7 @@ export default function Shop() {
             })
             .then(res => {
             //   setStuffBundles(res.data.data);
-              setStuffBundles(res.data.data.slice(5, 10));
+              setStuffBundles(res.data.data.slice(5, 6));
               setPageLoading(false);
             });
         } catch (e) {
@@ -34,50 +34,36 @@ export default function Shop() {
         }
     }, []);
     return (
-        <Box>
-            <Typography variant="h4">
-                Shop
+        <Box sx={{m : 2}}>
+            <Typography variant="h6">
+                최신 가구들
             </Typography>
             <Divider />
             {/* <Box>
                 크레딧이랑, 그런거 보여주기. navbar가 될 예정.
             </Box> */}
             { stuffBundles.map( stuffBundle => 
-                    <Card
-                        key={stuffBundle.stuffType}
-                        sx={{
-                            m : 2
-                        }}
-                    >
-                        <Typography variant='h5'
-                            sx={{
-                                m : 1
-                            }}
-                        >
-                            {stuffBundle.stuffTypeName}
-                        </Typography>
 
-                        <Canvas
-                            style={{
-                                height : '200px',
-                                backgroundColor : '#eeeeee'
-                            }}
-                            sx={{
-                                m : 1
-                            }}
-                        >
-                            <ShowWindow
-                                ScrollTarget={scrollTarget}
-                                stuffs={stuffBundle.slice.content}
-                            />
+                <Canvas
+                    style={{
+                        height : '200px',
+                        backgroundColor : '#eeeeee'
+                    }}
+                    sx={{
+                        m : 1
+                    }}
+                >
+                    <ShowWindow
+                        ScrollTarget={scrollTarget}
+                        stuffs={stuffBundle.slice.content}
+                    />
 
-                        <OrthographicCamera 
-                            makeDefault
-                            position={[0,0, 4]}
-                            zoom={50}   
-                        />
-                        </Canvas>
-                </Card>
+                    <OrthographicCamera 
+                        makeDefault
+                        position={[0,0, 4]}
+                        zoom={50}   
+                    />
+                </Canvas>
                 )}
         </Box>
     )
