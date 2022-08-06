@@ -602,3 +602,47 @@ include::{snippets}/post-search/http-response.adoc[]
 include::{snippets}/post-search/response-fields.adoc[]
 
 ---
+
+[[Store-API]]
+= Store API
+
+[[Store]]
+== 상점 첫 방문 시
+
+상점 첫 방문 시 모든 카테고리에 대한 Stuff를 조회하는 API
+
+=== Http Request
+include::{snippets}/store-all/http-request.adoc[]
+
+=== Request parameters
+include::{snippets}/store-all/request-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/store-all/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/store-all/response-fields.adoc[]
+
+---
+
+[[Store-by-stuffType]]
+== 가구타입으로 검색(상점)
+
+가구타입으로 원하는 페이지의 Stuff 조회
+
+=== Http Request
+include::{snippets}/store-with-stufftype/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/store-with-stufftype/path-parameters.adoc[]
+
+=== Request parameters
+include::{snippets}/store-with-stufftype/request-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/store-all/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/store-all/response-fields.adoc[]
+
+---
