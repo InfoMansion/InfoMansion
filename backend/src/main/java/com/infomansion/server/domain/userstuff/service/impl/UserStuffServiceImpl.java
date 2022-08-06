@@ -4,6 +4,7 @@ import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
+import com.infomansion.server.domain.userstuff.domain.DefaultStuff;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import com.infomansion.server.domain.userstuff.dto.*;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
@@ -154,6 +155,16 @@ public class UserStuffServiceImpl implements UserStuffService {
         return userStuffRepository.findArrangedByUser(user).stream()
                 .map(userStuff -> UserStuffArrangedResponeDto.toDto(userStuff))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public void saveDefaultUserStuff(User user) {
+        List<Stuff> defaultStuffs = stuffRepository.findStuffsByIdIn(DefaultStuff.getDefaultStuffIds());
+        for (Stuff defaultStuff : defaultStuffs) {
+            UserStuff defaultUserStuff = DefaultStuff.getDefaultUserStuff(defaultStuff, user);
+            userStuffRepository.save(defaultUserStuff);
+        }
     }
 
     private void checkDuplicatePlacedCategory(Long userId, String category) {

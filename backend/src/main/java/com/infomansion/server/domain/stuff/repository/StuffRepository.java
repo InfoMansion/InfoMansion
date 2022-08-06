@@ -36,4 +36,6 @@ public interface StuffRepository extends JpaRepository<Stuff, Long> {
     List<Stuff> findAllStuffInStore(@Param("loginUserId") Long userId, @Param("pageSize") Integer pageSize);
 
     Slice<StoreResponseDto> findByStuffTypeAndIdNotIn(StuffType stuffType, List<Long> stuffIds, Pageable pageable);
+
+    List<Stuff> findStuffsByIdIn(List<Long> defaultStuffIds);
 }

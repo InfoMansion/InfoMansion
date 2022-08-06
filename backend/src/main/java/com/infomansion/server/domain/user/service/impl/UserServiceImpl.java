@@ -2,14 +2,13 @@ package com.infomansion.server.domain.user.service.impl;
 
 import com.infomansion.server.domain.Room.domain.Room;
 import com.infomansion.server.domain.Room.repository.RoomRepository;
-import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
-import com.infomansion.server.domain.user.domain.UserAuthority;
 import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.domain.user.service.VerifyEmailService;
+import com.infomansion.server.domain.userstuff.service.UserStuffService;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
 import com.infomansion.server.global.util.jwt.ReissueDto;
@@ -27,10 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static com.infomansion.server.domain.category.util.CategoryUtil.validateCategories;
 
@@ -47,6 +43,7 @@ public class UserServiceImpl implements UserService {
     private final RedisUtil redisUtil;
     private final VerifyEmailService verifyEmailService;
     private final S3Uploader s3Uploader;
+    private final UserStuffService userStuffService;
     private final RoomRepository roomRepository;
 
 
@@ -127,8 +124,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.grantFromTempToUser();
-
         roomRepository.save(Room.createRoom(user));
+        userStuffService.saveDefaultUserStuff(user);
         return true;
     }
 

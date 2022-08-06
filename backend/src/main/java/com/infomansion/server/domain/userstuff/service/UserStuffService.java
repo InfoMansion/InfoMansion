@@ -1,5 +1,6 @@
 package com.infomansion.server.domain.userstuff.service;
 
+import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.userstuff.dto.*;
 
 import java.util.List;
@@ -23,5 +24,7 @@ public interface UserStuffService {
     Long removeUserStuff(Long userStuffId);
 
     List<UserStuffArrangedResponeDto> findArrangedUserStuffByUsername(String username);
+
+    void saveDefaultUserStuff(User user);
 
 }
