@@ -57,6 +57,16 @@ public enum FieldDescription {
     ACCESSTOKEN(JsonFieldType.STRING, "accessToken 정보"),
     REFRESHTOKEN(JsonFieldType.STRING, "refreshToken 정보"),
     ACCESSTOKEN_EXPIRE(JsonFieldType.STRING, "accessToken 만료기간"),
+
+    // Post
+    POST_ID(JsonFieldType.NUMBER, "post Id"),
+    POST_TITLE(JsonFieldType.STRING, "title"),
+    POST_CONTENT(JsonFieldType.STRING, "content"),
+    LIKES_POST(JsonFieldType.NUMBER, "좋아요 수"),
+
+    // Base
+    MODIFIED_DATE(JsonFieldType.STRING, "마지막 수정날짜"),
+
     ;
 
     private final JsonFieldType jsonFieldType;

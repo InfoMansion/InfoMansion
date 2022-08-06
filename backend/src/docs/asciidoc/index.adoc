@@ -338,6 +338,63 @@ include::{snippets}/post-recommend/response-fields.adoc[]
 
 ---
 
+[[Post-by-UserStuffId]]
+== UserStuff에 포함된 Post들 조회
+
+UserStuff 클릭 시 해당 UserStuff에 포함된 모든 Post들 조회하는 API
+
+=== Http Request
+include::{snippets}/post-find-by-userstuffid/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/post-find-by-userstuffid/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/post-find-by-userstuffid/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-find-by-userstuffid/response-fields.adoc[]
+
+---
+
+[[Post-by-PostId]]
+== Post 상세조회
+
+postId로 Post를 상세 조회하는 API
+
+=== Http Request
+include::{snippets}/post-find-by-postid/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/post-find-by-postid/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/post-find-by-postid/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-find-by-postid/response-fields.adoc[]
+
+---
+
+[[Post-likes]]
+== Post 좋아요 표시
+
+Post에 좋아요를 표시하는 API
+
+=== Http Request
+include::{snippets}/post-likes/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/post-likes/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/post-likes/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-likes/response-fields.adoc[]
+
+---
+
 [[User-API]]
 = User API
 
@@ -519,5 +576,26 @@ include::{snippets}/user-auth-before-change-info/http-response.adoc[]
 
 === Response fields
 include::{snippets}/user-auth-before-change-info/response-fields.adoc[]
+
+---
+[[Search-API]]
+= Search API
+
+[[Search-by-Keyword]]
+== 검색 기능
+
+검색어로 사용자 usernmae, post 제목, post 내용을 검색하는 API
+
+=== Http Request
+include::{snippets}/post-search/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/post-search/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/post-search/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-search/response-fields.adoc[]
 
 ---
