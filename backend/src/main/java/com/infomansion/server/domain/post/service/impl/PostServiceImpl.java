@@ -2,7 +2,10 @@ package com.infomansion.server.domain.post.service.impl;
 
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.domain.Post;
-import com.infomansion.server.domain.post.dto.*;
+import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
+import com.infomansion.server.domain.post.dto.PostDetailResponseDto;
+import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
+import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.user.domain.User;
@@ -48,7 +51,7 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public PostRecommendResponseDto findRecommendPost() {
+    public List<Long> findRecommendPost() {
 
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -61,10 +64,13 @@ public class PostServiceImpl implements PostService {
         LocalDateTime start = LocalDateTime.now().minusDays(7);
         LocalDateTime end = LocalDateTime.now();
 
-        //내 userID 제외
-        List<Long> recommendPosts = postRepository.findTop13ByCategoryInAndModifiedDateBetween(user, categories, start, end);
+        List<Long> recommendUserIds = postRepository.findTop13ByCategoryInAndModifiedDateBetween(user, categories, start, end);
 
-        return new PostRecommendResponseDto(recommendPosts);
+        if(recommendUserIds.size()>13){
+            List<Long> subRecommendUserIds = new ArrayList<>(recommendUserIds.subList(0,13));
+            return subRecommendUserIds;
+        }
+        return recommendUserIds;
     }
 
     @Override

@@ -322,22 +322,6 @@ include::{snippets}/post-create/request-fields.adoc[]
 
 ---
 
-[[Post-추천]]
-== Post를 이용한 사용자 추천
-
-로그인한 사용자의 카테고리와 Post의 카테고리, 좋아요, 작성시간을 분석하여 다른 사용자를 추천하는 API
-
-=== Http Request
-include::{snippets}/post-recommend/http-request.adoc[]
-
-=== Http Response
-include::{snippets}/post-recommend/http-response.adoc[]
-
-=== Response fields
-include::{snippets}/post-recommend/response-fields.adoc[]
-
----
-
 [[Post-by-UserStuffId]]
 == UserStuff에 포함된 Post들 조회
 

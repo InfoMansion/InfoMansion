@@ -1,6 +1,9 @@
 package com.infomansion.server.domain.post.api;
 
-import com.infomansion.server.domain.post.dto.*;
+import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
+import com.infomansion.server.domain.post.dto.PostDetailResponseDto;
+import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
+import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.global.apispec.CommonResponse;
@@ -24,12 +27,6 @@ public class PostApiController {
     public ResponseEntity<CommonResponse<Long>> createPost(@Valid @RequestBody PostCreateRequestDto requestDto){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CommonResponse<>(postService.createPost(requestDto)));
-    }
-
-    @GetMapping("api/v1/posts/recommend")
-    public ResponseEntity<CommonResponse<PostRecommendResponseDto>> findRecommendPostUser() {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(postService.findRecommendPost()));
     }
 
     @GetMapping("api/v1/posts/{userStuffId}")

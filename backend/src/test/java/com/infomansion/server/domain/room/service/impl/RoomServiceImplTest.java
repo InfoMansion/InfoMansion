@@ -94,7 +94,7 @@ public class RoomServiceImplTest {
 
         //then
         RoomResponseDto responseDto = roomService.findRoombyId(userId);
-        assertThat(responseDto.getUserResponseDto().getUsername()).isEqualTo("infomansion");
+        assertThat(responseDto.getUserName()).isEqualTo("infomansion");
     }
 
 

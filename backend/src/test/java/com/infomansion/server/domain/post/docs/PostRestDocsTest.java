@@ -3,7 +3,10 @@ package com.infomansion.server.domain.post.docs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.domain.Post;
-import com.infomansion.server.domain.post.dto.*;
+import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
+import com.infomansion.server.domain.post.dto.PostDetailResponseDto;
+import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
+import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.user.domain.User;
@@ -23,7 +26,6 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,12 +36,10 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
@@ -83,28 +83,6 @@ public class PostRestDocsTest {
                                 fieldWithPath("content").description("Post의 내용")
                         ),
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.NUMBER).description(USER_ID.getDescription())))
-                ));
-    }
-
-    @Test
-    public void post의_카테고리와_좋아요를_통해_다른사용자_추천() throws Exception {
-        // given
-        List<Long> userIds = new ArrayList<>();
-        userIds.add(10L);
-        userIds.add(20L);
-        userIds.add(99L);
-        PostRecommendResponseDto responseDto = new PostRecommendResponseDto(userIds);
-        given(postService.findRecommendPost()).willReturn(responseDto);
-
-        // when, then
-        mockMvc.perform(get("/api/v1/posts/recommend"))
-                .andExpect(status().isOk())
-                .andDo(document("post-recommend",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        responseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터")))
-                                .andWithPrefix("data.",
-                                        fieldWithPath("userIds").type(JsonFieldType.ARRAY).description("추천된 사용자 Id"))
                 ));
     }
 

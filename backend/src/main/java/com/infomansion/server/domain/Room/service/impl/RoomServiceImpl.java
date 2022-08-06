@@ -1,9 +1,11 @@
 package com.infomansion.server.domain.Room.service.impl;
 
 import com.infomansion.server.domain.Room.domain.Room;
+import com.infomansion.server.domain.Room.dto.RoomRecommendResponseDto;
 import com.infomansion.server.domain.Room.dto.RoomResponseDto;
 import com.infomansion.server.domain.Room.repository.RoomRepository;
 import com.infomansion.server.domain.Room.service.RoomService;
+import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.global.util.exception.CustomException;
@@ -22,6 +24,7 @@ public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final PostService postService;
 
     @Override
     public void deleteRoom(Long roomId) {
@@ -30,6 +33,18 @@ public class RoomServiceImpl implements RoomService {
         room.deleteRoom();
     }
 
+    @Override
+    public RoomRecommendResponseDto findRecommendRoom() {
+
+        List<Long> userIds = postService.findRecommendPost();
+        List<RoomResponseDto> roomResponseDtos = new ArrayList<>();
+
+        for(Long id : userIds){
+            roomResponseDtos.add(new RoomResponseDto(roomRepository.findRoomWithUser(id).get()));
+        }
+
+        return new RoomRecommendResponseDto(roomResponseDtos);
+    }
 
     @Override
     public RoomResponseDto findRoombyId(Long userId) {

@@ -144,57 +144,6 @@ public class PostApiControllerTest {
                 .andExpect(status().isCreated());
     }
 
-    @DisplayName("post 추천에 성공했습니다.")
-    @WithCustomUserDetails
-    @Transactional
-    @Test
-    public void Post_추천_성공() throws Exception{
-        // UserStuff 생성, 배치
-        UserStuffSaveRequestDto beforeCreateDto = UserStuffSaveRequestDto.builder()
-                .stuffId(stuffId).build();
-        userStuffId = userStuffService.saveUserStuff(beforeCreateDto);
-
-        // 다른 User 생성
-        String email = "infomansion@test.com1";
-        String password = "testPassword1$1";
-        String tel = "010123456781";
-        String username = "infomansion1";
-        String uCategories = "IT,COOK";
-
-        User postCreateUser = userRepository.save(builder()
-                .email(email)
-                .password(password)
-                .tel(tel)
-                .username(username)
-                .categories(uCategories)
-                .build());
-        Long postCreateUserId = postCreateUser.getId();
-
-        // 다른 User의 UserStuff 생성 및 배치
-        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
-                .stuffId(stuffId).build();
-
-        userStuffId = userStuffService.saveUserStuff(createDto);
-
-        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("Java란 뭘까?").category("IT")
-                .posX(0.2).posY(0.3).posZ(3.1)
-                .rotX(1.5).rotY(0.0).rotZ(0.9)
-                .build();
-
-        userStuffId = userStuffService.includeUserStuff(includeDto);
-
-        //post 작성
-
-        Post post = Post.builder().user(postCreateUser).userStuff(userStuffRepository.findById(userStuffId).get())
-                        .title("EffectiveJava").content("자바개발자 필독서").build();
-        postRepository.saveAndFlush(post);
-
-        mockMvc.perform(get("/api/v1/posts/recommend"))
-                .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.data.userIds.length()").value(1));
-    }
-
     @DisplayName("UserStuff 안에있는 Post를 모두 반환한다.")
     @WithCustomUserDetails
     @Transactional

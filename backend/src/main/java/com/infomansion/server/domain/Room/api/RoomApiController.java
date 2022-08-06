@@ -1,5 +1,6 @@
 package com.infomansion.server.domain.Room.api;
 
+import com.infomansion.server.domain.Room.dto.RoomRecommendResponseDto;
 import com.infomansion.server.domain.Room.dto.RoomResponseDto;
 import com.infomansion.server.domain.Room.service.RoomService;
 import com.infomansion.server.global.apispec.CommonResponse;
@@ -35,5 +36,10 @@ public class RoomApiController {
     private ResponseEntity<CommonResponse<Long>> deleteRoom(@Valid @PathVariable Long roomId){
         roomService.deleteRoom(roomId);
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomId));
+    }
+
+    @GetMapping("/api/v1/rooms/recommend")
+    private ResponseEntity<CommonResponse<RoomRecommendResponseDto>> findRecommendRoom(){
+        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomService.findRecommendRoom()));
     }
 }
