@@ -35,6 +35,8 @@ public class Post extends BaseTimeEntityAtSoftDelete {
     @Enumerated(value = EnumType.STRING)
     private Category category;
 
+    private String defaultPostThumbnail;
+
     @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
     private LikesPost likesPost;
 
@@ -47,6 +49,8 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         this.content = content;
         this.deleteFlag = false;
         this.likesPost = LikesPost.builder().post(this).build();
+        this.defaultPostThumbnail = "default";
+        replaceDefaultPostThumbnail(content);
         setUserAndUserStuff(user, userStuff);
     }
 
@@ -65,5 +69,16 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         this.userStuff = userStuff;
         this.category = userStuff.getCategory();
         userStuff.getPostList().add(this);
+    }
+
+    public void replaceDefaultPostThumbnail(String content){
+        int startIdx = content.indexOf("<img src=\"");
+        if(startIdx==-1) return;
+        else{
+            startIdx +=10;
+            int endIdx = content.indexOf("\"", startIdx);
+            String url = content.substring(startIdx, endIdx);
+            this.defaultPostThumbnail = url;
+        }
     }
 }

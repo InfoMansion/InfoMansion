@@ -63,6 +63,7 @@ public enum FieldDescription {
     POST_TITLE(JsonFieldType.STRING, "title"),
     POST_CONTENT(JsonFieldType.STRING, "content"),
     LIKES_POST(JsonFieldType.NUMBER, "좋아요 수"),
+    DEFAULTPOSTTHUMBNAIL(JsonFieldType.STRING, "대표 이미지"),
 
     // Base
     MODIFIED_DATE(JsonFieldType.STRING, "마지막 수정날짜"),

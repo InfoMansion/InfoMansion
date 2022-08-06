@@ -14,6 +14,7 @@ public class PostDetailResponseDto {
     private String title;
     private String content;
     private Category category;
+    private String defaultPostThumbnail;
     private LocalDateTime modifiedDate;
     private Long likes;
 
@@ -23,6 +24,7 @@ public class PostDetailResponseDto {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.category = post.getCategory();
+        this.defaultPostThumbnail = post.getDefaultPostThumbnail();
         this.modifiedDate = post.getModifiedDate();
         this.likes = post.getLikesPost().getLikes();
     }
