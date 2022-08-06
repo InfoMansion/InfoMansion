@@ -9,8 +9,6 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from '../../utils/axios';
 import { useRouter } from 'next/router';
-import { pwConfirmState } from '../../state/pwConfirm';
-import { useRecoilState } from 'recoil';
 import { useCookies } from 'react-cookie';
 
 const theme = createTheme({
@@ -31,7 +29,6 @@ export default function Confirm(props) {
   const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
     inputPassword,
   );
-  const [pwConfirm, setPwConfirmState] = useRecoilState(pwConfirmState);
 
   const inputUnFinish = !confirmPassword;
 
@@ -55,8 +52,9 @@ export default function Confirm(props) {
         },
       });
       props.setUserInfo(data.data);
-      setPwConfirmState(true);
+      props.setIsConfirmed(true);
     } catch (e) {
+      console.log(e);
       alert(e.response.data.message);
     }
   };

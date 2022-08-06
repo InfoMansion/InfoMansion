@@ -12,7 +12,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useRecoilState } from 'recoil';
 
 import { dashNumState } from '../../state/dashNum';
-import { pwConfirmState } from '../../state/pwConfirm';
 
 import MainListItems from '../../components/DashboardPage/mainlist.js';
 import Profile from '../../components/DashboardPage/profile';
@@ -116,17 +115,18 @@ function DashboardContent(props) {
 }
 
 export default function Dashboard() {
-  const [pwConfirm, setPwConfirmState] = useRecoilState(pwConfirmState);
+  const [isConfirmed, setIsConfirmed] = useState(false);
   let dashContent;
   const [userInfo, setUserInfo] = useState({
     username: '',
+    email: '',
     categories: [],
     introduce: '',
     profileImageUrl: '',
   });
   console.log('dashboard', userInfo);
 
-  if (pwConfirm) {
+  if (isConfirmed) {
     dashContent = (
       <DashboardContent
         userInfo={userInfo}
@@ -134,7 +134,12 @@ export default function Dashboard() {
       ></DashboardContent>
     );
   } else {
-    dashContent = <Confirm setUserInfo={setUserInfo}></Confirm>;
+    dashContent = (
+      <Confirm
+        setUserInfo={setUserInfo}
+        setIsConfirmed={setIsConfirmed}
+      ></Confirm>
+    );
   }
 
   return <>{dashContent}</>;

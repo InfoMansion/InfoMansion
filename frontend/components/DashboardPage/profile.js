@@ -237,7 +237,9 @@ export default function Profile({ ...props }) {
                   name="username"
                 ></TextField>
               </Grid>
-
+              {/* <Typography variant="body2" color="text.secondary">
+                {userInfo.email}
+              </Typography> */}
               <Divider />
               <TextField
                 multiline
