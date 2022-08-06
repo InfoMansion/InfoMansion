@@ -11,10 +11,10 @@ import java.util.Optional;
 
 public interface UserStuffRepository extends JpaRepository<UserStuff, Long> {
 
-    @Query("select us from UserStuff us left join fetch us.stuff where us.deleteFlag = false")
-    List<UserStuff> findByUser(User user);
+    @Query("select us from UserStuff us join fetch us.stuff where us.deleteFlag = false and us.user = :user")
+    List<UserStuff> findByUser(@Param("user") User user);
 
-    @Query("select us from UserStuff us left join fetch us.stuff where us.deleteFlag = false and us.id = :id")
+    @Query("select us from UserStuff us join fetch us.stuff where us.deleteFlag = false and us.id = :id")
     @Override
     Optional<UserStuff> findById(@Param("id") Long id);
 
