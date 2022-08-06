@@ -1,9 +1,9 @@
-import { Circle, OrbitControls, OrthographicCamera, Scroll, ScrollControls } from '@react-three/drei';
+import { Scroll, ScrollControls } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Suspense, useEffect, useState } from 'react'
 import ShopStuff from './atoms/ShopStuff'
 
-export default function ShowWindow({furnitures, type}) {
+export default function ShowWindow({stuffs, type}) {
     let count = -12;
     const [zoomscale] = useState(50);
     // stuff 간 거리.
@@ -29,19 +29,17 @@ export default function ShowWindow({furnitures, type}) {
             {/* 임시 빛 */}
                 <ambientLight />
                 <Suspense>
-                    {furnitures.map( furniture => 
-                        <group key={furniture.id}>
+                    {stuffs.map( stuff => 
+                        <group key={stuff.id}>
                             <ShopStuff
                                 Click={Click}
-                                data={furniture} 
+                                data={stuff} 
                                 pos={pos}
                                 dist={count += dist}
                             />
                         </group>
                     )}
                 </Suspense>
-                
-                {/* <OrbitControls /> */}
             </Scroll>
         </ScrollControls>
     )

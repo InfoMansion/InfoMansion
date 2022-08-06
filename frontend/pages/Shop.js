@@ -1,63 +1,84 @@
-import { Paper, Typography, Box } from "@mui/material";
-import { useState } from "react";
+import { Typography, Box, Card, Divider } from "@mui/material";
+import { useEffect, useState } from "react";
 import ShowWindow from "../components/ShopPage/ShowWindow";
 
-// furniture.json안에 stuff종류와 스터프들이 다 들어가야 함.
-import furnitures from '../components/jsonData/furnitures.json'
-import furnitureTypes from '../components/jsonData/furnitureTypes.json'
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, OrthographicCamera } from "@react-three/drei";
+import { OrthographicCamera } from "@react-three/drei";
+import { useCookies } from "react-cookie";
+import axios from "../utils/axios";
+import { pageLoading } from '../state/pageLoading';
+import { useSetRecoilState } from "recoil";
 
 export default function Shop() {
+    const [cookies] = useCookies(['cookie-name']);
     // 실제로는 db에서 카테고리 받아오기.
     const [scrollTarget] = useState(0);
+    const setPageLoading = useSetRecoilState(pageLoading);
+    const [stuffBundles, setStuffBundles] = useState([]);
 
+    useEffect(() => {
+        try {
+          setPageLoading(true);
+          axios.get(`/api/v1/stores?pageSize=10`, {
+              headers: {
+                Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+              },
+            })
+            .then(res => {
+            //   setStuffBundles(res.data.data);
+              setStuffBundles(res.data.data.slice(5, 10));
+              setPageLoading(false);
+            });
+        } catch (e) {
+            setPageLoading(false);
+            console.log(e);
+        }
+    }, []);
     return (
         <Box>
-            <Box>
+            <Typography variant="h4">
+                Shop
+            </Typography>
+            <Divider />
+            {/* <Box>
                 크레딧이랑, 그런거 보여주기. navbar가 될 예정.
-            </Box>
-            <Box>
-                Stuff 클릭시 상세 정보 보여줄 위치
-            </Box>
-
-
-            { furnitureTypes.map( type => 
-                    <Box
-                        key={type}
+            </Box> */}
+            { stuffBundles.map( stuffBundle => 
+                    <Card
+                        key={stuffBundle.stuffType}
                         sx={{
-                            mx : 2
+                            m : 2
                         }}
                     >
-                        {
-                            (furnitures[type]) ? 
-                            <Box>
-                                <Typography variant='h5'>{type}</Typography>
-                                {/* <Canvas orthographic camera={{ position: [0, 0, 5], fov: 50 }}>
-                                    <ShowWindowt scrollTarget={scrollTarget} />
-                                </Canvas> */}
-                                <Canvas
-                                    style={{
-                                        height : '200px',
-                                        backgroundColor : '#aaaaaa'
-                                    }}
-                                >
-                                    <ShowWindow
-                                        ScrollTarget={scrollTarget}
-                                        type={type}
-                                        furnitures={furnitures[type]}
-                                    />
+                        <Typography variant='h5'
+                            sx={{
+                                m : 1
+                            }}
+                        >
+                            {stuffBundle.stuffTypeName}
+                        </Typography>
 
-                                <OrthographicCamera 
-                                    makeDefault
-                                    position={[0,0, 4]}
-                                    zoom={50}   
-                                />
-                                </Canvas>
-                            </Box>
-                            : <></>
-                        }
-                    </Box>
+                        <Canvas
+                            style={{
+                                height : '200px',
+                                backgroundColor : '#eeeeee'
+                            }}
+                            sx={{
+                                m : 1
+                            }}
+                        >
+                            <ShowWindow
+                                ScrollTarget={scrollTarget}
+                                stuffs={stuffBundle.slice.content}
+                            />
+
+                        <OrthographicCamera 
+                            makeDefault
+                            position={[0,0, 4]}
+                            zoom={50}   
+                        />
+                        </Canvas>
+                </Card>
                 )}
         </Box>
     )

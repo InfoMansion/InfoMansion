@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export default function ShopStuff({data, Click, pos, dist}) {
     const [geometry] = useState(data.geometry);
-    const [material] = useState(data.materials);
+    const [material] = useState(data.material);
     const [glbpath] = useState(data.stuffGlbPath);
 
     // 컴포넌트 오류 해결.
@@ -11,7 +11,9 @@ export default function ShopStuff({data, Click, pos, dist}) {
     function onClick(e) {
         Click(e, data);
     }
-    const { nodes, materials } = useGLTF(`/stuffAssets/${glbpath}`)
+    const { nodes, materials } = useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath)
+
+    if(!nodes[geometry]) return
     
     return (
         <group 
@@ -23,9 +25,9 @@ export default function ShopStuff({data, Click, pos, dist}) {
                 castShadow
                 geometry={nodes[geometry].geometry}
                 material={materials[material]}
-                scale={50}
+                scale={100}
             />
-            <pointLight position={[2, 2, 2]} intensity={0.04}/>
+            <pointLight position={[2, 5, 2]} intensity={0.04}/>
         </group>
     )
 }
