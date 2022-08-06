@@ -578,6 +578,25 @@ include::{snippets}/user-auth-before-change-info/http-response.adoc[]
 include::{snippets}/user-auth-before-change-info/response-fields.adoc[]
 
 ---
+
+[[User-비밀번호찾기]]
+== User 비밀번호 찾기
+
+사용자가 비밀번호를 잊었을 때 사용하는 API
+
+=== Http Request
+include::{snippets}/user-forgot-password/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/user-forgot-password/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/user-forgot-password/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/user-forgot-password/response-fields.adoc[]
+
+---
 [[Search-API]]
 = Search API
 
