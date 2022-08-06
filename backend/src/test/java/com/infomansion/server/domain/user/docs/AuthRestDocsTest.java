@@ -1,7 +1,9 @@
 package com.infomansion.server.domain.user.docs;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
+import com.infomansion.server.domain.user.dto.UserResetPasswordRequestDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.global.util.jwt.ReissueDto;
@@ -25,6 +27,7 @@ import java.util.Date;
 import static com.infomansion.server.global.util.restdocs.FieldDescription.*;
 import static com.infomansion.server.global.util.restdocs.RestDocsUtil.common;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -195,6 +198,29 @@ public class AuthRestDocsTest {
                                 headerWithName("Set-Cookie").description("accessToken과 refreshToken이 삭제되어 보내짐")
                         ),
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("로그아웃 여부")))
+                ));
+    }
+
+    @Test
+    public void 비밀번호찾기() throws Exception {
+        //given
+        boolean responseDto = true;
+        UserResetPasswordRequestDto requestDto = new UserResetPasswordRequestDto("infomansion@test.com", "infomansion");
+        given(userService.resetPassword(any(UserResetPasswordRequestDto.class), anyString())).willReturn(responseDto);
+
+        //when&then
+        mockMvc.perform(post("/api/v1/auth/reset-password")
+                        .content(objectMapper.writeValueAsString(requestDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("user-forgot-password",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").description(USER_EMAIL.getDescription()),
+                                fieldWithPath("username").description(USERNAME.getDescription())
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("임시 비밀번호로 초기화 성공 여부")))
                 ));
     }
 }

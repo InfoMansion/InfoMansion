@@ -17,4 +17,5 @@ public interface UserService {
     UserInfoResponseDto findByUsername(String username);
     UserSimpleProfileResponseDto findSimpleProfile();
     UserModifyProfileResponseDto modifyUserProfile(MultipartFile profileImage, UserModifyProfileRequestDto profileInfo);
+    boolean resetPassword(UserResetPasswordRequestDto requestDto, String redirectURL);
 }

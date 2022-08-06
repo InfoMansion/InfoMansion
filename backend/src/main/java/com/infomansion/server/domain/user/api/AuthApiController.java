@@ -3,6 +3,7 @@ package com.infomansion.server.domain.user.api;
 import com.infomansion.server.domain.user.auth.AccessTokenRequestDto;
 import com.infomansion.server.domain.user.auth.AccessTokenResponseDto;
 import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
+import com.infomansion.server.domain.user.dto.UserResetPasswordRequestDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.global.apispec.BasicResponse;
@@ -86,6 +87,12 @@ public class AuthApiController {
                 .header(HttpHeaders.SET_COOKIE, removeAccessTokenCookie().toString())
                 .header(HttpHeaders.SET_COOKIE, removeRefreshTokenCookie().toString())
                 .body(new CommonResponse<>(userService.logout()));
+    }
+
+    @PostMapping("/api/v1/auth/reset-password")
+    public ResponseEntity<? extends  BasicResponse> userResetPassword(@Valid @RequestBody UserResetPasswordRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userService.resetPassword(requestDto, redirectURI)));
     }
 
     private ResponseCookie removeRefreshTokenCookie() {
