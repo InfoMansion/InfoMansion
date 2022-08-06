@@ -13,7 +13,7 @@ function a11yProps(index) {
   };
 }
 
-export default function SearchPost() {
+export default function searchPost() {
   //검색 결과가 담기는 query입니다.
   const { query } = useRouter();
   const [value, setValue] = useState(0);

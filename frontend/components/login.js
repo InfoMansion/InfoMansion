@@ -211,8 +211,8 @@ export default function LogIn() {
                         </Button>
                       </div>
                       <Grid container justifyContent="space-around">
-                        <Link href="#" variant="body2">
-                          Forgot password?
+                        <Link href="/user/forgotPassword" variant="body2">
+                          Forgot Password?
                         </Link>
                         <Link href="#" variant="body2" onClick={goSignUp}>
                           {'Sign Up'}
@@ -317,7 +317,7 @@ export default function LogIn() {
                           </Button>
                         </div>
                         <Grid container justifyContent="space-around">
-                          <Link href="#" variant="body2">
+                          <Link href="/user/forgotPassword" variant="body2">
                             Forgot password?
                           </Link>
                           <Link href="#" variant="body2" onClick={goSignUp}>

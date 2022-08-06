@@ -10,7 +10,7 @@ const contentToHtml = content => {
 };
 
 //추후에 state관리 여기서 할 예정
-export default function CreatePost() {
+export default function createPost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState(EditorState.createEmpty());
   const [category, setCategory] = useState('');
