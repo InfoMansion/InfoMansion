@@ -299,6 +299,25 @@ include::{snippets}/userstuff-modify-pos-or-rot/request-fields.adoc[]
 
 ---
 
+[[UserStuff-구매]]
+== 상점에서 Stuff 구매
+
+사용자가 상점에서 Stuff를 구매할 때 사용하는 API, 여러 개 Stuff를 구매 가능
+
+=== Http Request
+include::{snippets}/user-stuff-purchase/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/user-stuff-purchase/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/user-stuff-purchase/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/user-stuff-purchase/request-fields.adoc[]
+
+---
+
 [[Post-API]]
 = Post API
 
@@ -306,7 +325,7 @@ include::{snippets}/userstuff-modify-pos-or-rot/request-fields.adoc[]
 [[Post-생성]]
 == Post 생성
 
-와 userStuffId를 기반으로 Post를 작성하는 API
+User 와 userStuffId를 기반으로 Post를 작성하는 API
 
 === Http Request
 include::{snippets}/post-create/http-request.adoc[]
@@ -539,7 +558,7 @@ include::{snippets}/user-chang-pw/request-fields.adoc[]
 === Http Response
 include::{snippets}/user-chang-pw/http-response.adoc[]
 
-== Response fields
+=== Response fields
 include::{snippets}/user-chang-pw/http-response.adoc[]
 
 ---

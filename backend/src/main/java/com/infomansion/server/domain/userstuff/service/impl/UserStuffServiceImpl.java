@@ -1,6 +1,10 @@
 package com.infomansion.server.domain.userstuff.service.impl;
 
+import com.infomansion.server.domain.payment.domain.Payment;
+import com.infomansion.server.domain.payment.domain.PaymentLine;
+import com.infomansion.server.domain.payment.repository.PaymentRepository;
 import com.infomansion.server.domain.stuff.domain.Stuff;
+import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
@@ -27,6 +31,7 @@ public class UserStuffServiceImpl implements UserStuffService {
     private final UserRepository userRepository;
     private final StuffRepository stuffRepository;
     private final UserStuffRepository userStuffRepository;
+    private final PaymentRepository paymentRepository;
 
     @Transactional
     @Override
@@ -160,11 +165,42 @@ public class UserStuffServiceImpl implements UserStuffService {
     @Transactional
     @Override
     public void saveDefaultUserStuff(User user) {
-        List<Stuff> defaultStuffs = stuffRepository.findStuffsByIdIn(DefaultStuff.getDefaultStuffIds());
+        List<Stuff> defaultStuffs = stuffRepository.findStuffByIdIn(DefaultStuff.getDefaultStuffIds());
         for (Stuff defaultStuff : defaultStuffs) {
             UserStuff defaultUserStuff = DefaultStuff.getDefaultUserStuff(defaultStuff, user);
             userStuffRepository.save(defaultUserStuff);
         }
+    }
+
+    @Override
+    @Transactional
+    public List<StuffResponseDto> purchaseStuff(UserStuffPurchaseRequestDto requestDto) {
+        User user = userRepository.findUserWithCredit(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        List<Stuff> stuffList = stuffRepository.findStuffByIdIn(requestDto.getStuffIds());
+
+        // 전체 가격을 계산 후 사용자가 가구목록을 구매할 수 있을 지 판단
+        long totalPrice = 0L;
+        for(Stuff stuff : stuffList) {
+            totalPrice += stuff.getPrice();
+        }
+
+        // 구매목록을 한번에 살 수 없을 때
+        if (user.getCredit() < totalPrice) {
+            throw new CustomException(ErrorCode.NOT_ENOUGH_CREDIT);
+        }
+
+        // 결제 시작
+        Payment payment = Payment.record(user.getUserCredit(), totalPrice);
+        for(Stuff stuff : stuffList) {
+            user.purchaseStuff(stuff.getPrice());
+            userStuffRepository.save(UserStuff.havePossession(stuff, user));
+            payment.addPaymentLine(PaymentLine.createPaymentLine(payment, stuff, stuff.getPrice()));
+        }
+
+        paymentRepository.save(payment);
+
+        return stuffList.stream().map(StuffResponseDto::new).collect(Collectors.toList());
     }
 
     private void checkDuplicatePlacedCategory(Long userId, String category) {

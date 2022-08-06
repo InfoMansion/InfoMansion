@@ -1,15 +1,21 @@
 package com.infomansion.server.domain.userstuff.service;
 
 import com.infomansion.server.domain.category.domain.Category;
+import com.infomansion.server.domain.payment.domain.Payment;
+import com.infomansion.server.domain.payment.domain.PaymentLine;
+import com.infomansion.server.domain.payment.repository.PaymentLineRepository;
+import com.infomansion.server.domain.payment.repository.PaymentRepository;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.repository.UserCreditRepository;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import com.infomansion.server.domain.userstuff.dto.*;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
+import com.infomansion.server.global.util.security.SecurityUtil;
 import com.infomansion.server.global.util.security.WithCustomUserDetails;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +31,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserStuffServiceImplTest {
@@ -41,9 +48,20 @@ public class UserStuffServiceImplTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PaymentRepository paymentRepository;
+
+    @Autowired
+    private UserCreditRepository userCreditRepository;
+
+    @Autowired
+    private PaymentLineRepository paymentLineRepository;
+
     private Long userId;
     private String username;
     private List<Long> stuffIds;
+    private long credit = 100000000L;
+    private long totalPrice = 0;
 
     @BeforeEach
     public void setUp() {
@@ -54,15 +72,22 @@ public class UserStuffServiceImplTest {
         username = "infomansion";
         String userCategories = "IT,COOK";
 
-        userId = userRepository.save(User.builder()
+        User user = userRepository.save(User.builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
                 .categories(userCategories)
-                .build()).getId();
+                .build());
+
+        userId = user.getId();
+
+        user.getUserCredit().earnCredit(credit);
+
+        userCreditRepository.save(user.getUserCredit());
 
         // stuff 생성
+        totalPrice = 0;
         stuffIds = new ArrayList<>();
         List<String> stuffTypes = Arrays.asList("DESK", "CLOSET", "DRAWER", "WALL", "FLOOR");
         for(int i = 0; i < 10; i++) {
@@ -83,12 +108,15 @@ public class UserStuffServiceImplTest {
                     .build();
 
             stuffIds.add(stuffRepository.save(requestDto.toEntity()).getId());
+
+            totalPrice += price;
         }
     }
 
     @AfterEach
     public void cleanUp() {
         userStuffRepository.deleteAll();
+        paymentRepository.deleteAll();
         stuffRepository.deleteAll();
         userRepository.deleteAll();;
     }
@@ -446,6 +474,65 @@ public class UserStuffServiceImplTest {
         // when, then
         List<UserStuffArrangedResponeDto> responseList = userStuffService.findArrangedUserStuffByUsername(username);
         assertThat(responseList.size()).isEqualTo(3);
+    }
+
+    @DisplayName("Stuff 구매 후 User Credit 차감 및 Payment, PaymentLine 기록")
+    @WithCustomUserDetails
+    @Test
+    public void Stuff_구매_후_User_Credit_차감 () {
+        //given
+        UserStuffPurchaseRequestDto requestDto = new UserStuffPurchaseRequestDto(stuffIds);
+
+        //when
+        userStuffService.purchaseStuff(requestDto);
+
+        //then
+        User user = userRepository.findUserWithCredit(SecurityUtil.getCurrentUserId()).get();
+        assertThat(credit).isGreaterThan(user.getCredit());
+//        Payment payment = paymentRepository.findAll().get(0);
+//        assertThat(payment.getUserId()).isEqualTo(SecurityUtil.getCurrentUserId());
+//        assertThat(payment.getBeforeCredit()).isEqualTo(credit);
+//        assertThat(payment.getAfterCredit()).isEqualTo(user.getCredit());
+//        assertThat(payment.getTotalPrice()).isEqualTo(totalPrice);
+    }
+
+    @DisplayName("Stuff 구매 후 Payment 기록")
+    @WithCustomUserDetails
+    @Test
+    public void Stuff_구매_후_Payment_기록 () {
+        //given
+        UserStuffPurchaseRequestDto requestDto = new UserStuffPurchaseRequestDto(stuffIds);
+
+        //when
+        userStuffService.purchaseStuff(requestDto);
+
+        //then
+        User user = userRepository.findUserWithCredit(SecurityUtil.getCurrentUserId()).get();
+        Payment payment = paymentRepository.findAll().get(0);
+        assertThat(payment.getUserId()).isEqualTo(SecurityUtil.getCurrentUserId());
+        assertThat(payment.getBeforeCredit()).isEqualTo(credit);
+        assertThat(payment.getAfterCredit()).isEqualTo(user.getCredit());
+        assertThat(payment.getTotalPrice()).isEqualTo(totalPrice);
+    }
+
+    @DisplayName("Stuff 구매 후 PaymentLine 기록")
+    @WithCustomUserDetails
+    @Test
+    public void Stuff_구매_후_PaymentLine_기록 () {
+        //given
+        UserStuffPurchaseRequestDto requestDto = new UserStuffPurchaseRequestDto(stuffIds);
+
+        //when
+        userStuffService.purchaseStuff(requestDto);
+
+        //then
+        Payment payment = paymentRepository.findAllPaymentByUser(SecurityUtil.getCurrentUserId()).get(0);
+        List<PaymentLine> paymentLines = paymentLineRepository.findPaymentLinesByPaymentAndUser(payment);
+
+        assertThat(
+                paymentLines.stream().allMatch(paymentLine -> stuffIds.contains(paymentLine.getStuff().getId()))
+        ).isTrue();
+
     }
 
 }

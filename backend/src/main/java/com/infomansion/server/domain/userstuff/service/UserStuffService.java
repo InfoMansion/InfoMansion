@@ -1,5 +1,6 @@
 package com.infomansion.server.domain.userstuff.service;
 
+import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.userstuff.dto.*;
 
@@ -26,5 +27,6 @@ public interface UserStuffService {
     List<UserStuffArrangedResponeDto> findArrangedUserStuffByUsername(String username);
 
     void saveDefaultUserStuff(User user);
+    List<StuffResponseDto> purchaseStuff(UserStuffPurchaseRequestDto requestDto);
 
 }

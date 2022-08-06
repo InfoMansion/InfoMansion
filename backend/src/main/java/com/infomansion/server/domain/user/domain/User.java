@@ -34,6 +34,9 @@ public class User extends BaseTimeEntityAtSoftDelete {
     @Column(length = 200)
     private String introduce;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    private UserCredit userCredit;
+
     @Builder
     public User(String email, String password, String username, String tel, String categories) {
         this.email = email;
@@ -44,6 +47,7 @@ public class User extends BaseTimeEntityAtSoftDelete {
         this.categories = categories;
         this.profileImage = "https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png";
         this.introduce = "";
+        this.userCredit = new UserCredit(this);
     }
 
     /**
@@ -87,5 +91,20 @@ public class User extends BaseTimeEntityAtSoftDelete {
         if(multipartFile != null) {
             this.profileImage = s3Uploader.uploadFiles(multipartFile, "profile");
         }
+    }
+
+    /**
+     * User의 크레딧을 조회합니다.
+     * @return userCredit
+     */
+    public Long getCredit() {
+        return this.userCredit.getCredit();
+    }
+
+    /**
+     * Stuff 구매하여 Credit이 감소합니다.
+     */
+    public void purchaseStuff(Long stuffPrice) {
+        this.userCredit.spend(stuffPrice);
     }
 }

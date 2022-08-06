@@ -116,4 +116,14 @@ public class UserStuff extends BaseTimeEntityAtSoftDelete {
         this.setDeletedDate();
         resetPosAndRot();
     }
+
+    public static UserStuff havePossession(Stuff stuff, User user) {
+        return UserStuff.builder()
+                .stuff(stuff)
+                .user(user)
+                .selected(false)
+                .posX(BigDecimal.ZERO).posY(BigDecimal.ZERO).posZ(BigDecimal.ZERO)
+                .rotX(BigDecimal.ZERO).rotY(BigDecimal.ZERO).rotZ(BigDecimal.ZERO)
+                .build();
+    }
 }

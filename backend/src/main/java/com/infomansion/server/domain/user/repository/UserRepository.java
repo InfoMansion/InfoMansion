@@ -22,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where u.username like %:searchWord%")
     Slice<User> findUserByUserName(@Param("searchWord") String searchWord, Pageable pageable);
 
+    @Query("SELECT u FROM User u JOIN FETCH u.userCredit WHERE u.id = :userId")
+    Optional<User> findUserWithCredit(@Param("userId") Long userId);
+
 }

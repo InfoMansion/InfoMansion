@@ -71,4 +71,10 @@ public class UserStuffApiController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userStuffService.findArrangedUserStuffByUsername(username)));
     }
+
+    @PostMapping("/api/v2/user-stuff")
+    public ResponseEntity<? extends BasicResponse> purchaseStuff(@Valid @RequestBody UserStuffPurchaseRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new CommonResponse<>(userStuffService.purchaseStuff(requestDto)));
+    }
 }

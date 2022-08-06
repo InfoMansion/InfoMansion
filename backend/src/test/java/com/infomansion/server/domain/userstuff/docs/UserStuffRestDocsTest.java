@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.domain.StuffType;
+import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import com.infomansion.server.domain.userstuff.dto.*;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
@@ -354,6 +355,64 @@ public class UserStuffRestDocsTest {
                 fieldWithPath("rotZ").type(ROT_Z.getJsonFieldType()).description(ROT_Z.getDescription()),
                 fieldWithPath("createdTime").type(USERSTUFF_SELECTED.getJsonFieldType()).description(USERSTUFF_CREATED.getDescription()).optional(),
                 fieldWithPath("modifiedTime").type(USERSTUFF_MODIFIED.getJsonFieldType()).description(USERSTUFF_MODIFIED.getDescription()).optional()
+        );
+    }
+
+    @Test
+    public void userStuff_구매() throws Exception{
+        // given
+        Long userStuffId = 20L;
+        UserStuffPurchaseRequestDto requestDto = new UserStuffPurchaseRequestDto(List.of(1L,2L,3L,4L,5L));
+        List<StuffResponseDto> responseDtoList = new ArrayList<>();
+        for(int i = 1; i <= 5; i++) {
+            String categories = "DAILY,STUDY,INTERIOR";
+            Stuff stuff = Stuff.builder()
+                    .id(1L)
+                    .stuffName("desk"+i)
+                    .stuffNameKor("책상"+i)
+                    .price(50L)
+                    .categories(categories)
+                    .stuffType(StuffType.DESK)
+                    .geometry("geometry")
+                    .material("material")
+                    .stuffGlbPath("glbPath")
+                    .build();
+            responseDtoList.add(new StuffResponseDto(stuff));
+        }
+
+        given(userStuffService.purchaseStuff(any(UserStuffPurchaseRequestDto.class))).willReturn(responseDtoList);
+
+        // when, then
+        mockMvc.perform(post("/api/v2/user-stuff")
+                        .content(objectMapper.writeValueAsString(requestDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(document("user-stuff-purchase",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("stuffIds").description("구매할 Stuff들의 id들")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("구매한 Stuff들에 대한 정보")))
+                                .andWithPrefix("data.[].",getStuffResponse())
+                ));
+    }
+
+    private List<FieldDescriptor> getStuffResponse() {
+        return Arrays.asList(
+                fieldWithPath("id").type(JsonFieldType.NUMBER).description(STUFF_ID.getDescription()),
+                fieldWithPath("stuffName").type(JsonFieldType.STRING).description(STUFF_NAME.getDescription()),
+                fieldWithPath("stuffNameKor").type(JsonFieldType.STRING).description(STUFF_NAME_KOR.getDescription()),
+                fieldWithPath("price").type(JsonFieldType.NUMBER).description(STUFF_PRICE.getDescription()),
+                fieldWithPath("categories").type(JsonFieldType.ARRAY).description(STUFF_CATEGORIES.getDescription()),
+                fieldWithPath("categories.[].category").type(JsonFieldType.STRING).description(CATEGORY.getDescription()),
+                fieldWithPath("categories.[].categoryName").type(JsonFieldType.STRING).description(CATEGORY_NAME.getDescription()),
+                fieldWithPath("stuffType").type(JsonFieldType.STRING).description(STUFF_TYPE.getDescription()),
+                fieldWithPath("geometry").type(JsonFieldType.STRING).description(GEOMETRY.getDescription()),
+                fieldWithPath("material").type(JsonFieldType.STRING).description(MATERIAL.getDescription()),
+                fieldWithPath("stuffGlbPath").type(JsonFieldType.STRING).description(STUFF_GLB_PATH.getDescription()),
+                fieldWithPath("createdTime").type(JsonFieldType.STRING).description(STUFF_CREATED.getDescription()).ignored(),
+                fieldWithPath("modifiedTime").type(JsonFieldType.STRING).description(STUFF_MODIFIED.getDescription()).ignored()
         );
     }
 }

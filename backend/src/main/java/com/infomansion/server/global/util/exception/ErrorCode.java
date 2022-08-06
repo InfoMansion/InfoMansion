@@ -15,6 +15,8 @@ public enum ErrorCode {
     DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST,40003, "중복된 사용자 닉네임입니다."),
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST, 40004, "비밀번호가 올바르지 않습니다."),
     NOT_VALID_USER(HttpStatus.BAD_REQUEST, 40005, "Room을 생성할 수 없는 권한을 가진 User입니다."),
+    NOT_ENOUGH_CREDIT(HttpStatus.BAD_REQUEST, 40006, "크레딧이 부족합니다."),
+    NEGATIVE_AMOUNT_OF_CREDIT(HttpStatus.BAD_REQUEST, 40007, "음수인 크레딧입니다"),
     // JWT
     NOT_VALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST,40020, "유효하지 않은 Refresh Token입니다."),
     EXPIRED_TOKEN(HttpStatus.BAD_REQUEST, 40021, "만료된 JWT 토큰입니다."),
