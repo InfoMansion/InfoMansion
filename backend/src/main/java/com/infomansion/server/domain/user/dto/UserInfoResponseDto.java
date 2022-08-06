@@ -12,30 +12,30 @@ import java.util.stream.Collectors;
 @Getter
 public class UserInfoResponseDto {
     private Long userId;
-    private String userEmail;
     private String username;
     private List<String> categories = new ArrayList<>();
     private String profileImage;
     private String introduce;
+    private boolean isLoginUser;
 
     @Builder
-    protected UserInfoResponseDto(Long userId, String userEmail, String username, String categories, String profileImage, String introduce) {
+    protected UserInfoResponseDto(Long userId, String username, String categories, String profileImage, String introduce, boolean isLoginUser) {
         this.userId = userId;
-        this.userEmail = userEmail;
         this.username = username;
         this.categories = Arrays.stream(categories.split(",")).collect(Collectors.toList());
         this.profileImage = profileImage;
         this.introduce = introduce;
+        this.isLoginUser = isLoginUser;
     }
 
-    public static UserInfoResponseDto toDto(User user) {
+    public static UserInfoResponseDto toDto(User user, Long loginUserId) {
         return UserInfoResponseDto.builder()
                 .userId(user.getId())
-                .userEmail(user.getEmail())
                 .username(user.getUsername())
                 .categories(user.getCategories())
                 .profileImage(user.getProfileImage())
                 .introduce(user.getIntroduce())
+                .isLoginUser(user.getId() == loginUserId ? true : false)
                 .build();
     }
 }

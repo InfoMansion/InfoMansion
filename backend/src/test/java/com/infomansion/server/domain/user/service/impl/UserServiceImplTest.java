@@ -164,6 +164,7 @@ class UserServiceImplTest {
         assertThat(userRepository.findById(userId).get().getProfileImage()).isEqualTo("https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png");
     }
 
+    @WithCustomUserDetails
     @Test
     public void 사용자이름으로_회원조회시_UserInfoResponseDto_반환 () {
         //given&when

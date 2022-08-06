@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfoResponseDto findByUsername(String username) {
         return UserInfoResponseDto.toDto(userRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)), SecurityUtil.getCurrentUserId());
     }
 
     @Override
