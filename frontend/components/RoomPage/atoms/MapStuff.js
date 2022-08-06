@@ -3,7 +3,7 @@ import { useGLTF } from '@react-three/drei'
 import { animated, config, useSpring  } from '@react-spring/three';
 
 export default function Model({ Hover, Click, data, ...props }) {
-
+  if(!data) return;
   const [geo, setGeo] = useState(data.geometry);
   const [poly, setPoly] = useState(data.material);
   const [glb, setGlb] = useState(data.stuffGlbPath);
@@ -38,7 +38,7 @@ export default function Model({ Hover, Click, data, ...props }) {
   if(!nodes[geo]) return
 
   return (
-    <animated.group 
+    <group 
       castShadow
       ref={group} 
       {...props} 
@@ -49,7 +49,7 @@ export default function Model({ Hover, Click, data, ...props }) {
         material={materials[poly]} 
         scale={100} 
       />
-    </animated.group>
+    </group>
   )
 }
 

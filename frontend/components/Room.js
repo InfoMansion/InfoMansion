@@ -13,7 +13,7 @@ import RoomLight from './RoomPage/atoms/RoomLight';
 import axios from '../utils/axios';
 import { useCookies } from 'react-cookie';
 
-import { clickedStuffCategoryState } from '../state/roomState';
+import { clickedStuffCategoryState, loginUserState } from '../state/roomState';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { pageLoading } from '../state/pageLoading';
 
@@ -22,7 +22,7 @@ export default function Room({ StuffClick, userName }) {
   // 화면 확대 정도 조정.
   const [zoomscale] = useState(90);
   // 내 방인지 판단하는 변수
-  const [myroom] = useState(true);
+  const [myroom, setMyroom] = useState(true);
 
   // 사용자 가구들.
   const [mapstuffs, setMapstuffs] = useState([]);
@@ -33,6 +33,7 @@ export default function Room({ StuffClick, userName }) {
   const [tagon, setTagon] = useState(true);
   const [camloc] = useState([0, 0, 0]);
   const [, setClickedStuffCategory] = useRecoilState(clickedStuffCategoryState);
+  const [loginUser] = useRecoilState(loginUserState);
   const setPageLoading = useSetRecoilState(pageLoading);
   // 마운트시 stuff 로드
   const router = useRouter();
@@ -99,7 +100,7 @@ export default function Room({ StuffClick, userName }) {
       </Button>
       {/* 내 방일 때만 표시 */}
 
-      {myroom ? (
+      {loginUser ? (
         <Box
           style={{
             position: 'absolute',

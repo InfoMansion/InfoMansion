@@ -1,11 +1,8 @@
 import { OrthographicCamera } from '@react-three/drei'
-import {Canvas, useThree} from '@react-three/fiber'
+import {Canvas} from '@react-three/fiber'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { useRouter } from 'next/router'
 import { useSpring } from 'react-spring'
 
-// data
-import userStuff from './jsonData/userStuffs.json'
 import MapStuffs from './RoomPage/MapStuffs'
 import Stuffs from './RoomPage/Stuffs'
 // 이 파일은 나중에 db에 데이터 넣을 때 쓸거라 안지우고 유지하겠습니다.
@@ -15,7 +12,7 @@ import ScreenshotButton from './RoomPage/atoms/ScreenShotButton'
 import RoomLight from './RoomPage/atoms/RoomLight'
 import MapStuff from './RoomPage/atoms/MapStuff'
 
-const EditRoom = forwardRef(( props, ref ) => {
+const EditRoom = forwardRef(( {mapStuffs, stuffs, StuffClick}, ref ) => {
     useImperativeHandle(ref, () => ({
         ScreenShot
     }))
@@ -30,7 +27,6 @@ const EditRoom = forwardRef(( props, ref ) => {
 
     // 사용자 가구들.
     const [mapstuffs, setMapstuffs] = useState([]);
-    const [stuffs, setStuffs] = useState([]);
 
     const [hovered, setHovered] = useState(0);
     const [clicked, setClicked] = useState(0);
@@ -40,16 +36,6 @@ const EditRoom = forwardRef(( props, ref ) => {
     })
     const [camloc, setCamloc] = useState([0, 0, 0]);
 
-    const router = useRouter();
-    // 마운트시 stuff 로드
-    useEffect(() => {
-        if(!router.isReady) return;
-        // stuff 가져오기
-        setMapstuffs(userStuff[router.query.userName].slice(0, 2));
-        setStuffs(userStuff[router.query.userName].slice(2));
-
-    }, [router.isReady]);
-
     // stuff 호버 이벤트.
     function Hover(e, stuff) { setHovered(); }
     
@@ -58,9 +44,12 @@ const EditRoom = forwardRef(( props, ref ) => {
         console.log(stuff.category + "클릭");
         if(stuff.category == 'NONE') return null;
         
-        props.StuffClick(stuff);
+        StuffClick(stuff);
     }
 
+    useEffect(() => {
+        console.log(stuffs);
+    }, [])
 
     return (
         <Canvas
@@ -81,7 +70,7 @@ const EditRoom = forwardRef(( props, ref ) => {
             <MapStuffs
                 Hover={Hover}
                 Click={Click}
-                stuffs={props.mapStuffs}
+                stuffs={mapStuffs}
             />
 
             {/* stuffs */}

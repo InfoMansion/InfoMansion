@@ -7,6 +7,8 @@ import Link from 'next/link';
 import axios from "../../utils/axios";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
+import { loginUserState } from "../../state/roomState";
+import { useRecoilState } from "recoil";
 
 const Root = styled('div')(({ theme }) => ({
     padding: theme.spacing(1),
@@ -23,6 +25,7 @@ const Root = styled('div')(({ theme }) => ({
 export default function UserInfo( {userName} ) {
     const router = useRouter();
     const [cookies] = useCookies(['cookie-name']);
+    const [loginUser, setLoginUser] = useRecoilState(loginUserState);  
 
     // username 가지고 userinfo 가져와야 함.
     const [userinfo, setUserinfo] = useState({
@@ -44,6 +47,8 @@ export default function UserInfo( {userName} ) {
                 }
             })
             .then(res => {
+                console.log(res.data);
+                setLoginUser(res.data.data.loginUser)
                 setUserinfo(res.data.data);
             })
         } catch(e) {
@@ -91,13 +96,16 @@ export default function UserInfo( {userName} ) {
                         >
                             {userinfo.username}
                         </Typography>
-
-                        <Link href={userName + "/dashboard"}>
-                            <SettingsIcon  
-                                sx={{mx : 2}}
-                                style={{color : '#777777'}}
-                            />
-                        </Link>
+                        
+                        {loginUser ?
+                            <Link href={userName + "/dashboard"}>
+                                <SettingsIcon  
+                                    sx={{mx : 2}}
+                                    style={{color : '#777777'}}
+                                />
+                            </Link>
+                            : <></>
+                        }
                     </Box>
                     <Typography
                         variant="body2"

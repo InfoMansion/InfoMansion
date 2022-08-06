@@ -12,3 +12,8 @@ export const clickedStuffCategoryState = atom({
         categoryName : 'NONE'
     }
 })
+
+export const loginUserState = atom({
+    key : 'loginUserState',
+    default : false
+})

@@ -1,11 +1,10 @@
-import { Circle, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { useState } from "react";
 
 export default function EditStuff({data, Click}) {
     const [geometry] = useState(data.geometry);
     const [material] = useState(data.material);
     const [glbpath] = useState(data.stuffGlbPath);
-    // 통신이 구현되면 바꿔야 합니다.
     const { nodes, materials } = useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath);
 
     if(!nodes[geometry]) return

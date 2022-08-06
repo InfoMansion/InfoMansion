@@ -7,6 +7,7 @@ import { useRecoilState } from 'recoil';
 import { clickedStuffCategoryState } from '../../../state/roomState'
 
 export default function Model({ tagon, status, Hover, Click, data, ...props }) {
+  
   const [geometry] = useState(data.geometry);
   const [material] = useState(data.material);
   const [glbpath] = useState(data.stuffGlbPath);

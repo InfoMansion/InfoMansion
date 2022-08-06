@@ -20,17 +20,22 @@ function RenderStuff({stuff, index, posy, click}) {
 }
 
 export default function MapStuffList({stuffs, posy, tag, click}) {
+
     return (
         <Canvas
             style={{
                 width : '100%',
                 height : '120px',
             }}
+            gl={{
+                antialias : false,
+            }}
+            dpr={[1, 1.5]} 
         >
             {/* <ScrollControls
                 horizontal
                 damping={10}
-                pages={2}
+                pages={3}
             >
                 <Scroll> */}
                     {stuffs.map((stuff, index) => 
