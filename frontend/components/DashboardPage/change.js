@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -59,6 +59,9 @@ export default function Change() {
           },
         },
       );
+      alert('비밀번호 변경이 완료되었습니다.');
+      setInputPassword('');
+      setInputPassword2('');
     } catch (e) {
       console.log(e);
     }
@@ -98,6 +101,7 @@ export default function Change() {
               type="password"
               id="password1"
               autoComplete="current-password"
+              value={inputPassword}
               onChange={handleInput}
               color="primary"
               focused
@@ -111,6 +115,7 @@ export default function Change() {
               type="password"
               id="password2"
               autoComplete="new-password"
+              value={inputPassword2}
               onChange={handleInput}
               color="primary"
               focused
