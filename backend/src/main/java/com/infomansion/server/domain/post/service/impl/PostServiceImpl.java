@@ -64,10 +64,10 @@ public class PostServiceImpl implements PostService {
         LocalDateTime start = LocalDateTime.now().minusDays(7);
         LocalDateTime end = LocalDateTime.now();
 
-        List<Long> recommendUserIds = postRepository.findTop26ByCategoryInAndModifiedDateBetween(user, categories, start, end);
+        List<Long> recommendUserIds = postRepository.findTop27ByCategoryInAndModifiedDateBetween(user, categories, start, end);
 
-        if(recommendUserIds.size()>26){
-            return new ArrayList<>(recommendUserIds.subList(0,26));
+        if(recommendUserIds.size()>27){
+            return new ArrayList<>(recommendUserIds.subList(0,27));
         }
         return recommendUserIds;
     }
