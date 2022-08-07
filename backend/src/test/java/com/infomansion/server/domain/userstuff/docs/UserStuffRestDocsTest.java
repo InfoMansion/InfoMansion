@@ -408,6 +408,7 @@ public class UserStuffRestDocsTest {
         List<UserStuffCategoryResponseDto> response = new ArrayList<>();
         for(int i = 1; i <= 3; i++) {
             response.add(UserStuffCategoryResponseDto.builder()
+                    .userStuffId(Long.valueOf(i))
                     .stuffNameKor("책상"+i).alias("데일리"+i).category(new CategoryMapperValue(Category.DAILY)).build());
         }
         given(userStuffService.findCategoryPlacedInRoom()).willReturn(response);
@@ -420,6 +421,7 @@ public class UserStuffRestDocsTest {
                         preprocessResponse(prettyPrint()),
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("배치된 UserStuff의 카테고리")))
                                 .andWithPrefix("data.[].",
+                                        fieldWithPath("userStuffId").type(USERSTUFF_ID.getJsonFieldType()).description(USERSTUFF_ID.getDescription()),
                                         fieldWithPath("stuffNameKor").type(STUFF_NAME_KOR.getJsonFieldType()).description(STUFF_NAME_KOR.getDescription()),
                                         fieldWithPath("alias").type(ALIAS.getJsonFieldType()).description(ALIAS.getDescription()),
                                         fieldWithPath("category").type(JsonFieldType.OBJECT).description("카테고리 정보"),
