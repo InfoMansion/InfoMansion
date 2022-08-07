@@ -161,13 +161,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserModifyProfileResponseDto modifyUserProfile(MultipartFile profileImage, UserModifyProfileRequestDto profileInfo) {
-        if (userRepository.existsByUsername(profileInfo.getUsername()))
-            throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
-
-        validateCategories(profileInfo.getCategories());
 
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (!user.getUsername().equals(profileInfo.getUsername()) && userRepository.existsByUsername(profileInfo.getUsername()))
+            throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
+
+        validateCategories(profileInfo.getCategories());
 
         try {
             user.changeProfileImage(s3Uploader, profileImage);
