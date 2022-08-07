@@ -306,7 +306,7 @@ public class PostApiControllerTest {
                 .andExpect((ResultMatcher) jsonPath("$.data.['content']").value("자바개발자 필독서"))
                 .andExpect((ResultMatcher) jsonPath("$.data.['category']").value("IT"))
                 .andExpect((ResultMatcher) jsonPath("$.data.['likes']").value(3))
-                .andExpect((ResultMatcher) jsonPath("$.data.['defaultPostThumbnail']").value("default"));
+                .andExpect((ResultMatcher) jsonPath("$.data.['defaultPostThumbnail']").value("https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/thumbnail/IT_defaultThumbnail.jpeg"));
 
 
     }

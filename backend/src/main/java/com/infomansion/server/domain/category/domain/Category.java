@@ -24,6 +24,9 @@ public enum Category implements EnumMapperType {
     NONE("NONE");
 
     private final String categoryName;
+    private final String categoryDefaultThumbnail=
+            "https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/thumbnail/"
+                    +getEnum()+"_defaultThumbnail.jpeg";
 
     @Override
     public String getEnum() {
@@ -33,5 +36,9 @@ public enum Category implements EnumMapperType {
     @Override
     public String getEnumName() {
         return this.categoryName;
+    }
+
+    public String getCategoryDefaultThumbnail(){
+        return this.categoryDefaultThumbnail;
     }
 }

@@ -53,9 +53,8 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         this.content = content;
         this.deleteFlag = false;
         this.likesPost = LikesPost.builder().post(this).build();
-        this.defaultPostThumbnail = "default";
-        replaceDefaultPostThumbnail(content);
         setUserAndUserStuff(user, userStuff);
+        replaceDefaultPostThumbnail(content);
     }
 
     public static Post createPost(User user, UserStuff userStuff, String title, String content) {
@@ -81,6 +80,7 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         this.user = user;
         this.userStuff = userStuff;
         this.category = userStuff.getCategory();
+        this.defaultPostThumbnail = userStuff.getCategory().getCategoryDefaultThumbnail();
         userStuff.getPostList().add(this);
     }
 
