@@ -4,6 +4,7 @@ import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.stuff.dto.StoreGroupResponseDto;
 import com.infomansion.server.domain.stuff.dto.StoreResponseDto;
+import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.stuff.service.StoreService;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -59,6 +61,12 @@ public class StoreServiceImpl implements StoreService {
     public Slice<StoreResponseDto> findStuffWithStuffTypeInStore(StuffType stuffType, Pageable pageable) {
         List<Long> stuffIds = userStuffRepository.findByUserId(SecurityUtil.getCurrentUserId());
         return stuffRepository.findByStuffTypeAndIdNotIn(stuffType, stuffIds, pageable);
+    }
+
+    @Override
+    public List<StoreResponseDto> findTheLatestStuff() {
+        return stuffRepository.findTop10ByOrderByCreatedDateDesc().stream().map(StoreResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     private StoreGroupResponseDto entityToResponseDto(int pageSize, List<StoreResponseDto> stuffs, StuffType stuffType) {

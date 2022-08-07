@@ -188,4 +188,12 @@ public class StoreApiControllerTest {
                 .andExpect(jsonPath("$.data.size").value(size))
                 .andExpect(jsonPath("$.data.numberOfElements").value(0));
     }
+
+    @DisplayName("최신 Stuff 10개 조회 성공")
+    @Test
+    public void the_latest_stuff_조회_성공() throws Exception {
+        mockMvc.perform(get("/api/v1/stores/latest"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.size()").value(10));
+    }
 }

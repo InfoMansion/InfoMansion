@@ -758,6 +758,22 @@ include::{snippets}/store-all/response-fields.adoc[]
 
 ---
 
+[[Store-latest]]
+== 최신 가구 조회
+
+최신 가구 10개를 조회하는 API
+
+=== Http Request
+include::{snippets}/ths-latest-stuff/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/ths-latest-stuff/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/ths-latest-stuff/response-fields.adoc[]
+
+---
+
 [[Room-API]]
 = Room API
 

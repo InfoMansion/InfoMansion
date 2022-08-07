@@ -38,4 +38,6 @@ public interface StuffRepository extends JpaRepository<Stuff, Long> {
     Slice<StoreResponseDto> findByStuffTypeAndIdNotIn(StuffType stuffType, List<Long> stuffIds, Pageable pageable);
 
     List<Stuff> findStuffByIdIn(List<Long> defaultStuffIds);
+
+    List<Stuff> findTop10ByOrderByCreatedDateDesc();
 }

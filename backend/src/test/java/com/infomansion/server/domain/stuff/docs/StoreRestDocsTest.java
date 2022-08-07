@@ -136,4 +136,31 @@ public class StoreRestDocsTest {
                                         )
                 ));
     }
+
+    @Test
+    public void 최신_stuff_조회() throws Exception {
+        // given
+        List<StoreResponseDto> response = new ArrayList<>();
+        response.add(new StoreResponseDto(4L, "책상4", 15L, "geometry", "material", "glbPath"));
+        response.add(new StoreResponseDto(5L, "책상5", 10L, "geometry", "material", "glbPath"));
+        response.add(new StoreResponseDto(6L, "책상6", 12L, "geometry", "material", "glbPath"));
+        given(storeService.findTheLatestStuff()).willReturn(response);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/stores/latest"))
+                .andExpect(status().isOk())
+                .andDo(document("ths-latest-stuff",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("최신 Stuff")))
+                                .andWithPrefix("data.[].",
+                                        fieldWithPath("id").type(STUFF_ID.getJsonFieldType()).description(STUFF_ID.getDescription()),
+                                        fieldWithPath("stuffNameKor").type(STUFF_NAME_KOR.getJsonFieldType()).description(STUFF_NAME_KOR.getDescription()),
+                                        fieldWithPath("price").type(STUFF_PRICE.getJsonFieldType()).description(STUFF_PRICE.getDescription()),
+                                        fieldWithPath("geometry").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
+                                        fieldWithPath("material").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
+                                        fieldWithPath("stuffGlbPath").type(STUFF_GLB_PATH.getJsonFieldType()).description(STUFF_GLB_PATH.getDescription())
+                                )
+                ));
+    }
 }
