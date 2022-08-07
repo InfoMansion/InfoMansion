@@ -36,27 +36,30 @@ export default function Home() {
     };
   }, [handleResize]);
 
-  const init = useCallback(async () => {
-    try {
-      const { data } = await axios.get('/api/v1/rooms/recommend', {
-        headers: {
-          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-          withCredentials: true,
-        },
-      });
-      console.log(data);
-      console.log(data.data.roomResponseDtos);
-      setRoomImgs(data.data.roomResponseDtos);
-    } catch (e) {
-      console.log(e);
-    }
-  }, [cookies]);
+  const init = useCallback(
+    async token => {
+      try {
+        const { data } = await axios.get('/api/v1/rooms/recommend', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            withCredentials: true,
+          },
+        });
+        console.log(data);
+        console.log(data.data.roomResponseDtos);
+        setRoomImgs(data.data.roomResponseDtos);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [cookies],
+  );
 
   useEffect(() => {
     if (!auth.isAuthorized || !cookies.InfoMansionAccessToken) {
       return;
     }
-    init();
+    init(cookies.InfoMansionAccessToken);
   }, [init, auth.isAuthorized, cookies]);
 
   return (
@@ -65,13 +68,36 @@ export default function Home() {
         <Box>
           <div
             style={{
-              display: 'flex',
               width: '100%',
               height: '100%',
-              justifyContent: 'center',
+              minHeight: 'calc(100vh - 70px)',
+              paddingBottom: '49px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}
           >
-            <div style={{ height: '100%' }}>
+            <img
+              src="/image/mainCover.svg"
+              style={{
+                position: 'absolute',
+                top: 49,
+                width: '100%',
+                height: 'auto',
+              }}
+            />
+            <div
+              style={{
+                paddingTop: '5%',
+                fontSize: '56px',
+                color: 'white',
+                fontWeight: 'medium',
+                zIndex: 1,
+              }}
+            >
+              InfoMansion
+            </div>
+            <div style={{ height: '100%', paddingTop: '3%' }}>
               <ul className={styles.container}>
                 {roomImgs.map(v => (
                   <Item
@@ -83,15 +109,15 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-            {windowSize && windowSize.width >= 1200 && (
-              <div style={{ width: '300px', height: '100%' }}>
-                <Shop />
-              </div>
-            )}
+            <div
+              style={{ width: '1205px', height: '340px', marginTop: '65px' }}
+            >
+              <Shop />
+            </div>
           </div>
         </Box>
       ) : (
-        <LoginComponent />
+        <LoginComponent onSignIn={token => init(token)} />
       )}
     </>
   );

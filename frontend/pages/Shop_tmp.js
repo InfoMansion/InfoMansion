@@ -36,8 +36,10 @@ export default function Shop() {
     }
   }, []);
   return (
-    <Box sx={{ height: '500px' }}>
-      <Typography variant="h6">최신 가구들</Typography>
+    <Box>
+      <Typography variant="h6" style={{ color: '#6a5f5f', textSize: '24px' }}>
+        New items
+      </Typography>
       <Divider />
       {/* <Box>
                 크레딧이랑, 그런거 보여주기. navbar가 될 예정.
@@ -45,8 +47,10 @@ export default function Shop() {
       {stuffBundles.map(stuffBundle => (
         <Canvas
           style={{
-            height: '100%',
+            height: '330px',
             backgroundColor: '#FFFFFF',
+            borderTop: '1px solid #c0c0c0',
+            borderBottom: '1px solid #c0c0c0',
           }}
           sx={{
             m: 1,

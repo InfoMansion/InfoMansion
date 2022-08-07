@@ -31,7 +31,7 @@ const theme = createTheme({
   },
 });
 
-export default function LogIn() {
+export default function LogIn({ onSignIn }) {
   const [, setCookie] = useCookies(['cookie-name']);
   const [likeCate, setlikeCate] = useRecoilState(likeCateState);
   const [inputId, setInputId] = useState('');
@@ -88,9 +88,9 @@ export default function LogIn() {
         withCredentials: true,
       });
       setAuth({ isAuthorized: true, accessToken: data.data.accessToken });
-      console.log('data : ', data);
       localStorage.setItem('expiresAt', data.data.expiresAt);
-      router.push('/');
+      onSignIn(data.data.accessToken);
+      console.log('data : ', data);
     } catch (e) {
       console.log('error', e);
     }

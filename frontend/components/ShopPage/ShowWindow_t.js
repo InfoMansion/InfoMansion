@@ -4,10 +4,10 @@ import { Suspense, useEffect, useState } from 'react';
 import ShopStuff from './atoms/ShopStuff';
 
 export default function ShowWindow({ stuffs, type, click }) {
-  let count = 12;
+  let count = -12;
   const [zoomscale] = useState(50);
   // stuff 간 거리.
-  const [dist, setDist] = useState(-4);
+  const [dist, setDist] = useState(4);
 
   const [pos, setPos] = useState([0, 0, 0]);
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function ShowWindow({ stuffs, type, click }) {
   function Click(e, stuff) {}
 
   return (
-    <ScrollControls vertical damping={4} pages={dist - 2 - 4 * dist}>
+    <ScrollControls horizontal damping={4} pages={2 - dist + 4 * dist}>
       <Scroll>
         {/* 임시 빛 */}
         <group>
@@ -30,7 +30,7 @@ export default function ShowWindow({ stuffs, type, click }) {
                 data={stuff}
                 pos={pos}
                 dist={(count += dist)}
-                tmp={true}
+                tmp={false}
               />
             </group>
           ))}
