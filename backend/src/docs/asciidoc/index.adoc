@@ -603,22 +603,60 @@ include::{snippets}/user-forgot-password/response-fields.adoc[]
 [[Search-API]]
 = Search API
 
-[[Search-by-Keyword]]
-== 검색 기능
+[[Search-Title]]
+== Title 검색 기능
 
-검색어로 사용자 usernmae, post 제목, post 내용을 검색하는 API
+검색어로 post 제목을 검색하는 API
 
 === Http Request
-include::{snippets}/post-search/http-request.adoc[]
+include::{snippets}/post-search-title/http-request.adoc[]
 
-=== Path parameters
-include::{snippets}/post-search/path-parameters.adoc[]
+=== Request parameters
+include::{snippets}/post-search-title/request-parameters.adoc[]
 
 === Http Response
-include::{snippets}/post-search/http-response.adoc[]
+include::{snippets}/post-search-title/http-response.adoc[]
 
 === Response fields
-include::{snippets}/post-search/response-fields.adoc[]
+include::{snippets}/post-search-title/response-fields.adoc[]
+
+---
+
+[[Search-Title]]
+== Content 검색 기능
+
+검색어로 post 내용을 검색하는 API
+
+=== Http Request
+include::{snippets}/post-search-title/http-request.adoc[]
+
+=== Request parameters
+include::{snippets}/post-search-title/request-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/post-search-title/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-search-title/response-fields.adoc[]
+
+---
+
+[[Search-Title]]
+== User 검색 기능
+
+검색어로 사용자를 검색하는 API
+
+=== Http Request
+include::{snippets}/user-search/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/user-search/request-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/user-search/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/user-search/response-fields.adoc[]
 
 ---
 
@@ -665,3 +703,21 @@ include::{snippets}/store-all/http-response.adoc[]
 include::{snippets}/store-all/response-fields.adoc[]
 
 ---
+
+[[Room-API]]
+= Room API
+
+[[Room-for-Main]]
+== 메인페이지에 Room을 추천하는 API
+
+메인페이지에서 로그인한 사용자의 카테고리를 기반으로 다른 사용자의 Room을 추천하는 API
+
+=== Http Request
+include::{snippets}/room-recommend/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/room-recommend/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/room-recommend/response-fields.adoc[]
+

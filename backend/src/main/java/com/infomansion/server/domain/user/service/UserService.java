@@ -3,6 +3,7 @@ package com.infomansion.server.domain.user.service;
 import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.global.util.jwt.ReissueDto;
 import com.infomansion.server.global.util.jwt.TokenDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
@@ -18,4 +19,5 @@ public interface UserService {
     UserSimpleProfileResponseDto findSimpleProfile();
     UserModifyProfileResponseDto modifyUserProfile(MultipartFile profileImage, UserModifyProfileRequestDto profileInfo);
     boolean resetPassword(UserResetPasswordRequestDto requestDto, String redirectURL);
+    UserSearchResponseDto findUserBySearchWordForUserName(String searchWord, Pageable pageable);
 }

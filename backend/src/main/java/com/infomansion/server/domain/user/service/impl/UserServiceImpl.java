@@ -17,6 +17,8 @@ import com.infomansion.server.global.util.jwt.TokenProvider;
 import com.infomansion.server.global.util.redis.RedisUtil;
 import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -27,12 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static com.infomansion.server.domain.category.util.CategoryUtil.validateCategories;
 
@@ -196,6 +195,14 @@ public class UserServiceImpl implements UserService {
         verifyEmailService.sendMail(user.getEmail(), "[Info`Mansion] 임시 비밀번호 발급", createResetPasswordEmail(tempPassword, redirectURL));
 
         return true;
+    }
+
+    @Override
+    public UserSearchResponseDto findUserBySearchWordForUserName(String searchWord, Pageable pageable) {
+        Slice<UserSimpleProfileResponseDto> usersByUserName =
+                userRepository.findUserByUserName(searchWord, pageable)
+                        .map(UserSimpleProfileResponseDto::toDto);
+        return new UserSearchResponseDto(usersByUserName);
     }
 
     private String getRandomPassword(int size) {

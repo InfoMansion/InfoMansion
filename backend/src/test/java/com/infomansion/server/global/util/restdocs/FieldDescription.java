@@ -68,6 +68,9 @@ public enum FieldDescription {
     // Base
     MODIFIED_DATE(JsonFieldType.STRING, "마지막 수정날짜"),
 
+    // Room
+    ROOM_IMG(JsonFieldType.STRING, "Room 이미지")
+
     ;
 
     private final JsonFieldType jsonFieldType;

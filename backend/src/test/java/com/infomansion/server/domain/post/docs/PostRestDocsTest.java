@@ -10,6 +10,7 @@ import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.dto.UserSearchResponseDto;
 import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +39,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -173,43 +174,85 @@ public class PostRestDocsTest {
     }
 
     @Test
-    public void post_검색() throws Exception {
+    public void post_타이틀_검색() throws Exception {
         // given
         String searchWord = "검색어";
 
-        List<PostSimpleResponseDto> result1 = new ArrayList<>();
+        List<PostSimpleResponseDto> postsByTitleOrContent = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
-            result1.add(new PostSimpleResponseDto(Post.builder()
-                            .id(Long.valueOf(i)).title("title"+i).content("content"+i)
-                            .user(User.builder().build()).userStuff(UserStuff.builder().build())
-                            .build()));
+            postsByTitleOrContent.add(new PostSimpleResponseDto(Post.builder()
+                    .id(Long.valueOf(i)).title("title"+i).content("content"+i)
+                    .user(User.builder().build()).userStuff(UserStuff.builder().build())
+                    .build()));
         }
-        List<UserSimpleProfileResponseDto> result2 = new ArrayList<>();
-        for(int i = 1; i <= 2; i++) {
-            result2.add(UserSimpleProfileResponseDto.builder()
-                    .username("username"+i).profileImage("profileImage"+i).build());
-        }
-        Slice<UserSimpleProfileResponseDto> postsByUserName = new SliceImpl<>(result2, Pageable.ofSize(10), true);
-        Slice<PostSimpleResponseDto> postByTitle = new SliceImpl<>(result1, Pageable.ofSize(10), true);
-        Slice<PostSimpleResponseDto> postsByContent = new SliceImpl<>(result1, Pageable.ofSize(10), false);
-
-        PostSearchResponseDto response = new PostSearchResponseDto(postsByUserName, postByTitle, postsByContent);
-        given(postService.findPostBySearchWord(anyString(), any(Pageable.class))).willReturn(response);
+        Slice<PostSimpleResponseDto> postByTitle = new SliceImpl<>(postsByTitleOrContent, Pageable.ofSize(10), true);
+        PostSearchResponseDto titleResponse = new PostSearchResponseDto(postByTitle);
+        given(postService.findPostBySearchWordForTitle(anyString(), any(Pageable.class))).willReturn(titleResponse);
 
         // when, then
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/search/{searchWord}", searchWord))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/posts/search/title?searchWord=", searchWord))
                 .andExpect(status().isOk())
-                .andDo(document("post-search",
+                .andDo(document("post-search-title",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        pathParameters(
+                        requestParameters(
                                 parameterWithName("searchWord").description("검색어")
                         ),
-                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("검색 결과")))
-                                .andWithPrefix("data.",
-                                    fieldWithPath("postsByUserName").type(JsonFieldType.OBJECT).description("사용자 이름으로 검색한 결과"),
-                                    fieldWithPath("postsByTitle").type(JsonFieldType.OBJECT).description("post 제목으로 검색한 결과"),
-                                    fieldWithPath("postsByContent").type(JsonFieldType.OBJECT).description("post 내용으로 검색한 결과")
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.VARIES).description("타이틀 검색 결과")))
+                                .andWithPrefix("data.postsByTitleOrContent.",
+                                        fieldWithPath("content[]").type(SLICE_CONTENT.getJsonFieldType()).description(SLICE_CONTENT.getDescription()),
+                                        fieldWithPath("content.[].id").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("content.[].title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content.[].content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
+                                        fieldWithPath("content.[].defaultPostThumbnail").type(JsonFieldType.STRING).description("대표 이미지 사진"),
+                                        fieldWithPath("content.[].likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
+                                        fieldWithPath("numberOfElements").type(SLICE_NUMBER_OF_ELEMENTS.getJsonFieldType()).description(SLICE_NUMBER_OF_ELEMENTS.getDescription()),
+                                        fieldWithPath("first").type(SLICE_FIRST.getJsonFieldType()).description(SLICE_FIRST.getDescription()),
+                                        fieldWithPath("last").type(SLICE_LAST.getJsonFieldType()).description(SLICE_LAST.getDescription()),
+                                        fieldWithPath("number").type(SLICE_NUMBER.getJsonFieldType()).description(SLICE_NUMBER.getDescription()),
+                                        fieldWithPath("size").type(SLICE_SIZE.getJsonFieldType()).description(SLICE_SIZE.getDescription())
+                                )
+
+                ));
+    }
+
+    @Test
+    public void post_content_검색() throws Exception {
+        // given
+        String searchWord = "검색어";
+        List<PostSimpleResponseDto> postsByTitleOrContent = new ArrayList<>();
+        for (int i = 1; i <= 2; i++) {
+            postsByTitleOrContent.add(new PostSimpleResponseDto(Post.builder()
+                    .id(Long.valueOf(i)).title("title"+i).content("content"+i)
+                    .user(User.builder().build()).userStuff(UserStuff.builder().build())
+                    .build()));
+        }
+        Slice<PostSimpleResponseDto> postsByContent = new SliceImpl<>(postsByTitleOrContent, Pageable.ofSize(10), false);
+        PostSearchResponseDto contentResponse = new PostSearchResponseDto(postsByContent);
+        given(postService.findPostBySearchWordForContent(anyString(), any(Pageable.class))).willReturn(contentResponse);
+
+        // when, then
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/posts/search/content?searchWord=검색어"))
+                .andExpect(status().isOk())
+                .andDo(document("post-search-content",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("searchWord").description("검색어")
+                        ),
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.VARIES).description("post 제목으로 검색한 결과")))
+                                .andWithPrefix("data.postsByTitleOrContent.",
+                                        fieldWithPath("content[]").type(SLICE_CONTENT.getJsonFieldType()).description(SLICE_CONTENT.getDescription()),
+                                        fieldWithPath("content.[].id").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("content.[].title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content.[].content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
+                                        fieldWithPath("content.[].defaultPostThumbnail").type(JsonFieldType.STRING).description("대표 이미지 사진"),
+                                        fieldWithPath("content.[].likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
+                                        fieldWithPath("numberOfElements").type(SLICE_NUMBER_OF_ELEMENTS.getJsonFieldType()).description(SLICE_NUMBER_OF_ELEMENTS.getDescription()),
+                                        fieldWithPath("first").type(SLICE_FIRST.getJsonFieldType()).description(SLICE_FIRST.getDescription()),
+                                        fieldWithPath("last").type(SLICE_LAST.getJsonFieldType()).description(SLICE_LAST.getDescription()),
+                                        fieldWithPath("number").type(SLICE_NUMBER.getJsonFieldType()).description(SLICE_NUMBER.getDescription()),
+                                        fieldWithPath("size").type(SLICE_SIZE.getJsonFieldType()).description(SLICE_SIZE.getDescription())
                                 )
 
                 ));

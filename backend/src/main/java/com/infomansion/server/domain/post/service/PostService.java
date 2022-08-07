@@ -12,6 +12,7 @@ public interface PostService {
     Long createPost(PostCreateRequestDto requestDto);
     List<Long> findRecommendPost();
     List<PostSimpleResponseDto> findPostByUserStuffId(Long userStuffId);
-    PostSearchResponseDto findPostBySearchWord(String searchWord, Pageable pageable);
+    PostSearchResponseDto findPostBySearchWordForTitle(String searchWord, Pageable pageable);
+    PostSearchResponseDto findPostBySearchWordForContent(String searchWord, Pageable pageable);
     PostDetailResponseDto findPostWithUser(Long postId);
 }

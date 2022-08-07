@@ -41,10 +41,16 @@ public class PostApiController {
                 .body(new CommonResponse<>(likesPostService.addLikes(postId)));
     }
 
-    @GetMapping("api/v1/posts/search/{searchWord}")
-    public ResponseEntity<CommonResponse<PostSearchResponseDto>> searchPostByWord(@Valid @PathVariable String searchWord, Pageable pageable){
+    @GetMapping("api/v1/posts/search/title")
+    public ResponseEntity<CommonResponse<PostSearchResponseDto>> searchPostByTitle(@Valid @RequestParam String searchWord, Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(postService.findPostBySearchWord(searchWord, pageable)));
+                .body(new CommonResponse<>(postService.findPostBySearchWordForTitle(searchWord, pageable)));
+    }
+
+    @GetMapping("api/v1/posts/search/content")
+    public ResponseEntity<CommonResponse<PostSearchResponseDto>> searchPostByContent(@Valid @RequestParam String searchWord, Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(postService.findPostBySearchWordForContent(searchWord, pageable)));
     }
 
     @GetMapping("api/v1/posts/detail/{postId}")

@@ -9,20 +9,27 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.infomansion.server.global.util.restdocs.FieldDescription.*;
 import static com.infomansion.server.global.util.restdocs.RestDocsUtil.common;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -188,5 +195,41 @@ public class UserRestDocsTest {
                 ));
     }
 
+    @Test
+    public void User_검색() throws Exception {
+        // given
+        String searchWord = "검색어";
+        List<UserSimpleProfileResponseDto> result2 = new ArrayList<>();
+        for(int i = 1; i <= 2; i++) {
+            result2.add(UserSimpleProfileResponseDto.builder()
+                    .username("username"+i).profileImage("profileImage"+i).build());
+        }
+        Slice<UserSimpleProfileResponseDto> usersByUserName = new SliceImpl<>(result2, Pageable.ofSize(10), true);
+        UserSearchResponseDto userResponse = new UserSearchResponseDto(usersByUserName);
 
+        given(userService.findUserBySearchWordForUserName(anyString(), any(Pageable.class))).willReturn(userResponse);
+
+        // when, then
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/search/username?searchWord=검색어"))
+                .andExpect(status().isOk())
+                .andDo(document("user-search",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("searchWord").description("검색어")
+                        ),
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.VARIES).description("사용자 이름으로 검색한 결과")))
+                                .andWithPrefix("data.usersByUserName.",
+                                        fieldWithPath("content[]").type(SLICE_CONTENT.getJsonFieldType()).description(SLICE_CONTENT.getDescription()),
+                                        fieldWithPath("content.[].username").type(USERNAME.getJsonFieldType()).description(USERNAME.getDescription()),
+                                        fieldWithPath("content.[].profileImage").type(PROFILE_IMAGE.getJsonFieldType()).description(PROFILE_IMAGE.getDescription()),
+                                        fieldWithPath("numberOfElements").type(SLICE_NUMBER_OF_ELEMENTS.getJsonFieldType()).description(SLICE_NUMBER_OF_ELEMENTS.getDescription()),
+                                        fieldWithPath("first").type(SLICE_FIRST.getJsonFieldType()).description(SLICE_FIRST.getDescription()),
+                                        fieldWithPath("last").type(SLICE_LAST.getJsonFieldType()).description(SLICE_LAST.getDescription()),
+                                        fieldWithPath("number").type(SLICE_NUMBER.getJsonFieldType()).description(SLICE_NUMBER.getDescription()),
+                                        fieldWithPath("size").type(SLICE_SIZE.getJsonFieldType()).description(SLICE_SIZE.getDescription())
+                                )
+
+                ));
+    }
 }

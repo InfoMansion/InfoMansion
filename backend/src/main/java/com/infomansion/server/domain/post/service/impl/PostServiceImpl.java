@@ -9,7 +9,6 @@ import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.user.domain.User;
-import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
@@ -86,21 +85,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSearchResponseDto findPostBySearchWord(String searchWord, Pageable pageable) {
-
-        Slice<UserSimpleProfileResponseDto> usersByUserName =
-                userRepository.findUserByUserName(searchWord, pageable)
-                        .map(UserSimpleProfileResponseDto::toDto);
-
+    public PostSearchResponseDto findPostBySearchWordForTitle(String searchWord, Pageable pageable) {
         Slice<PostSimpleResponseDto> postsByTitle =
                 postRepository.findByTitle(searchWord, pageable)
                         .map(PostSimpleResponseDto::new);
+        return new PostSearchResponseDto(postsByTitle);
+    }
 
-        Slice<PostSimpleResponseDto> postsByContent =
+    @Override
+    public PostSearchResponseDto findPostBySearchWordForContent(String searchWord, Pageable pageable) {
+        Slice<PostSimpleResponseDto> postsByTitle =
                 postRepository.findByContent(searchWord, pageable)
                         .map(PostSimpleResponseDto::new);
-
-        return new PostSearchResponseDto(usersByUserName, postsByTitle, postsByContent);
+        return new PostSearchResponseDto(postsByTitle);
     }
 
     @Override

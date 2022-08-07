@@ -3,10 +3,12 @@ package com.infomansion.server.domain.user.api;
 import com.infomansion.server.domain.user.dto.UserAuthRequestDto;
 import com.infomansion.server.domain.user.dto.UserChangePasswordDto;
 import com.infomansion.server.domain.user.dto.UserModifyProfileRequestDto;
+import com.infomansion.server.domain.user.dto.UserSearchResponseDto;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,5 +50,11 @@ public class UserApiController {
     public ResponseEntity<? extends BasicResponse> modifyUserProfile(@RequestPart(value = "profileImage", required = false) MultipartFile profileImage,@RequestPart(value = "profileInfo") UserModifyProfileRequestDto profileInfo) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userService.modifyUserProfile(profileImage, profileInfo)));
+    }
+
+    @GetMapping("api/v1/users/search/username")
+    public ResponseEntity<CommonResponse<UserSearchResponseDto>> searchUsersByContent(@Valid @RequestParam String searchWord, Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userService.findUserBySearchWordForUserName(searchWord, pageable)));
     }
 }

@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.infomansion.server.domain.user.domain.User.builder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -237,7 +238,7 @@ public class PostApiControllerTest {
         //post 작성
         PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
                 .userStuffId(userStuffId)
-                .title("EffectiveJava자바")
+                .title("EffectiveJava자바 infomansion")
                 .content("infomansion Java 파이팅!")
                 .build();
 
@@ -246,19 +247,25 @@ public class PostApiControllerTest {
         postCreateDto = PostCreateRequestDto.builder()
                 .userStuffId(userStuffId)
                 .title("킹갓infomansion")
-                .content("Java개발자 필독서")
+                .content("Java개발자 infomansion 필독서")
                 .build();
 
         postService.createPost(postCreateDto);
-        String searchWord = "Java";
+        String searchWord = "infomansion";
         int page = 0;
         int size = 3;
 
-        mockMvc.perform(get("/api/v1/posts/search/"+searchWord+"?page"+page+"&size="+size))
+        mockMvc.perform(get("/api/v1/users/search/username"+"?searchWord="+searchWord+"&page"+page+"&size="+size))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.data.['postsByUserName'].['content'].size()").value(0))
-                .andExpect((ResultMatcher) jsonPath("$.data.['postsByTitle'].['content'][0].['title']").value("EffectiveJava자바"))
-                .andExpect((ResultMatcher) jsonPath("$.data.['postsByContent'].['content'][1].['content']").value("Java개발자 필독서"));
+                .andExpect((ResultMatcher) jsonPath("$.data.['usersByUserName'].['content'].size()").value(1));
+
+        mockMvc.perform(get("/api/v1/posts/search/title"+"?searchWord="+searchWord+"&page"+page+"&size="+size))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.data.['postsByTitleOrContent'].['content'][0].['title']").value("EffectiveJava자바 infomansion"));
+
+        mockMvc.perform(get("/api/v1/posts/search/content"+"?searchWord="+searchWord+"&page"+page+"&size="+size))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.data.['postsByTitleOrContent'].['content'][1].['content']").value("Java개발자 infomansion 필독서"));
 
     }
 
