@@ -37,7 +37,7 @@ export default function Post({
           sx={{
             width: picwidth,
           }}
-          image={`${IMG_S3_URL}${post.image}`}
+          image={`${IMG_S3_URL}${post.defaultPostThumbnail}`}
           alt="no img"
         />
 

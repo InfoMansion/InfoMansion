@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import { Tabs, Tab, Box, Divider, Typography } from '@mui/material';
+import { Tabs, Tab, Box, Divider, Typography, Button } from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
 import TabPanel from '../../components/PostPage/TabPanel';
 import Post from '../../components/RoomPage/atoms/Post';
-import postData from '../../components/jsonData/posts.json';
+import Profile from '../../components/PostPage/Profile';
 import PostViewModal from '../../components/PostPage/PostViewModal';
+import { useCookies } from 'react-cookie';
+import axios from '../../utils/axios';
+
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -13,16 +16,32 @@ function a11yProps(index) {
   };
 }
 
+const categories = ['title', 'content', 'username'];
+
+const defaultPosts = {
+  title: {
+    data: [],
+    page: -1,
+  },
+  content: {
+    data: [],
+    page: -1,
+  },
+  username: {
+    data: [],
+    page: -1,
+  },
+};
+
 export default function searchPost() {
   //검색 결과가 담기는 query입니다.
   const { query } = useRouter();
-  const [value, setValue] = useState(0);
-  const [posts] = useState(postData.slice(0, 5));
+  const [category, setCategory] = useState('title');
+  const [posts, setPosts] = useState(defaultPosts);
   const [showModal, setShowModal] = useState(false);
   const [post, setPost] = useState('');
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const [cookies] = useCookies(['cookie-name']);
+
   const styles = theme => ({
     indicator: {
       backgroundColor: 'white',
@@ -33,6 +52,59 @@ export default function searchPost() {
     setPost(post);
     setShowModal(true);
   };
+
+  const getResult = useCallback(
+    async (category, page = 0) => {
+      if (posts[category].page === page) {
+        return;
+      }
+      try {
+        const { data } = await axios.get(
+          `/api/v1/${
+            category === 'username' ? 'users' : 'posts'
+          }/search/${category}?searchWord=${query.keyword}&page=${page}&size=5`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+              withCredentials: true,
+            },
+          },
+        );
+        console.log(data);
+        setTimeout(() => {
+          setPosts(prev => ({
+            ...prev,
+            [category]: {
+              data: [
+                ...prev[category].data,
+                ...data.data[
+                  category === 'username'
+                    ? 'usersByUserName'
+                    : 'postsByTitleOrContent'
+                ].content,
+              ],
+              page,
+            },
+          }));
+        }, 0);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [query.keyword, cookies, category],
+  );
+
+  useEffect(() => {
+    setTimeout(() => {
+      setPosts(defaultPosts);
+    }, 0);
+    getResult('title');
+    getResult('content');
+    getResult('username');
+  }, [query.keyword]);
+  console.log(posts[category]);
+
+  const value = categories.indexOf(category);
   return (
     <Box sx={{ width: '100%' }}>
       <PostViewModal
@@ -43,7 +115,9 @@ export default function searchPost() {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
-          onChange={handleChange}
+          onChange={(event, newValue) => {
+            setCategory(categories[newValue]);
+          }}
           textColorPrimary="black"
           sx={{
             '.MuiButtonBase-root': {
@@ -63,26 +137,32 @@ export default function searchPost() {
           <Tab label="닉네임" {...a11yProps(2)} />
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
-        <Divider />
-        {posts.map(post => (
-          <div>
-            <Post
-              post={post}
-              totheight={150}
-              picwidth={150}
-              maxcontent={150}
-              openModal={openModal}
-            />
-          </div>
-        ))}{' '}
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        내용 관련 검색 결과의 포스트들이 오겠죠?
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        닉네임 관련 검색 결과의 포스트들이 오겠죠?
-      </TabPanel>
+      {categories.map((category, index) => (
+        <TabPanel key={category} value={value} index={index}>
+          {posts[category].data.map(post => (
+            <div key={post.id}>
+              {category === 'username' ? (
+                <Profile post={post} />
+              ) : (
+                <Post
+                  post={post}
+                  totheight={150}
+                  picwidth={150}
+                  maxcontent={150}
+                  openModal={openModal}
+                />
+              )}
+            </div>
+          ))}{' '}
+        </TabPanel>
+      ))}
+      <Button
+        onClick={() => {
+          getResult(category, posts[category].page + 1);
+        }}
+      >
+        more
+      </Button>
     </Box>
   );
 }
