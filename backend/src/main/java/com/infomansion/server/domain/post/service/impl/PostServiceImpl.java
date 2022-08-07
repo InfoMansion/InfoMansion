@@ -67,7 +67,7 @@ public class PostServiceImpl implements PostService {
         List<Long> recommendUserIds = postRepository.findTop26ByCategoryInAndModifiedDateBetween(user, categories, start, end);
 
         if(recommendUserIds.size()>26){
-            return new ArrayList<>(recommendUserIds.subList(0,13));
+            return new ArrayList<>(recommendUserIds.subList(0,26));
         }
         return recommendUserIds;
     }
