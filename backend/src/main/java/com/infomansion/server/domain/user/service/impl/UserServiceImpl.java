@@ -134,6 +134,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         user.grantFromTempToUser();
+        user.getUserCredit().earnCredit(500L);
         roomRepository.save(Room.createRoom(user));
         userStuffService.saveDefaultUserStuff(user);
         return true;
