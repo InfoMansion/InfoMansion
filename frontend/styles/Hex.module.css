@@ -9,8 +9,8 @@
   max-width: 100%;
 }
 .item {
-  width: 10rem;
-  height: 10rem;
+  width: 15rem;
+  height: 15rem;
   position: relative;
 
   /* Default - simple fallback when no CSS Grid support */
@@ -21,14 +21,14 @@
   /* Goldenrod outline on the hexagon */
   content: '';
   background-image: url('/test.png');
-  background-size: 160px 160px;
+  background-size: 240px 240px;
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   opacity: 0.6;
-  background-color: goldenrod;
+  /* background-color: goldenrod; */
   clip-path: polygon(50% 0, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
   transform: scale(1.077);
   transition: transform 0.3s;
@@ -55,13 +55,12 @@
   @media (min-width: 17rem) {
     .container {
       display: grid;
-      max-width: 15rem;
       grid-template-columns: repeat(3, 5rem);
     }
     .item {
       grid-column: span 2;
       margin: 0;
-      margin-bottom: -1.4rem;
+      margin-bottom: -2.1rem;
     }
     .item:nth-child(even) {
       grid-column: 2;
@@ -86,8 +85,7 @@
 
   @media (min-width: 22rem) {
     .container {
-      max-width: 30rem;
-      grid-template-columns: repeat(6, 5rem);
+      grid-template-columns: repeat(6, 7.5rem);
     }
     .item:nth-child(5n + 1) {
       grid-column: 2;
@@ -136,8 +134,7 @@
 
   @media (min-width: 1200px) {
     .container {
-      max-width: 50rem;
-      grid-template-columns: repeat(10, 5rem);
+      grid-template-columns: repeat(10, 7.5rem);
     }
     .item:nth-child(9n + 1) {
       grid-column: 2;

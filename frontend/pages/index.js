@@ -1,13 +1,27 @@
-import { Box, Card, Link } from '@mui/material';
+import { Box, Card, Link, styled } from '@mui/material';
 import styles from '../styles/Hex.module.css';
 import { useCallback, useEffect, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import LoginComponent from '../components/login';
 import Shop from './Shop_tmp';
+import { useCookies } from 'react-cookie';
+import axios from '../utils/axios';
+import { useRouter } from 'next/router';
+import { IMG_S3_URL } from '../constants';
+
+const Item = styled('li')(({ backgroundImage }) => ({
+  ':before': {
+    backgroundImage,
+  },
+}));
 
 export default function Home() {
   const [windowSize, setWindowSize] = useState();
   const { auth } = useAuth();
+  const [cookies] = useCookies(['cookie-name']);
+  const router = useRouter();
+  const [roomImgs, setRoomImgs] = useState([{ useName: '', roomImg: '' }]);
+
   const handleResize = useCallback(() => {
     setWindowSize({
       width: window.innerWidth,
@@ -22,41 +36,59 @@ export default function Home() {
     };
   }, [handleResize]);
 
+  const init = useCallback(async () => {
+    try {
+      const { data } = await axios.get('/api/v1/rooms/recommend', {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          withCredentials: true,
+        },
+      });
+      console.log(data);
+      console.log(data.data.roomResponseDtos);
+      setRoomImgs(data.data.roomResponseDtos);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [cookies]);
+
+  useEffect(() => {
+    if (!auth.isAuthorized || !cookies.InfoMansionAccessToken) {
+      return;
+    }
+    init();
+  }, [init, auth.isAuthorized, cookies]);
+
   return (
     <>
       {auth.isAuthorized ? (
         <Box>
-          <div style={{ display: 'flex', width: '100%', height: '640px' }}>
-            <div style={{ width: '80%', height: '100%' }}>
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              height: '100%',
+              justifyContent: 'center',
+            }}
+          >
+            <div style={{ height: '100%' }}>
               <ul className={styles.container}>
-                {windowSize &&
-                  Array.from(
-                    {
-                      length: windowSize.width >= 1200 ? 13 : 7,
-                    },
-                    (_, idx) => (
-                      <li className={styles.item}>
-                        <Link
-                          href={`/test${idx}`}
-                          style={{ zIndex: 2 }}
-                        ></Link>
-                      </li>
-                    ),
-                  )}
+                {roomImgs.map(v => (
+                  <Item
+                    className={styles.item}
+                    backgroundImage={`url(${IMG_S3_URL}${v.roomImg})`}
+                  >
+                    <Link href={`/${v.userName}`} style={{ zIndex: 2 }}></Link>
+                  </Item>
+                ))}
               </ul>
             </div>
-            <div style={{ width: '20%', height: '100%' }}>
-              <div
-                style={{ width: '100%', height: '70%', background: 'red' }}
-              ></div>
-              <div
-                style={{ width: '100%', height: '30%', background: 'black' }}
-              ></div>
-            </div>
+            {windowSize && windowSize.width >= 1200 && (
+              <div style={{ width: '300px', height: '100%' }}>
+                <Shop />
+              </div>
+            )}
           </div>
-          <Card>
-            <Shop />
-          </Card>
         </Box>
       ) : (
         <LoginComponent />

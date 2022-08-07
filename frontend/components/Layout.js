@@ -5,6 +5,7 @@ import useAuth from '../hooks/useAuth';
 import { useRecoilState } from 'recoil';
 import { pageLoading } from '../state/pageLoading';
 import Loading from './Loading';
+import { useRouter } from 'next/router';
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(1),
@@ -21,6 +22,7 @@ const Root = styled('div')(({ theme }) => ({
 export default function Layout({ children }) {
   const { auth } = useAuth();
   const [loading] = useRecoilState(pageLoading);
+  const { pathname } = useRouter();
 
   return (
     <Box
@@ -38,9 +40,12 @@ export default function Layout({ children }) {
           <HeaderNav />
         </Paper>
       )}
+
       <Root
         style={{
           backgroundColor: '#ffffff',
+          width: pathname === '/' ? '100%' : undefined,
+          margin: pathname === '/' ? '1px 0 0 0' : undefined,
         }}
         sx={{
           height: '100%',
