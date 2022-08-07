@@ -7,6 +7,7 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
+import IMG_S3_URL from '../../../constants';
 
 export default function Post({
   post,
@@ -36,7 +37,7 @@ export default function Post({
           sx={{
             width: picwidth,
           }}
-          image={`/image/${post.image}`}
+          image={`${IMG_S3_URL}${post.image}`}
           alt="no img"
         />
 

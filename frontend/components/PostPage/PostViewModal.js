@@ -185,7 +185,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
                 },
               }}
             >
-              {post.content}
+              <div dangerouslySetInnerHTML={{ __html: post.content }}></div>{' '}
             </DialogContentText>
             <div
               style={{
