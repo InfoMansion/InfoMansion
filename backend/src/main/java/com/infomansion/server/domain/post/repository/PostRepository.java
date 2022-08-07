@@ -30,4 +30,7 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query("select p from Post p join fetch p.user where p.id=:id ")
     Optional<Post> findPostWithUser(@Param("id") Long id);
 
+    @Query("select p from Post p join fetch p.user where p.user.id = :userId")
+    List<Post> findTop5Post(@Param("userId") Long userId, Pageable pageable);
+
 }

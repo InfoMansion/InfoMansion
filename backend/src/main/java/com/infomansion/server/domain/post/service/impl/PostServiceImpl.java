@@ -16,6 +16,7 @@ import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
 import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -107,6 +108,19 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         return new PostDetailResponseDto(post);
+    }
+
+    @Override
+    public List<PostSimpleResponseDto> findRecent5ByUser(String userName, Pageable pageable) {
+        int size = 5;
+        Long userId = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)).getId();
+
+        List<PostSimpleResponseDto> top5RecentPost = new ArrayList<>();
+        postRepository.findTop5Post(userId, PageRequest.of(0,size))
+                .forEach(post -> top5RecentPost.add(new PostSimpleResponseDto(post)));
+
+        return top5RecentPost;
     }
 
 }

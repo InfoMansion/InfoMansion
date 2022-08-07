@@ -58,4 +58,10 @@ public class PostApiController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postService.findPostWithUser(postId)));
     }
+
+    @GetMapping("api/v1/posts/recent")
+    public ResponseEntity<CommonResponse<List<PostSimpleResponseDto>>> findRecentPosts(@Valid @RequestParam String userName, Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(postService.findRecent5ByUser(userName, pageable)));
+    }
 }

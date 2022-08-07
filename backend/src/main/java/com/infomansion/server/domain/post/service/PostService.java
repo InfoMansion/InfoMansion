@@ -15,4 +15,5 @@ public interface PostService {
     PostSearchResponseDto findPostBySearchWordForTitle(String searchWord, Pageable pageable);
     PostSearchResponseDto findPostBySearchWordForContent(String searchWord, Pageable pageable);
     PostDetailResponseDto findPostWithUser(Long postId);
+    List<PostSimpleResponseDto> findRecent5ByUser(String userName, Pageable pageable);
 }

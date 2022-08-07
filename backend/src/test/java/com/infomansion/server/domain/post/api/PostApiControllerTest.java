@@ -29,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.infomansion.server.domain.user.domain.User.builder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -352,6 +351,40 @@ public class PostApiControllerTest {
                 .andExpect((ResultMatcher) jsonPath("$.data.['likes']").value(3))
                 .andExpect((ResultMatcher) jsonPath("$.data.['defaultPostThumbnail']").value("https://cdn.pixabay.com/photo/2021/08/25/07/21/cat-6572630_1280.jpg"));
 
+
+    }
+
+    @DisplayName("User의 가장 최근 Post를 5개 반환한다.")
+    @WithCustomUserDetails
+    @Transactional
+    @Test
+    public void post_User_recent5() throws Exception{
+        // UserStuff 생성
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffId).build();
+        userStuffId = userStuffService.saveUserStuff(createDto);
+
+        //UserStuff 배치
+        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
+                .id(userStuffId).alias("Java 정리").category("IT")
+                .posX(0.2).posY(0.3).posZ(3.1)
+                .rotX(1.5).rotY(0.0).rotZ(0.9)
+                .build();
+
+        userStuffId = userStuffService.includeUserStuff(includeDto);
+        String userName = "infomansion";
+        //post 작성
+        for(int i=0;i<7;i++){
+            Post post = Post.builder().user(user).userStuff(userStuffRepository.findById(userStuffId).get())
+                    .title("EffectiveJava ver." + (10-i)).content("자바개발자 필독서 ver."+ (10-i)).build();
+            postRepository.saveAndFlush(post);
+            for(int j=0;j<i+1;j++) post.getLikesPost().addPostLikes();
+        }
+
+        mockMvc.perform(get("/api/v1/posts/recent?userName="+userName))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.data.size()").value(5))
+                .andExpect((ResultMatcher) jsonPath("$.data[0].['content']").value("자바개발자 필독서 ver.10"));
 
     }
 

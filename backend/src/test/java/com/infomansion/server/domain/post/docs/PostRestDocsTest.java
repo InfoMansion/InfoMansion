@@ -114,6 +114,7 @@ public class PostRestDocsTest {
                                         fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
                                         fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
                                         fieldWithPath("likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
+                                        fieldWithPath("modifiedDate").type(MODIFIED_DATE.getJsonFieldType()).description(MODIFIED_DATE.getDescription()).optional(),
                                         fieldWithPath("defaultPostThumbnail").type(DEFAULTPOSTTHUMBNAIL.getJsonFieldType()).description(DEFAULTPOSTTHUMBNAIL.getDescription())
                                 )
                 ));
