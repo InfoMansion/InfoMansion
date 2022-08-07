@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
+import {
+  InputBase,
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Badge,
+  Menu,
+  MenuItem,
+} from '@mui/material';
 import Image from 'next/image';
 import SearchIcon from '@mui/icons-material/Search';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import Menu from '@mui/material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Link from 'next/link';
 import { useCookies } from 'react-cookie';
@@ -19,6 +21,8 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useRouter } from 'next/router';
 import useAuth from '../../hooks/useAuth';
 import axios from '../../utils/axios';
+import { useRecoilState } from 'recoil';
+import { profileState } from '../../state/profileState';
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -62,13 +66,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function HeaderNav() {
   const { push, pathname } = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [focus, setFocus] = useState(false);
 
   const { setAuth } = useAuth();
   const [cookies, , removeCookies] = useCookies(['cookie-name']);
   const isMenuOpen = Boolean(anchorEl);
-
+  const [simpleUser, setSimpleUser] = useState({
+    username: '',
+    profileImage: '',
+  });
+  const { auth } = useAuth();
   const [keyword, setKeyword] = useState('');
+  const [profile, setProfileState] = useRecoilState(profileState);
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -99,6 +107,28 @@ export default function HeaderNav() {
     setKeyword(e.target.value);
   };
 
+  const init = useCallback(async () => {
+    try {
+      const { data } = await axios.get('/api/v1/users/info/simple', {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          withCredentials: true,
+        },
+      });
+      setSimpleUser(data.data);
+      setProfileState(false);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [cookies]);
+
+  useEffect(() => {
+    if (!auth.isAuthorized || !cookies.InfoMansionAccessToken) {
+      return;
+    }
+    init();
+  }, [init, auth.isAuthorized, profile]);
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -116,7 +146,7 @@ export default function HeaderNav() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <Link href="/1">
+      <Link href={`/${simpleUser.username}`}>
         <MenuItem onClick={handleMenuClose}>마이룸</MenuItem>
       </Link>
 
@@ -196,7 +226,7 @@ export default function HeaderNav() {
           <div
             style={{ display: 'flex', height: '30px', alignItems: 'center' }}
           >
-            <Link href="/post/CreatePost">
+            {/* <Link href="/post/CreatePost">
               <IconButton
                 baseClassName="fas"
                 className="fa-plus-circle"
@@ -206,7 +236,7 @@ export default function HeaderNav() {
               >
                 <AddIcon />
               </IconButton>
-            </Link>
+            </Link> */}
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
@@ -227,7 +257,10 @@ export default function HeaderNav() {
               color="inherit"
               style={{ color: '#9e9e9e' }}
             >
-              <AccountCircle />
+              <img
+                src={`${simpleUser.profileImage}`}
+                style={{ height: '30px', width: '30px', borderRadius: '50%' }}
+              />
             </IconButton>
           </div>
         </Toolbar>

@@ -9,6 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useRef, useEffect } from 'react';
+import { profileState } from '../../state/profileState';
 import axios from '../../utils/axios';
 import {
   Avatar,
@@ -21,7 +22,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useCookies } from 'react-cookie';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { pageLoading } from '../../state/pageLoading';
 
 const theme = createTheme({
@@ -109,6 +110,7 @@ export default function Profile({ ...props }) {
   }, [props.userInfo]);
 
   const [state, setState] = useState(allCategories);
+  const setProfileState = useSetRecoilState(profileState);
 
   const [changeCate, setChangeCate] = useState(selectedCate);
   const cateCount = changeCate.split(',').length - 1;
@@ -155,6 +157,8 @@ export default function Profile({ ...props }) {
       });
       setPageLoading(false);
       setUserInfo(data.data);
+      setProfileState(true);
+      alert('프로필 수정이 완료됐습니다.');
     } catch (e) {
       setPageLoading(false);
       alert(e.response.data.message);
