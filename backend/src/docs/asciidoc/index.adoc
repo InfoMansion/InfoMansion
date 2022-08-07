@@ -775,3 +775,83 @@ include::{snippets}/room-recommend/http-response.adoc[]
 === Response fields
 include::{snippets}/room-recommend/response-fields.adoc[]
 
+
+
+[[Follow-API]]
+= Follow API
+
+[[Follow-User]]
+== 사용자 팔로우 API
+
+username인 사용자를 팔로우하는 API
+
+=== Http Request
+include::{snippets}/follow-user/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/follow-user/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/follow-user/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/follow-user/response-fields.adoc[]
+
+---
+
+[[UnFollow-User]]
+== 사용자 언팔로우 API
+
+username인 사용자를 언팔로우하는 API
+
+=== Http Request
+include::{snippets}/unfollow-user/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/unfollow-user/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/unfollow-user/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/unfollow-user/response-fields.adoc[]
+
+---
+
+[[Following-User-List]]
+== 사용자의 팔로잉 목록 조회 API
+
+username인 사용자의 팔로우 목록을 조회하는 API
+
+=== Http Request
+include::{snippets}/following-list/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/following-list/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/following-list/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/following-list/response-fields.adoc[]
+
+---
+
+[[Follower-User-List]]
+== 사용자의 팔로워 목록 조회 API
+
+username인 사용자의 팔로워 목록을 조회하는 API
+
+=== Http Request
+include::{snippets}/follower-list/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/follower-list/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/follower-list/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/follower-list/response-fields.adoc[]
+
+---

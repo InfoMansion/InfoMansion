@@ -6,6 +6,8 @@ import com.infomansion.server.global.util.jwt.TokenDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface UserService {
 
     Long join(UserSignUpRequestDto requestDto);
@@ -20,4 +22,8 @@ public interface UserService {
     UserModifyProfileResponseDto modifyUserProfile(MultipartFile profileImage, UserModifyProfileRequestDto profileInfo);
     boolean resetPassword(UserResetPasswordRequestDto requestDto, String redirectURL);
     UserSearchResponseDto findUserBySearchWordForUserName(String searchWord, Pageable pageable);
+    boolean followUser(String username);
+    boolean unFollowUser(String username);
+    List<UserSimpleProfileResponseDto> findFollowerUserList(String username);
+    List<UserSimpleProfileResponseDto> findFollowingUserList(String username);
 }

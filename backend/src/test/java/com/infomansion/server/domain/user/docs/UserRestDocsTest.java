@@ -115,7 +115,10 @@ public class UserRestDocsTest {
                 .categories("IT,DAILY,STUDY")
                 .profileImage("profileImage")
                 .introduce("안녕하세요 infomansion 계정 주인입니다.")
+                .following(259L)
+                .follower(230L)
                 .isLoginUser(true)
+                .isFollow(true)
                 .build();
         given(userService.findByUsername("infomansion")).willReturn(responseDto);
 
@@ -135,7 +138,10 @@ public class UserRestDocsTest {
                                         fieldWithPath("categories").type(USER_CATEGORIES.getJsonFieldType()).description(USER_CATEGORIES.getDescription()),
                                         fieldWithPath("profileImage").type(PROFILE_IMAGE.getJsonFieldType()).description(PROFILE_IMAGE.getDescription()),
                                         fieldWithPath("introduce").type(INTRODUCE.getJsonFieldType()).description(INTRODUCE.getDescription()),
-                                        fieldWithPath("loginUser").type(JsonFieldType.BOOLEAN).description("로그인한 사용자인지 구분")
+                                        fieldWithPath("following").type(JsonFieldType.NUMBER).description("팔로잉 수"),
+                                        fieldWithPath("follower").type(JsonFieldType.NUMBER).description("팔로워 수"),
+                                        fieldWithPath("loginUser").type(JsonFieldType.BOOLEAN).description("로그인한 사용자인지 구분"),
+                                        fieldWithPath("follow").type(JsonFieldType.BOOLEAN).description("로그인한 사용자가 해당 사용자를 팔로우하고 있는지 구분")
                                 )
                 ));
     }

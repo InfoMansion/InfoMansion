@@ -1,8 +1,10 @@
 package com.infomansion.server.domain.user.service.impl;
 
 import com.infomansion.server.domain.upload.service.S3Uploader;
+import com.infomansion.server.domain.user.domain.Follow;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.*;
+import com.infomansion.server.domain.user.repository.FollowRepository;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.domain.user.service.VerifyEmailService;
@@ -17,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -30,6 +33,9 @@ class UserServiceImplTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FollowRepository followRepository;
 
     @MockBean
     private VerifyEmailService verifyEmailService;
@@ -66,7 +72,8 @@ class UserServiceImplTest {
 
     @AfterEach
     public void cleanUp() {
-        userRepository.deleteAll();;
+        followRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -166,7 +173,7 @@ class UserServiceImplTest {
 
     @WithCustomUserDetails
     @Test
-    public void 사용자이름으로_회원조회시_UserInfoResponseDto_반환 () {
+    public void 사용자이름으로_회원조회시_UserInfoResponseDto_반환() {
         //given&when
         UserInfoResponseDto responseDto = userService.findByUsername("infomansion");
 
@@ -183,7 +190,7 @@ class UserServiceImplTest {
 
     @WithCustomUserDetails
     @Test
-    public void 로그인된_회원의_프로필이미지_조회 () {
+    public void 로그인된_회원의_프로필이미지_조회() {
         //given&when
         UserSimpleProfileResponseDto responseDto = userService.findSimpleProfile();
 
@@ -263,4 +270,123 @@ class UserServiceImplTest {
                 .isInstanceOf(CustomException.class);
     }
 
+    @WithCustomUserDetails
+    @Test
+    public void 다른_사용자_팔로우_성공() {
+        // given
+        for (int i = 1; i <= 5; i++) {
+            String email = "infomansion" + i + "@test.com";
+            String password = "testPassword1$";
+            String tel = "01012345678";
+            String username = "infomansion" + i;
+            String categories = "IT,COOK";
+
+            UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                    .email(email)
+                    .password(password)
+                    .tel(tel)
+                    .username(username)
+                    .categories(categories)
+                    .build();
+            userService.join(requestDto);
+
+            // when
+            if (i % 2 == 0) userService.followUser(username);
+        }
+
+        // then
+        List<UserSimpleProfileResponseDto> followingUserList = userService.findFollowingUserList("infomansion");
+        assertThat(followingUserList.size()).isEqualTo(2);
+    }
+
+    @WithCustomUserDetails
+    @Test
+    public void 다른_사용자_언팔로우_성공() {
+        // given
+        for (int i = 1; i <= 5; i++) {
+            String email = "infomansion" + i + "@test.com";
+            String password = "testPassword1$";
+            String tel = "01012345678";
+            String username = "infomansion" + i+"";
+            String categories = "IT,COOK";
+
+            UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                    .email(email)
+                    .password(password)
+                    .tel(tel)
+                    .username(username)
+                    .categories(categories)
+                    .build();
+            userService.join(requestDto);
+            if (i % 2 == 0) userService.followUser(username);
+        }
+
+        // when
+        boolean response = userService.unFollowUser("infomansion2");
+
+        // then
+        assertThat(response).isTrue();
+        assertThat(userService.findFollowingUserList("infomansion").size()).isEqualTo(1);
+    }
+
+    @WithCustomUserDetails
+    @Test
+    public void 사용자_팔로우_리스트_조회_성공() {
+        // given
+        for (int i = 1; i <= 5; i++) {
+            String email = "infomansion" + i + "@test.com";
+            String password = "testPassword1$";
+            String tel = "01012345678";
+            String username = "infomansion" + i;
+            String categories = "IT,COOK";
+
+            UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                    .email(email)
+                    .password(password)
+                    .tel(tel)
+                    .username(username)
+                    .categories(categories)
+                    .build();
+            userService.join(requestDto);
+            userService.followUser(username);
+        }
+
+        // when
+        List<UserSimpleProfileResponseDto> response = userService.findFollowingUserList("infomansion");
+        for (UserSimpleProfileResponseDto responseDto : response) {
+            System.out.println("responseDto = " + responseDto.getUsername());
+        }
+        // then
+        assertThat(response.size()).isEqualTo(5);
+        for(int i = 0; i < 5; i++)
+            assertThat(response.get(i).getUsername()).isEqualTo("infomansion"+(i+1));
+    }
+
+    @WithCustomUserDetails
+    @Test
+    public void 사용자_팔로워_리스트_조회_성공() {
+        // given
+        String email = "infomansion1@test.com";
+        String password = "testPassword1$";
+        String tel = "01012345678";
+        String username = "infomansion1";
+        String categories = "IT,COOK";
+
+        UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username(username)
+                .categories(categories)
+                .build();
+        userService.join(requestDto);
+        userService.followUser(username);
+
+        // when
+        List<UserSimpleProfileResponseDto> response = userService.findFollowerUserList(username);
+
+        // then
+        assertThat(response.size()).isEqualTo(1);
+        assertThat(response.get(0).getUsername()).isEqualTo("infomansion");
+    }
 }

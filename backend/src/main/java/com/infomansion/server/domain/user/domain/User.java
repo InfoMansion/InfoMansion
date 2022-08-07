@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @ToString
 @Getter
@@ -33,6 +35,12 @@ public class User extends BaseTimeEntityAtSoftDelete {
 
     @Column(length = 200)
     private String introduce;
+
+    @OneToMany(mappedBy = "fromUser", fetch = FetchType.LAZY)
+    private List<Follow> following = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toUser", fetch = FetchType.LAZY)
+    private List<Follow> follower = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private UserCredit userCredit;

@@ -3,8 +3,10 @@ package com.infomansion.server.domain.user.service.impl;
 import com.infomansion.server.domain.Room.domain.Room;
 import com.infomansion.server.domain.Room.repository.RoomRepository;
 import com.infomansion.server.domain.upload.service.S3Uploader;
+import com.infomansion.server.domain.user.domain.Follow;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.*;
+import com.infomansion.server.domain.user.repository.FollowRepository;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.domain.user.service.VerifyEmailService;
@@ -30,8 +32,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.infomansion.server.domain.category.util.CategoryUtil.validateCategories;
 
@@ -50,6 +54,7 @@ public class UserServiceImpl implements UserService {
     private final S3Uploader s3Uploader;
     private final UserStuffService userStuffService;
     private final RoomRepository roomRepository;
+    private final FollowRepository followRepository;
 
 
     @Override
@@ -148,8 +153,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoResponseDto findByUsername(String username) {
-        return UserInfoResponseDto.toDto(userRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)), SecurityUtil.getCurrentUserId());
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Long following = followRepository.countByFromUserIs(user);
+        Long follower = followRepository.countByToUserIs(user);
+
+        if(user.getId() == SecurityUtil.getCurrentUserId())
+            return UserInfoResponseDto.toDto(user,following, follower, true, false);
+        else
+            return UserInfoResponseDto.toDto(user, following, follower, false,
+                    followRepository.existsByFromUserIdAndToUserIs(SecurityUtil.getCurrentUserId(), user));
     }
 
     @Override
@@ -204,6 +217,48 @@ public class UserServiceImpl implements UserService {
                 userRepository.findUserByUserName(searchWord, pageable)
                         .map(UserSimpleProfileResponseDto::toDto);
         return new UserSearchResponseDto(usersByUserName);
+    }
+
+    @Transactional
+    @Override
+    public boolean followUser(String username) {
+        User fromUser = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User toUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        followRepository.save(Follow.createFollow(fromUser, toUser));
+        return true;
+    }
+
+    @Transactional
+    @Override
+    public boolean unFollowUser(String username) {
+        User fromUser = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User toUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Follow follow = followRepository.findByFromUserIsAndToUserIs(fromUser, toUser)
+                .orElseThrow(() -> new CustomException(ErrorCode.FOLLOW_NOT_FOUND));
+        followRepository.delete(follow);
+        return true;
+    }
+
+    @Override
+    public List<UserSimpleProfileResponseDto> findFollowerUserList(String username) {
+        User toUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return userRepository.findFollowerUserList(toUser).getFollower()
+                .stream().map(follow -> UserSimpleProfileResponseDto.toDto(follow.getFromUser()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserSimpleProfileResponseDto> findFollowingUserList(String username) {
+        User fromUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return userRepository.findFollowingUserList(fromUser).getFollowing()
+                .stream().map(follow -> UserSimpleProfileResponseDto.toDto(follow.getToUser()))
+                .collect(Collectors.toList());
     }
 
     private String getRandomPassword(int size) {
