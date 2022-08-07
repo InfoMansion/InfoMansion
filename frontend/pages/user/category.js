@@ -200,7 +200,7 @@ export default function Category() {
       setlikeCate(updateCateState);
       opacityTarget.style.removeProperty('opacity');
     } else {
-      if (count > 5) {
+      if (count >= 5) {
         alert('5개 까지만 선택이 가능 합니다');
       } else {
         const updateCateState = likeCate + selected;
@@ -279,7 +279,10 @@ export default function Category() {
                     value={image.title}
                   >
                     {image.name}
-                    <ImageMarked className="MuiImageMarked-root" />
+                    <ImageMarked
+                      className="MuiImageMarked-root"
+                      value={image.title}
+                    />
                   </Typography>
                 </Image>
               </ImageButton>
