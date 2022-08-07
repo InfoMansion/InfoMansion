@@ -4,29 +4,13 @@ import styles from '../../styles/Editor.module.css';
 import dynamic from 'next/dynamic';
 import { Input, Autocomplete, TextField, styled } from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
+import axios from '../../utils/axios';
+import { useCookies } from 'react-cookie';
 
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then(mod => mod.Editor),
   { ssr: false },
 );
-const categoryList = [
-  { label: '카테고리 없음' },
-  { label: 'Sport' },
-  { label: 'Daily' },
-  { label: 'Fasion & Beauty' },
-  { label: 'Travel' },
-  { label: 'Cooking' },
-  { label: 'Art' },
-  { label: 'Music' },
-  { label: 'Interior' },
-  { label: 'Nature' },
-  { label: 'IT' },
-  { label: 'Game' },
-  { label: 'Clean' },
-  { label: 'Culture/Current' },
-  { label: 'Study' },
-  { label: 'Home Appliance' },
-];
 
 export default function PostEditor({
   title,
@@ -37,12 +21,33 @@ export default function PostEditor({
   onCategoryChange,
 }) {
   const [windowSize, setWindowSize] = useState();
+  const [categoryList, setCategoryList] = useState([]);
+  const [cookies] = useCookies(['cookie-name']);
 
   const handleResize = useCallback(() => {
     setWindowSize({
       height: window.innerHeight,
     });
   }, []);
+
+  const UpdateUserCategory = async () => {
+    try {
+      const { data } = await axios.get('/api/v1/userstuffs/category', {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          withCredentials: true,
+        },
+      });
+      let userCategoryList = [];
+      data.data.forEach(stuff => {
+        let categoryLabel = { label: stuff.category.categoryName };
+        userCategoryList.push(categoryLabel);
+      });
+      setCategoryList(userCategoryList);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     handleResize();
@@ -51,6 +56,10 @@ export default function PostEditor({
       window.removeEventListener('resize', handleResize);
     };
   }, [handleResize]);
+
+  useEffect(() => {
+    UpdateUserCategory();
+  }, []);
 
   return (
     <>

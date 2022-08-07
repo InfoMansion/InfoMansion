@@ -226,7 +226,7 @@ export default function HeaderNav() {
           <div
             style={{ display: 'flex', height: '30px', alignItems: 'center' }}
           >
-            {/* <Link href="/post/CreatePost">
+            <Link href="/post/CreatePost">
               <IconButton
                 baseClassName="fas"
                 className="fa-plus-circle"
@@ -236,7 +236,7 @@ export default function HeaderNav() {
               >
                 <AddIcon />
               </IconButton>
-            </Link> */}
+            </Link>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
