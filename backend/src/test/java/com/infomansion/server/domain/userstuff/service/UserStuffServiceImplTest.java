@@ -94,7 +94,7 @@ public class UserStuffServiceImplTest {
             String stuffName = "notebook"+(i+1);
             String stuffNameKor = "노트북"+(i+1);
             Long price = 30L;
-            String sCategories = "IT,GAME,SPORTS,DAILY,INTERIOR";
+            String sCategories = "IT,GAME,SPORTS,DAILY,INTERIOR,NONE";
             String stuffType = stuffTypes.get(i % stuffTypes.size());
 
             StuffRequestDto requestDto = StuffRequestDto.builder()
@@ -533,6 +533,31 @@ public class UserStuffServiceImplTest {
                 paymentLines.stream().allMatch(paymentLine -> stuffIds.contains(paymentLine.getStuff().getId()))
         ).isTrue();
 
+    }
+
+    @DisplayName("로그인한 사용자의 배치된 UserStuff들의 카테고리 조회")
+    @WithCustomUserDetails
+    @Test
+    public void 배치된_user_stuff의_카테고리_조회_성공() {
+        // given
+        List<String> categories = Arrays.asList("IT", "GAME", "NONE", "SPORTS", "DAILY");
+        for(int i = 0; i < stuffIds.size(); i++) {
+            UserStuffSaveRequestDto requestDto = UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffIds.get(i)).build();
+            Long userStuffId = userStuffService.saveUserStuff(requestDto);
+            if(i < stuffIds.size()/2) { // 5개만 배치
+                UserStuffIncludeRequestDto arrangedDto = UserStuffIncludeRequestDto.builder()
+                        .id(userStuffId).category(categories.get(i % categories.size())).alias("Java 모음집")
+                        .posX(1.1).posY(0.5).posZ(0.0)
+                        .rotX(0.0).rotY(0.2).rotZ(2.2)
+                        .build();
+                userStuffService.includeUserStuff(arrangedDto);
+            }
+        }
+
+        // when,then
+        List<UserStuffCategoryResponseDto> responseList = userStuffService.findCategoryPlacedInRoom();
+        assertThat(responseList.size()).isEqualTo(4);
     }
 
 }

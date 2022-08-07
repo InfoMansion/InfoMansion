@@ -1,5 +1,6 @@
 package com.infomansion.server.domain.userstuff.service.impl;
 
+import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.payment.domain.Payment;
 import com.infomansion.server.domain.payment.domain.PaymentLine;
 import com.infomansion.server.domain.payment.repository.PaymentRepository;
@@ -201,6 +202,15 @@ public class UserStuffServiceImpl implements UserStuffService {
         paymentRepository.save(payment);
 
         return stuffList.stream().map(StuffResponseDto::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserStuffCategoryResponseDto> findCategoryPlacedInRoom() {
+        User loginUser = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return userStuffRepository.findCategoryPlacedInRoom(loginUser, Category.NONE)
+                .stream().map(UserStuffCategoryResponseDto::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     private void checkDuplicatePlacedCategory(Long userId, String category) {

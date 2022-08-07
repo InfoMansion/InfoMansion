@@ -29,4 +29,6 @@ public interface UserStuffService {
     void saveDefaultUserStuff(User user);
     List<StuffResponseDto> purchaseStuff(UserStuffPurchaseRequestDto requestDto);
 
+    List<UserStuffCategoryResponseDto> findCategoryPlacedInRoom();
+
 }

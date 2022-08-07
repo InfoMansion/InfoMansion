@@ -318,6 +318,22 @@ include::{snippets}/user-stuff-purchase/request-fields.adoc[]
 
 ---
 
+[[UserStuff-Category]]
+== 배치된 UserStuff의 카테고리 조회
+
+배치된 UserStuff의 카테고리만 조회하는 API
+
+=== Http Request
+include::{snippets}/userstuff-category-placed/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/userstuff-category-placed/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/userstuff-category-placed/response-fields.adoc[]
+
+---
+
 [[Post-API]]
 = Post API
 

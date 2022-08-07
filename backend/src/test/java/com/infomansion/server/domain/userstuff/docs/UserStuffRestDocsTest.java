@@ -2,6 +2,7 @@ package com.infomansion.server.domain.userstuff.docs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infomansion.server.domain.category.domain.Category;
+import com.infomansion.server.domain.category.domain.CategoryMapperValue;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
@@ -398,6 +399,33 @@ public class UserStuffRestDocsTest {
                         ),
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("구매한 Stuff들에 대한 정보")))
                                 .andWithPrefix("data.[].",getStuffResponse())
+                ));
+    }
+
+    @Test
+    public void 배치된_userSutff의_카테고리_조회() throws Exception {
+        // given
+        List<UserStuffCategoryResponseDto> response = new ArrayList<>();
+        for(int i = 1; i <= 3; i++) {
+            response.add(UserStuffCategoryResponseDto.builder()
+                    .stuffNameKor("책상"+i).alias("데일리"+i).category(new CategoryMapperValue(Category.DAILY)).build());
+        }
+        given(userStuffService.findCategoryPlacedInRoom()).willReturn(response);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/userstuffs/category"))
+                .andExpect(status().isOk())
+                .andDo(document("userstuff-category-placed",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("배치된 UserStuff의 카테고리")))
+                                .andWithPrefix("data.[].",
+                                        fieldWithPath("stuffNameKor").type(STUFF_NAME_KOR.getJsonFieldType()).description(STUFF_NAME_KOR.getDescription()),
+                                        fieldWithPath("alias").type(ALIAS.getJsonFieldType()).description(ALIAS.getDescription()),
+                                        fieldWithPath("category").type(JsonFieldType.OBJECT).description("카테고리 정보"),
+                                        fieldWithPath("category.category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
+                                        fieldWithPath("category.categoryName").type(CATEGORY_NAME.getJsonFieldType()).description(CATEGORY_NAME.getDescription())
+                                )
                 ));
     }
 

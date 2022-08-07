@@ -1,5 +1,6 @@
 package com.infomansion.server.domain.userstuff.repository;
 
+import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,4 +30,8 @@ public interface UserStuffRepository extends JpaRepository<UserStuff, Long> {
             "when us.stuff.stuffType = 'FLOOR' then 2 " +
             "else 3 end)")
     List<UserStuff> findArrangedByUser(@Param("user") User user);
+
+    @Query("select us from UserStuff us join fetch us.stuff " +
+            "where us.user = :user and us.selected = true and us.category <> :category ")
+    List<UserStuff> findCategoryPlacedInRoom(@Param("user") User user, @Param("category") Category category);
 }

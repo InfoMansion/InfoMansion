@@ -77,4 +77,10 @@ public class UserStuffApiController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CommonResponse<>(userStuffService.purchaseStuff(requestDto)));
     }
+
+    @GetMapping("/api/v1/userstuffs/category")
+    public ResponseEntity<? extends BasicResponse> findCategoryPlacedInRoom() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userStuffService.findCategoryPlacedInRoom()));
+    }
 }
