@@ -4,12 +4,13 @@ import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.UserLoginRequestDto;
 import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
 import com.infomansion.server.domain.user.repository.UserRepository;
-import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.domain.user.service.VerifyEmailService;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import com.infomansion.server.global.apispec.ErrorResponse;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,8 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -139,6 +138,68 @@ class UserApiControllerTest {
         assertThat(res.isSuccess()).isFalse();
         assertThat(res.getCode()).isEqualTo(40031);
 
+    }
+
+    @DisplayName("username 형식에 맞지 않는 사용자 회원가입 실패")
+    @Test
+    public void user_회원가입_실패_잘못된_닉네임_형식() {
+        //given
+        String email = "infomansion@test.com";
+        String password = "testPassword1@";
+        String tel = "01012345678";
+        String username = "rla28716!";
+        UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username(username)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/auth/signup";
+
+        //when
+        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(url, requestDto, ErrorResponse.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(responseEntity.getBody()).isInstanceOf(BasicResponse.class);
+
+        ErrorResponse res = (ErrorResponse) responseEntity.getBody();
+
+        assertThat(res.isSuccess()).isFalse();
+        assertThat(res.getCode()).isEqualTo(40031);
+
+    }
+
+    @DisplayName("username 형식에 맞는 사용자 회원가입 성공")
+    @Test
+    public void user_회원가입_성공_올바른_닉네임_형식() {
+        //given
+        String email = "infomansion@test.com";
+        String password = "testPassword1@";
+        String tel = "01012345678";
+        String username = "test_1130";
+        String categories = "IT,COOK";
+        UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username(username)
+                .categories(categories)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/auth/signup";
+
+        //when
+        ResponseEntity<? extends BasicResponse> responseEntity = restTemplate.postForEntity(url, requestDto, CommonResponse.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isInstanceOf(BasicResponse.class);
+
+        CommonResponse response = (CommonResponse) responseEntity.getBody();
+
+        assertThat(response.isSuccess()).isTrue();
     }
 
     @DisplayName("중복된 이메일인 사용자 회원가입 실패")
