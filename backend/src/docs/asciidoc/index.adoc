@@ -398,6 +398,60 @@ include::{snippets}/post-likes/response-fields.adoc[]
 
 ---
 
+[[User-Likes-Post]]
+== 사용자가 Post에 좋아요를 누름
+
+Post에 좋아요를 누르는 API
+
+=== Http Request
+include::{snippets}/user-likes-post/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/user-likes-post/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/user-likes-post/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/user-likes-post/response-fields.adoc[]
+
+---
+
+[[Post-List-User-Likes]]
+== 사용자가 좋아요를 누른 Post 목록 조회
+
+사용자가 좋아요를 누른 Post 목록 조회 API
+
+=== Http Request
+include::{snippets}/post-list-user-likes/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/post-list-user-likes/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-list-user-likes/response-fields.adoc[]
+
+---
+
+[[User-List-Like-This-Post]]
+== 해당 Post에 좋아요를 누른 사용자 목록 조회
+
+해당 Post에 좋아요를 누른 사용자 목록 조회 API
+
+=== Http Request
+include::{snippets}/users-like-this-post/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/user-likes-post/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/users-like-this-post/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/users-like-this-post/response-fields.adoc[]
+
+---
+
 [[User-API]]
 = User API
 

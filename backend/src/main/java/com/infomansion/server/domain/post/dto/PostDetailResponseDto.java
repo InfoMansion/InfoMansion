@@ -2,6 +2,7 @@ package com.infomansion.server.domain.post.dto;
 
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.domain.Post;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -29,4 +30,15 @@ public class PostDetailResponseDto {
         this.likes = post.getLikesPost().getLikes();
     }
 
+    @Builder
+    public PostDetailResponseDto(Long id, String userName, String title, String content, Category category, String defaultPostThumbnail, LocalDateTime modifiedDate, Long likes) {
+        this.id = id;
+        this.userName = userName;
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.defaultPostThumbnail = defaultPostThumbnail;
+        this.modifiedDate = modifiedDate;
+        this.likes = likes;
+    }
 }

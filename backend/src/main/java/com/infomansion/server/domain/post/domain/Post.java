@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -40,11 +42,13 @@ public class Post extends BaseTimeEntityAtSoftDelete {
     @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
     private LikesPost likesPost;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<UserLikePost> userLikePostList = new ArrayList<>();
+
     private boolean deleteFlag;
 
     @Builder
-    public Post(Long id, User user, UserStuff userStuff, String title, String content) {
-        this.id = id;
+    public Post(User user, UserStuff userStuff, String title, String content) {
         this.title = title;
         this.content = content;
         this.deleteFlag = false;
@@ -52,6 +56,15 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         this.defaultPostThumbnail = "default";
         replaceDefaultPostThumbnail(content);
         setUserAndUserStuff(user, userStuff);
+    }
+
+    public static Post createPost(User user, UserStuff userStuff, String title, String content) {
+        return Post.builder()
+                .user(user)
+                .userStuff(userStuff)
+                .title(title)
+                .content(content)
+                .build();
     }
 
     public void updatePost(String title, String content){

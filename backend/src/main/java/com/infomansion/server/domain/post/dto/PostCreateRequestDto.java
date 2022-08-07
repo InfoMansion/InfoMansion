@@ -32,11 +32,6 @@ public class PostCreateRequestDto {
     }
 
     public Post toEntity(User user, UserStuff userStuff){
-        return Post.builder()
-                .user(user)
-                .userStuff(userStuff)
-                .title(title)
-                .content(content)
-                .build();
+        return Post.createPost(user, userStuff, title, content);
     }
 }

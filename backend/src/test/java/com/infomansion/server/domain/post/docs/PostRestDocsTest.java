@@ -9,8 +9,8 @@ import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
 import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
+import com.infomansion.server.domain.post.service.UserLikePostService;
 import com.infomansion.server.domain.user.domain.User;
-import com.infomansion.server.domain.user.dto.UserSearchResponseDto;
 import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import org.junit.jupiter.api.Test;
@@ -26,15 +26,14 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.infomansion.server.global.util.restdocs.FieldDescription.*;
 import static com.infomansion.server.global.util.restdocs.RestDocsUtil.common;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -59,6 +58,9 @@ public class PostRestDocsTest {
 
     @MockBean
     private LikesPostService likesPostService;
+
+    @MockBean
+    private UserLikePostService userLikePostService;
 
     @Test
     public void post_작성() throws Exception {
@@ -93,9 +95,14 @@ public class PostRestDocsTest {
         Long requestDto = 10L;
         List<PostSimpleResponseDto> responseDtoList = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
-            responseDtoList.add(new PostSimpleResponseDto(Post.builder()
-                    .id(requestDto).title("title"+i).content("content"+i)
-                    .user(User.builder().build()).userStuff(UserStuff.builder().build()).build()));
+            responseDtoList.add(PostSimpleResponseDto.builder()
+                    .id((long) i)
+                    .title("title"+i)
+                    .content("content"+i)
+                    .defaultPostThumbnail("default")
+                    .modifiedDate(LocalDateTime.now())
+                    .likes(2L)
+                    .build());
         }
         given(postService.findPostByUserStuffId(any(Long.class))).willReturn(responseDtoList);
 
@@ -124,11 +131,16 @@ public class PostRestDocsTest {
     public void post_상세_조회() throws Exception {
         // given
         Long requestDto = 10L;
-        PostDetailResponseDto responseDto = new PostDetailResponseDto(Post.builder()
-                .id(requestDto).title("title").content("content")
-                .user(User.builder().username("작성자").build())
-                .userStuff(UserStuff.builder().category(Category.NONE).build())
-                .build());
+        PostDetailResponseDto responseDto = PostDetailResponseDto.builder()
+                .id(10L)
+                .title("title")
+                .userName("username")
+                .content("content")
+                .category(Category.NONE)
+                .defaultPostThumbnail("default")
+                .modifiedDate(LocalDateTime.now())
+                .likes(10L)
+                .build();
         given(postService.findPostWithUser(any(Long.class))).willReturn(responseDto);
 
         // when, then
@@ -181,17 +193,21 @@ public class PostRestDocsTest {
 
         List<PostSimpleResponseDto> postsByTitleOrContent = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
-            postsByTitleOrContent.add(new PostSimpleResponseDto(Post.builder()
-                    .id(Long.valueOf(i)).title("title"+i).content("content"+i)
-                    .user(User.builder().build()).userStuff(UserStuff.builder().build())
-                    .build()));
+            postsByTitleOrContent.add(PostSimpleResponseDto.builder()
+                    .id((long) i)
+                    .title("title"+i)
+                    .content("content"+i)
+                    .defaultPostThumbnail("default")
+                    .modifiedDate(LocalDateTime.now())
+                    .likes(2L)
+                    .build());
         }
         Slice<PostSimpleResponseDto> postByTitle = new SliceImpl<>(postsByTitleOrContent, Pageable.ofSize(10), true);
         PostSearchResponseDto titleResponse = new PostSearchResponseDto(postByTitle);
         given(postService.findPostBySearchWordForTitle(anyString(), any(Pageable.class))).willReturn(titleResponse);
 
         // when, then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/posts/search/title?searchWord=", searchWord))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/search/title?searchWord=", searchWord))
                 .andExpect(status().isOk())
                 .andDo(document("post-search-title",
                         preprocessRequest(prettyPrint()),
@@ -223,17 +239,21 @@ public class PostRestDocsTest {
         String searchWord = "검색어";
         List<PostSimpleResponseDto> postsByTitleOrContent = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
-            postsByTitleOrContent.add(new PostSimpleResponseDto(Post.builder()
-                    .id(Long.valueOf(i)).title("title"+i).content("content"+i)
-                    .user(User.builder().build()).userStuff(UserStuff.builder().build())
-                    .build()));
+            postsByTitleOrContent.add(PostSimpleResponseDto.builder()
+                    .id((long) i)
+                    .title("title"+i)
+                    .content("content"+i)
+                    .defaultPostThumbnail("default")
+                    .modifiedDate(LocalDateTime.now())
+                    .likes(2L)
+                    .build());
         }
         Slice<PostSimpleResponseDto> postsByContent = new SliceImpl<>(postsByTitleOrContent, Pageable.ofSize(10), false);
         PostSearchResponseDto contentResponse = new PostSearchResponseDto(postsByContent);
         given(postService.findPostBySearchWordForContent(anyString(), any(Pageable.class))).willReturn(contentResponse);
 
         // when, then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/posts/search/content?searchWord=검색어"))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/search/content?searchWord=검색어"))
                 .andExpect(status().isOk())
                 .andDo(document("post-search-content",
                         preprocessRequest(prettyPrint()),
@@ -259,5 +279,89 @@ public class PostRestDocsTest {
                 ));
     }
 
+    @Test
+    public void post_좋아요() throws Exception {
+        // given
+        Long requestDto = 10L;
+        Long responseDto = 10L;
+        given(userLikePostService.likePost(anyLong())).willReturn(responseDto);
 
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v2/posts/likes/{postId}", requestDto))
+                .andExpect(status().isCreated())
+                .andDo(document("user-likes-post",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("postId").description("좋아요를 누를 Post의 id")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.NUMBER).description(POST_ID.getDescription())))
+                ));
+    }
+
+    @Test
+    public void 사용자가_좋아요를_누른_Post_목록_조회() throws Exception {
+        //given
+        List<PostSimpleResponseDto> responseDtoList = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            responseDtoList.add(
+                    PostSimpleResponseDto.builder()
+                            .id((long) i)
+                            .title("title"+i)
+                            .content("content"+i)
+                            .defaultPostThumbnail("default")
+                            .modifiedDate(LocalDateTime.now())
+                            .likes(2L)
+                            .build());
+        }
+        given(userLikePostService.findPostsUserLikes()).willReturn(responseDtoList);
+
+        //when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v2/posts/my-likes"))
+                .andExpect(status().isOk())
+                .andDo(document("post-list-user-likes",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("사용자가 좋아요를 누른 Post 목록")))
+                                .andWithPrefix("data.[].",
+                                        fieldWithPath("id").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
+                                        fieldWithPath("likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
+                                        fieldWithPath("modifiedDate").type(MODIFIED_DATE.getJsonFieldType()).description(MODIFIED_DATE.getDescription()).optional(),
+                                        fieldWithPath("defaultPostThumbnail").type(DEFAULTPOSTTHUMBNAIL.getJsonFieldType()).description(DEFAULTPOSTTHUMBNAIL.getDescription())
+                                )
+                ));
+    }
+
+    @Test
+    public void Post에_좋아요를_누른_사용자_목록_조회() throws Exception {
+        //given
+        List<UserSimpleProfileResponseDto> responseDtoList = new ArrayList<>();
+        for(int i=1;i<=5;i++) {
+            responseDtoList.add(UserSimpleProfileResponseDto.builder()
+                    .username("username" + i)
+                    .profileImage("profileImage" + i)
+                    .build());
+        }
+
+        given(userLikePostService.findUsersLikeThisPost(anyLong())).willReturn(responseDtoList);
+
+        //when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v2/posts/likes/{postId}", 10L))
+                .andExpect(status().isOk())
+                .andDo(document("users-like-this-post",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("postId").description("사용자들이 좋아요를 누른 Post의 id")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("해당 Post를 좋아요 누른 사용자 목록")))
+                                .andWithPrefix("data.[].",
+                                        fieldWithPath("username").type(USERNAME.getJsonFieldType()).description(USERNAME.getDescription()),
+                                        fieldWithPath("profileImage").type(PROFILE_IMAGE.getJsonFieldType()).description(PROFILE_IMAGE.getDescription())
+                                )
+
+                ));
+    }
 }
