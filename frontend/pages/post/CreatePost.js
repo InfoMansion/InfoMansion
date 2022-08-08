@@ -4,6 +4,8 @@ import draftToHtml from 'draftjs-to-html';
 import { useState } from 'react';
 import PostEditor from '../../components/PostPage/PostEditor';
 import { MAIN_COLOR } from '../../constants';
+import axios from '../../utils/axios';
+import { useCookies } from 'react-cookie';
 
 const contentToHtml = content => {
   return draftToHtml(convertToRaw(content.getCurrentContent()));
@@ -14,6 +16,29 @@ export default function createPost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState(EditorState.createEmpty());
   const [category, setCategory] = useState('');
+  const [stuffId, setStuffId] = useState('');
+  const [cookies] = useCookies(['cookie-name']);
+
+  const handleSave = async () => {
+    const userPost = {
+      userStuffId: stuffId,
+      title: title,
+      content: contentToHtml(content),
+    };
+    try {
+      const { data } = await axios.post('/api/v1/posts', userPost, {
+        headers: {
+          ContentType: 'application/json',
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          withCredentials: true,
+        },
+      });
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div style={{ position: 'relative' }}>
       <Button
@@ -27,9 +52,7 @@ export default function createPost() {
           display: 'block',
           marginBottom: '0px',
         }}
-        onClick={() => {
-          console.log({ title, content: contentToHtml(content), category });
-        }}
+        onClick={handleSave}
       >
         저장
       </Button>
@@ -40,6 +63,7 @@ export default function createPost() {
         onContentChange={setContent}
         category={category}
         onCategoryChange={setCategory}
+        setStuffId={setStuffId}
       />
     </div>
   );

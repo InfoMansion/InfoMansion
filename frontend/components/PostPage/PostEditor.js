@@ -19,6 +19,7 @@ export default function PostEditor({
   onContentChange,
   category,
   onCategoryChange,
+  setStuffId,
 }) {
   const [windowSize, setWindowSize] = useState();
   const [categoryList, setCategoryList] = useState([]);
@@ -39,8 +40,12 @@ export default function PostEditor({
         },
       });
       let userCategoryList = [];
+      console.log(data.data);
       data.data.forEach(stuff => {
-        let categoryLabel = { label: stuff.category.categoryName };
+        let categoryLabel = {
+          label: stuff.category.categoryName,
+          userStuffId: stuff.userStuffId,
+        };
         userCategoryList.push(categoryLabel);
       });
       setCategoryList(userCategoryList);
@@ -95,6 +100,7 @@ export default function PostEditor({
               value={category}
               onChange={(_, v) => {
                 onCategoryChange(v.label);
+                setStuffId(v.userStuffId);
               }}
               sy={{ height: 1 }}
               renderInput={params => (
