@@ -1,8 +1,8 @@
-package com.infomansion.server.domain.Room.service;
+package com.infomansion.server.domain.room.service;
 
 
-import com.infomansion.server.domain.Room.dto.RoomRecommendResponseDto;
-import com.infomansion.server.domain.Room.dto.RoomResponseDto;
+import com.infomansion.server.domain.room.dto.RoomRecommendResponseDto;
+import com.infomansion.server.domain.room.dto.RoomResponseDto;
 
 import java.util.List;
 

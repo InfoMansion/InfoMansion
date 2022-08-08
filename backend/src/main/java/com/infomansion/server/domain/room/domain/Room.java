@@ -1,4 +1,4 @@
-package com.infomansion.server.domain.Room.domain;
+package com.infomansion.server.domain.room.domain;
 
 import com.infomansion.server.domain.base.BaseTimeEntity;
 import com.infomansion.server.domain.user.domain.User;

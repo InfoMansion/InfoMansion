@@ -1,10 +1,10 @@
-package com.infomansion.server.domain.Room.service.impl;
+package com.infomansion.server.domain.room.service.impl;
 
-import com.infomansion.server.domain.Room.domain.Room;
-import com.infomansion.server.domain.Room.dto.RoomRecommendResponseDto;
-import com.infomansion.server.domain.Room.dto.RoomResponseDto;
-import com.infomansion.server.domain.Room.repository.RoomRepository;
-import com.infomansion.server.domain.Room.service.RoomService;
+import com.infomansion.server.domain.room.domain.Room;
+import com.infomansion.server.domain.room.dto.RoomRecommendResponseDto;
+import com.infomansion.server.domain.room.dto.RoomResponseDto;
+import com.infomansion.server.domain.room.repository.RoomRepository;
+import com.infomansion.server.domain.room.service.RoomService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;

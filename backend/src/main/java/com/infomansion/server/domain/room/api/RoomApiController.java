@@ -1,8 +1,8 @@
-package com.infomansion.server.domain.Room.api;
+package com.infomansion.server.domain.room.api;
 
-import com.infomansion.server.domain.Room.dto.RoomRecommendResponseDto;
-import com.infomansion.server.domain.Room.dto.RoomResponseDto;
-import com.infomansion.server.domain.Room.service.RoomService;
+import com.infomansion.server.domain.room.dto.RoomRecommendResponseDto;
+import com.infomansion.server.domain.room.dto.RoomResponseDto;
+import com.infomansion.server.domain.room.service.RoomService;
 import com.infomansion.server.global.apispec.CommonResponse;
 import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;

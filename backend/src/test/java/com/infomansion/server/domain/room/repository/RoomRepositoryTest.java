@@ -1,7 +1,6 @@
 package com.infomansion.server.domain.room.repository;
 
-import com.infomansion.server.domain.Room.domain.Room;
-import com.infomansion.server.domain.Room.repository.RoomRepository;
+import com.infomansion.server.domain.room.domain.Room;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;

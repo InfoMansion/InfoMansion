@@ -1,4 +1,4 @@
-package com.infomansion.server.domain.Room.dto;
+package com.infomansion.server.domain.room.dto;
 
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
 package com.infomansion.server.domain.user.service.impl;
 
-import com.infomansion.server.domain.Room.domain.Room;
-import com.infomansion.server.domain.Room.repository.RoomRepository;
+import com.infomansion.server.domain.room.domain.Room;
+import com.infomansion.server.domain.room.repository.RoomRepository;
 import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.Follow;
 import com.infomansion.server.domain.user.domain.User;

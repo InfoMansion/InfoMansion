@@ -1,6 +1,6 @@
-package com.infomansion.server.domain.Room.dto;
+package com.infomansion.server.domain.room.dto;
 
-import com.infomansion.server.domain.Room.domain.Room;
+import com.infomansion.server.domain.room.domain.Room;
 import lombok.Getter;
 import lombok.ToString;
 

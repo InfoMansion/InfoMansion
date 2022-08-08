@@ -1,23 +1,17 @@
 package com.infomansion.server.domain.room.docs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infomansion.server.domain.Room.domain.Room;
-import com.infomansion.server.domain.Room.dto.RoomRecommendResponseDto;
-import com.infomansion.server.domain.Room.dto.RoomResponseDto;
-import com.infomansion.server.domain.Room.service.RoomService;
+import com.infomansion.server.domain.room.domain.Room;
+import com.infomansion.server.domain.room.dto.RoomRecommendResponseDto;
+import com.infomansion.server.domain.room.dto.RoomResponseDto;
+import com.infomansion.server.domain.room.service.RoomService;
 import com.infomansion.server.domain.user.domain.User;
-import com.infomansion.server.domain.user.dto.UserSearchResponseDto;
-import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,17 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.infomansion.server.global.util.restdocs.FieldDescription.*;
-import static com.infomansion.server.global.util.restdocs.FieldDescription.SLICE_SIZE;
 import static com.infomansion.server.global.util.restdocs.RestDocsUtil.common;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
