@@ -1,5 +1,8 @@
 package com.infomansion.server.domain.post.service.impl;
 
+import com.infomansion.server.domain.notification.domain.Notification;
+import com.infomansion.server.domain.notification.domain.NotificationType;
+import com.infomansion.server.domain.notification.repository.NotificationRepository;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.domain.UserLikePost;
 import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
@@ -28,18 +31,20 @@ public class UserLikePostServiceImpl implements UserLikePostService {
     private final UserLikePostRepository userLikePostRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
 
 
     @Override
     @Transactional
     public Long likePost(Long postId) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findPostWithUser(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         userLikePostRepository.save(UserLikePost.likePost(post, user));
+        notificationRepository.save(Notification.createNotification(user.getUsername(), post.getUser().getUsername(), NotificationType.LIKE_POST, postId));
         return postId;
     }
 

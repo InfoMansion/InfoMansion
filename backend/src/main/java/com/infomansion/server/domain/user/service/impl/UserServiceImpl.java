@@ -1,5 +1,8 @@
 package com.infomansion.server.domain.user.service.impl;
 
+import com.infomansion.server.domain.notification.domain.Notification;
+import com.infomansion.server.domain.notification.domain.NotificationType;
+import com.infomansion.server.domain.notification.repository.NotificationRepository;
 import com.infomansion.server.domain.room.domain.Room;
 import com.infomansion.server.domain.room.repository.RoomRepository;
 import com.infomansion.server.domain.upload.service.S3Uploader;
@@ -55,6 +58,7 @@ public class UserServiceImpl implements UserService {
     private final UserStuffService userStuffService;
     private final RoomRepository roomRepository;
     private final FollowRepository followRepository;
+    private final NotificationRepository notificationRepository;
 
 
     @Override
@@ -228,6 +232,7 @@ public class UserServiceImpl implements UserService {
         User toUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         followRepository.save(Follow.createFollow(fromUser, toUser));
+        notificationRepository.save(Notification.createNotification(fromUser.getUsername(), toUser.getUsername(), NotificationType.FOLLOW_USER, fromUser.getId()));
         return true;
     }
 

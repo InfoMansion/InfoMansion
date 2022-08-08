@@ -1,7 +1,8 @@
 package com.infomansion.server.domain.user.service.impl;
 
+import com.infomansion.server.domain.notification.domain.Notification;
+import com.infomansion.server.domain.notification.repository.NotificationRepository;
 import com.infomansion.server.domain.upload.service.S3Uploader;
-import com.infomansion.server.domain.user.domain.Follow;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.domain.user.repository.FollowRepository;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,9 @@ class UserServiceImplTest {
 
     @Autowired
     private FollowRepository followRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @MockBean
     private VerifyEmailService verifyEmailService;
@@ -74,6 +79,7 @@ class UserServiceImplTest {
     public void cleanUp() {
         followRepository.deleteAll();
         userRepository.deleteAll();
+        notificationRepository.deleteAll();
     }
 
     @Test
@@ -388,5 +394,36 @@ class UserServiceImplTest {
         // then
         assertThat(response.size()).isEqualTo(1);
         assertThat(response.get(0).getUsername()).isEqualTo("infomansion");
+    }
+
+    @WithCustomUserDetails
+    @Test
+    public void 사용자_팔로우시_Noti_생성() {
+        // given
+        for (int i = 1; i <= 5; i++) {
+            String email = "infomansion" + i + "@test.com";
+            String password = "testPassword1$";
+            String tel = "01012345678";
+            String username = "infomansion" + i;
+            String categories = "IT,COOK";
+
+            UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                    .email(email)
+                    .password(password)
+                    .tel(tel)
+                    .username(username)
+                    .categories(categories)
+                    .build();
+            userService.join(requestDto);
+
+            // when
+            if (i % 2 == 0) userService.followUser(username);
+        }
+
+        // then
+        List<Notification> notificationsToInfomansion1 = notificationRepository.findSimpleUnReadNotificationsByUsername("infomansion1");
+        List<Notification> notificationsToInfomansion2 = notificationRepository.findSimpleUnReadNotificationsByUsername("infomansion2");
+        assertThat(notificationsToInfomansion1.size()).isEqualTo(0);
+        assertThat(notificationsToInfomansion2.size()).isEqualTo(1);
     }
 }

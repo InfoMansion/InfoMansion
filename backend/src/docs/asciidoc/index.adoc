@@ -692,7 +692,7 @@ include::{snippets}/post-search-title/response-fields.adoc[]
 
 ---
 
-[[Search-Title]]
+[[Search-Content]]
 == Content 검색 기능
 
 검색어로 post 내용을 검색하는 API
@@ -885,5 +885,56 @@ include::{snippets}/follower-list/http-response.adoc[]
 
 === Response fields
 include::{snippets}/follower-list/response-fields.adoc[]
+
+---
+
+[[Get-Un-Read-Notification-List]]
+== 읽지 않은 Notification 목록 조회
+
+로그인한 사용자가 읽지 않은 Notification 목록 조회
+
+=== Http Request
+include::{snippets}/notifications-user-unread/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/notifications-user-unread/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/notifications-user-unread/response-fields.adoc[]
+
+---
+
+[[Get-All-Notification-List]]
+== 모든 Notification 목록 조회
+
+로그인한 사용자의 모든 Notification 목록 조회 with 페이징
+
+=== Http Request
+include::{snippets}/notifications-all/http-request.adoc[]
+
+=== Request Params
+include::{snippets}/notifications-all/request-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/notifications-all/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/notifications-all/response-fields.adoc[]
+
+---
+
+[[Read-Un-Read-Notifications]]
+== 로그인한 사용자가 읽지 않은 모든 Notification 읽음 API
+
+로그인한 사용자가 읽지 않은 모든 Notification 읽음으로 처리
+
+=== Http Request
+include::{snippets}/read-unread-notifications/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/read-unread-notifications/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/read-unread-notifications/response-fields.adoc[]
 
 ---

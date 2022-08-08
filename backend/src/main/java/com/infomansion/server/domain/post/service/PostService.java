@@ -1,9 +1,6 @@
 package com.infomansion.server.domain.post.service;
 
-import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
-import com.infomansion.server.domain.post.dto.PostDetailResponseDto;
-import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
-import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
+import com.infomansion.server.domain.post.dto.*;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

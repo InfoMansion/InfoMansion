@@ -2,10 +2,7 @@ package com.infomansion.server.domain.post.service.impl;
 
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.domain.Post;
-import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
-import com.infomansion.server.domain.post.dto.PostDetailResponseDto;
-import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
-import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
+import com.infomansion.server.domain.post.dto.*;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.user.domain.User;
