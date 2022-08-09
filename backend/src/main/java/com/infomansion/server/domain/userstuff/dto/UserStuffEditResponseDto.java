@@ -74,7 +74,8 @@ public class UserStuffEditResponseDto {
                 .rotX(userStuff.getRotX()).rotY(userStuff.getRotY()).rotZ(userStuff.getRotZ())
                 .geometry(userStuff.getStuff().getGeometry())
                 .material(userStuff.getStuff().getMaterial())
-                .modifiedTime(userStuff.getCreatedDate())
+                .stuffGlbPath(userStuff.getStuff().getStuffGlbPath())
+                .createdTime(userStuff.getCreatedDate())
                 .modifiedTime(userStuff.getModifiedDate())
                 .build();
     }
