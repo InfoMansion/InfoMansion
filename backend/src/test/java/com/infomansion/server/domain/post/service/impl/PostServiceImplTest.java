@@ -64,8 +64,8 @@ public class PostServiceImplTest {
     private Long stuffId;
     private Long userStuffId;
     private User user;
+
     @BeforeEach
-    @WithCustomUserDetails
     public void setUp() {
         // user 생성
         String email = "infomansion@test.com";

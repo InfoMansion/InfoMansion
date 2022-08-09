@@ -37,7 +37,8 @@ public enum StuffType implements EnumMapperType {
     TOY("장난감"),
     DECO("꾸미기"),
     PET("애완동물"),
-    SHOES("신발");
+    SHOES("신발"),
+    POSTBOX("저장소");
 
     private final String stuffTypeName;
 

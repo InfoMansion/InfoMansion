@@ -7,6 +7,7 @@ import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -33,4 +34,7 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query("select p from Post p join fetch p.user where p.user.id = :userId")
     List<Post> findTop5Post(@Param("userId") Long userId, Pageable pageable);
 
+    @Modifying(clearAutomatically = true)
+    @Query("update Post p set p.userStuff = :anotherUs where p.userStuff = :us")
+    int movePostToAnotherStuff(@Param("us") UserStuff us, @Param("anotherUs") UserStuff anotherUs);
 }

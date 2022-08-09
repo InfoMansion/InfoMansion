@@ -3,7 +3,6 @@ package com.infomansion.server.domain.post.dto;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
-import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

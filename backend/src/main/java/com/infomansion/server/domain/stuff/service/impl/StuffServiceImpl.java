@@ -1,6 +1,5 @@
 package com.infomansion.server.domain.stuff.service.impl;
 
-import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
@@ -13,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.infomansion.server.domain.category.util.CategoryUtil.validateCategories;
 

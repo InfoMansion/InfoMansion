@@ -5,7 +5,6 @@ import com.infomansion.server.domain.notification.domain.NotificationType;
 import com.infomansion.server.domain.notification.repository.NotificationRepository;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.domain.UserLikePost;
-import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
 import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.repository.UserLikePostRepository;

@@ -19,7 +19,9 @@ public enum DefaultStuff {
     FLOOR(202L, "", Category.NONE, true, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO),
     TABLE(469L, "나의 하루", Category.DAILY, true, BigDecimal.valueOf(3), BigDecimal.ZERO, BigDecimal.valueOf(2.7), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.valueOf(5.78)),
     CHAIR(45L, "나의 휴식처", Category.NONE, true,  BigDecimal.valueOf(2), BigDecimal.ZERO, BigDecimal.valueOf(2), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.valueOf(6.08)),
-    GUESTBOOK(265L, "방명록", Category.NONE, true,  BigDecimal.valueOf(3), BigDecimal.valueOf(2), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.valueOf(4.71));
+    GUESTBOOK(265L, "방명록", Category.NONE, true,  BigDecimal.valueOf(3), BigDecimal.valueOf(2), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.valueOf(4.71)),
+    POSTBOX(346L, "POST 저장소", Category.POSTBOX, true,  BigDecimal.valueOf(2), BigDecimal.ZERO, BigDecimal.valueOf(1), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.valueOf(4.00));
+
 
     private final Long stuffId;
     private final String alias;
@@ -51,6 +53,7 @@ public enum DefaultStuff {
         else if(stuffId == 202L) return FLOOR;
         else if(stuffId == 469L) return TABLE;
         else if(stuffId == 45L) return CHAIR;
+        else if(stuffId == 346L) return POSTBOX;
         else return GUESTBOOK;
     }
 

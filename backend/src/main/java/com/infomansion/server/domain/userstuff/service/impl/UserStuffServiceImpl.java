@@ -6,6 +6,7 @@ import com.infomansion.server.domain.payment.domain.PaymentLine;
 import com.infomansion.server.domain.payment.repository.PaymentRepository;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.stuff.domain.Stuff;
+import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
@@ -101,7 +102,13 @@ public class UserStuffServiceImpl implements UserStuffService {
     public Long removeUserStuff(Long userStuffId) {
         UserStuff userStuff = userStuffRepository.findById(userStuffId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+        UserStuff garbage = userStuffRepository.findUserStuffByStuffType(SecurityUtil.getCurrentUserId(), StuffType.POSTBOX)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        postRepository.movePostToAnotherStuff(userStuff, garbage);
+
         userStuff.deleteUserStuff();
+        userStuffRepository.save(userStuff);
         return userStuffId;
     }
 

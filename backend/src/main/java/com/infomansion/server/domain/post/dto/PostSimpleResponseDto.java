@@ -1,6 +1,5 @@
 package com.infomansion.server.domain.post.dto;
 
-import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.category.domain.CategoryMapperValue;
 import com.infomansion.server.domain.post.domain.Post;
 import lombok.Builder;

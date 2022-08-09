@@ -1,8 +1,6 @@
 package com.infomansion.server.domain.post.service;
 
-import com.infomansion.server.domain.post.dto.PostDetailResponseDto;
 import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
-import com.infomansion.server.domain.user.dto.UserInfoResponseDto;
 import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
 
 import java.util.List;

@@ -113,7 +113,8 @@ public class UserStuff extends BaseTimeEntityAtSoftDelete {
     public void deleteUserStuff() {
         this.deleteFlag = true;
         this.setDeletedDate();
-        changeExcludedState();
+        this.getPostList().clear();
+        changePosAndRot(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
     }
 
     public void changeIsPublicOfPost(boolean isPublic) {
@@ -134,4 +135,15 @@ public class UserStuff extends BaseTimeEntityAtSoftDelete {
                 .rotX(BigDecimal.ZERO).rotY(BigDecimal.ZERO).rotZ(BigDecimal.ZERO)
                 .build();
     }
+
+    @Override
+    public String toString() {
+        return "UserStuff{" +
+                "id=" + id +
+                ", stuff=" + stuff.getStuffNameKor() +
+                ", alias='" + alias + '\'' +
+                ", category=" + category +
+                '}';
+    }
+
 }

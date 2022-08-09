@@ -1,10 +1,15 @@
 package com.infomansion.server.domain.userstuff.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
+import com.infomansion.server.domain.post.repository.PostRepository;
+import com.infomansion.server.domain.post.service.PostService;
+import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
+import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import com.infomansion.server.domain.userstuff.dto.UserStuffEditRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffModifyRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffSaveRequestDto;
@@ -21,6 +26,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +55,17 @@ public class UserStuffApiControllerTest {
     private UserStuffRepository userStuffRepository;
 
     @Autowired
+    private PostService postService;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     private Long userId;
     private List<Long> stuffIds;
+    private User user;
 
     @BeforeEach
     public void setUp() {
@@ -63,13 +76,15 @@ public class UserStuffApiControllerTest {
         String username = "infomansion";
         String uCategories = "IT,COOK";
 
-        userId = userRepository.save(User.builder()
+        user = userRepository.save(User.builder()
                 .email(email)
                 .password(password)
                 .tel(tel)
                 .username(username)
                 .categories(uCategories)
-                .build()).getId();
+                .build());
+
+        userId = user.getId();
 
         // stuff 생성
         stuffIds = new ArrayList<>();
@@ -96,6 +111,7 @@ public class UserStuffApiControllerTest {
 
     @AfterEach
     public void reset() {
+        postRepository.deleteAll();
         userStuffRepository.deleteAll();
         stuffRepository.deleteAll();
         userRepository.deleteAll();
@@ -227,12 +243,69 @@ public class UserStuffApiControllerTest {
 
     @DisplayName("유효한 userStuffId로 삭제 요청 성공")
     @WithCustomUserDetails
+    @Transactional
     @Test
     public void userstuff_삭제_성공() throws Exception {
+
+        String stuffName = "postbox";
+        String stuffNameKor = "저장소";
+        Long price = 30L;
+        String sCategories = "POSTBOX";
+        String stuffType = "POSTBOX";
+
+        StuffRequestDto requestDto = StuffRequestDto.builder()
+                .stuffName(stuffName)
+                .stuffNameKor(stuffNameKor)
+                .price(price)
+                .categories(sCategories)
+                .stuffType(stuffType)
+                .geometry("geometry")
+                .material("materials")
+                .build();
+
+        //Postbox Stuff 생성
+        Stuff stuff = stuffRepository.save(requestDto.toEntity());
+        Long postboxStuffId = stuff.getId();
+
+        //Postbox UserStuff 생성
+        UserStuffSaveRequestDto postboxSaveRequestDto = UserStuffSaveRequestDto.builder()
+                .stuffId(postboxStuffId).build();
+
+        User user = userRepository.findById(userId).get();
+        Long postboxusId = userStuffService.saveUserStuff(postboxSaveRequestDto);
+
+        String category = "POSTBOX";
+        String alias = "POST저장소";
+
+        UserStuffEditRequestDto postboxIncludeRequestDto = UserStuffEditRequestDto.builder()
+                .userStuffId(postboxusId).alias(alias).category(category)
+                .posX(1.1).posY(0.0).posZ(1.0).rotX(0.0).rotY(0.1).rotZ(0.1).build();
+        List<UserStuffEditRequestDto> placed = new ArrayList<>();
+        placed.add(postboxIncludeRequestDto);
+
         // given
         UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(createDto);
+
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .posX(0.2).posY(0.3).posZ(3.1)
+                .rotX(1.5).rotY(0.0).rotZ(0.9)
+                .build();
+        placed.add(includeDto);
+        // postbox와 stuff 1번 배치완료
+        userStuffService.editUserStuff(placed);
+
+        UserStuff userStuff = userStuffRepository.findById(userStuffId).get();
+
+        System.out.println(userStuff);
+        String title = "EffectiveJava자바 infomansion";
+        String content = "infomansion Java 파이팅!";
+        PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
+                        .userStuffId(userStuffId).title(title).content(content).build();
+
+        Long postId = postService.createPost(postCreateRequestDto);
 
         // when
         mockMvc.perform(patch("/api/v1/userstuffs/"+userStuffId));
@@ -242,6 +315,11 @@ public class UserStuffApiControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(ErrorCode.USER_STUFF_NOT_FOUND.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.USER_STUFF_NOT_FOUND.getMessage()));
+
+        mockMvc.perform(get("/api/v1/posts/"+postboxusId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.size()").value(1))
+                .andExpect(jsonPath("$.data[0].id").value(postId));
 
     }
 

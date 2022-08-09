@@ -1,11 +1,11 @@
 package com.infomansion.server.domain.room.service.impl;
 
+import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.room.domain.Room;
 import com.infomansion.server.domain.room.dto.RoomRecommendResponseDto;
 import com.infomansion.server.domain.room.dto.RoomResponseDto;
 import com.infomansion.server.domain.room.repository.RoomRepository;
 import com.infomansion.server.domain.room.service.RoomService;
-import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;

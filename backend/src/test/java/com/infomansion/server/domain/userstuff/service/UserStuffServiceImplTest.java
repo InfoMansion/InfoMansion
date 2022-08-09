@@ -5,6 +5,11 @@ import com.infomansion.server.domain.payment.domain.Payment;
 import com.infomansion.server.domain.payment.domain.PaymentLine;
 import com.infomansion.server.domain.payment.repository.PaymentLineRepository;
 import com.infomansion.server.domain.payment.repository.PaymentRepository;
+import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
+import com.infomansion.server.domain.post.repository.PostRepository;
+import com.infomansion.server.domain.post.service.PostService;
+import com.infomansion.server.domain.stuff.domain.Stuff;
+import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
@@ -23,7 +28,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,6 +62,12 @@ public class UserStuffServiceImplTest {
 
     @Autowired
     private PaymentLineRepository paymentLineRepository;
+
+    @Autowired
+    private PostService postService;
+
+    @Autowired
+    private PostRepository postRepository;
 
     private Long userId;
     private String username;
@@ -114,6 +127,7 @@ public class UserStuffServiceImplTest {
 
     @AfterEach
     public void cleanUp() {
+        postRepository.deleteAll();
         userStuffRepository.deleteAll();
         paymentRepository.deleteAll();
         stuffRepository.deleteAll();
@@ -220,21 +234,156 @@ public class UserStuffServiceImplTest {
 
     }
 
-    @DisplayName("userStuffId로 삭제 성공")
+    @DisplayName("Post가 있는 userStuff 삭제 성공")
+    @Transactional
+    @WithCustomUserDetails
+    @Test
+    public void user_stuff_삭제_Post_Garbage로_이동_성공() {
+
+        String stuffName = "postbox";
+        String stuffNameKor = "저장소";
+        Long price = 30L;
+        String sCategories = "POSTBOX";
+        String stuffType = "POSTBOX";
+
+        StuffRequestDto requestDto = StuffRequestDto.builder()
+                .stuffName(stuffName)
+                .stuffNameKor(stuffNameKor)
+                .price(price)
+                .categories(sCategories)
+                .stuffType(stuffType)
+                .geometry("geometry")
+                .material("materials")
+                .build();
+
+        //Postbox Stuff 생성
+        Stuff stuff = stuffRepository.save(requestDto.toEntity());
+        Long postboxStuffId = stuff.getId();
+
+        //Postbox UserStuff 생성
+        UserStuffSaveRequestDto postboxSaveRequestDto = UserStuffSaveRequestDto.builder()
+                .stuffId(postboxStuffId).build();
+
+        User user = userRepository.findById(userId).get();
+        UserStuff postboxus = userStuffRepository.save(postboxSaveRequestDto.toEntity(user, stuff));
+        Long postboxusId = postboxus.getId();
+
+        List<UserStuffEditRequestDto> placed = new ArrayList<>();
+        UserStuffEditRequestDto postboxIncludeRequestDto = UserStuffEditRequestDto.builder()
+                .userStuffId(postboxusId)
+                .category("POSTBOX")
+                .alias("POST저장소")
+                .posX(1.1).posY(0.5).posZ(0.0)
+                .rotX(0.0).rotY(0.2).rotZ(2.2)
+                .build();
+        placed.add(postboxIncludeRequestDto);
+
+        // given
+        Long[] userStuffId = new Long[2];
+        for(int i = 0; i < 2; i++) {
+            UserStuffSaveRequestDto usRequestDto = UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffIds.get(i)).build();
+            userStuffId[i] = userStuffService.saveUserStuff(usRequestDto);
+        }
+        UserStuffEditRequestDto usRequestDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId[0]).category("IT").alias("Java 모음집1")
+                .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
+        placed.add(usRequestDto);
+        userStuffService.editUserStuff(placed);
+
+        PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
+                .userStuffId(userStuffId[0])
+                .title("EffectiveJava자바 infomansion")
+                .content("infomansion Java 파이팅!")
+                .build();
+
+        postService.createPost(postCreateDto);
+
+        // when
+        userStuffService.removeUserStuff(userStuffId[0]);
+
+        // then
+        Optional<UserStuff> postBox = userStuffRepository.findUserStuffByStuffType(userId, StuffType.POSTBOX);
+        assertThat(postBox.get().getPostList().size()).isEqualTo(1);
+        assertThat(postBox.get().getPostList().get(0).getTitle()).isEqualTo("EffectiveJava자바 infomansion");
+
+    }
+
+    @DisplayName("Post가 없는 userStuff 삭제 성공")
+    @Transactional
     @WithCustomUserDetails
     @Test
     public void user_stuff_삭제_성공() {
+
+        String stuffName = "postbox";
+        String stuffNameKor = "저장소";
+        Long price = 30L;
+        String sCategories = "POSTBOX";
+        String stuffType = "POSTBOX";
+
+        StuffRequestDto requestDto = StuffRequestDto.builder()
+                .stuffName(stuffName)
+                .stuffNameKor(stuffNameKor)
+                .price(price)
+                .categories(sCategories)
+                .stuffType(stuffType)
+                .geometry("geometry")
+                .material("materials")
+                .build();
+
+        //Postbox Stuff 생성
+        Stuff stuff = stuffRepository.save(requestDto.toEntity());
+        Long postboxStuffId = stuff.getId();
+
+        //Postbox UserStuff 생성
+        UserStuffSaveRequestDto postboxSaveRequestDto = UserStuffSaveRequestDto.builder()
+                .stuffId(postboxStuffId).build();
+
+        User user = userRepository.findById(userId).get();
+        UserStuff postboxus = userStuffRepository.save(postboxSaveRequestDto.toEntity(user, stuff));
+        Long postboxusId = postboxus.getId();
+
+        List<UserStuffEditRequestDto> placed = new ArrayList<>();
+        UserStuffEditRequestDto postboxIncludeRequestDto = UserStuffEditRequestDto.builder()
+                .userStuffId(postboxusId)
+                .category("POSTBOX")
+                .alias("POST저장소")
+                .posX(1.1).posY(0.5).posZ(0.0)
+                .rotX(0.0).rotY(0.2).rotZ(2.2)
+                .build();
+        placed.add(postboxIncludeRequestDto);
+
         // given
-        UserStuffSaveRequestDto requestDtoGiven = UserStuffSaveRequestDto.builder()
-                .stuffId(stuffIds.get(0)).build();
-        Long userStuffId = userStuffService.saveUserStuff(requestDtoGiven);
+        List<String> categories = Arrays.asList("IT", "GAME", "SPORTS", "DAILY", "INTERIOR");
+        Long[] userStuffId = new Long[2];
+        for(int i = 0; i < 2; i++) {
+            UserStuffSaveRequestDto usRequestDto = UserStuffSaveRequestDto.builder()
+                    .stuffId(stuffIds.get(i)).build();
+            userStuffId[i] = userStuffService.saveUserStuff(usRequestDto);
+
+            UserStuffEditRequestDto usIncludeRequestDto = UserStuffEditRequestDto.builder()
+                    .userStuffId(userStuffId[i]).category(categories.get(i)).alias("Java 모음집1")
+                    .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
+            placed.add(usIncludeRequestDto);
+        }
+        userStuffService.editUserStuff(placed);
+
+
+
+        PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
+                .userStuffId(userStuffId[0])
+                .title("EffectiveJava자바 infomansion")
+                .content("infomansion Java 파이팅!")
+                .build();
+
+        postService.createPost(postCreateDto);
 
         // when
-        userStuffService.removeUserStuff(userStuffId);
+        userStuffService.removeUserStuff(userStuffId[1]);
 
         // then
-        Optional<UserStuff> removedUserStuff = userStuffRepository.findById(userStuffId);
-        assertThat(removedUserStuff.isEmpty()).isTrue();
+        Optional<UserStuff> postBox = userStuffRepository.findUserStuffByStuffType(userId, StuffType.POSTBOX);
+        assertThat(postBox.get().getPostList().size()).isEqualTo(0);
 
     }
 

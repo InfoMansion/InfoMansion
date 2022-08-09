@@ -4,7 +4,6 @@ import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.category.domain.CategoryMapperValue;
 import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
-import com.infomansion.server.global.util.common.EnumMapperType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

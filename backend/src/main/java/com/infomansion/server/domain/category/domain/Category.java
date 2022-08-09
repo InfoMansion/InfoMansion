@@ -22,6 +22,7 @@ public enum Category implements EnumMapperType {
     STUDY("공부"),
     HOMEAPPLIANCES("가전제품"),
     GUESTBOOK("방명록"),
+    POSTBOX("저장소"),
     NONE("NONE");
 
     private final String categoryName;
