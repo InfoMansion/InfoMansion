@@ -1,12 +1,29 @@
 import { useGLTF } from "@react-three/drei";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function EditStuff({data, Click}) {
-    const [geometry] = useState(data.geometry);
-    const [material] = useState(data.material);
-    const [glbpath] = useState(data.stuffGlbPath);
-    const { nodes, materials } = useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath);
-
+export default function EditStuff({data}) {
+    const [geometry, setGeometry] = useState(data.geometry);
+    const [material, setMaterial] = useState(data.material);
+    const [glbpath, setGlbpath] = useState(data.stuffGlbPath);
+    if(!glbpath) return null;
+  
+    const [asset, setAsset] = useState(useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath));
+    let { nodes, materials } = asset
+    
+    useEffect(() => {
+      setGeometry(data.geometry);
+      setMaterial(data.material);
+      setGlbpath(data.stuffGlbPath);
+    }, [data.stuffGlbPath])
+    
+    useEffect(() => {
+      setAsset(useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath));
+    })
+  
+    useEffect(() => {
+      nodes = asset.nodes;
+      materials = asset.materials;
+    }, [asset])
     if(!nodes[geometry]) return
     
     return (

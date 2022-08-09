@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, Button, Card, Container, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
-import EditRoom from "../../components/EditRoom";
-import MyStuffList from "../../components/RoomEditPage/MyStuffList";
-
 import Link from "next/link";
 import axios from "../../utils/axios";
 import { useCookies } from "react-cookie";
+
+import EditRoom from "../../components/EditRoom";
+import MyStuffList from "../../components/RoomEditPage/MyStuffList";
+import EditConsole from "../../components/RoomEditPage/EditConsole";
+import { useRecoilState } from "recoil";
+import { editingState, editStuffState, fromState, positionState, rotationState } from "../../state/editRoomState";
+
 
 export default function RoomEdit() {
     const [cookies] = useCookies(['cookie-name']);
@@ -20,25 +24,16 @@ export default function RoomEdit() {
     const [wallStuffs, setWallStuffs] = useState([]);
     const [floorStuffs, setFloorStuffs] = useState([]);
     const [locatedStuffs, setLocatedStuffs] = useState([]);
+    const [unlocatedStuffs, setUnlocatedStuffs] = useState([]);
     
     // 현재 편집중인 스터프.
-    const [editStuff, setEditStuff] = useState({});
-    const [wallStuff, setWallStuff] = useState({
-            "id" : "0",
-            "category" : "NONE",
-            "pos_x" : 0,
-            "pos_y" : 0,
-            "pos_z" : 0,
-            "rot_x" : 0,
-            "rot_z" : 0,
-            "rot_y" : 0,
-            "stuffAlias" : "기본 나무 바닥",
-            "stuffName" : "floor_1958",
-            "stuffNameKor" : "나무 바다아아아아아아악",
-            "stuffGlbPath" : "/stuff-assets/floor_1958.glb",
-            "geometry" : "low_poly_interior1958",
-            "material" : "low_poly_interior"
-    });
+    const [editing, setEditing] = useRecoilState(editingState);
+    const [editStuff, setEditStuff] = useRecoilState(editStuffState);
+    const [, setEditPosition] = useRecoilState(positionState);
+    const [, setEditRotation] = useRecoilState(rotationState);
+    const [from, setFrom] = useRecoilState(fromState);
+
+    const [wallStuff, setWallStuff] = useState({});
     const [floorStuff, setFloorStuff] = useState({});
 
     // stuff 가져오기.
@@ -51,6 +46,8 @@ export default function RoomEdit() {
                 }
             })
             .then( res => {
+                // console.log(res.data);
+
                 setWallStuffs(res.data.data.filter(stuff => stuff.stuffType == 'WALL'))
                 setFloorStuffs(res.data.data.filter(stuff => stuff.stuffType == 'FLOOR'))
                 setStuffs(res.data.data.filter(stuff => stuff.stuffType != 'WALL' && stuff.stuffType != 'FLOOR'));
@@ -69,11 +66,27 @@ export default function RoomEdit() {
 
     useEffect(() => {
         setLocatedStuffs(stuffs.filter(stuff => stuff.selected));
+        setUnlocatedStuffs(stuffs.filter(stuff => !stuff.selected));
     }, [stuffs])
 
-    function StuffClick(stuff) {
+    function StuffClick(e, stuff) {
         // 여기서 stuffpage로 변수 전달하면 됨.
-        setStuffon(!stuffon);
+        
+        if(editing) return;
+        console.log(stuff);
+        
+        setEditing(true);
+        setFrom('located');
+        
+        setEditStuff(stuff);
+        setEditPosition([stuff.posX, stuff.posY, stuff.posZ]);
+        setEditRotation([stuff.rotX, stuff.rotY, stuff.rotZ]);
+
+        // locatedstuff배열에서 stuff 빼기.
+        let copylocateddata = locatedStuffs.filter(data => data.userStuffId != stuff.userStuffId);
+        console.log(copylocateddata);
+        console.log(copylocateddata);
+        setLocatedStuffs(copylocateddata);
     }
 
     function MapClick(stuff, tag) {
@@ -84,8 +97,27 @@ export default function RoomEdit() {
     }
 
     function EndEdit() {
-        // 편집여부가 있는지 판단.
+        let senddata = [{...wallStuff}, {...floorStuff}, ...locatedStuffs];
+        console.log(senddata);
         editRoomRef.current.ScreenShot();
+    }
+    
+    function reset() {
+        setEditing(false);
+    }
+    function addLocateStuff(e, stuff) {
+        console.log(stuff);
+        setLocatedStuffs([...locatedStuffs, stuff]);
+    }
+    function addUnlocatedStuff(e, stuff) {
+        console.log(stuff);
+        setUnlocatedStuffs([...unlocatedStuffs, stuff]);
+    }
+    function deleteUnlocatedStuff(e, stuff) {
+        let unlocateddata = unlocatedStuffs.filter( data => data.userStuffId != stuff.userStuffId);
+        setUnlocatedStuffs(unlocateddata);
+        console.log(stuff);
+        console.log(unlocateddata);
     }
 
     return (
@@ -94,6 +126,7 @@ export default function RoomEdit() {
                 margin : '30px auto'
             }}
         >
+            <Button onClick={reset}>임시리셋</Button>
             <Grid 
                 container
                 spacing={0}
@@ -118,30 +151,45 @@ export default function RoomEdit() {
                             }}
                         >
                             <Typography variant='h6'>
-                                편집할 에셋을 클릭하세요
+                                {editing ? editStuff.alias : "편집할 에셋을 클릭하세요" }
                             </Typography>
-                            <MyStuffList
-                                MapClick={MapClick}
+                            {editing ?
+                                <EditConsole 
+                                    addLocateStuff={addLocateStuff}
+                                    addUnlocatedStuff={addUnlocatedStuff}
+                                    deleteUnlocatedStuff={deleteUnlocatedStuff}
+                                />
+                                :
+                                <Box>
+                                    <MyStuffList
+                                        MapClick={MapClick}
+                                        stuffs={unlocatedStuffs}
+                                        wallStuffs={wallStuffs}
+                                        floorStuffs={floorStuffs}
+                                    />
+                                    <Box
+                                        sx={{
+                                            position : 'absolute',
+                                            right : 10,
+                                            bottom : 10
+                                        }}                      
+                                    >
 
-                                stuffs={stuffs}
-                                wallStuffs={wallStuffs}
-                                floorStuffs={floorStuffs}
-                            />
-
-                            <Button
-                                variant="contained"
-                                sx={{
-                                    position : 'absolute',
-                                    right : 10,
-                                    bottom : 10
-                                }}
-                                onClick={EndEdit}
-                            >
-                                {/* 추후에 변경된 사항 저장할지 묻는 기능 필요. */}
-                                <Link href={`/${userName}`}>
-                                    편집 종료
-                                </Link>
-                            </Button>
+                                        <Button variant="outlined" >
+                                            <Link href={`/${userName}`}>
+                                                취소
+                                            </Link>
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            onClick={EndEdit}
+                                        >
+                                            {/* 추후에 변경된 사항 저장할지 묻는 기능 필요. */}
+                                            편집 완료
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            }
                         </Box>
                     </Card>
                 </Grid>

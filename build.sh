@@ -44,4 +44,3 @@ echo "[BUILD] Spring"
 docker build --tag spring:0.0.1 .
 echo "[RUN] Spring"
 docker run --name spring -d -p 8080:8080 spring:0.0.1
-

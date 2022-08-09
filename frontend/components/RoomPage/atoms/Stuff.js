@@ -6,7 +6,7 @@ import { useFrame } from '@react-three/fiber';
 import { useRecoilState } from 'recoil';
 import { clickedStuffCategoryState } from '../../../state/roomState'
 
-export default function Model({ tagon, status, Hover, Click, data, ...props }) {
+export default function Model({ tagon, Hover, Click, data, ...props }) {
   
   const [geometry] = useState(data.geometry);
   const [material] = useState(data.material);
@@ -59,7 +59,7 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
   }, [hovered])
   
   useFrame(({camera}) => {
-    if(tagon && status == 'view' && data.category.category != 'NONE'){
+    if(tagon && data.category.category != 'NONE'){
       locref.current.quaternion.copy(camera.quaternion);
       textref.current.material.color.lerp(color.set(hovered ? '#ffa0a0' : 'black'), 0.1);
     }
@@ -69,55 +69,38 @@ export default function Model({ tagon, status, Hover, Click, data, ...props }) {
       position={[data.posX, data.posY, data.posZ]}
     >
     {/* 스터프 */}
-    {
-      (status == 'view')
-      ?
-        <animated.group
-          onPointerOver={(e) => onHover(e)}
-          onPointerDown={(e) => onClick(e)}
-          
-          onPointerEnter={() => setHovered(true)}
-          onPointerLeave={() => setHovered(false)}
-          
-          rotation={[data.rotX, data.rotY, data.rotZ]}
-          scale={scale}
-          {...props} dispose={null}
-        >
-          {
-            // category NONE인거 y축 이동 방지하기 위해 동적 렌더링함.
-            (data.category.category != 'NONE') ? 
-            <animated.mesh
-              geometry={nodes[geometry].geometry} 
-              material={materials[material]} 
-              castShadow
-              scale={100}            
-              position-y={positionY}
-            />
-            : 
-            <mesh
-              geometry={nodes[geometry].geometry} material={materials[material]} castShadow
-              scale={100}
-            />
-          }
-        </animated.group> 
-      : 
-      <group
+      <animated.group
+        onPointerOver={(e) => onHover(e)}
+        onPointerDown={(e) => onClick(e)}
+        
+        onPointerEnter={() => setHovered(true)}
+        onPointerLeave={() => setHovered(false)}
+        
         rotation={[data.rotX, data.rotY, data.rotZ]}
-        scale={1}
+        scale={scale}
+        {...props} dispose={null}
       >
-        <mesh
-          geometry={nodes[geometry].geometry} 
-          material={materials[material]} 
-          castShadow
-          onPointerDown={(e) => onClick(e)}
-          scale={100}
-        />
-      </group>
-    }
+        {
+          // category NONE인거 y축 이동 방지하기 위해 동적 렌더링함.
+          (data.category.category != 'NONE') ? 
+          <animated.mesh
+            geometry={nodes[geometry].geometry} 
+            material={materials[material]} 
+            castShadow
+            scale={100}            
+            position-y={positionY}
+          />
+          : 
+          <mesh
+            geometry={nodes[geometry].geometry} material={materials[material]} castShadow
+            scale={100}
+          />
+        }
+      </animated.group> 
     
     {/* 태그 */}
     {
-      (tagon && status == 'view' && data.category.category != 'NONE') ?
+      (tagon && data.category.category != 'NONE') ?
       <group ref={locref} position={[1, 1.5, 1]}>
         <mesh>
           <circleGeometry attach="geometry" args={[0.3, 20]} />

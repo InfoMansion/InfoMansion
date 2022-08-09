@@ -19,12 +19,10 @@ export default function Model({ Hover, Click, data, ...props }) {
   const [asset, setAsset] = useState(useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glb));
   let { nodes, materials } = asset
 
-
   useEffect(() => {
     setGeo(data.geometry);
     setPoly(data.material);
     setGlb(data.stuffGlbPath);
-
   }, [data.stuffGlbPath])
   
   useEffect(() => {
@@ -34,7 +32,7 @@ export default function Model({ Hover, Click, data, ...props }) {
   useEffect(() => {
     nodes = asset.nodes;
     materials = asset.materials;
-  })
+  }, [asset])
   if(!nodes[geo]) return
 
   return (

@@ -1,7 +1,6 @@
 import { OrthographicCamera } from '@react-three/drei'
 import {Canvas} from '@react-three/fiber'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { useSpring } from 'react-spring'
 
 import MapStuffs from './RoomPage/MapStuffs'
 import Stuffs from './RoomPage/Stuffs'
@@ -10,41 +9,29 @@ import Stuffs from './RoomPage/Stuffs'
 import EditRoomCamera from './RoomPage/atoms/RoomEditCamera'
 import ScreenshotButton from './RoomPage/atoms/ScreenShotButton'
 import RoomLight from './RoomPage/atoms/RoomLight'
-import MapStuff from './RoomPage/atoms/MapStuff'
+import { useRecoilState } from 'recoil'
+import { editingState, editStuffState, positionState, rotationState } from '../state/editRoomState'
+
+import EditingStuff from './RoomEditPage/atoms/EditingStuff'
 
 const EditRoom = forwardRef(( {mapStuffs, stuffs, StuffClick}, ref ) => {
-    useImperativeHandle(ref, () => ({
-        ScreenShot
-    }))
-
+    useImperativeHandle(ref, () => ({ ScreenShot }))
     const ScreenShotButtonRef = useRef();
-    function ScreenShot() {
-        ScreenShotButtonRef.current.ScreenShot();
-    }
-
-    // 화면 확대 정도 조정.
+    function ScreenShot() { ScreenShotButtonRef.current.ScreenShot(); }
     const [zoomscale] = useState(90);
 
-    // 사용자 가구들.
-    const [mapstuffs, setMapstuffs] = useState([]);
-
-    const [hovered, setHovered] = useState(0);
-    const [clicked, setClicked] = useState(0);
-    const { spring } = useSpring({
-        spring : clicked,
-        config : {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
-    })
-    const [camloc, setCamloc] = useState([0, 0, 0]);
+    const [editingStuff] = useRecoilState(editStuffState);
+    const [editing] = useRecoilState(editingState);
+    const [editingposition] = useRecoilState(positionState);
+    const [editingrotation] = useRecoilState(rotationState);
 
     // stuff 호버 이벤트.
-    function Hover(e, stuff) { setHovered(); }
+    function Hover(e, stuff) {}
     
     // stuff 클릭 이벤트.
-    function Click(e, stuff) {
-        console.log(stuff.category + "클릭");
-        if(stuff.category == 'NONE') return null;
-        
-        StuffClick(stuff);
+    function Click(e, stuff) { 
+        console.log(stuff);
+        StuffClick(e, stuff);
     }
 
     return (
@@ -59,7 +46,7 @@ const EditRoom = forwardRef(( {mapStuffs, stuffs, StuffClick}, ref ) => {
             <RoomLight />
 
             <ScreenshotButton ref={ScreenShotButtonRef} />
-            <EditRoomCamera camloc={camloc}/>
+            <EditRoomCamera camloc={[0, 0, 0]}/>
             <OrthographicCamera makeDefault zoom={zoomscale} />
             
             {/* 벽, 바닥 */}
@@ -76,6 +63,15 @@ const EditRoom = forwardRef(( {mapStuffs, stuffs, StuffClick}, ref ) => {
                 Click={Click}
                 status={'edit'}
             />
+
+            {editing ?
+                <EditingStuff 
+                    data={editingStuff}
+                    position={editingposition}
+                    rotation={editingrotation}
+                />
+                : <></>
+            }
         </Canvas>
       )
 });
