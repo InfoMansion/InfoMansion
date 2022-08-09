@@ -1,7 +1,9 @@
 package com.infomansion.server.domain.upload.service;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,10 +26,24 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${cloud.aws.s3.bucketUrl")
+    private String bucketUrl;
+
     public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
         return upload(uploadFile, dirName);
+    }
+
+    public void deleteFiles(List<String> deleteImages) {
+        try {
+            DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket);
+            for (String deleteImage : deleteImages)
+                deleteObjectsRequest = deleteObjectsRequest.withKeys(deleteImage.substring(bucketUrl.length()+1));
+            amazonS3Client.deleteObjects(deleteObjectsRequest);
+        } catch (AmazonServiceException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private String upload(File uploadFile, String filePath) {

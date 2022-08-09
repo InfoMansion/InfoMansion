@@ -2,6 +2,7 @@ package com.infomansion.server.domain.upload.api;
 
 import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.global.apispec.BasicResponse;
+import com.infomansion.server.global.apispec.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +26,15 @@ public class S3ApiController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/api/v1/image/post")
+    public ResponseEntity<? extends BasicResponse> uploadImageForPost(@RequestParam("image") MultipartFile multipartFile) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new CommonResponse<>(s3Uploader.uploadFiles(multipartFile, "post")));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

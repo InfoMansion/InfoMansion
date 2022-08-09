@@ -8,6 +8,7 @@ import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
 import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.PostService;
+import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
@@ -36,6 +37,7 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final UserStuffRepository userStuffRepository;
     private final PostRepository postRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     @Override
@@ -45,6 +47,13 @@ public class PostServiceImpl implements PostService {
 
         UserStuff userStuff = userStuffRepository.findById(requestDto.getUserStuffId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        if(requestDto.getImages() != null) {
+            List<String> deleteImages = requestDto.getImages()
+                    .stream().filter(image -> !requestDto.getContent().contains(image))
+                    .collect(Collectors.toList());
+            s3Uploader.deleteFiles(deleteImages);
+        }
 
         return postRepository.save(requestDto.toEntity(user, userStuff)).getId();
     }

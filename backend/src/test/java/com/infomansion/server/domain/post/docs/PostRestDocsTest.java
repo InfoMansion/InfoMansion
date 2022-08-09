@@ -84,7 +84,8 @@ public class PostRestDocsTest {
                         requestFields(
                                 fieldWithPath("userStuffId").description("저장될 UserStuffId"),
                                 fieldWithPath("title").description("Post의 제목"),
-                                fieldWithPath("content").description("Post의 내용")
+                                fieldWithPath("content").description("Post의 내용"),
+                                fieldWithPath("images").description("업로드한 이미지 주소들")
                         ),
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.NUMBER).description(USER_ID.getDescription())))
                 ));
