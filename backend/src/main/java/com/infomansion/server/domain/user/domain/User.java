@@ -45,6 +45,8 @@ public class User extends BaseTimeEntityAtSoftDelete {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private UserCredit userCredit;
 
+    private boolean privateFlag;
+
     @Builder
     public User(String email, String password, String username, String tel, String categories) {
         this.email = email;
@@ -56,6 +58,7 @@ public class User extends BaseTimeEntityAtSoftDelete {
         this.profileImage = "https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png";
         this.introduce = "";
         this.userCredit = new UserCredit(this);
+        this.privateFlag = false;
     }
 
     /**
@@ -114,5 +117,12 @@ public class User extends BaseTimeEntityAtSoftDelete {
      */
     public void purchaseStuff(Long stuffPrice) {
         this.userCredit.spend(stuffPrice);
+    }
+
+    /**
+     * User의 공개 권한을 비공개로 바꾼다.
+     */
+    public void changePrivate(){
+        this.privateFlag = !this.privateFlag;
     }
 }

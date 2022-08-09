@@ -22,13 +22,13 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query("select p from Post p where p.userStuff = :userStuff and p.deleteFlag = false order by p.modifiedDate")
     List<Post> findByUserStuffId(@Param("userStuff") UserStuff userStuff);
 
-    @Query("select p from Post p where p.title like %:searchWord%")
+    @Query("select p from Post p where p.title like %:searchWord% and p.user.privateFlag=false")
     Slice<Post> findByTitle(@Param("searchWord") String searchWord, Pageable pageable);
 
-    @Query("select p from Post p where p.content like %:searchWord%")
+    @Query("select p from Post p where p.content like %:searchWord% and p.user.privateFlag=false")
     Slice<Post> findByContent(@Param("searchWord") String searchWord, Pageable pageable);
 
-    @Query("select p from Post p join fetch p.user where p.id=:id ")
+    @Query("select p from Post p join fetch p.user where p.id=:id")
     Optional<Post> findPostWithUser(@Param("id") Long id);
 
     @Query("select p from Post p join fetch p.user where p.user.id = :userId")

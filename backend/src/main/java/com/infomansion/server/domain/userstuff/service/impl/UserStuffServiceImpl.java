@@ -117,6 +117,12 @@ public class UserStuffServiceImpl implements UserStuffService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        // 내 방을 보는 것이 아닐 경우에 user의 공개 state가 'private'이라면 권한 없음.
+
+        if(user.isPrivateFlag() && !user.getId().equals(SecurityUtil.getCurrentUserId())){
+            throw new CustomException(ErrorCode.NOT_PUBLIC_USER);
+        }
+
         return userStuffRepository.findArrangedByUser(user).stream()
                 .map(userStuff -> UserStuffArrangedResponseDto.toDto(userStuff))
                 .collect(Collectors.toList());

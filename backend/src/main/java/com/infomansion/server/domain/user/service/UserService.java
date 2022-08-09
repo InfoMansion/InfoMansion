@@ -26,4 +26,5 @@ public interface UserService {
     boolean unFollowUser(String username);
     List<UserSimpleProfileResponseDto> findFollowerUserList(String username);
     List<UserSimpleProfileResponseDto> findFollowingUserList(String username);
+    Boolean changeUserState(String username);
 }

@@ -122,9 +122,13 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostSimpleResponseDto> findRecent5ByUser(String userName, Pageable pageable) {
         int size = 5;
-        Long userId = userRepository.findByUsername(userName)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)).getId();
+        User user = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Long userId = user.getId();
 
+        if(!user.getId().equals(SecurityUtil.getCurrentUserId()) && user.isPrivateFlag()){
+            throw new CustomException(ErrorCode.NOT_PUBLIC_USER);
+        }
         List<PostSimpleResponseDto> top5RecentPost = new ArrayList<>();
         postRepository.findTop5Post(userId, PageRequest.of(0,size))
                 .forEach(post -> top5RecentPost.add(new PostSimpleResponseDto(post)));

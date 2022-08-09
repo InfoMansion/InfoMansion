@@ -57,4 +57,10 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userService.findUserBySearchWordForUserName(searchWord, pageable)));
     }
+
+    @PatchMapping("api/v1/users/changestate")
+    public ResponseEntity<CommonResponse<Boolean>> searchUsersByContent(@Valid @RequestParam String username){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userService.changeUserState(username)));
+    }
 }

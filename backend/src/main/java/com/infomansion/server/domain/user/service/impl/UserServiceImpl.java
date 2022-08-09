@@ -267,6 +267,17 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    @Override
+    public Boolean changeUserState(String username) {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if(user.getUsername().equals(username)) user.changePrivate();
+
+        return user.isPrivateFlag();
+    }
+
     private String getRandomPassword(int size) {
         final String regex = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}";
 
