@@ -191,10 +191,13 @@ export default function Category() {
   const router = useRouter();
   const [likeCate, setlikeCate] = useRecoilState(likeCateState);
 
-  function clickCategory(event) {
+  const clickCategory = event => {
     const selected = event.target.getAttribute('value') + ',';
     const count = likeCate.split(',').length - 1;
     const opacityTarget = event.currentTarget;
+    if (selected === 'null,') {
+      return;
+    }
     if (likeCate.includes(selected)) {
       const updateCateState = likeCate.replace(selected, '');
       setlikeCate(updateCateState);
@@ -209,7 +212,7 @@ export default function Category() {
       }
     }
     console.log(likeCate);
-  }
+  };
 
   function nextPage() {
     router.push('/user/signup');
