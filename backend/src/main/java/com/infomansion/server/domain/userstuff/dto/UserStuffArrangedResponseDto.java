@@ -9,7 +9,7 @@ import lombok.Getter;
 import java.math.BigDecimal;
 
 @Getter
-public class UserStuffArrangedResponeDto {
+public class UserStuffArrangedResponseDto {
 
     private Long id;
     private String stuffNameKor;
@@ -24,9 +24,10 @@ public class UserStuffArrangedResponeDto {
     private String geometry;
     private String material;
     private String stuffGlbPath;
+    private String backgroundByWall;
 
     @Builder
-    public UserStuffArrangedResponeDto(Long id, String stuffNameKor, String alias, Category category, BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ, String geometry, String material, String stuffGlbPath) {
+    public UserStuffArrangedResponseDto(Long id, String stuffNameKor, String alias, Category category, BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ, String geometry, String material, String stuffGlbPath, String backgroundByWall) {
         this.id = id;
         this.stuffNameKor = stuffNameKor;
         this.alias = alias;
@@ -40,10 +41,11 @@ public class UserStuffArrangedResponeDto {
         this.geometry = geometry;
         this.material = material;
         this.stuffGlbPath = stuffGlbPath;
+        this.backgroundByWall = backgroundByWall;
     }
 
-    public static UserStuffArrangedResponeDto toDto(UserStuff userStuff) {
-        return UserStuffArrangedResponeDto.builder()
+    public static UserStuffArrangedResponseDto toDto(UserStuff userStuff) {
+        return UserStuffArrangedResponseDto.builder()
                 .id(userStuff.getId())
                 .stuffNameKor(userStuff.getStuff().getStuffNameKor())
                 .alias(userStuff.getAlias())
@@ -57,6 +59,7 @@ public class UserStuffArrangedResponeDto {
                 .geometry(userStuff.getStuff().getGeometry())
                 .material(userStuff.getStuff().getMaterial())
                 .stuffGlbPath(userStuff.getStuff().getStuffGlbPath())
+                .backgroundByWall(userStuff.getStuff().getBackgroundByWall())
                 .build();
     }
 }

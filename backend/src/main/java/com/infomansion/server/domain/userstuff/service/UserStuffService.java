@@ -18,7 +18,7 @@ public interface UserStuffService {
 
     Long removeUserStuff(Long userStuffId);
 
-    List<UserStuffArrangedResponeDto> findArrangedUserStuffByUsername(String username);
+    List<UserStuffArrangedResponseDto> findArrangedUserStuffByUsername(String username);
 
     void saveDefaultUserStuff(User user);
     List<StuffResponseDto> purchaseStuff(UserStuffPurchaseRequestDto requestDto);

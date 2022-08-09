@@ -488,7 +488,7 @@ public class UserStuffServiceImplTest {
         userStuffService.editUserStuff(placed);
 
         // when,then
-        List<UserStuffArrangedResponeDto> responseList = userStuffService.findArrangedUserStuffByUsername(username);
+        List<UserStuffArrangedResponseDto> responseList = userStuffService.findArrangedUserStuffByUsername(username);
         assertThat(responseList.size()).isEqualTo(5);
     }
 
@@ -525,7 +525,7 @@ public class UserStuffServiceImplTest {
         userStuffService.editUserStuff(placed);
 
         // when, then
-        List<UserStuffArrangedResponeDto> responseList = userStuffService.findArrangedUserStuffByUsername(username);
+        List<UserStuffArrangedResponseDto> responseList = userStuffService.findArrangedUserStuffByUsername(username);
         assertThat(responseList.size()).isEqualTo(3);
     }
 

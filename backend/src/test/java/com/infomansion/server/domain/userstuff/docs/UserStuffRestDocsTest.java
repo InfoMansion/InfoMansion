@@ -246,7 +246,7 @@ public class UserStuffRestDocsTest {
         // given
         String username = "infomansion";
         List<StuffType> list = Arrays.asList(StuffType.WALL, StuffType.FLOOR, StuffType.DESK, StuffType.CLOSET, StuffType.DRAWER);
-        List<UserStuffArrangedResponeDto> responseDtoList = new ArrayList<>();
+        List<UserStuffArrangedResponseDto> responseDtoList = new ArrayList<>();
         for(int i = 1; i < 5; i+=2) {
             String categories = "DAILY,STUDY,INTERIOR";
             Stuff stuff = Stuff.builder()
@@ -254,7 +254,7 @@ public class UserStuffRestDocsTest {
                     .categories(categories).stuffType(list.get(i))
                     .geometry("geometry").material("material").stuffGlbPath("glbPath")
                     .build();
-            responseDtoList.add(UserStuffArrangedResponeDto.toDto(
+            responseDtoList.add(UserStuffArrangedResponseDto.toDto(
                     UserStuff.builder()
                             .id(Long.valueOf(i))
                             .stuff(stuff)

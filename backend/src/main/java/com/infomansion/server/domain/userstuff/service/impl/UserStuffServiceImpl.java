@@ -113,12 +113,12 @@ public class UserStuffServiceImpl implements UserStuffService {
     }
 
     @Override
-    public List<UserStuffArrangedResponeDto> findArrangedUserStuffByUsername(String username) {
+    public List<UserStuffArrangedResponseDto> findArrangedUserStuffByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return userStuffRepository.findArrangedByUser(user).stream()
-                .map(userStuff -> UserStuffArrangedResponeDto.toDto(userStuff))
+                .map(userStuff -> UserStuffArrangedResponseDto.toDto(userStuff))
                 .collect(Collectors.toList());
     }
 

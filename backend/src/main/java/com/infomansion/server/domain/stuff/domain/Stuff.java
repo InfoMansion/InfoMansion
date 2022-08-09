@@ -33,11 +33,12 @@ public class Stuff extends BaseTimeEntityAtSoftDelete {
     private String geometry;
     private String material;
     private String stuffGlbPath;
+    private String backgroundByWall;
 
     private Boolean deleteFlag;
 
     @Builder
-    public Stuff(Long id, String stuffName, String stuffNameKor, Long price, String categories, StuffType stuffType, String geometry, String material, String stuffGlbPath) {
+    public Stuff(Long id, String stuffName, String stuffNameKor, Long price, String categories, StuffType stuffType, String geometry, String material, String stuffGlbPath, String backgroundByWall) {
         this.id = id;
         this.stuffName = stuffName;
         this.stuffNameKor = stuffNameKor;
@@ -47,6 +48,7 @@ public class Stuff extends BaseTimeEntityAtSoftDelete {
         this.geometry = geometry;
         this.material = material;
         this.stuffGlbPath = stuffGlbPath;
+        this.backgroundByWall = (stuffType.getEnum().equals("WALL"))? backgroundByWall : "notwall";
         this.deleteFlag = false;
     }
 
