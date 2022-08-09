@@ -1,12 +1,15 @@
 package com.infomansion.server.domain.room.domain;
 
 import com.infomansion.server.domain.base.BaseTimeEntity;
+import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.IOException;
 
 @Getter
 @NoArgsConstructor
@@ -35,6 +38,10 @@ public class Room extends BaseTimeEntity {
 
     public void deleteRoom(){
         this.deleteFlag = true;
+    }
+
+    public void changeRoomImage(S3Uploader s3Uploader, MultipartFile roomImage) throws IOException {
+        this.roomImg = s3Uploader.uploadFiles(roomImage, "room");
     }
 
     public static Room createRoom(User user){

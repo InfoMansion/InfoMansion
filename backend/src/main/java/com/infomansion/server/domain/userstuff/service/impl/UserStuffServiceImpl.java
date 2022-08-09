@@ -4,6 +4,7 @@ import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.payment.domain.Payment;
 import com.infomansion.server.domain.payment.domain.PaymentLine;
 import com.infomansion.server.domain.payment.repository.PaymentRepository;
+import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
@@ -21,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -33,6 +36,7 @@ public class UserStuffServiceImpl implements UserStuffService {
     private final StuffRepository stuffRepository;
     private final UserStuffRepository userStuffRepository;
     private final PaymentRepository paymentRepository;
+    private final PostRepository postRepository;
 
     @Transactional
     @Override
@@ -46,12 +50,12 @@ public class UserStuffServiceImpl implements UserStuffService {
     }
 
     @Override
-    public List<UserStuffResponseDto> findAllUserStuff() {
+    public List<UserStuffEditResponseDto> findAllUserStuff() {
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return userStuffRepository.findByUser(user).stream()
-                .map(userStuff -> new UserStuffResponseDto(userStuff))
+                .map(UserStuffEditResponseDto::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -60,42 +64,7 @@ public class UserStuffServiceImpl implements UserStuffService {
         UserStuff findUserStuff = userStuffRepository.findById(userStuffId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
 
-        return new UserStuffResponseDto(findUserStuff);
-    }
-
-    @Transactional
-    @Override
-    public Long excludeUserStuff(Long userStuffId) {
-        UserStuff findUserStuff = userStuffRepository.findById(userStuffId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
-
-        /**
-         * 이미 제외된 Stuff를 요청하는 경우 throw
-         */
-        if(!findUserStuff.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
-
-        findUserStuff.resetPosAndRot();
-        return userStuffId;
-    }
-
-    @Transactional
-    @Override
-    public Long includeUserStuff(UserStuffIncludeRequestDto requestDto) {
-        UserStuff findUserStuff = userStuffRepository.findById(requestDto.getId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
-
-        /**
-         * 이미 배치된 Stuff를 요청하는 경우 throw
-         */
-        if(findUserStuff.getSelected()) throw new CustomException(ErrorCode.INCLUDED_USER_STUFF);
-
-        checkDuplicatePlacedCategory(SecurityUtil.getCurrentUserId(), requestDto.getCategory());
-        checkAcceptableCategory(findUserStuff.getStuff(), requestDto.getCategory());
-
-        findUserStuff.changeIncludedStatus(requestDto.getAlias(), requestDto.getCategory(),
-                requestDto.getPosX(), requestDto.getPosY(), requestDto.getPosZ(),
-                requestDto.getRotX(), requestDto.getRotY(), requestDto.getRotZ());
-        return findUserStuff.getId();
+        return UserStuffResponseDto.toDto(findUserStuff);
     }
 
     @Transactional
@@ -125,23 +94,6 @@ public class UserStuffServiceImpl implements UserStuffService {
         // alias가 null일 경우 changeAliasOrCategory에서 변경이 일어나지 않고 기존 alias를 사용한다.
         us.changeAliasOrCategory(requestDto.getAlias(), requestDto.getCategory());
         return us.getId();
-    }
-
-    @Transactional
-    @Override
-    public Long modifyPosAndRot(UserStuffPositionRequestDto requestDto) {
-        UserStuff userStuff = userStuffRepository.findById(requestDto.getId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
-
-        /**
-         * 배치되지 않은 Stuff의 Position과 Rotation을 변경할 경우 throw
-         */
-        if(!userStuff.getSelected()) throw new CustomException(ErrorCode.EXCLUDED_USER_STUFF);
-
-        userStuff.changePosAndRot(requestDto.getPosX(), requestDto.getPosY(), requestDto.getPosZ(),
-                requestDto.getRotX(), requestDto.getRotY(), requestDto.getRotZ());
-
-        return userStuff.getId();
     }
 
     @Transactional
@@ -211,6 +163,35 @@ public class UserStuffServiceImpl implements UserStuffService {
         return userStuffRepository.findCategoryPlacedInRoom(loginUser, Category.NONE)
                 .stream().map(UserStuffCategoryResponseDto::toResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public boolean editUserStuff(List<UserStuffEditRequestDto> requestDtos) {
+        User loginUser = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 배치할 UserStuffIds
+        List<Long> placedUserStuffIds = requestDtos.stream().map(UserStuffEditRequestDto::getUserStuffId).collect(Collectors.toList());
+
+        // 방에서 제외되어야 할 UserStuff들
+        userStuffRepository.findByUserIsAndIdNotInAndSelectedIsTrue(loginUser, placedUserStuffIds)
+                .forEach(UserStuff::changeExcludedState);
+
+        Set<String> checkDuplicateCategory = new HashSet<>();
+        requestDtos.forEach(userStuffEditRequestDto -> {
+            UserStuff userStuff = userStuffRepository.findById(userStuffEditRequestDto.getUserStuffId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+            // 새롭게 배치할 UserStuff의 카테고리 중복 검사 및 Stuff에 적용가능한 지 검사
+            if(!userStuffEditRequestDto.getCategory().equals("NONE") && checkDuplicateCategory.contains(userStuffEditRequestDto.getCategory()))
+                throw new CustomException(ErrorCode.DUPLICATE_CATEGORY);
+            checkAcceptableCategory(userStuff.getStuff(), userStuffEditRequestDto.getCategory());
+            checkDuplicateCategory.add(userStuffEditRequestDto.getCategory());
+
+            userStuff.changePlacedStatus(userStuffEditRequestDto);
+        });
+        return true;
     }
 
     private void checkDuplicatePlacedCategory(Long userId, String category) {

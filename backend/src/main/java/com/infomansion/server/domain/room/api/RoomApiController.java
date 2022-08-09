@@ -3,15 +3,14 @@ package com.infomansion.server.domain.room.api;
 import com.infomansion.server.domain.room.dto.RoomRecommendResponseDto;
 import com.infomansion.server.domain.room.dto.RoomResponseDto;
 import com.infomansion.server.domain.room.service.RoomService;
+import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -41,5 +40,12 @@ public class RoomApiController {
     @GetMapping("/api/v1/rooms/recommend")
     private ResponseEntity<CommonResponse<RoomRecommendResponseDto>> findRecommendRoom(){
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomService.findRecommendRoom()));
+    }
+
+    @PutMapping(value = "/api/v1/rooms/edit", consumes = {"multipart/form-data"})
+    public ResponseEntity<? extends BasicResponse> editRoom(@RequestParam(value = "roomImg")MultipartFile roomImage) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(roomService.editRoomImg(roomImage)));
+
     }
 }

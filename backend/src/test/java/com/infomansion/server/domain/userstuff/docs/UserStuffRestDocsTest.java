@@ -90,9 +90,9 @@ public class UserStuffRestDocsTest {
                 .stuffType(StuffType.DESK)
                 .geometry("geometry")
                 .material("material")
-                .stuffGlbPath("glbPath")
+                .stuffGlbPath("stuffGlbPath")
                 .build();
-        UserStuffResponseDto responseDto = new UserStuffResponseDto(
+        UserStuffResponseDto responseDto = UserStuffResponseDto.toDto(
                     UserStuff.builder()
                         .id(userStuffId)
                         .stuff(stuff)
@@ -113,7 +113,26 @@ public class UserStuffRestDocsTest {
                                 parameterWithName("userstuffId").description("조회할 userStuff Id")
                         ),
                         relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("조회된 UserStuff")))
-                                .andWithPrefix("data.", getUserStuffResponse())
+                                .andWithPrefix("data.",
+                                        fieldWithPath("userStuffId").type(USERSTUFF_ID.getJsonFieldType()).description(USERSTUFF_ID.getDescription()),
+                                        fieldWithPath("stuffType").type(STUFF_TYPE.getJsonFieldType()).description(STUFF_TYPE.getDescription()),
+                                        fieldWithPath("alias").type(ALIAS.getJsonFieldType()).description(ALIAS.getDescription()),
+                                        fieldWithPath("category").type(JsonFieldType.OBJECT).description("Category"),
+                                        fieldWithPath("category.category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
+                                        fieldWithPath("category.categoryName").type(CATEGORY_NAME.getJsonFieldType()).description(CATEGORY_NAME.getDescription()),
+                                        fieldWithPath("selected").type(USERSTUFF_SELECTED.getJsonFieldType()).description(USERSTUFF_SELECTED.getDescription()),
+                                        fieldWithPath("posX").type(POS_X.getJsonFieldType()).description(POS_X.getDescription()),
+                                        fieldWithPath("posY").type(POS_Y.getJsonFieldType()).description(POS_Y.getDescription()),
+                                        fieldWithPath("posZ").type(POS_Z.getJsonFieldType()).description(POS_Z.getDescription()),
+                                        fieldWithPath("rotX").type(ROT_X.getJsonFieldType()).description(ROT_X.getDescription()),
+                                        fieldWithPath("rotY").type(ROT_Y.getJsonFieldType()).description(ROT_Y.getDescription()),
+                                        fieldWithPath("rotZ").type(ROT_Z.getJsonFieldType()).description(ROT_Z.getDescription()),
+                                        fieldWithPath("geometry").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
+                                        fieldWithPath("material").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
+                                        fieldWithPath("stuffGlbPath").type(STUFF_GLB_PATH.getJsonFieldType()).description(STUFF_GLB_PATH.getDescription()).optional(),
+                                        fieldWithPath("createdTime").type(USERSTUFF_SELECTED.getJsonFieldType()).description(USERSTUFF_CREATED.getDescription()).optional(),
+                                        fieldWithPath("modifiedTime").type(USERSTUFF_MODIFIED.getJsonFieldType()).description(USERSTUFF_MODIFIED.getDescription()).optional()
+                                )
                 ));
     }
 
@@ -121,7 +140,7 @@ public class UserStuffRestDocsTest {
     public void 로그인된_사용자의_모든_userStuff_조회() throws Exception {
         // given
         Long userId = 10L;
-        List<UserStuffResponseDto> responseDtoList = new ArrayList<>();
+        List<UserStuffEditResponseDto> responseDtoList = new ArrayList<>();
         for(int i = 1; i < 10; i+=2) {
             String categories = "DAILY,STUDY,INTERIOR";
             Stuff stuff = Stuff.builder()
@@ -134,7 +153,7 @@ public class UserStuffRestDocsTest {
                     .material("material")
                     .stuffGlbPath("glbPath")
                     .build();
-            responseDtoList.add(new UserStuffResponseDto(
+            responseDtoList.add(UserStuffEditResponseDto.toDto(
                     UserStuff.builder()
                             .id(Long.valueOf(i))
                             .stuff(stuff)
@@ -153,61 +172,27 @@ public class UserStuffRestDocsTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("사용자의 모든 UserStuff")))
-                                .andWithPrefix("data.[].", getUserStuffResponse())
-                ));
-    }
-
-    @Test
-    public void 방에_배치된_userStuff_제외() throws Exception {
-        // given
-        Long userStuffId = 20L;
-        given(userStuffService.excludeUserStuff(any(Long.class))).willReturn(userStuffId);
-
-        // when, then
-        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/userstuffs/{userStuffId}", userStuffId))
-                .andExpect(status().isOk())
-                .andDo(document("userstuff-exclude-in-room",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("userStuffId").description("방에서 제외할 userStuff Id")
-                        ),
-                        responseFields(common(fieldWithPath("data").type(JsonFieldType.NUMBER).description("제외된 "+USERSTUFF_ID.getDescription())))
-                ));
-    }
-
-    @Test
-    public void userStuff를_방에_배치() throws Exception {
-        // given
-        Long userStuffId = 20L;
-        UserStuffIncludeRequestDto requestDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId)
-                .alias("Info`Mansion 이용법 정리")
-                .category("DAILY")
-                .posX(1.5).posY(3.0).posZ(2.7)
-                .rotX(0.0).rotY(0.0).rotZ(0.0).build();
-        given(userStuffService.includeUserStuff(any(UserStuffIncludeRequestDto.class))).willReturn(userStuffId);
-
-        // when, then
-        mockMvc.perform(put("/api/v1/userstuffs")
-                .content(objectMapper.writeValueAsString(requestDto))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(document("userstuff-include-in-room",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestFields(
-                                fieldWithPath("id").description("배치할 userStuff의 Id"),
-                                fieldWithPath("alias").description("userStuff의 별칭"),
-                                fieldWithPath("category").description("stuff에 설정할 수 있는 카테고리"),
-                                fieldWithPath("posX").description("위치좌표 X"),
-                                fieldWithPath("posY").description("위치좌표 Y"),
-                                fieldWithPath("posZ").description("위치좌표 Z"),
-                                fieldWithPath("rotX").description("회전값 X"),
-                                fieldWithPath("rotY").description("회전값 Y"),
-                                fieldWithPath("rotZ").description("회전값 Z")
-                        ),
-                        responseFields(common(fieldWithPath("data").type(JsonFieldType.NUMBER).description("배치된 "+USERSTUFF_ID.getDescription())))
+                                .andWithPrefix("data.[].",
+                                        fieldWithPath("userStuffId").type(USERSTUFF_ID.getJsonFieldType()).description(USERSTUFF_ID.getDescription()),
+                                        fieldWithPath("stuffType").type(STUFF_TYPE.getJsonFieldType()).description(STUFF_TYPE.getDescription()),
+                                        fieldWithPath("alias").type(ALIAS.getJsonFieldType()).description(ALIAS.getDescription()),
+                                        fieldWithPath("selectedCategory").type(JsonFieldType.STRING).description("선택된 카테고리"),
+                                        fieldWithPath("categories[]").type(JsonFieldType.ARRAY).description("Category"),
+                                        fieldWithPath("categories.[].category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
+                                        fieldWithPath("categories.[].categoryName").type(CATEGORY_NAME.getJsonFieldType()).description(CATEGORY_NAME.getDescription()),
+                                        fieldWithPath("selected").type(USERSTUFF_SELECTED.getJsonFieldType()).description(USERSTUFF_SELECTED.getDescription()),
+                                        fieldWithPath("posX").type(POS_X.getJsonFieldType()).description(POS_X.getDescription()),
+                                        fieldWithPath("posY").type(POS_Y.getJsonFieldType()).description(POS_Y.getDescription()),
+                                        fieldWithPath("posZ").type(POS_Z.getJsonFieldType()).description(POS_Z.getDescription()),
+                                        fieldWithPath("rotX").type(ROT_X.getJsonFieldType()).description(ROT_X.getDescription()),
+                                        fieldWithPath("rotY").type(ROT_Y.getJsonFieldType()).description(ROT_Y.getDescription()),
+                                        fieldWithPath("rotZ").type(ROT_Z.getJsonFieldType()).description(ROT_Z.getDescription()),
+                                        fieldWithPath("geometry").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
+                                        fieldWithPath("material").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
+                                        fieldWithPath("stuffGlbPath").type(STUFF_GLB_PATH.getJsonFieldType()).description(STUFF_GLB_PATH.getDescription()).optional(),
+                                        fieldWithPath("createdTime").type(USERSTUFF_SELECTED.getJsonFieldType()).description(USERSTUFF_CREATED.getDescription()).optional(),
+                                        fieldWithPath("modifiedTime").type(USERSTUFF_MODIFIED.getJsonFieldType()).description(USERSTUFF_MODIFIED.getDescription()).optional()
+                                )
                 ));
     }
 
@@ -236,36 +221,6 @@ public class UserStuffRestDocsTest {
                 ));
     }
 
-    @Test
-    public void userStuff를_위치나_회전_수정() throws Exception {
-        // given
-        Long userStuffId = 20L;
-        UserStuffPositionRequestDto requestDto = UserStuffPositionRequestDto.builder()
-                        .id(userStuffId)
-                        .posX(0.0).posY(0.0).posZ(0.0)
-                        .rotX(0.0).rotY(0.0).rotZ(0.0).build();
-        given(userStuffService.modifyPosAndRot(any(UserStuffPositionRequestDto.class))).willReturn(userStuffId);
-
-        // when, then
-        mockMvc.perform(put("/api/v1/userstuffs/position")
-                        .content(objectMapper.writeValueAsString(requestDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(document("userstuff-modify-pos-or-rot",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestFields(
-                                fieldWithPath("id").description("배치할 userStuff의 Id"),
-                                fieldWithPath("posX").description("위치좌표 X"),
-                                fieldWithPath("posY").description("위치좌표 Y"),
-                                fieldWithPath("posZ").description("위치좌표 Z"),
-                                fieldWithPath("rotX").description("회전값 X"),
-                                fieldWithPath("rotY").description("회전값 Y"),
-                                fieldWithPath("rotZ").description("회전값 Z")
-                        ),
-                        responseFields(common(fieldWithPath("data").type(JsonFieldType.NUMBER).description("수정된 "+USERSTUFF_ID.getDescription())))
-                ));
-    }
 
     @Test
     public void userSutff_삭제() throws Exception {
@@ -337,31 +292,6 @@ public class UserStuffRestDocsTest {
                 ));
     }
 
-    private List<FieldDescriptor> getUserStuffResponse() {
-        return Arrays.asList(
-                fieldWithPath("userStuffId").type(USERSTUFF_ID.getJsonFieldType()).description(USERSTUFF_ID.getDescription()),
-                fieldWithPath("stuffName").type(STUFF_NAME.getJsonFieldType()).description(STUFF_NAME.getDescription()),
-                fieldWithPath("stuffNameKor").type(STUFF_NAME_KOR.getJsonFieldType()).description(STUFF_NAME_KOR.getDescription()),
-                fieldWithPath("stuffType").type(STUFF_TYPE.getJsonFieldType()).description(STUFF_TYPE.getDescription()),
-                fieldWithPath("alias").type(ALIAS.getJsonFieldType()).description(ALIAS.getDescription()),
-                fieldWithPath("category").type(JsonFieldType.OBJECT).description("Category"),
-                fieldWithPath("category.category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
-                fieldWithPath("category.categoryName").type(CATEGORY_NAME.getJsonFieldType()).description(CATEGORY_NAME.getDescription()),
-                fieldWithPath("selected").type(USERSTUFF_SELECTED.getJsonFieldType()).description(USERSTUFF_SELECTED.getDescription()),
-                fieldWithPath("posX").type(POS_X.getJsonFieldType()).description(POS_X.getDescription()),
-                fieldWithPath("posY").type(POS_Y.getJsonFieldType()).description(POS_Y.getDescription()),
-                fieldWithPath("posZ").type(POS_Z.getJsonFieldType()).description(POS_Z.getDescription()),
-                fieldWithPath("rotX").type(ROT_X.getJsonFieldType()).description(ROT_X.getDescription()),
-                fieldWithPath("rotY").type(ROT_Y.getJsonFieldType()).description(ROT_Y.getDescription()),
-                fieldWithPath("rotZ").type(ROT_Z.getJsonFieldType()).description(ROT_Z.getDescription()),
-                fieldWithPath("geometry").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
-                fieldWithPath("material").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
-                fieldWithPath("stuffGlbPath").type(STUFF_GLB_PATH.getJsonFieldType()).description(STUFF_GLB_PATH.getDescription()),
-                fieldWithPath("createdTime").type(USERSTUFF_SELECTED.getJsonFieldType()).description(USERSTUFF_CREATED.getDescription()).optional(),
-                fieldWithPath("modifiedTime").type(USERSTUFF_MODIFIED.getJsonFieldType()).description(USERSTUFF_MODIFIED.getDescription()).optional()
-        );
-    }
-
     @Test
     public void userStuff_구매() throws Exception{
         // given
@@ -409,7 +339,7 @@ public class UserStuffRestDocsTest {
         for(int i = 1; i <= 3; i++) {
             response.add(UserStuffCategoryResponseDto.builder()
                     .userStuffId(Long.valueOf(i))
-                    .stuffNameKor("책상"+i).alias("데일리"+i).category(new CategoryMapperValue(Category.DAILY)).build());
+                    .alias("데일리"+i).category(new CategoryMapperValue(Category.DAILY)).build());
         }
         given(userStuffService.findCategoryPlacedInRoom()).willReturn(response);
 
@@ -422,7 +352,6 @@ public class UserStuffRestDocsTest {
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("배치된 UserStuff의 카테고리")))
                                 .andWithPrefix("data.[].",
                                         fieldWithPath("userStuffId").type(USERSTUFF_ID.getJsonFieldType()).description(USERSTUFF_ID.getDescription()),
-                                        fieldWithPath("stuffNameKor").type(STUFF_NAME_KOR.getJsonFieldType()).description(STUFF_NAME_KOR.getDescription()),
                                         fieldWithPath("alias").type(ALIAS.getJsonFieldType()).description(ALIAS.getDescription()),
                                         fieldWithPath("category").type(JsonFieldType.OBJECT).description("카테고리 정보"),
                                         fieldWithPath("category.category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
@@ -447,5 +376,46 @@ public class UserStuffRestDocsTest {
                 fieldWithPath("createdTime").type(JsonFieldType.STRING).description(STUFF_CREATED.getDescription()).ignored(),
                 fieldWithPath("modifiedTime").type(JsonFieldType.STRING).description(STUFF_MODIFIED.getDescription()).ignored()
         );
+    }
+
+    @Test
+    public void room_편집_완료_시_변경된_userStuff를_저장() throws Exception {
+        // given
+        List<StuffType> list = Arrays.asList(StuffType.WALL, StuffType.FLOOR, StuffType.DESK, StuffType.CLOSET, StuffType.DRAWER);
+        List<UserStuffEditRequestDto> requestDtoList = new ArrayList<>();
+        for(int i = 1; i < 5; i+=2) {
+            String categories = "DAILY,STUDY,INTERIOR";
+            Stuff stuff = Stuff.builder()
+                    .id(10L+i).stuffName("desk"+i).stuffNameKor("책상"+i).price(50L+i)
+                    .categories(categories).stuffType(list.get(i))
+                    .geometry("geometry").material("material").stuffGlbPath("glbPath")
+                    .build();
+            requestDtoList.add( new UserStuffEditRequestDto(Long.valueOf(i), "alias", "DAILY",
+                    0.5, 0.5 ,0.5, 0.5, 0.5, 0.5));
+        }
+        given(userStuffService.editUserStuff(any(List.class))).willReturn(true);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/userstuffs/edit")
+                        .content(objectMapper.writeValueAsString(requestDtoList))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("userstuff-edit-room",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("[]").description("배치할 UserStuff"),
+                                fieldWithPath("[].userStuffId").type(USERSTUFF_ID.getJsonFieldType()).description(USERSTUFF_ID.getDescription()),
+                                fieldWithPath("[].alias").type(ALIAS.getJsonFieldType()).description(ALIAS.getDescription()),
+                                fieldWithPath("[].category").type(JsonFieldType.STRING).description("선택된 카테고리"),
+                                fieldWithPath("[].posX").type(POS_X.getJsonFieldType()).description(POS_X.getDescription()),
+                                fieldWithPath("[].posY").type(POS_Y.getJsonFieldType()).description(POS_Y.getDescription()),
+                                fieldWithPath("[].posZ").type(POS_Z.getJsonFieldType()).description(POS_Z.getDescription()),
+                                fieldWithPath("[].rotX").type(ROT_X.getJsonFieldType()).description(ROT_X.getDescription()),
+                                fieldWithPath("[].rotY").type(ROT_Y.getJsonFieldType()).description(ROT_Y.getDescription()),
+                                fieldWithPath("[].rotZ").type(ROT_Z.getJsonFieldType()).description(ROT_Z.getDescription())
+                        ),
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("UserStuff 편집 성공")))
+                ));
     }
 }

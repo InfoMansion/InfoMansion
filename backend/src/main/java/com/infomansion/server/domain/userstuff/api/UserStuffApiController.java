@@ -31,33 +31,15 @@ public class UserStuffApiController {
     }
 
     @GetMapping("/api/v1/userstuffs/list")
-    public ResponseEntity<CommonResponse<List<UserStuffResponseDto>>> findAllUserStuff() {
+    public ResponseEntity<CommonResponse<List<UserStuffEditResponseDto>>> findAllUserStuff() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userStuffService.findAllUserStuff()));
-    }
-
-    @PutMapping("/api/v1/userstuffs/{userStuffId}")
-    public ResponseEntity<CommonResponse<Long>> excludeUserStuff(@PathVariable Long userStuffId) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userStuffService.excludeUserStuff(userStuffId)));
-    }
-
-    @PutMapping("/api/v1/userstuffs")
-    public ResponseEntity<CommonResponse<Long>> includeUserStuff(@Valid @RequestBody UserStuffIncludeRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userStuffService.includeUserStuff(requestDto)));
     }
 
     @PutMapping("/api/v1/userstuffs/option")
     public ResponseEntity<CommonResponse<Long>> modifyAliasAndCategory(@Valid @RequestBody UserStuffModifyRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userStuffService.modifyAliasOrCategory(requestDto)));
-    }
-
-    @PutMapping("/api/v1/userstuffs/position")
-    public ResponseEntity<CommonResponse<Long>> modifyPosAndRot(@Valid @RequestBody UserStuffPositionRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userStuffService.modifyPosAndRot(requestDto)));
     }
 
     @PatchMapping("/api/v1/userstuffs/{userStuffId}")
@@ -82,5 +64,11 @@ public class UserStuffApiController {
     public ResponseEntity<? extends BasicResponse> findCategoryPlacedInRoom() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userStuffService.findCategoryPlacedInRoom()));
+    }
+
+    @PutMapping("/api/v1/userstuffs/edit")
+    public ResponseEntity<? extends BasicResponse> editUserStuffPlaced(@Valid @RequestBody List<UserStuffEditRequestDto> requestDtos) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userStuffService.editUserStuff(requestDtos)));
     }
 }

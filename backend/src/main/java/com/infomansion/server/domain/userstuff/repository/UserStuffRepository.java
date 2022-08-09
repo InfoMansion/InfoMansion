@@ -31,7 +31,8 @@ public interface UserStuffRepository extends JpaRepository<UserStuff, Long> {
             "else 3 end)")
     List<UserStuff> findArrangedByUser(@Param("user") User user);
 
-    @Query("select us from UserStuff us join fetch us.stuff " +
-            "where us.user = :user and us.selected = true and us.category <> :category ")
+    @Query("select us from UserStuff us where us.user = :user and us.selected = true and us.category <> :category ")
     List<UserStuff> findCategoryPlacedInRoom(@Param("user") User user, @Param("category") Category category);
+
+    List<UserStuff> findByUserIsAndIdNotInAndSelectedIsTrue(User user, List<Long> userStuffIds);
 }

@@ -4,23 +4,26 @@ import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.category.domain.CategoryMapperValue;
 import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
-import com.infomansion.server.global.util.common.EnumMapperType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ToString
 @Getter
-public class UserStuffResponseDto {
+public class UserStuffEditResponseDto {
 
     private Long userStuffId;
     private StuffType stuffType;
 
     private String alias;
-    private CategoryMapperValue category;
+    private Category selectedCategory;
+    private List<CategoryMapperValue> categories;
     private Boolean selected;
 
     private BigDecimal posX;
@@ -39,12 +42,12 @@ public class UserStuffResponseDto {
     private LocalDateTime modifiedTime;
 
     @Builder
-    public UserStuffResponseDto(Long userStuffId, StuffType stuffType, String alias, Category category, Boolean selected, BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ, String geometry, String material, String stuffGlbPath, LocalDateTime createdTime, LocalDateTime modifiedTime) {
+    public UserStuffEditResponseDto(Long userStuffId, StuffType stuffType, String alias, Category selectedCategory, List<CategoryMapperValue> categories, Boolean selected, BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ, String geometry, String material, String stuffGlbPath, LocalDateTime createdTime, LocalDateTime modifiedTime) {
         this.userStuffId = userStuffId;
         this.stuffType = stuffType;
         this.alias = alias;
-        if(category != null)
-            this.category = new CategoryMapperValue(category);
+        this.selectedCategory = selectedCategory;
+        this.categories = categories;
         this.selected = selected;
         this.posX = posX;
         this.posY = posY;
@@ -59,12 +62,13 @@ public class UserStuffResponseDto {
         this.modifiedTime = modifiedTime;
     }
 
-    public static UserStuffResponseDto toDto(UserStuff userStuff) {
-        return UserStuffResponseDto.builder()
+    public static UserStuffEditResponseDto toDto(UserStuff userStuff) {
+        return UserStuffEditResponseDto.builder()
                 .userStuffId(userStuff.getId())
                 .stuffType(userStuff.getStuff().getStuffType())
                 .alias(userStuff.getAlias())
-                .category(userStuff.getCategory())
+                .selectedCategory(userStuff.getCategory())
+                .categories(getCategories(userStuff.getStuff().getCategories()))
                 .selected(userStuff.getSelected())
                 .posX(userStuff.getPosX()).posY(userStuff.getPosY()).posZ(userStuff.getPosZ())
                 .rotX(userStuff.getRotX()).rotY(userStuff.getRotY()).rotZ(userStuff.getRotZ())
@@ -73,5 +77,12 @@ public class UserStuffResponseDto {
                 .modifiedTime(userStuff.getCreatedDate())
                 .modifiedTime(userStuff.getModifiedDate())
                 .build();
+    }
+
+    private static List<CategoryMapperValue> getCategories(String categories) {
+        String[] splitCategories = categories.split(",");
+        return Arrays.stream(splitCategories)
+                .map(category -> new CategoryMapperValue(Category.valueOf(category)))
+                .collect(Collectors.toList());
     }
 }

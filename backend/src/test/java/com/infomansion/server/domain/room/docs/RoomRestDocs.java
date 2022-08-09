@@ -12,9 +12,16 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.http.HttpMethod;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +32,10 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -67,6 +78,25 @@ public class RoomRestDocs {
                                         fieldWithPath("roomResponseDtos.[].roomImg").type(ROOM_IMG.getJsonFieldType()).description(ROOM_IMG.getDescription())
                                 )
 
+                ));
+    }
+
+    @Test
+    public void Room_이미지_수정() throws Exception {
+        // given
+        MockMultipartFile roomImg = new MockMultipartFile("roomImg", "imagefile.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        given(roomService.editRoomImg(any(MockMultipartFile.class))).willReturn(true);
+        // when, then
+        mockMvc.perform(multipart(HttpMethod.PUT, URI.create("/api/v1/rooms/edit"))
+                        .file(roomImg))
+                .andExpect(status().isOk())
+                .andDo(document("room-edit",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParts(
+                                partWithName("roomImg").description("변경할 room 이미지")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("room 이미지 수정 성공")))
                 ));
     }
 }

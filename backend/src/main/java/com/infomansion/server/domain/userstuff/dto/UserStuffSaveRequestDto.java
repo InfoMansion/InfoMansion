@@ -29,6 +29,7 @@ public class UserStuffSaveRequestDto {
         return UserStuff.builder()
                 .stuff(stuff)
                 .user(user)
+                .alias(stuff.getStuffNameKor())
                 .selected(false)
                 .posX(BigDecimal.ZERO).posY(BigDecimal.ZERO).posZ(BigDecimal.ZERO)
                 .rotX(BigDecimal.ZERO).rotY(BigDecimal.ZERO).rotZ(BigDecimal.ZERO)

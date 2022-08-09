@@ -204,6 +204,25 @@ include::{snippets}/userstuff-get-arranged-userstuff-with-username/response-fiel
 
 ---
 
+[[UserStuff-편집]]
+== Room 수정 시 UserStuff 변경
+
+로그인한 사용자의 room이 수정될 경우 UserStuff 배치를 수정하는 API
+
+=== Http Request
+include::{snippets}/userstuff-edit-room/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/userstuff-edit-room/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/userstuff-edit-room/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/userstuff-edit-room/response-fields.adoc[]
+
+---
+
 [[UserStuff-삭제]]
 == UserStuff 삭제
 
@@ -223,44 +242,6 @@ include::{snippets}/userstuff-delete/response-fields.adoc[]
 
 ---
 
-[[UserStuff-제외]]
-== UserStuff를 방에서 제외
-
-배치된 UserStuff를 방에서 제외시키는 API
-
-=== Http Request
-include::{snippets}/userstuff-exclude-in-room/http-request.adoc[]
-
-=== Path parameters
-include::{snippets}/userstuff-exclude-in-room/path-parameters.adoc[]
-
-=== Http Response
-include::{snippets}/userstuff-exclude-in-room/http-response.adoc[]
-
-=== Response fields
-include::{snippets}/userstuff-exclude-in-room/response-fields.adoc[]
-
----
-
-[[UserStuff-배치]]
-== UserStuff를 방에 배치
-
-UserStuff를 방에 배치하는 API
-
-=== Http Request
-include::{snippets}/userstuff-include-in-room/http-request.adoc[]
-
-=== Request fields
-include::{snippets}/userstuff-include-in-room/request-fields.adoc[]
-
-=== Http Response
-include::{snippets}/userstuff-include-in-room/http-response.adoc[]
-
-=== Response fields
-include::{snippets}/userstuff-include-in-room/request-fields.adoc[]
-
----
-
 [[UserStuff-별칭또는카테고리수정]]
 == UserStuff의 별칭 또는 카테고리 수정
 
@@ -277,25 +258,6 @@ include::{snippets}/userstuff-modify-alias-or-category/http-response.adoc[]
 
 === Response fields
 include::{snippets}/userstuff-modify-alias-or-category/request-fields.adoc[]
-
----
-
-[[UserStuff-위치수정]]
-== UserStuff의 위치나 회전각 수정
-
-UserStuff의 Position이나 Rotation을 수정하는 API
-
-=== Http Request
-include::{snippets}/userstuff-modify-pos-or-rot/http-request.adoc[]
-
-=== Request fields
-include::{snippets}/userstuff-modify-pos-or-rot/request-fields.adoc[]
-
-=== Http Response
-include::{snippets}/userstuff-modify-pos-or-rot/http-response.adoc[]
-
-=== Response fields
-include::{snippets}/userstuff-modify-pos-or-rot/request-fields.adoc[]
 
 ---
 
@@ -806,6 +768,28 @@ include::{snippets}/room-recommend/http-response.adoc[]
 
 === Response fields
 include::{snippets}/room-recommend/response-fields.adoc[]
+
+---
+
+[[Room-edit]]
+== 수정된 Room Image 저장하는 API
+
+Room 수정이 완료되었을 때 DB에 저장된 room Image를 변경하는 API
+
+=== Http Request
+include::{snippets}/room-edit/http-request.adoc[]
+
+=== Request parts
+include::{snippets}/room-edit/request-parts.adoc[]
+
+=== Http Response
+include::{snippets}/room-edit/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/room-edit/response-fields.adoc[]
+
+=== Request fields
+
 
 
 

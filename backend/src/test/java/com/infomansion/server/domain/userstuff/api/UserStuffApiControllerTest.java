@@ -5,9 +5,8 @@ import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
-import com.infomansion.server.domain.userstuff.dto.UserStuffIncludeRequestDto;
+import com.infomansion.server.domain.userstuff.dto.UserStuffEditRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffModifyRequestDto;
-import com.infomansion.server.domain.userstuff.dto.UserStuffPositionRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffSaveRequestDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
@@ -136,74 +135,6 @@ public class UserStuffApiControllerTest {
                 .andExpect(jsonPath("$.code").value(ErrorCode.USER_STUFF_NOT_FOUND.getCode()));
     }
 
-    @DisplayName("유효하지 않은 userStuffId로 제외 요청 시 실패")
-    @Test
-    public void userstuff_제외_실패_1() throws Exception {
-        // given
-        Long userStuffId = 99999L;
-
-        // when, then
-        mockMvc.perform(put("/api/v1/userstuffs/"+userStuffId))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(ErrorCode.USER_STUFF_NOT_FOUND.getCode()))
-                .andExpect(jsonPath("$.message").value(ErrorCode.USER_STUFF_NOT_FOUND.getMessage()));
-    }
-
-    @DisplayName("이미 제외된 userStuffId로 제외 요청 시 실패")
-    @WithCustomUserDetails
-    @Test
-    public void userstuff_제외_실패_2() throws Exception {
-        // given
-        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
-                .stuffId(stuffIds.get(0)).build();
-        Long userStuffId = userStuffService.saveUserStuff(createDto);
-
-        // when, then
-        mockMvc.perform(put("/api/v1/userstuffs/"+userStuffId))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(ErrorCode.EXCLUDED_USER_STUFF.getCode()))
-                .andExpect(jsonPath("$.message").value(ErrorCode.EXCLUDED_USER_STUFF.getMessage()));
-
-    }
-
-    @DisplayName("이미 배치된 userStuffId로 배치 요청 시 실패")
-    @WithCustomUserDetails
-    @Test
-    public void userstuff_배치_실패() throws Exception {
-        // given
-        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
-                .stuffId(stuffIds.get(0)).build();
-        Long userStuffId = userStuffService.saveUserStuff(createDto);
-
-        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("Java 정리").category("IT")
-                .posX(0.2).posY(0.3).posZ(3.1)
-                .rotX(1.5).rotY(0.0).rotZ(0.9)
-                .build();
-
-        String includeDtoJson = objectMapper.writeValueAsString(includeDto);
-        mockMvc.perform(put("/api/v1/userstuffs")
-                        .content(includeDtoJson)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-
-        // when, then
-        UserStuffIncludeRequestDto reIncludeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("GAME 공략 모음").category("GAME")
-                .posX(3.2).posY(3.3).posZ(0.1)
-                .rotX(0.0).rotY(0.0).rotZ(1.2)
-                .build();
-        String reIncludeDtoJson = objectMapper.writeValueAsString(reIncludeDto);
-        mockMvc.perform(put("/api/v1/userstuffs")
-                        .content(reIncludeDtoJson)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(ErrorCode.INCLUDED_USER_STUFF.getCode()))
-                .andExpect(jsonPath("$.message").value(ErrorCode.INCLUDED_USER_STUFF.getMessage()));
-
-    }
-
     @DisplayName("alias, category 둘 다 미입력 시 실패")
     @WithCustomUserDetails
     @Test
@@ -213,14 +144,16 @@ public class UserStuffApiControllerTest {
                 .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
-        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("Java 정리").category("IT")
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").category("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
+        List<UserStuffEditRequestDto> requestDto = new ArrayList<>();
+        requestDto.add(includeDto);
 
-        String includeDtoJson = objectMapper.writeValueAsString(includeDto);
-        mockMvc.perform(put("/api/v1/userstuffs")
+        String includeDtoJson = objectMapper.writeValueAsString(requestDto);
+        mockMvc.perform(put("/api/v1/userstuffs/edit")
                         .content(includeDtoJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -248,14 +181,16 @@ public class UserStuffApiControllerTest {
                 .stuffId(stuffIds.get(0)).build();
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
-        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("Java 정리").category("IT")
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").category("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
+        List<UserStuffEditRequestDto> requestDto = new ArrayList<>();
+        requestDto.add(includeDto);
 
-        String includeDtoJson = objectMapper.writeValueAsString(includeDto);
-        mockMvc.perform(put("/api/v1/userstuffs")
+        String includeDtoJson = objectMapper.writeValueAsString(requestDto);
+        mockMvc.perform(put("/api/v1/userstuffs/edit")
                         .content(includeDtoJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -272,29 +207,6 @@ public class UserStuffApiControllerTest {
                 .andExpect(jsonPath("$.code").value(ErrorCode.NOT_VALID_CATEGORY.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.NOT_VALID_CATEGORY.getMessage()));
 
-    }
-
-    @DisplayName("배치되지 않은 UserStuff의 Position 변경 시 실패")
-    @WithCustomUserDetails
-    @Test
-    public void userstuff_pos_and_rot_수정_실패() throws Exception {
-        // given
-        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
-                .stuffId(stuffIds.get(0)).build();
-        Long userStuffId = userStuffService.saveUserStuff(createDto);
-
-        // when, then
-        UserStuffPositionRequestDto modifyDto = UserStuffPositionRequestDto.builder()
-                .id(userStuffId)
-                .posX(3.2).posY(3.3).posZ(0.1)
-                .rotX(0.0).rotY(0.0).rotZ(1.2).build();
-        String modifyDtoJson = objectMapper.writeValueAsString(modifyDto);
-        mockMvc.perform(put("/api/v1/userstuffs/position")
-                        .content(modifyDtoJson)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(ErrorCode.EXCLUDED_USER_STUFF.getCode()))
-                .andExpect(jsonPath("$.message").value(ErrorCode.EXCLUDED_USER_STUFF.getMessage()));
     }
 
     @DisplayName("유효하지 않은 userStuffId로 삭제 요청 시 실패")

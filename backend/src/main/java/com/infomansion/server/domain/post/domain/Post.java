@@ -45,6 +45,8 @@ public class Post extends BaseTimeEntityAtSoftDelete {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<UserLikePost> userLikePostList = new ArrayList<>();
 
+    private boolean isPublic;
+
     private boolean deleteFlag;
 
     @Builder
@@ -53,6 +55,7 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         this.content = content;
         this.deleteFlag = false;
         this.likesPost = LikesPost.builder().post(this).build();
+        this.isPublic = true;
         setUserAndUserStuff(user, userStuff);
         replaceDefaultPostThumbnail(content);
     }
@@ -71,8 +74,18 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         this.content = content;
     }
 
+    public void updateIsPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public void updateCategory(Category category) {
+        this.category = category;
+        System.out.println("category = " + category);
+    }
+
     public void deletePost(){
         this.deleteFlag = true;
+        this.isPublic = false;
         setDeletedDate();
     }
 

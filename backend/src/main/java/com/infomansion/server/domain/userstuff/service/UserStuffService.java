@@ -10,17 +10,11 @@ public interface UserStuffService {
 
     Long saveUserStuff(UserStuffSaveRequestDto requestDto);
 
-    List<UserStuffResponseDto> findAllUserStuff();
+    List<UserStuffEditResponseDto> findAllUserStuff();
 
     UserStuffResponseDto findUserStuffByUserStuffId(Long userStuffId);
 
-    Long excludeUserStuff(Long userStuffId);
-
-    Long includeUserStuff(UserStuffIncludeRequestDto requestDto);
-
     Long modifyAliasOrCategory(UserStuffModifyRequestDto requestDto);
-
-    Long modifyPosAndRot(UserStuffPositionRequestDto requestDto);
 
     Long removeUserStuff(Long userStuffId);
 
@@ -30,5 +24,7 @@ public interface UserStuffService {
     List<StuffResponseDto> purchaseStuff(UserStuffPurchaseRequestDto requestDto);
 
     List<UserStuffCategoryResponseDto> findCategoryPlacedInRoom();
+
+    boolean editUserStuff(List<UserStuffEditRequestDto> requestDtos);
 
 }

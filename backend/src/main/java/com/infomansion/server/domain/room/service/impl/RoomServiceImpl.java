@@ -6,14 +6,18 @@ import com.infomansion.server.domain.room.dto.RoomResponseDto;
 import com.infomansion.server.domain.room.repository.RoomRepository;
 import com.infomansion.server.domain.room.service.RoomService;
 import com.infomansion.server.domain.post.service.PostService;
+import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
+import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +29,8 @@ public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final PostService postService;
+
+    private final S3Uploader s3Uploader;
 
     @Override
     public void deleteRoom(Long roomId) {
@@ -44,6 +50,20 @@ public class RoomServiceImpl implements RoomService {
         }
 
         return new RoomRecommendResponseDto(roomResponseDtos);
+    }
+
+    @Transactional
+    @Override
+    public boolean editRoomImg(MultipartFile roomImage) {
+        Room loginUserRoom = roomRepository.findRoomWithUser(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
+
+        try {
+            loginUserRoom.changeRoomImage(s3Uploader, roomImage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
     }
 
     @Override

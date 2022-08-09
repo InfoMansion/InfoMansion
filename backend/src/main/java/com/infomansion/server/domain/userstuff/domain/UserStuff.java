@@ -5,6 +5,7 @@ import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.userstuff.dto.UserStuffEditRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -68,10 +69,7 @@ public class UserStuff extends BaseTimeEntityAtSoftDelete {
         this.deleteFlag = false;
     }
 
-    /**
-     * 배치된 UserStuff의 Position과 Rotation 변경
-     */
-    public void changePosAndRot(BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ) {
+    private void changePosAndRot(BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ) {
         this.posX = posX;
         this.posY = posY;
         this.posZ = posZ;
@@ -80,14 +78,25 @@ public class UserStuff extends BaseTimeEntityAtSoftDelete {
         this.rotZ = rotZ;
     }
 
-    public void resetPosAndRot() {
+    /**
+     * UserStuff를 배치된 상태로 변경
+     */
+    public void changePlacedStatus(UserStuffEditRequestDto requestDto) {
+        this.alias = requestDto.getAlias();
+        if(this.category != Category.valueOf(requestDto.getCategory())) {
+            changeCategoryOfPost(Category.valueOf(requestDto.getCategory()));
+        }
+        changeIsPublicOfPost(true);
+        this.category = Category.valueOf(requestDto.getCategory());
+        this.selected = true;
+        changePosAndRot(requestDto.getPosX(), requestDto.getPosY(), requestDto.getPosZ(),
+                requestDto.getRotX(), requestDto.getRotY(), requestDto.getRotZ());
+    }
+
+    public void changeExcludedState() {
         this.selected = false;
-        this.posX = BigDecimal.ZERO;
-        this.posY = BigDecimal.ZERO;
-        this.posZ = BigDecimal.ZERO;
-        this.rotX = BigDecimal.ZERO;
-        this.rotY = BigDecimal.ZERO;
-        this.rotZ = BigDecimal.ZERO;
+        changePosAndRot(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+        changeIsPublicOfPost(false);
     }
 
     /**
@@ -99,28 +108,27 @@ public class UserStuff extends BaseTimeEntityAtSoftDelete {
     }
 
     /**
-     * UserStuff를 배치된 상태로 변경
-     */
-    public void changeIncludedStatus(String alias, String category, BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ) {
-        this.alias = alias;
-        this.category = Category.valueOf(category);
-        this.selected = true;
-        changePosAndRot(posX, posY, posZ, rotX, rotY, rotZ);
-    }
-
-    /**
      * UserStuff 삭제 시 실제로 데이터를 삭제하지 않고 DeleteFlag를 통해 삭제되었다고 표시
      */
     public void deleteUserStuff() {
         this.deleteFlag = true;
         this.setDeletedDate();
-        resetPosAndRot();
+        changeExcludedState();
+    }
+
+    public void changeIsPublicOfPost(boolean isPublic) {
+        postList.forEach(post -> post.updateIsPublic(isPublic));
+    }
+
+    public void changeCategoryOfPost(Category category) {
+        postList.forEach(post -> post.updateCategory(category));
     }
 
     public static UserStuff havePossession(Stuff stuff, User user) {
         return UserStuff.builder()
                 .stuff(stuff)
                 .user(user)
+                .alias(stuff.getStuffNameKor())
                 .selected(false)
                 .posX(BigDecimal.ZERO).posY(BigDecimal.ZERO).posZ(BigDecimal.ZERO)
                 .rotX(BigDecimal.ZERO).rotY(BigDecimal.ZERO).rotZ(BigDecimal.ZERO)

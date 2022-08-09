@@ -10,7 +10,7 @@ import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
-import com.infomansion.server.domain.userstuff.dto.UserStuffIncludeRequestDto;
+import com.infomansion.server.domain.userstuff.dto.UserStuffEditRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffSaveRequestDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
@@ -26,6 +26,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.infomansion.server.domain.user.domain.User.builder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -121,13 +124,15 @@ public class PostApiControllerTest {
         userStuffId = userStuffService.saveUserStuff(createDto);
 
         //UserStuff 배치
-        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("Java 정리").category("IT")
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").category("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
+        List<UserStuffEditRequestDto> includeDtoList = new ArrayList<>();
+        includeDtoList.add(includeDto);
 
-        userStuffId = userStuffService.includeUserStuff(includeDto);
+        userStuffService.editUserStuff(includeDtoList);
 
         //post 작성
         PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
@@ -155,13 +160,15 @@ public class PostApiControllerTest {
         userStuffId = userStuffService.saveUserStuff(createDto);
 
         //UserStuff 배치
-        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("Java 정리").category("IT")
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").category("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
+        List<UserStuffEditRequestDto> includeDtoList = new ArrayList<>();
+        includeDtoList.add(includeDto);
 
-        userStuffId = userStuffService.includeUserStuff(includeDto);
+        userStuffService.editUserStuff(includeDtoList);
 
         //post 작성
         for(int i=0;i<3;i++){
@@ -188,13 +195,15 @@ public class PostApiControllerTest {
         userStuffId = userStuffService.saveUserStuff(createDto);
 
         //UserStuff 배치
-        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("Java 정리").category("IT")
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").category("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
+        List<UserStuffEditRequestDto> includeDtoList = new ArrayList<>();
+        includeDtoList.add(includeDto);
 
-        userStuffId = userStuffService.includeUserStuff(includeDto);
+        userStuffService.editUserStuff(includeDtoList);
 
         //post 작성
         PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
@@ -226,13 +235,15 @@ public class PostApiControllerTest {
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
         //UserStuff 배치
-        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("Java 정리").category("IT")
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").category("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
+        List<UserStuffEditRequestDto> includeDtoList = new ArrayList<>();
+        includeDtoList.add(includeDto);
 
-        userStuffId = userStuffService.includeUserStuff(includeDto);
+        userStuffService.editUserStuff(includeDtoList);
 
         //post 작성
         PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
@@ -280,13 +291,15 @@ public class PostApiControllerTest {
         userStuffId = userStuffService.saveUserStuff(createDto);
 
         //UserStuff 배치
-        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("Java 정리").category("IT")
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").category("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
+        List<UserStuffEditRequestDto> includeDtoList = new ArrayList<>();
+        includeDtoList.add(includeDto);
 
-        userStuffId = userStuffService.includeUserStuff(includeDto);
+        userStuffService.editUserStuff(includeDtoList);
 
         //post 작성
         PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
@@ -323,13 +336,15 @@ public class PostApiControllerTest {
         userStuffId = userStuffService.saveUserStuff(createDto);
 
         //UserStuff 배치
-        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("Java 정리").category("IT")
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").category("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
+        List<UserStuffEditRequestDto> includeDtoList = new ArrayList<>();
+        includeDtoList.add(includeDto);
 
-        userStuffId = userStuffService.includeUserStuff(includeDto);
+        userStuffService.editUserStuff(includeDtoList);
 
         //post 작성
         PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
@@ -365,13 +380,15 @@ public class PostApiControllerTest {
         userStuffId = userStuffService.saveUserStuff(createDto);
 
         //UserStuff 배치
-        UserStuffIncludeRequestDto includeDto = UserStuffIncludeRequestDto.builder()
-                .id(userStuffId).alias("Java 정리").category("IT")
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").category("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
+        List<UserStuffEditRequestDto> includeDtoList = new ArrayList<>();
+        includeDtoList.add(includeDto);
 
-        userStuffId = userStuffService.includeUserStuff(includeDto);
+        userStuffService.editUserStuff(includeDtoList);
         String userName = "infomansion";
         //post 작성
         for(int i=0;i<7;i++){

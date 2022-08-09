@@ -2,6 +2,7 @@ package com.infomansion.server.domain.post.docs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infomansion.server.domain.category.domain.Category;
+import com.infomansion.server.domain.category.domain.CategoryMapperValue;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
 import com.infomansion.server.domain.post.dto.PostDetailResponseDto;
@@ -99,6 +100,7 @@ public class PostRestDocsTest {
                     .id((long) i)
                     .title("title"+i)
                     .content("content"+i)
+                    .category(new CategoryMapperValue(Category.DAILY))
                     .defaultPostThumbnail("default")
                     .modifiedDate(LocalDateTime.now())
                     .likes(2L)
@@ -121,6 +123,9 @@ public class PostRestDocsTest {
                                         fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
                                         fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
                                         fieldWithPath("likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
+                                        fieldWithPath("category").type(JsonFieldType.OBJECT).description(CATEGORY.getDescription()),
+                                        fieldWithPath("category.category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
+                                        fieldWithPath("category.categoryName").type(CATEGORY_NAME.getJsonFieldType()).description(CATEGORY_NAME.getDescription()),
                                         fieldWithPath("modifiedDate").type(MODIFIED_DATE.getJsonFieldType()).description(MODIFIED_DATE.getDescription()).optional(),
                                         fieldWithPath("defaultPostThumbnail").type(DEFAULTPOSTTHUMBNAIL.getJsonFieldType()).description(DEFAULTPOSTTHUMBNAIL.getDescription())
                                 )
@@ -309,6 +314,7 @@ public class PostRestDocsTest {
                             .id((long) i)
                             .title("title"+i)
                             .content("content"+i)
+                            .category(new CategoryMapperValue(Category.DAILY))
                             .defaultPostThumbnail("default")
                             .modifiedDate(LocalDateTime.now())
                             .likes(2L)
@@ -328,6 +334,9 @@ public class PostRestDocsTest {
                                         fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
                                         fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
                                         fieldWithPath("likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
+                                        fieldWithPath("category").type(JsonFieldType.OBJECT).description(CATEGORY.getDescription()),
+                                        fieldWithPath("category.category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
+                                        fieldWithPath("category.categoryName").type(CATEGORY_NAME.getJsonFieldType()).description(CATEGORY_NAME.getDescription()),
                                         fieldWithPath("modifiedDate").type(MODIFIED_DATE.getJsonFieldType()).description(MODIFIED_DATE.getDescription()).optional(),
                                         fieldWithPath("defaultPostThumbnail").type(DEFAULTPOSTTHUMBNAIL.getJsonFieldType()).description(DEFAULTPOSTTHUMBNAIL.getDescription())
                                 )
