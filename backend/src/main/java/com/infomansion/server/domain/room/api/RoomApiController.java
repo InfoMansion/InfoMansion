@@ -42,6 +42,11 @@ public class RoomApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomService.findRecommendRoom()));
     }
 
+    @GetMapping("/api/v2/rooms/recommend")
+    private ResponseEntity<CommonResponse<RoomRecommendResponseDto>> findRecommendRoomByUserLikePost(){
+        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomService.findRecommendRoomByUserLikePost()));
+    }
+
     @PutMapping(value = "/api/v1/rooms/edit", consumes = {"multipart/form-data"})
     public ResponseEntity<? extends BasicResponse> editRoom(@RequestParam(value = "roomImg")MultipartFile roomImage) {
         return ResponseEntity.status(HttpStatus.OK)

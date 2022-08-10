@@ -52,6 +52,18 @@ public class RoomServiceImpl implements RoomService {
         return new RoomRecommendResponseDto(roomResponseDtos);
     }
 
+    @Override
+    public RoomRecommendResponseDto findRecommendRoomByUserLikePost() {
+        List<Long> userIds = postService.findRecommendPostByUserLikePost();
+        List<RoomResponseDto> roomResponseDtos = new ArrayList<>();
+
+        for(Long id : userIds){
+            roomResponseDtos.add(new RoomResponseDto(roomRepository.findRoomWithUser(id).get()));
+        }
+
+        return new RoomRecommendResponseDto(roomResponseDtos);
+    }
+
     @Transactional
     @Override
     public boolean editRoomImg(MultipartFile roomImage) {

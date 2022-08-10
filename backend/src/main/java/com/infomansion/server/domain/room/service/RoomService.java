@@ -21,6 +21,9 @@ public interface RoomService {
     //UserId를 통해 추천된 RoomImg와 UserName 반환
     RoomRecommendResponseDto findRecommendRoom();
 
+    //UserId, UserLikePost를 통해 추천된 RoomImg와 UserName 반환
+    RoomRecommendResponseDto findRecommendRoomByUserLikePost();
+
     boolean editRoomImg(MultipartFile roomImage);
 
 }

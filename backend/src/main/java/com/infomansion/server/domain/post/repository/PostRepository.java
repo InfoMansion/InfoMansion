@@ -19,7 +19,15 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query("select distinct p.user.id from Post p left join LikesPost l on p.id = l.postId where (p.category in :categories and p.modifiedDate between :start and :end and not p.user= :user) group by p.user.id order by l.likes desc")
     List<Long> findTop27ByCategoryInAndModifiedDateBetween(@Param("user") User user, @Param("categories") List<Category> categories, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    @Query("select p from Post p where p.userStuff = :userStuff order by p.modifiedDate")
+    // 후에 UserLikePost 데이터가 채워지면 inner join으로 변경 예정
+    @Query(value = "select distinct p.user.id from Post p left join UserLikePost ulp on p.id = ulp.post.id " +
+            "where p.modifiedDate BETWEEN :start and :end " +
+            "and p.category in :categories and not p.user = :user " +
+            "group by p.id " +
+            "order by count (ulp.post) desc")
+    List<Long> findTop27PostByUserLikePost(@Param("user") User user, @Param("categories") List<Category> categories, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    @Query("select p from Post p where p.userStuff = :userStuff and p.deleteFlag = false order by p.modifiedDate")
     List<Post> findByUserStuffId(@Param("userStuff") UserStuff userStuff);
 
     @Query("select p from Post p where p.title like %:searchWord% and p.user.privateFlag=false")
