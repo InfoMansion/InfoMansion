@@ -2,10 +2,7 @@ package com.infomansion.server.domain.post.service.impl;
 
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.domain.Post;
-import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
-import com.infomansion.server.domain.post.dto.PostDetailResponseDto;
-import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
-import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
+import com.infomansion.server.domain.post.dto.*;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.repository.UserLikePostRepository;
 import com.infomansion.server.domain.post.service.PostService;
@@ -165,10 +162,31 @@ public class PostServiceImpl implements PostService {
     public boolean deletePost(Long postId) {
         Post post = postRepository.findPostWithUser(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-        if(post.getUser().getId() != SecurityUtil.getCurrentUserId() && post.getUserStuff().getUser().getId() != SecurityUtil.getCurrentUserId())
+        if (post.getUser().getId() != SecurityUtil.getCurrentUserId() && post.getUserStuff().getUser().getId() != SecurityUtil.getCurrentUserId())
             throw new CustomException(ErrorCode.USER_NO_PERMISSION);
 
         post.deletePost();
+        return true;
+    }
+
+    @Override
+    public boolean modifyPost(PostModifyRequestDto requestDto) {
+        Post post = postRepository.findById(requestDto.getPostId())
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if(post.getUserStuff().getId() != requestDto.getUserStuffId()) {
+            UserStuff userStuffToMove = userStuffRepository.findById(requestDto.getUserStuffId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+            post.updatePostWithUserStuff(userStuffToMove, requestDto.getTitle(), requestDto.getContent());
+        } else
+            post.updatePost(requestDto.getTitle(), requestDto.getContent());
+
+        List<String> deleteImages = requestDto.getImages()
+                .stream().filter(image -> !requestDto.getContent().contains(image))
+                .collect(Collectors.toList());
+        if (deleteImages.size() > 0)
+            s3Uploader.deleteFiles(deleteImages);
+
         return true;
     }
 

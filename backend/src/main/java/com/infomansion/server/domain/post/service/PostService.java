@@ -1,9 +1,6 @@
 package com.infomansion.server.domain.post.service;
 
-import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
-import com.infomansion.server.domain.post.dto.PostDetailResponseDto;
-import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
-import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
+import com.infomansion.server.domain.post.dto.*;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -18,4 +15,5 @@ public interface PostService {
     PostDetailResponseDto findPostWithUser(Long postId);
     List<PostSimpleResponseDto> findRecent5ByUser(String userName, Pageable pageable);
     boolean deletePost(Long postId);
+    boolean modifyPost(PostModifyRequestDto requestDto);
 }

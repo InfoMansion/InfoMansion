@@ -76,6 +76,12 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         this.content = content;
     }
 
+    public void updatePostWithUserStuff(UserStuff userStuff, String title, String content) {
+        this.userStuff = userStuff;
+        this.category = userStuff.getCategory();
+        updatePost(title, content);
+    }
+
     public void updateIsPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }

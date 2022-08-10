@@ -357,6 +357,25 @@ include::{snippets}/post-find-by-postid/response-fields.adoc[]
 
 ---
 
+[[Post-modify]]
+== Post 수정
+
+Post를 수정하는 API
+
+=== Http Request
+include::{snippets}/post-modify/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/post-modify/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/post-modify/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-modify/response-fields.adoc[]
+
+---
+
 [[Post-delete]]
 == Post 삭제
 

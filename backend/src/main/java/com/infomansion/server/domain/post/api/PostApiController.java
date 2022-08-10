@@ -1,9 +1,6 @@
 package com.infomansion.server.domain.post.api;
 
-import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
-import com.infomansion.server.domain.post.dto.PostDetailResponseDto;
-import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
-import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
+import com.infomansion.server.domain.post.dto.*;
 import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.post.service.UserLikePostService;
@@ -91,5 +88,11 @@ public class PostApiController {
     public ResponseEntity<? extends BasicResponse> deletePost(@Valid @PathVariable Long postId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postService.deletePost(postId)));
+    }
+
+    @PutMapping("/api/v1/posts")
+    public ResponseEntity<? extends BasicResponse> modifyPost(@Valid @RequestBody PostModifyRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(postService.modifyPost(requestDto)));
     }
 }

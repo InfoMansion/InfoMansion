@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.category.domain.CategoryMapperValue;
 import com.infomansion.server.domain.post.domain.Post;
-import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
-import com.infomansion.server.domain.post.dto.PostDetailResponseDto;
-import com.infomansion.server.domain.post.dto.PostSearchResponseDto;
-import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
+import com.infomansion.server.domain.post.dto.*;
 import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.post.service.UserLikePostService;
@@ -37,6 +34,7 @@ import static com.infomansion.server.global.util.restdocs.RestDocsUtil.common;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -182,7 +180,7 @@ public class PostRestDocsTest {
         given(likesPostService.addLikes(any(Long.class))).willReturn(responseDto);
 
         // when, then
-        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/posts/likes/{postId}", requestDto))
+        mockMvc.perform(put("/api/v1/posts/likes/{postId}", requestDto))
                 .andExpect(status().isOk())
                 .andDo(document("post-likes",
                         preprocessRequest(prettyPrint()),
@@ -394,6 +392,36 @@ public class PostRestDocsTest {
                                 parameterWithName("postId").description("삭제할 post Id")
                         ),
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("삭제 성공 여부")))
+                ));
+    }
+
+    @Test
+    public void post_수정() throws Exception {
+        // given
+        PostModifyRequestDto requestDto = PostModifyRequestDto.builder()
+                .postId(20L)
+                .userStuffId(10L)
+                .title("Post Title")
+                .content("Post Content")
+                .images(new ArrayList<>()).build();
+        given(postService.modifyPost(any(PostModifyRequestDto.class))).willReturn(true);
+
+        // when, then
+        mockMvc.perform(put("/api/v1/posts")
+                        .content(objectMapper.writeValueAsString(requestDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("post-modify",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("postId").description("수정할 postId"),
+                                fieldWithPath("userStuffId").description("저장될 UserStuffId"),
+                                fieldWithPath("title").description("Post의 제목"),
+                                fieldWithPath("content").description("Post의 내용"),
+                                fieldWithPath("images").description("업로드한 이미지 주소들")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("수정 성공 여부")))
                 ));
     }
 }
