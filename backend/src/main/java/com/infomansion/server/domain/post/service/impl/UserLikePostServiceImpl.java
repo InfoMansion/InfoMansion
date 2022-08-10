@@ -42,7 +42,9 @@ public class UserLikePostServiceImpl implements UserLikePostService {
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        userLikePostRepository.save(UserLikePost.likePost(post, user));
+        UserLikePost ulp = UserLikePost.likePost(post, user);
+        userLikePostRepository.save(ulp);
+        post.addUserLikePost(ulp);
         notificationRepository.save(Notification.createNotification(user.getUsername(), post.getUser().getUsername(), NotificationType.LIKE_POST, postId));
         return postId;
     }

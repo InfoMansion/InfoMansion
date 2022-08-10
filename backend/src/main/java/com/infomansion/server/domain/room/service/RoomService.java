@@ -18,9 +18,6 @@ public interface RoomService {
     //Room 삭제
     void deleteRoom(Long roomId);
 
-    //UserId를 통해 추천된 RoomImg와 UserName 반환
-    RoomRecommendResponseDto findRecommendRoom();
-
     //UserId, UserLikePost를 통해 추천된 RoomImg와 UserName 반환
     RoomRecommendResponseDto findRecommendRoomByUserLikePost();
 

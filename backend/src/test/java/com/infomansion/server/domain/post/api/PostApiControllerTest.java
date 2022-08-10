@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
-import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
+import com.infomansion.server.domain.post.service.UserLikePostService;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
@@ -31,7 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.infomansion.server.domain.user.domain.User.builder;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,7 +62,7 @@ public class PostApiControllerTest {
     private PostService postService;
 
     @Autowired
-    private LikesPostService likesPostService;
+    private UserLikePostService userLikePostService;
 
     private Long userId;
     private Long stuffId;
@@ -176,7 +177,7 @@ public class PostApiControllerTest {
             Post post = Post.builder().user(user).userStuff(userStuffRepository.findById(userStuffId).get())
                     .title("EffectiveJava ver." + (i+1)).content("자바개발자 필독서 ver."+ (i+1)).build();
             postRepository.saveAndFlush(post);
-            for(int j=0;j<i+1;j++) post.getLikesPost().addPostLikes();
+            for(int j=0;j<i+1;j++) userLikePostService.likePost(post.getId());
         }
 
         mockMvc.perform(get("/api/v1/posts/"+userStuffId))
@@ -217,8 +218,8 @@ public class PostApiControllerTest {
         Long postId = postService.createPost(postCreateDto);
 
 
-        mockMvc.perform(put("/api/v1/posts/likes/"+postId))
-                .andExpect(status().isOk());
+        mockMvc.perform(post("/api/v2/posts/likes/"+postId))
+                .andExpect(status().isCreated());
 
         mockMvc.perform(get("/api/v1/posts/"+userStuffId))
                 .andExpect(status().isOk())
@@ -315,7 +316,7 @@ public class PostApiControllerTest {
 
         Long postId = postService.createPost(postCreateDto);
 
-        for(int i=0;i<3;i++) likesPostService.addLikes(postId);
+        for(int i=0;i<3;i++) userLikePostService.likePost(postId);
 
         mockMvc.perform(get("/api/v1/posts/detail/"+postId))
                 .andExpect(status().isOk())
@@ -361,7 +362,7 @@ public class PostApiControllerTest {
 
         Long postId = postService.createPost(postCreateDto);
 
-        for(int i=0;i<3;i++) likesPostService.addLikes(postId);
+        for(int i=0;i<3;i++) userLikePostService.likePost(postId);
 
         mockMvc.perform(get("/api/v1/posts/detail/"+postId))
                 .andExpect(status().isOk())
@@ -401,7 +402,7 @@ public class PostApiControllerTest {
             Post post = Post.builder().user(user).userStuff(userStuffRepository.findById(userStuffId).get())
                     .title("EffectiveJava ver." + (10-i)).content("자바개발자 필독서 ver."+ (10-i)).build();
             postRepository.saveAndFlush(post);
-            for(int j=0;j<i+1;j++) post.getLikesPost().addPostLikes();
+            for(int j=0;j<i+1;j++) userLikePostService.likePost(post.getId());
         }
 
         mockMvc.perform(get("/api/v1/posts/recent?userName="+userName))

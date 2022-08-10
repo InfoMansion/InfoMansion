@@ -44,7 +44,7 @@ public class PostDetailResponseDto {
                 .category(post.getCategory())
                 .defaultPostThumbnail(post.getDefaultPostThumbnail())
                 .modifiedDate(post.getModifiedDate())
-                .likes(post.getLikesPost().getLikes())
+                .likes((long) post.getUserLikePostList().size())
                 .followFlag(followFlag)
                 .build();
     }

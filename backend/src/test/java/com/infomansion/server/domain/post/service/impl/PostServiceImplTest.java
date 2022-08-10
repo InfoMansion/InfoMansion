@@ -5,7 +5,6 @@ import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.dto.PostModifyRequestDto;
 import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
-import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.domain.StuffType;
@@ -65,9 +64,6 @@ public class PostServiceImplTest {
 
     @Autowired
     private PostService postService;
-
-    @Autowired
-    private LikesPostService likesPostService;
 
     @Autowired
     private EntityManager em;

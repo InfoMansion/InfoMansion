@@ -60,29 +60,6 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(requestDto.toEntity(user, userStuff)).getId();
     }
 
-
-    @Override
-    public List<Long> findRecommendPost() {
-
-        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        String userCategories = user.getCategories();
-
-        List<Category> categories = Arrays.stream(userCategories.split(",")).map(Category::valueOf)
-                .collect(Collectors.toList());
-
-        LocalDateTime start = LocalDateTime.now().minusDays(7);
-        LocalDateTime end = LocalDateTime.now();
-
-        List<Long> recommendUserIds = postRepository.findTop27ByCategoryInAndModifiedDateBetween(user, categories, start, end);
-
-        if(recommendUserIds.size()>27){
-            return new ArrayList<>(recommendUserIds.subList(0,27));
-        }
-        return recommendUserIds;
-    }
-
     @Override
     public List<Long> findRecommendPostByUserLikePost() {
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())

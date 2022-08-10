@@ -1,7 +1,6 @@
 package com.infomansion.server.domain.post.api;
 
 import com.infomansion.server.domain.post.dto.*;
-import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.post.service.UserLikePostService;
 import com.infomansion.server.domain.upload.service.S3Uploader;
@@ -21,7 +20,6 @@ import java.util.List;
 public class PostApiController {
 
     private final PostService postService;
-    private final LikesPostService likesPostService;
     private final UserLikePostService userLikePostService;
     private final S3Uploader s3Uploader;
 
@@ -35,12 +33,6 @@ public class PostApiController {
     public ResponseEntity<CommonResponse<List<PostSimpleResponseDto>>> findPostByUserStuff(@Valid @PathVariable Long userStuffId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postService.findPostByUserStuffId(userStuffId)));
-    }
-
-    @PutMapping("api/v1/posts/likes/{postId}")
-    public ResponseEntity<CommonResponse<Long>> addPostLikes(@Valid @PathVariable Long postId){
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(likesPostService.addLikes(postId)));
     }
 
     @GetMapping("api/v1/posts/search/title")
@@ -66,7 +58,6 @@ public class PostApiController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postService.findRecent5ByUser(userName, pageable)));
     }
-
 
     @PostMapping("/api/v2/posts/likes/{postId}")
     public ResponseEntity<? extends BasicResponse> userLikesPost(@Valid @PathVariable Long postId) {

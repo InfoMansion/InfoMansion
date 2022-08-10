@@ -40,19 +40,6 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public RoomRecommendResponseDto findRecommendRoom() {
-
-        List<Long> userIds = postService.findRecommendPost();
-        List<RoomResponseDto> roomResponseDtos = new ArrayList<>();
-
-        for(Long id : userIds){
-            roomResponseDtos.add(new RoomResponseDto(roomRepository.findRoomWithUser(id).get()));
-        }
-
-        return new RoomRecommendResponseDto(roomResponseDtos);
-    }
-
-    @Override
     public RoomRecommendResponseDto findRecommendRoomByUserLikePost() {
         List<Long> userIds = postService.findRecommendPostByUserLikePost();
         List<RoomResponseDto> roomResponseDtos = new ArrayList<>();

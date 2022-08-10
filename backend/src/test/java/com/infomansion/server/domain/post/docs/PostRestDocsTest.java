@@ -3,15 +3,12 @@ package com.infomansion.server.domain.post.docs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.category.domain.CategoryMapperValue;
-import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.dto.*;
-import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.post.service.UserLikePostService;
 import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
-import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -55,9 +52,6 @@ public class PostRestDocsTest {
 
     @MockBean
     private PostService postService;
-
-    @MockBean
-    private LikesPostService likesPostService;
 
     @MockBean
     private UserLikePostService userLikePostService;
@@ -181,11 +175,11 @@ public class PostRestDocsTest {
         // given
         Long requestDto = 10L;
         Long responseDto = 10L;
-        given(likesPostService.addLikes(any(Long.class))).willReturn(responseDto);
+        given(userLikePostService.likePost(any(Long.class))).willReturn(responseDto);
 
         // when, then
-        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/posts/likes/{postId}", requestDto))
-                .andExpect(status().isOk())
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v2/posts/likes/{postId}", requestDto))
+                .andExpect(status().isCreated())
                 .andDo(document("post-likes",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),

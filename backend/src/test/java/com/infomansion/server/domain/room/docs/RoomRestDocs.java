@@ -64,9 +64,9 @@ public class RoomRestDocs {
             roomResponseDtos.add(new RoomResponseDto(Room.builder()
                     .user(User.builder().username("test"+i).build()).build()));
         }
-        given(roomService.findRecommendRoom()).willReturn(new RoomRecommendResponseDto(roomResponseDtos));
+        given(roomService.findRecommendRoomByUserLikePost()).willReturn(new RoomRecommendResponseDto(roomResponseDtos));
         // when, then
-        mockMvc.perform(get("/api/v1/rooms/recommend"))
+        mockMvc.perform(get("/api/v2/rooms/recommend"))
                 .andExpect(status().isOk())
                 .andDo(document("room-recommend",
                         preprocessRequest(prettyPrint()),

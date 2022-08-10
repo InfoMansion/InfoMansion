@@ -44,9 +44,6 @@ public class Post extends BaseTimeEntityAtSoftDelete {
 
     private String defaultPostThumbnail;
 
-    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
-    private LikesPost likesPost;
-
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<UserLikePost> userLikePostList = new ArrayList<>();
 
@@ -59,7 +56,6 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         this.title = title;
         this.content = content;
         this.deleteFlag = false;
-        this.likesPost = LikesPost.builder().post(this).build();
         this.isPublic = true;
         setUserAndUserStuff(user, userStuff);
         replaceDefaultPostThumbnail(content);
@@ -127,5 +123,9 @@ public class Post extends BaseTimeEntityAtSoftDelete {
             String url = content.substring(startIdx, endIdx);
             this.defaultPostThumbnail = url;
         }
+    }
+
+    public void addUserLikePost(UserLikePost ulp){
+        this.userLikePostList.add(ulp);
     }
 }

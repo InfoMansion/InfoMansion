@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface PostService {
     Long createPost(PostCreateRequestDto requestDto);
-    List<Long> findRecommendPost();
     List<Long> findRecommendPostByUserLikePost();
     List<PostSimpleResponseDto> findPostByUserStuffId(Long userStuffId);
     PostSearchResponseDto findPostBySearchWordForTitle(String searchWord, Pageable pageable);

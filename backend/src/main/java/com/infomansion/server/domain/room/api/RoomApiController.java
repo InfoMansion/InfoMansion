@@ -37,11 +37,6 @@ public class RoomApiController {
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomId));
     }
 
-    @GetMapping("/api/v1/rooms/recommend")
-    private ResponseEntity<CommonResponse<RoomRecommendResponseDto>> findRecommendRoom(){
-        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomService.findRecommendRoom()));
-    }
-
     @GetMapping("/api/v2/rooms/recommend")
     private ResponseEntity<CommonResponse<RoomRecommendResponseDto>> findRecommendRoomByUserLikePost(){
         return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomService.findRecommendRoomByUserLikePost()));
