@@ -82,13 +82,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostSimpleResponseDto> findPostByUserStuffId(Long userStuffId) {
+    public List<PostSimpleResponseDto> findPostByUserStuffId(Long userStuffId, Pageable pageable) {
 
         UserStuff userStuff = userStuffRepository.findById(userStuffId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
 
         List<PostSimpleResponseDto> simpleResponseDtos = new ArrayList<>();
-        postRepository.findByUserStuffId(userStuff)
+        postRepository.findByUserStuffId(userStuff, pageable)
                 .forEach(post -> simpleResponseDtos.add(new PostSimpleResponseDto(post)));
 
         return simpleResponseDtos;

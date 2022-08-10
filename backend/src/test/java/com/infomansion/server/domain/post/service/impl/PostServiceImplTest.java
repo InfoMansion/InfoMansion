@@ -27,6 +27,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -155,7 +157,8 @@ public class PostServiceImplTest {
         includeDtoList.add(modifiedIncludeDto);
         userStuffService.editUserStuff(includeDtoList);
 
-        List<PostSimpleResponseDto> response = postService.findPostByUserStuffId(userStuffId);
+        Pageable pageable = PageRequest.of(0, 5);
+        List<PostSimpleResponseDto> response = postService.findPostByUserStuffId(userStuffId, pageable);
         for (PostSimpleResponseDto postSimpleResponseDto : response) {
             assertThat(postSimpleResponseDto.getCategory().getCategory()).isEqualTo("DAILY");
         }

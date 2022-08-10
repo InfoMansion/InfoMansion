@@ -33,6 +33,7 @@ import java.util.List;
 import static com.infomansion.server.domain.user.domain.User.builder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -180,7 +181,10 @@ public class PostApiControllerTest {
             for(int j=0;j<i+1;j++) userLikePostService.likePost(post.getId());
         }
 
-        mockMvc.perform(get("/api/v1/posts/"+userStuffId))
+        int page = 0;
+        int size = 3;
+
+        mockMvc.perform(get("/api/v1/posts/"+userStuffId+ "?page="+page+"&size="+size))
                 .andExpect(status().isOk())
                 .andExpect((ResultMatcher) jsonPath("$.data[0].['title']").value("EffectiveJava ver.1"));
     }
@@ -221,7 +225,10 @@ public class PostApiControllerTest {
         mockMvc.perform(post("/api/v2/posts/likes/"+postId))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(get("/api/v1/posts/"+userStuffId))
+        int page = 0;
+        int size = 3;
+
+        mockMvc.perform(get("/api/v1/posts/"+userStuffId+ "?page="+page+"&size="+size))
                 .andExpect(status().isOk())
                 .andExpect((ResultMatcher) jsonPath("$.data[0].['likes']").value(1));
 

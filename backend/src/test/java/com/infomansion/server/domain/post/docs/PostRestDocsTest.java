@@ -103,7 +103,8 @@ public class PostRestDocsTest {
                     .likes(2L)
                     .build());
         }
-        given(postService.findPostByUserStuffId(any(Long.class))).willReturn(responseDtoList);
+
+        given(postService.findPostByUserStuffId(any(Long.class), any(Pageable.class))).willReturn(responseDtoList);
 
         // when, then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/{userStuffId}", requestDto))
