@@ -17,7 +17,6 @@ public class Notification {
     @Column(name = "notification_id")
     private Long id;
 
-    @Column(name = "read")
     private boolean isRead;
 
     @CreatedDate
