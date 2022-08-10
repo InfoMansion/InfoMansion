@@ -146,6 +146,7 @@ public class PostRestDocsTest {
                 .defaultPostThumbnail("default")
                 .modifiedDate(LocalDateTime.now())
                 .likes(10L)
+                .followFlag(false)
                 .build();
         given(postService.findPostWithUser(any(Long.class))).willReturn(responseDto);
 
@@ -167,7 +168,8 @@ public class PostRestDocsTest {
                                         fieldWithPath("likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
                                         fieldWithPath("category").type(CATEGORY.getJsonFieldType()).description("Post의 " + CATEGORY.getDescription()),
                                         fieldWithPath("modifiedDate").type(MODIFIED_DATE.getJsonFieldType()).description(MODIFIED_DATE.getDescription()).optional(),
-                                        fieldWithPath("defaultPostThumbnail").type(DEFAULTPOSTTHUMBNAIL.getJsonFieldType()).description(DEFAULTPOSTTHUMBNAIL.getDescription())
+                                        fieldWithPath("defaultPostThumbnail").type(DEFAULTPOSTTHUMBNAIL.getJsonFieldType()).description(DEFAULTPOSTTHUMBNAIL.getDescription()),
+                                        fieldWithPath("followFlag").type(FOLLOW_FLAG.getJsonFieldType()).description(FOLLOW_FLAG.getDescription())
                                 )
                 ));
     }

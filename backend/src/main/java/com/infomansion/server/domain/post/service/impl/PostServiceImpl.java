@@ -11,6 +11,7 @@ import com.infomansion.server.domain.post.repository.UserLikePostRepository;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.repository.FollowRepository;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
@@ -39,6 +40,7 @@ public class PostServiceImpl implements PostService {
     private final UserStuffRepository userStuffRepository;
     private final PostRepository postRepository;
     private final UserLikePostRepository userLikePostRepository;
+    private final FollowRepository followRepository;
     private final S3Uploader s3Uploader;
 
     @Transactional
@@ -138,7 +140,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findPostWithUser(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        return new PostDetailResponseDto(post);
+        return PostDetailResponseDto.toDto(post, followRepository.existsByFromUserIdAndToUserIs(SecurityUtil.getCurrentUserId(), post.getUser()));
     }
 
     @Override

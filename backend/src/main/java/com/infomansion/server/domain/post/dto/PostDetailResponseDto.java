@@ -18,20 +18,11 @@ public class PostDetailResponseDto {
     private String defaultPostThumbnail;
     private LocalDateTime modifiedDate;
     private Long likes;
+    private boolean followFlag;
 
-    public PostDetailResponseDto(Post post){
-        this.id = post.getId();
-        this.userName = post.getUser().getUsername();
-        this.title = post.getTitle();
-        this.content = post.getContent();
-        this.category = post.getCategory();
-        this.defaultPostThumbnail = post.getDefaultPostThumbnail();
-        this.modifiedDate = post.getModifiedDate();
-        this.likes = post.getLikesPost().getLikes();
-    }
 
     @Builder
-    public PostDetailResponseDto(Long id, String userName, String title, String content, Category category, String defaultPostThumbnail, LocalDateTime modifiedDate, Long likes) {
+    public PostDetailResponseDto(Long id, String userName, String title, String content, Category category, String defaultPostThumbnail, LocalDateTime modifiedDate, Long likes, boolean followFlag) {
         this.id = id;
         this.userName = userName;
         this.title = title;
@@ -40,5 +31,21 @@ public class PostDetailResponseDto {
         this.defaultPostThumbnail = defaultPostThumbnail;
         this.modifiedDate = modifiedDate;
         this.likes = likes;
+        this.followFlag = followFlag;
+    }
+
+
+    public static PostDetailResponseDto toDto(Post post, boolean followFlag){
+        return PostDetailResponseDto.builder()
+                .id(post.getId())
+                .userName(post.getUser().getUsername())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .category(post.getCategory())
+                .defaultPostThumbnail(post.getDefaultPostThumbnail())
+                .modifiedDate(post.getModifiedDate())
+                .likes(post.getLikesPost().getLikes())
+                .followFlag(followFlag)
+                .build();
     }
 }
