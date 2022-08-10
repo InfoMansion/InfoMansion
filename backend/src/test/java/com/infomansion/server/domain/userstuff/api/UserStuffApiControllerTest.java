@@ -303,7 +303,7 @@ public class UserStuffApiControllerTest {
         String title = "EffectiveJava자바 infomansion";
         String content = "infomansion Java 파이팅!";
         PostCreateRequestDto postCreateRequestDto = PostCreateRequestDto.builder()
-                        .userStuffId(userStuffId).title(title).content(content).build();
+                        .userStuffId(userStuffId).title(title).content(content).images(new ArrayList<>()).build();
 
         Long postId = postService.createPost(postCreateRequestDto);
 

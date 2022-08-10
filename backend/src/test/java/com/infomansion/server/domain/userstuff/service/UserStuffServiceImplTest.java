@@ -294,6 +294,7 @@ public class UserStuffServiceImplTest {
                 .userStuffId(userStuffId[0])
                 .title("EffectiveJava자바 infomansion")
                 .content("infomansion Java 파이팅!")
+                .images(new ArrayList<>())
                 .build();
 
         postService.createPost(postCreateDto);
@@ -373,6 +374,7 @@ public class UserStuffServiceImplTest {
                 .userStuffId(userStuffId[0])
                 .title("EffectiveJava자바 infomansion")
                 .content("infomansion Java 파이팅!")
+                .images(new ArrayList<>())
                 .build();
 
         postService.createPost(postCreateDto);

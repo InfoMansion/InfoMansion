@@ -139,6 +139,7 @@ public class PostApiControllerTest {
                 .userStuffId(userStuffId)
                 .title("EffectiveJava")
                 .content("자바개발자 필독서")
+                .images(new ArrayList<>())
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -210,6 +211,7 @@ public class PostApiControllerTest {
                 .userStuffId(userStuffId)
                 .title("EffectiveJava")
                 .content("자바개발자 필독서")
+                .images(new ArrayList<>())
                 .build();
 
         Long postId = postService.createPost(postCreateDto);
@@ -250,6 +252,7 @@ public class PostApiControllerTest {
                 .userStuffId(userStuffId)
                 .title("EffectiveJava자바 infomansion")
                 .content("infomansion Java 파이팅!")
+                .images(new ArrayList<>())
                 .build();
 
         postService.createPost(postCreateDto);
@@ -258,6 +261,7 @@ public class PostApiControllerTest {
                 .userStuffId(userStuffId)
                 .title("킹갓infomansion")
                 .content("Java개발자 infomansion 필독서")
+                .images(new ArrayList<>())
                 .build();
 
         postService.createPost(postCreateDto);
@@ -306,6 +310,7 @@ public class PostApiControllerTest {
                 .userStuffId(userStuffId)
                 .title("EffectiveJava")
                 .content("자바개발자 필독서")
+                .images(new ArrayList<>())
                 .build();
 
         Long postId = postService.createPost(postCreateDto);
@@ -351,6 +356,7 @@ public class PostApiControllerTest {
                 .userStuffId(userStuffId)
                 .title("EffectiveJava")
                 .content("자바개발자 필독서, <img src=\"https://cdn.pixabay.com/photo/2021/08/25/07/21/cat-6572630_1280.jpg\"> ")
+                .images(new ArrayList<>())
                 .build();
 
         Long postId = postService.createPost(postCreateDto);

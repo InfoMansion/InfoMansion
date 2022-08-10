@@ -48,12 +48,11 @@ public class PostServiceImpl implements PostService {
         UserStuff userStuff = userStuffRepository.findById(requestDto.getUserStuffId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
 
-        if(requestDto.getImages() != null) {
-            List<String> deleteImages = requestDto.getImages()
-                    .stream().filter(image -> !requestDto.getContent().contains(image))
-                    .collect(Collectors.toList());
+        List<String> deleteImages = requestDto.getImages()
+                .stream().filter(image -> !requestDto.getContent().contains(image))
+                .collect(Collectors.toList());
+        if (deleteImages.size() > 0)
             s3Uploader.deleteFiles(deleteImages);
-        }
 
         return postRepository.save(requestDto.toEntity(user, userStuff)).getId();
     }

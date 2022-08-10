@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    @Value("${cloud.aws.s3.bucketUrl")
+    @Value("${cloud.aws.s3.bucketUrl}")
     private String bucketUrl;
 
     public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
@@ -47,7 +48,7 @@ public class S3Uploader {
     }
 
     private String upload(File uploadFile, String filePath) {
-        String fileName = filePath + "/" + UUID.randomUUID() + uploadFile.getName();
+        String fileName = filePath + "/" + "infomansion_" + uploadFile.getName() + LocalDate.now();
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
         return uploadImageUrl;
@@ -67,7 +68,7 @@ public class S3Uploader {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(System.getProperty("user.dir") + "/" + file.getOriginalFilename());
+        File convertFile = new File(System.getProperty("user.dir") + "/" + UUID.randomUUID());
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
