@@ -23,7 +23,7 @@ export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUn
         data.rotY = editrotation[1];
         data.rotZ = editrotation[2];
 
-        data.selectedcategory = editCategory;
+        data.selectedCategory = editCategory;
         // located에 추가해주기.
         addLocateStuff(e, data);
         if(from == 'unlocated') deleteUnlocatedStuff(e, {...editStuff});

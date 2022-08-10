@@ -9,16 +9,20 @@ import EditRoom from "../../components/EditRoom";
 import MyStuffList from "../../components/RoomEditPage/MyStuffList";
 import EditConsole from "../../components/RoomEditPage/EditConsole";
 import { useRecoilState } from "recoil";
-import { editingState, editStuffState, fromState, positionState, rotationState } from "../../state/editRoomState";
-
+import { categoryState, editingState, editStuffState, fromState, positionState, rotationState } from "../../state/editRoomState";
+import useAuth from "../../hooks/useAuth";
 
 export default function RoomEdit() {
     const [cookies] = useCookies(['cookie-name']);
     const editRoomRef = useRef();
     const router = useRouter();
 
-    const [userName, setuserName] = useState(0);
-    const [stuffon, setStuffon] = useState('');
+    const {auth} = useAuth();
+    const [userName] = useState(auth.username);
+
+    useEffect(() => {
+        console.log(userName);
+    }, [userName]);
 
     const [stuffs, setStuffs] = useState([]);    
     const [wallStuffs, setWallStuffs] = useState([]);
@@ -31,23 +35,21 @@ export default function RoomEdit() {
     const [editStuff, setEditStuff] = useRecoilState(editStuffState);
     const [, setEditPosition] = useRecoilState(positionState);
     const [, setEditRotation] = useRecoilState(rotationState);
-    const [from, setFrom] = useRecoilState(fromState);
+    const [, setEditCategory] = useRecoilState(categoryState);
+    const [, setFrom] = useRecoilState(fromState);
 
     const [wallStuff, setWallStuff] = useState({});
     const [floorStuff, setFloorStuff] = useState({});
 
     // stuff 가져오기.
     useEffect(() => {
-        if(!router.isReady) return;
         try{
             axios.get(`/api/v1/userstuffs/list`, {
-                headers : {
+                headers : { 
                     Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
                 }
             })
             .then( res => {
-                // console.log(res.data);
-
                 setWallStuffs(res.data.data.filter(stuff => stuff.stuffType == 'WALL'))
                 setFloorStuffs(res.data.data.filter(stuff => stuff.stuffType == 'FLOOR'))
                 setStuffs(res.data.data.filter(stuff => stuff.stuffType != 'WALL' && stuff.stuffType != 'FLOOR'));
@@ -55,7 +57,7 @@ export default function RoomEdit() {
         }catch(e) {
             console.log(e);
         }
-    }, [router.isReady]);
+    }, []);
     
     useEffect(() => {
         setWallStuff(wallStuffs.filter(stuff => stuff.selected)[0]);
@@ -69,9 +71,7 @@ export default function RoomEdit() {
         setUnlocatedStuffs(stuffs.filter(stuff => !stuff.selected));
     }, [stuffs])
 
-    function StuffClick(e, stuff) {
-        // 여기서 stuffpage로 변수 전달하면 됨.
-        
+    function StuffClick(e, stuff) {        
         if(editing) return;
         console.log(stuff);
         
@@ -81,8 +81,8 @@ export default function RoomEdit() {
         setEditStuff(stuff);
         setEditPosition([stuff.posX, stuff.posY, stuff.posZ]);
         setEditRotation([stuff.rotX, stuff.rotY, stuff.rotZ]);
+        setEditCategory(stuff.selectedCategory);
 
-        // locatedstuff배열에서 stuff 빼기.
         let copylocateddata = locatedStuffs.filter(data => data.userStuffId != stuff.userStuffId);
         console.log(copylocateddata);
         console.log(copylocateddata);
@@ -90,6 +90,13 @@ export default function RoomEdit() {
     }
 
     function MapClick(stuff, tag) {
+        stuff.posX = 0;
+        stuff.posY = 0;
+        stuff.posZ = 0;
+        stuff.rotX = 0;
+        stuff.rotY = 0;
+        stuff.rotZ = 0;
+        stuff.selectedCategory = "NONE";
         if(tag == 1) {
             setFloorStuff(stuff);
         }else
@@ -98,8 +105,17 @@ export default function RoomEdit() {
 
     function EndEdit() {
         let senddata = [{...wallStuff}, {...floorStuff}, ...locatedStuffs];
-        console.log(senddata);
-        editRoomRef.current.ScreenShot();
+        axios.put('/api/v1/userstuffs/edit', senddata, {
+            headers : {
+                Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            }
+        })
+        .then( res => {
+            // console.log(res);
+        })
+        // 사진 캡쳐. s3 정상화되면 살리면 됩니다.
+        // editRoomRef.current.ScreenShot();
+        router.push(`/${userName}`)
     }
     
     function reset() {

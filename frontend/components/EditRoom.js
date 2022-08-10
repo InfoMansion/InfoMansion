@@ -18,6 +18,7 @@ const EditRoom = forwardRef(( {mapStuffs, stuffs, StuffClick}, ref ) => {
     useImperativeHandle(ref, () => ({ ScreenShot }))
     const ScreenShotButtonRef = useRef();
     function ScreenShot() { ScreenShotButtonRef.current.ScreenShot(); }
+    
     const [zoomscale] = useState(90);
 
     const [editingStuff] = useRecoilState(editStuffState);

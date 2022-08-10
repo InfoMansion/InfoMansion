@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 
 import EditStuff from "./atoms/EditStuff";
 import { useRecoilState } from "recoil";
-import { editingState, editStuffState, fromState, positionState, rotationState } from "../../state/editRoomState";
+import { categoryState, editingState, editStuffState, fromState, positionState, rotationState } from "../../state/editRoomState";
 
 const multicon = 2.5;
 const yoff = 1;
@@ -31,12 +31,15 @@ export default function StuffList({stuffs}) {
     const [, setEditPosition] = useRecoilState(positionState);
     const [, setEditRotation] = useRecoilState(rotationState);
     const [, setFrom] = useRecoilState(fromState);
+    const [, setEditCategory] = useRecoilState(categoryState);
+
     function click(stuff) {
         setEditStuff(stuff);
         setEditing(true);
 
         setEditPosition([stuff.posX, stuff.posY, stuff.posZ]);
         setEditRotation([stuff.rotX, stuff.rotY, stuff.rotZ]);
+        setEditCategory("NONE");
         setFrom('unlocated');
     }
 

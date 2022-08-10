@@ -119,7 +119,6 @@ export default function Room({ StuffClick, userName }) {
       <Canvas
         shadows
         style={{ zIndex: '1' }}
-        onCreated={state => state.gl.setClearColor('#ffffff')}
       >
         <RoomLight />
 
