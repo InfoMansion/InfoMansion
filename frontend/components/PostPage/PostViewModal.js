@@ -14,8 +14,11 @@ import StarIcon from '@mui/icons-material/Star';
 import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Follow from '../Follow';
+import axios from '../../utils/axios';
+import { useCookies } from 'react-cookie';
 
 export default function PostViewModal({ post, showModal, setShowModal }) {
+  const [cookies] = useCookies(['cookie-name']);
   const handleClose = () => setShowModal(false);
   const [star, setStar] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -29,6 +32,23 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
     setAnchorEl(null);
   };
   const menuId = 'primary-search-account-menu';
+
+  const postDelete = async () => {
+    const postInfo = {
+      postId: post.id,
+    };
+    try {
+      const { data } = await axios.patch(`/api/v1/posts/${post.id}`, postInfo, {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          withCredentials: true,
+        },
+      });
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const renderMenu = (
     <Menu
@@ -48,7 +68,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
     >
       <MenuItem onClick={handleMenuClose}>글수정</MenuItem>
 
-      <MenuItem onClick={handleMenuClose}>글삭제</MenuItem>
+      <MenuItem onClick={postDelete}>글삭제</MenuItem>
     </Menu>
   );
 
@@ -127,7 +147,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
           }}
         >
           <img
-            src={`/image/${post.image}`}
+            src={`${post.defaultPostThumbnail}`}
             style={{
               display: 'block',
               minWidth: '0',
