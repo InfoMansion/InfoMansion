@@ -15,7 +15,7 @@ export default function ShopStuff({ data, Click, pos, dist, tmp }) {
     process.env.NEXT_PUBLIC_S3_PATH + glbpath,
   );
 
-  if (!nodes[geometry]) return;
+  if (!nodes[geometry[0]]) return;
 
   return (
     <group
@@ -25,12 +25,14 @@ export default function ShopStuff({ data, Click, pos, dist, tmp }) {
       onPointerDown={e => onClick(e)}
       rotation={[0.6, -0.775, 0]}
     >
-      <mesh
-        castShadow
-        geometry={nodes[geometry].geometry}
-        material={materials[material]}
-        scale={100}
-      />
+      {geometry.map((geo, i) => (
+          <mesh
+            castShadow
+            geometry={nodes[geo].geometry}
+            material={materials[material[i]]}
+            scale={100}
+          />
+      ))}
       <pointLight position={[2, 5, 2]} intensity={0.04} />
     </group>
   );

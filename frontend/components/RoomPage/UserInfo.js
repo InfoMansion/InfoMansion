@@ -19,7 +19,7 @@ import { loginUserState } from '../../state/roomState';
 import { useRecoilState } from 'recoil';
 import Follow from '../Follow';
 
-export default function UserInfo({ userName }) {
+export default function UserInfo() {
   const router = useRouter();
   const [cookies] = useCookies(['cookie-name']);
   const [loginUser, setLoginUser] = useRecoilState(loginUserState);
@@ -115,7 +115,7 @@ export default function UserInfo({ userName }) {
             <Typography variant="h4">{userInfo.username}</Typography>
 
             {loginUser ? (
-              <Link href={userName + '/dashboard'}>
+              <Link href={userInfo.username + '/dashboard'}>
                 <SettingsIcon sx={{ mx: 2 }} style={{ color: '#777777' }} />
               </Link>
             ) : (

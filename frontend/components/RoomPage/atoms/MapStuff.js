@@ -4,9 +4,9 @@ import { animated, config, useSpring  } from '@react-spring/three';
 
 export default function Model({ Hover, Click, data, ...props }) {
   if(!data) return;
-  const [geo, setGeo] = useState(data.geometry);
-  const [poly, setPoly] = useState(data.material);
-  const [glb, setGlb] = useState(data.stuffGlbPath);
+  const [geometry, setGeometry] = useState(data.geometry);
+  const [material, setMaterial] = useState(data.material);
+  const [glbpath, setGlbpath] = useState(data.stuffGlbPath);
 
   function onHover(e) { Hover(e, data); }
   function onClick(e) { Click(e, data); }
@@ -14,26 +14,26 @@ export default function Model({ Hover, Click, data, ...props }) {
   const group = useRef()
 
   // component가 하나라도 잘못되었을 때 렌더링이 고장나는 것을 방지.
-  if(!glb) return null;
+  if(!glbpath) return null;
 
-  const [asset, setAsset] = useState(useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glb));
+  const [asset, setAsset] = useState(useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath));
   let { nodes, materials } = asset
 
   useEffect(() => {
-    setGeo(data.geometry);
-    setPoly(data.material);
-    setGlb(data.stuffGlbPath);
+    setGeometry(data.geometry);
+    setMaterial(data.material);
+    setGlbpath(data.stuffGlbPath);
   }, [data.stuffGlbPath])
   
   useEffect(() => {
-    setAsset(useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glb));
-  }, [glb])
+    setAsset(useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath));
+  }, [glbpath])
 
   useEffect(() => {
     nodes = asset.nodes;
     materials = asset.materials;
   }, [asset])
-  if(!nodes[geo]) return
+  if(!nodes[geometry[0]]) return
 
   return (
     <group 
@@ -42,11 +42,13 @@ export default function Model({ Hover, Click, data, ...props }) {
       {...props} 
       dispose={null}
     >
-      <mesh 
-        geometry={nodes[geo].geometry} 
-        material={materials[poly]} 
-        scale={100} 
-      />
+      {geometry.map( (geo, i) => (
+        <mesh
+          geometry={nodes[geo].geometry}
+          material={materials[material[i]]}
+          scale={100}
+        />
+      ))}
     </group>
   )
 }

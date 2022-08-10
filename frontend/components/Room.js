@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Button } from '@mui/material';
 import RoomManageMenu from './RoomPage/RoomManageMenu';
-
-// data
 import MapStuffs from './RoomPage/MapStuffs';
 import Stuffs from './RoomPage/Stuffs';
 
@@ -21,8 +19,6 @@ export default function Room({ StuffClick, userName }) {
   const [cookies] = useCookies(['cookie-name']);
   // 화면 확대 정도 조정.
   const [zoomscale] = useState(90);
-  // 내 방인지 판단하는 변수
-  const [myroom, setMyroom] = useState(true);
 
   // 사용자 가구들.
   const [mapstuffs, setMapstuffs] = useState([]);

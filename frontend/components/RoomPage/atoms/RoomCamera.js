@@ -10,7 +10,7 @@ export default function RoomCamera({camloc, clicked, zoomscale}) {
 
     useFrame(({mouse, camera}) => {
         const distance = 40;
-        const con = 3;
+        const con = 1.5;
         const xoff = mouse.x*con;
         const yoff = mouse.y*con;
         
@@ -25,7 +25,7 @@ export default function RoomCamera({camloc, clicked, zoomscale}) {
             ), 0.05);
         camera.updateProjectionMatrix();
 
-        camera.lookAt(xoff/20, yoff/100 + camloc[1] + clicky, 0);
+        camera.lookAt(0, clicky, 0);
     })
     return <OrthographicCamera makeDefault zoom={zoomscale} />
 }

@@ -3,8 +3,6 @@ import { Text, useGLTF } from '@react-three/drei'
 import { animated, config, useSpring } from '@react-spring/three';
 import { Color } from 'three';
 import { useFrame } from '@react-three/fiber';
-import { useRecoilState } from 'recoil';
-import { clickedStuffCategoryState } from '../../../state/roomState'
 
 export default function Model({ tagon, Hover, Click, data, ...props }) {
   
@@ -69,34 +67,38 @@ export default function Model({ tagon, Hover, Click, data, ...props }) {
       position={[data.posX, data.posY, data.posZ]}
     >
     {/* 스터프 */}
-      <animated.group
-        onPointerOver={(e) => onHover(e)}
-        onPointerDown={(e) => onClick(e)}
-        
-        onPointerEnter={() => setHovered(true)}
-        onPointerLeave={() => setHovered(false)}
-        
-        rotation={[data.rotX, data.rotY, data.rotZ]}
-        scale={scale}
-        {...props} dispose={null}
-      >
-        {
-          // category NONE인거 y축 이동 방지하기 위해 동적 렌더링함.
-          (data.category.category != 'NONE') ? 
-          <animated.mesh
-            geometry={nodes[geometry].geometry} 
-            material={materials[material]} 
-            castShadow
-            scale={100}            
-            position-y={positionY}
-          />
-          : 
-          <mesh
+    { (data.category.category != 'NONE') ? 
+        <animated.group
+          onPointerOver={(e) => onHover(e)}
+          onPointerDown={(e) => onClick(e)}
+          
+          onPointerEnter={() => setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
+          
+          position-y={positionY}
+          rotation={[data.rotX, data.rotY, data.rotZ]}
+          scale={scale}
+          {...props} dispose={null}
+          >
+          {geometry.map((geo, i) => ( 
+            <mesh
             geometry={nodes[geometry].geometry} material={materials[material]} castShadow
             scale={100}
-          />
-        }
-      </animated.group> 
+            />
+            ))}
+        </animated.group>
+      :
+      <group
+        rotation={[data.rotX, data.rotY, data.rotZ]}
+      >
+          {geometry.map((geo, i) => ( 
+            <mesh
+              geometry={nodes[geometry].geometry} material={materials[material]} castShadow
+              scale={100}
+            />
+          ))}
+        </group>
+    }
     
     {/* 태그 */}
     {

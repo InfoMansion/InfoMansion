@@ -24,18 +24,19 @@ export default function EditStuff({data}) {
       nodes = asset.nodes;
       materials = asset.materials;
     }, [asset])
-    if(!nodes[geometry]) return
+    if(!nodes[geometry[0]]) return
     
     return (
         <group
             rotation={[0.6, -0.775, 0]}
         >
-            <mesh
-                castShadow
-                geometry={nodes[geometry].geometry}
-                material={materials[material]}
+            {geometry.map( (geo, i) => (
+              <mesh castShadow
+                geometry={nodes[geo].geometry}
+                material={materials[material[i]]}
                 scale={50}
-            />
+              />
+            ))}
             <pointLight position={[2, 5, 3]} intensity={0.3}/>
         </group>
     )

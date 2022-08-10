@@ -118,9 +118,6 @@ export default function RoomEdit() {
         router.push(`/${userName}`)
     }
     
-    function reset() {
-        setEditing(false);
-    }
     function addLocateStuff(e, stuff) {
         console.log(stuff);
         setLocatedStuffs([...locatedStuffs, stuff]);
@@ -142,7 +139,6 @@ export default function RoomEdit() {
                 margin : '30px auto'
             }}
         >
-            <Button onClick={reset}>임시리셋</Button>
             <Grid 
                 container
                 spacing={0}

@@ -43,7 +43,7 @@ const EditRoom = forwardRef(( {mapStuffs, stuffs, StuffClick}, ref ) => {
                 height : "610px",
             }}
             shadows
-            onCreated={state => state.gl.setClearColor("#ffffff")} >
+        >
             <RoomLight />
 
             <ScreenshotButton ref={ScreenShotButtonRef} />

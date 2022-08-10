@@ -8,19 +8,20 @@ export default function EditStuff({data, position, rotation}) {
     const [glbpath] = useState(data.stuffGlbPath);
     const { nodes, materials } = useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath);
 
-    if(!nodes[geometry]) return
+    if(!nodes[geometry[0]]) return
     
     return (
         <group
             rotation={rotation}
             position={position}
         >
-            <mesh
-                castShadow
-                geometry={nodes[geometry].geometry}
-                material={materials[material]}
-                scale={100}
-            />
+            {geometry.map( (geo, i) => (
+                <mesh castShadow
+                    geometry={nodes[geo].geometry}
+                    material={materials[material[i]]}
+                    scale={100}
+                />
+            ))}
         </group>
     )
 }
