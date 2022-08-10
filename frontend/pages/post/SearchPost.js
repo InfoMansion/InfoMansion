@@ -142,7 +142,7 @@ export default function searchPost() {
           {posts[category].data.map(post => (
             <div key={post.id}>
               {category === 'username' ? (
-                <Profile post={post} />
+                <Profile user={post} />
               ) : (
                 <Post
                   post={post}

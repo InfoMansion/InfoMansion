@@ -18,12 +18,14 @@ import { useRouter } from 'next/router';
 import { loginUserState } from '../../state/roomState';
 import { useRecoilState } from 'recoil';
 import Follow from '../Follow';
+import FollowList from './atoms/FollowList';
 
 export default function UserInfo({ userName }) {
   const router = useRouter();
   const [cookies] = useCookies(['cookie-name']);
   const [loginUser, setLoginUser] = useRecoilState(loginUserState);
   const [posts, setPosts] = useState([]);
+  const [modalInfo, setModalInfo] = useState(undefined);
   // username 가지고 userinfo 가져와야 함.
   const [userInfo, setUserInfo] = useState({
     userEmail: 'infomansion@google.co.kr',
@@ -36,6 +38,42 @@ export default function UserInfo({ userName }) {
     follow: undefined,
     categories: [],
   });
+
+  const handleFollowingClick = async title => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/follow/following/${userInfo.username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        },
+      );
+      setModalInfo({ title, data: data.data });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleFollowerClick = async title => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/follow/follower/${userInfo.username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        },
+      );
+      setModalInfo({ title, data: data.data });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleModalClose = () => {
+    setModalInfo(undefined);
+  };
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -78,90 +116,102 @@ export default function UserInfo({ userName }) {
   }, [getRecentPost]);
 
   return (
-    <Card>
-      <Grid
-        sx={{
-          p: 2,
-        }}
-        container
-      >
+    <>
+      {modalInfo !== undefined ? (
+        <FollowList
+          modalInfo={modalInfo}
+          handleModalClose={handleModalClose}
+        ></FollowList>
+      ) : null}
+      <Card>
         <Grid
-          item
-          xs={3}
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
+            p: 2,
           }}
+          container
         >
-          <Avatar
-            alt="profile"
-            src={userInfo.profileImage}
-            sx={{
-              width: '100%',
-              maxWidth: '80px',
-              height: '100%',
-              maxHeight: '80px',
-            }}
-            style={{ objectFit: 'fill' }}
-          />
-        </Grid>
-        <Grid item xs={9}>
-          <Box
+          <Grid
+            item
+            xs={3}
             sx={{
               display: 'flex',
-              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            <Typography variant="h4">{userInfo.username}</Typography>
-            <div>팔로워 {userInfo.following}</div>
+            <Avatar
+              alt="profile"
+              src={userInfo.profileImage}
+              sx={{
+                width: '100%',
+                maxWidth: '80px',
+                height: '100%',
+                maxHeight: '80px',
+              }}
+              style={{ objectFit: 'fill' }}
+            />
+          </Grid>
+          <Grid item xs={9}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h4">{userInfo.username}</Typography>
+              <div onClick={() => handleFollowerClick('팔로워')}>
+                팔로워 {userInfo.follower}
+              </div>
 
-            <div>팔로우 {userInfo.follower}</div>
+              <div onClick={() => handleFollowingClick('팔로우')}>
+                팔로우 {userInfo.following}
+              </div>
 
-            {loginUser ? (
-              <Link href={userName + '/dashboard'}>
-                <SettingsIcon sx={{ mx: 2 }} style={{ color: '#777777' }} />
-              </Link>
-            ) : (
-              <Follow
-                isFollow={userInfo.follow}
-                username={userInfo.username}
-              ></Follow>
-            )}
-          </Box>
-          <Typography variant="body2" color="text.secondary">
-            {userInfo.userEmail}
-          </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-              my: 1,
-            }}
-          >
-            {userInfo.categories.map((category, index) => (
-              <Typography
-                variant="body2"
-                style={{
-                  backgroundColor: '#fc7a71',
-                  color: 'white',
-                }}
-                sx={{
-                  px: 2,
-                  mr: 1,
-                  borderRadius: 4,
-                }}
-              >
-                {category}
-              </Typography>
-            ))}
-          </Box>
+              {loginUser ? (
+                <Link href={userName + '/dashboard'}>
+                  <SettingsIcon sx={{ mx: 2 }} style={{ color: '#777777' }} />
+                </Link>
+              ) : (
+                <Follow
+                  isFollow={userInfo.follow}
+                  username={userInfo.username}
+                ></Follow>
+              )}
+            </Box>
+            <Typography variant="body2" color="text.secondary">
+              {userInfo.userEmail}
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                my: 1,
+              }}
+            >
+              {userInfo.categories.map((category, index) => (
+                <Typography
+                  variant="body2"
+                  style={{
+                    backgroundColor: '#fc7a71',
+                    color: 'white',
+                  }}
+                  sx={{
+                    px: 2,
+                    mr: 1,
+                    borderRadius: 4,
+                  }}
+                >
+                  {category}
+                </Typography>
+              ))}
+            </Box>
+          </Grid>
+
+          <Divider />
+          <Typography sx={{ m: 2 }}>{userInfo.introduce}</Typography>
+
+          {/* 여기 브레이크포인트에 따라 더보기 버튼과 recentpost 바꿔 사용할 것. */}
+          <RecentPost posts={posts} />
         </Grid>
-
-        <Divider />
-        <Typography sx={{ m: 2 }}>{userInfo.introduce}</Typography>
-
-        {/* 여기 브레이크포인트에 따라 더보기 버튼과 recentpost 바꿔 사용할 것. */}
-        <RecentPost posts={posts} />
-      </Grid>
-    </Card>
+      </Card>
+    </>
   );
 }
