@@ -257,8 +257,8 @@ public class UserServiceImpl implements UserService {
     public List<UserSimpleProfileResponseDto> findFollowerUserList(String username) {
         User toUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return userRepository.findFollowerUserList(toUser).getFollower()
-                .stream().map(follow -> UserSimpleProfileResponseDto.toDto(follow.getFromUser()))
+        return followRepository.findFollowerUserList(toUser).stream()
+                .map(follow -> UserSimpleProfileResponseDto.toDto(follow.getFromUser()))
                 .collect(Collectors.toList());
     }
 
@@ -266,8 +266,8 @@ public class UserServiceImpl implements UserService {
     public List<UserSimpleProfileResponseDto> findFollowingUserList(String username) {
         User fromUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return userRepository.findFollowingUserList(fromUser).getFollowing()
-                .stream().map(follow -> UserSimpleProfileResponseDto.toDto(follow.getToUser()))
+        return followRepository.findFollowingUserList(fromUser).stream()
+                .map(follow -> UserSimpleProfileResponseDto.toDto(follow.getToUser()))
                 .collect(Collectors.toList());
     }
 

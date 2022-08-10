@@ -22,12 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where u.username like %:searchWord%")
     Slice<User> findUserByUserName(@Param("searchWord") String searchWord, Pageable pageable);
 
-    @Query("SELECT distinct u FROM User u join fetch u.following WHERE u = :fromUser")
-    User findFollowingUserList(@Param("fromUser") User fromUser);
-
-    @Query("SELECT distinct u FROM User u join fetch u.follower WHERE u = :toUser")
-    User findFollowerUserList(@Param("toUser") User toUser);
-
     @Query("SELECT u FROM User u JOIN FETCH u.userCredit WHERE u.id = :userId")
     Optional<User> findUserWithCredit(@Param("userId") Long userId);
 
