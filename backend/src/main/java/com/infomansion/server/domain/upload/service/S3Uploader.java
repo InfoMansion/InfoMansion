@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -48,7 +49,7 @@ public class S3Uploader {
     }
 
     private String upload(File uploadFile, String filePath) {
-        String fileName = filePath + "/" + "infomansion_" + uploadFile.getName() + LocalDate.now();
+        String fileName = filePath + "/" + "infomansion_" + LocalDate.now() + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
         return uploadImageUrl;
@@ -68,7 +69,7 @@ public class S3Uploader {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(System.getProperty("user.dir") + "/" + UUID.randomUUID());
+        File convertFile = new File(System.getProperty("user.dir") + "/" + UUID.randomUUID() + "." + StringUtils.getFilenameExtension(file.getOriginalFilename()));
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
