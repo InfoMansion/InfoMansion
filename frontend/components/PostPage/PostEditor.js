@@ -1,25 +1,152 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import styles from '../../styles/Editor.module.css';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import dynamic from 'next/dynamic';
+import 'react-quill/dist/quill.snow.css';
+import styles from '../../styles/Editor.module.css';
 import { Input, Autocomplete, TextField, styled } from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
 import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
 
-const Editor = dynamic(
-  () => import('react-draft-wysiwyg').then(mod => mod.Editor),
+const ReactQuill = dynamic(
+  async () => {
+    const { default: RQ } = await import('react-quill');
+    return function comp({ forwardRef, ...props }) {
+      return <RQ ref={forwardRef} {...props} />;
+    };
+  },
   { ssr: false },
 );
+
+// 옵션에 상응하는 포맷, 추가해주지 않으면 text editor에 적용된 스타일을 볼수 없음
+export const formats = [
+  'header',
+  'font',
+  'size',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'align',
+  'blockquote',
+  'list',
+  'bullet',
+  'indent',
+  'background',
+  'color',
+  'link',
+  'image',
+  'width',
+];
+
+const Editor = ({
+  placeholder,
+  value,
+  content,
+  setContent,
+  setImageUrlList,
+  imageUrlList,
+  ...rest
+}) => {
+  const [cookies] = useCookies(['cookie-name']);
+  const QuillRef = useRef();
+  const onChange = (content, delta, soruce, editor) => {
+    setContent(content);
+    console.log(content);
+  };
+
+  const ImageHandler = () => {
+    const imageInput = document.createElement('input');
+    const formData = new FormData();
+    let imageUrl;
+
+    imageInput.setAttribute('type', 'file');
+    imageInput.setAttribute('accept', 'image/jpg,image/png,image/jpeg');
+    imageInput.click();
+
+    imageInput.onchange = async event => {
+      const files = event.target.files;
+      if (files[0]) {
+        formData.append('image', files[0]);
+        try {
+          const { data } = await axios.post('/api/v1/image/post', formData, {
+            headers: {
+              ContentType: 'multipart/form-data',
+              Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+              withCredentials: true,
+            },
+          });
+          let imageUrl = data.data;
+          let tempUrlList = imageUrlList;
+          tempUrlList.push(imageUrl);
+          setImageUrlList(tempUrlList);
+          const range = QuillRef.current.getEditor().getSelection().index;
+          if (range !== null && range !== undefined) {
+            let quill = QuillRef.current.getEditor();
+            quill.setSelection(range, 1);
+            quill.clipboard.dangerouslyPasteHTML(
+              range,
+              `<img src=${imageUrl} alt="이미지 태그가 삽입" />`,
+            );
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    };
+  };
+  const modules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+          [{ size: ['small', false, 'large', 'huge'] }, { color: [] }],
+          [
+            { list: 'ordered' },
+            { list: 'bullet' },
+            { indent: '-1' },
+            { indent: '+1' },
+            { align: [] },
+          ],
+          ['image'],
+        ],
+        handlers: {
+          image: ImageHandler,
+        },
+      },
+    }),
+    [],
+  );
+  return (
+    <ReactQuill
+      {...rest}
+      placeholder={placeholder}
+      forwardRef={QuillRef}
+      value={content}
+      theme="snow"
+      modules={modules}
+      formats={formats}
+      onChange={onChange}
+    ></ReactQuill>
+  );
+};
 
 export default function PostEditor({
   title,
   onTitleChange,
   content,
-  onContentChange,
+  setContent,
   category,
   onCategoryChange,
   setStuffId,
+  setImageUrlList,
+  imageUrlList,
 }) {
   const [windowSize, setWindowSize] = useState();
   const [categoryList, setCategoryList] = useState([]);
@@ -139,14 +266,16 @@ export default function PostEditor({
               locale: 'ko',
             }}
             // 초기값 설정
-            editorState={content}
-            // 에디터의 값이 변경될 때마다 onEditorStateChange 호출
-            onEditorStateChange={onContentChange}
+            content={content}
+            setContent={setContent}
+            // 기타
+            imageUrlList={imageUrlList}
+            setImageUrlList={setImageUrlList}
           />
         </div>
         /* <IntroduceContent
-            dangerouslySetInnerHTML={{ __html: editorToHtml }}
-          /> */
+              dangerouslySetInnerHTML={{ __html: editorToHtml }}
+            /> */
       )}
       <br />
     </>
