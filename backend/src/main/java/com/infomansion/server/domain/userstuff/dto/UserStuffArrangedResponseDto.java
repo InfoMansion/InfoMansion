@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 public class UserStuffArrangedResponseDto {
@@ -21,13 +22,13 @@ public class UserStuffArrangedResponseDto {
     private BigDecimal rotX;
     private BigDecimal rotY;
     private BigDecimal rotZ;
-    private String geometry;
-    private String material;
+    private List<String> geometry;
+    private List<String> material;
     private String stuffGlbPath;
     private String backgroundByWall;
 
     @Builder
-    public UserStuffArrangedResponseDto(Long id, String stuffNameKor, String alias, Category category, BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ, String geometry, String material, String stuffGlbPath, String backgroundByWall) {
+    public UserStuffArrangedResponseDto(Long id, String stuffNameKor, String alias, Category category, BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ, List<String> geometry, List<String> material, String stuffGlbPath, String backgroundByWall) {
         this.id = id;
         this.stuffNameKor = stuffNameKor;
         this.alias = alias;
@@ -56,8 +57,8 @@ public class UserStuffArrangedResponseDto {
                 .rotX(userStuff.getRotX())
                 .rotY(userStuff.getRotY())
                 .rotZ(userStuff.getRotZ())
-                .geometry(userStuff.getStuff().getGeometry())
-                .material(userStuff.getStuff().getMaterial())
+                .geometry(userStuff.getStuff().getGeometryList())
+                .material(userStuff.getStuff().getMaterialList())
                 .stuffGlbPath(userStuff.getStuff().getStuffGlbPath())
                 .backgroundByWall(userStuff.getStuff().getBackgroundByWall())
                 .build();

@@ -58,6 +58,14 @@ public class Stuff extends BaseTimeEntityAtSoftDelete {
         return Arrays.stream(categories.split(",")).collect(Collectors.toList());
     }
 
+    public List<String> getGeometryList() {
+        return Arrays.stream(geometry.split(",")).collect(Collectors.toList());
+    }
+
+    public List<String> getMaterialList() {
+        return Arrays.stream(material.split(",")).collect(Collectors.toList());
+    }
+
     public void updateStuff(String stuffName, String stuffNameKor, Long price, String categories, String stuffType, String geometry, String material) {
         this.stuffName = stuffName;
         this.stuffNameKor = stuffNameKor;

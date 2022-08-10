@@ -728,7 +728,7 @@ include::{snippets}/post-search-title/response-fields.adoc[]
 
 ---
 
-[[Search-Title]]
+[[Search-User]]
 == User 검색 기능
 
 검색어로 사용자를 검색하는 API

@@ -4,14 +4,18 @@ import com.infomansion.server.domain.stuff.domain.Stuff;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 public class StoreResponseDto {
 
     private Long id;
     private String stuffNameKor;
     private Long price;
-    private String geometry;
-    private String material;
+    private List<String> geometry;
+    private List<String> material;
     private String stuffGlbPath;
 
     @Builder
@@ -19,17 +23,19 @@ public class StoreResponseDto {
         this.id = id;
         this.stuffNameKor = stuffNameKor;
         this.price = price;
-        this.geometry = geometry;
-        this.material = material;
+        this.geometry = Arrays.stream(geometry.split(",")).collect(Collectors.toList());
+        this.material = Arrays.stream(material.split(",")).collect(Collectors.toList());
         this.stuffGlbPath = stuffGlbPath;
     }
 
-    public StoreResponseDto(Stuff stuff) {
-        this.id = stuff.getId();
-        this.stuffNameKor = stuff.getStuffNameKor();
-        this.price = stuff.getPrice();
-        this.geometry = stuff.getGeometry();
-        this.material = stuff.getMaterial();
-        this.stuffGlbPath = stuff.getStuffGlbPath();
+    public static StoreResponseDto toResponseDto(Stuff stuff) {
+        return StoreResponseDto.builder()
+                .id(stuff.getId())
+                .stuffNameKor(stuff.getStuffNameKor())
+                .price(stuff.getPrice())
+                .geometry(stuff.getGeometry())
+                .material(stuff.getMaterial())
+                .stuffGlbPath(stuff.getStuffGlbPath())
+                .build();
     }
 }

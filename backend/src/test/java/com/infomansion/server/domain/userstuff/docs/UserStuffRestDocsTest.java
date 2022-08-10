@@ -127,8 +127,8 @@ public class UserStuffRestDocsTest {
                                         fieldWithPath("rotX").type(ROT_X.getJsonFieldType()).description(ROT_X.getDescription()),
                                         fieldWithPath("rotY").type(ROT_Y.getJsonFieldType()).description(ROT_Y.getDescription()),
                                         fieldWithPath("rotZ").type(ROT_Z.getJsonFieldType()).description(ROT_Z.getDescription()),
-                                        fieldWithPath("geometry").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
-                                        fieldWithPath("material").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
+                                        fieldWithPath("geometry[]").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
+                                        fieldWithPath("material[]").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
                                         fieldWithPath("stuffGlbPath").type(STUFF_GLB_PATH.getJsonFieldType()).description(STUFF_GLB_PATH.getDescription()).optional(),
                                         fieldWithPath("createdTime").type(USERSTUFF_SELECTED.getJsonFieldType()).description(USERSTUFF_CREATED.getDescription()).optional(),
                                         fieldWithPath("modifiedTime").type(USERSTUFF_MODIFIED.getJsonFieldType()).description(USERSTUFF_MODIFIED.getDescription()).optional()
@@ -139,7 +139,6 @@ public class UserStuffRestDocsTest {
     @Test
     public void 로그인된_사용자의_모든_userStuff_조회() throws Exception {
         // given
-        Long userId = 10L;
         List<UserStuffEditResponseDto> responseDtoList = new ArrayList<>();
         for(int i = 1; i < 10; i+=2) {
             String categories = "DAILY,STUDY,INTERIOR";
@@ -187,8 +186,8 @@ public class UserStuffRestDocsTest {
                                         fieldWithPath("rotX").type(ROT_X.getJsonFieldType()).description(ROT_X.getDescription()),
                                         fieldWithPath("rotY").type(ROT_Y.getJsonFieldType()).description(ROT_Y.getDescription()),
                                         fieldWithPath("rotZ").type(ROT_Z.getJsonFieldType()).description(ROT_Z.getDescription()),
-                                        fieldWithPath("geometry").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
-                                        fieldWithPath("material").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
+                                        fieldWithPath("geometry[]").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
+                                        fieldWithPath("material[]").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
                                         fieldWithPath("stuffGlbPath").type(STUFF_GLB_PATH.getJsonFieldType()).description(STUFF_GLB_PATH.getDescription()).optional(),
                                         fieldWithPath("createdTime").type(USERSTUFF_SELECTED.getJsonFieldType()).description(USERSTUFF_CREATED.getDescription()).optional(),
                                         fieldWithPath("modifiedTime").type(USERSTUFF_MODIFIED.getJsonFieldType()).description(USERSTUFF_MODIFIED.getDescription()).optional()
@@ -295,7 +294,6 @@ public class UserStuffRestDocsTest {
     @Test
     public void userStuff_구매() throws Exception{
         // given
-        Long userStuffId = 20L;
         UserStuffPurchaseRequestDto requestDto = new UserStuffPurchaseRequestDto(List.of(1L,2L,3L,4L,5L));
         List<StuffResponseDto> responseDtoList = new ArrayList<>();
         for(int i = 1; i <= 5; i++) {
@@ -370,8 +368,8 @@ public class UserStuffRestDocsTest {
                 fieldWithPath("categories.[].category").type(JsonFieldType.STRING).description(CATEGORY.getDescription()),
                 fieldWithPath("categories.[].categoryName").type(JsonFieldType.STRING).description(CATEGORY_NAME.getDescription()),
                 fieldWithPath("stuffType").type(JsonFieldType.STRING).description(STUFF_TYPE.getDescription()),
-                fieldWithPath("geometry").type(JsonFieldType.STRING).description(GEOMETRY.getDescription()),
-                fieldWithPath("material").type(JsonFieldType.STRING).description(MATERIAL.getDescription()),
+                fieldWithPath("geometry[]").type(JsonFieldType.ARRAY).description(GEOMETRY.getDescription()),
+                fieldWithPath("material[]").type(JsonFieldType.ARRAY).description(MATERIAL.getDescription()),
                 fieldWithPath("stuffGlbPath").type(JsonFieldType.STRING).description(STUFF_GLB_PATH.getDescription()),
                 fieldWithPath("createdTime").type(JsonFieldType.STRING).description(STUFF_CREATED.getDescription()).ignored(),
                 fieldWithPath("modifiedTime").type(JsonFieldType.STRING).description(STUFF_MODIFIED.getDescription()).ignored()
@@ -381,15 +379,8 @@ public class UserStuffRestDocsTest {
     @Test
     public void room_편집_완료_시_변경된_userStuff를_저장() throws Exception {
         // given
-        List<StuffType> list = Arrays.asList(StuffType.WALL, StuffType.FLOOR, StuffType.DESK, StuffType.CLOSET, StuffType.DRAWER);
         List<UserStuffEditRequestDto> requestDtoList = new ArrayList<>();
         for(int i = 1; i < 5; i+=2) {
-            String categories = "DAILY,STUDY,INTERIOR";
-            Stuff stuff = Stuff.builder()
-                    .id(10L+i).stuffName("desk"+i).stuffNameKor("책상"+i).price(50L+i)
-                    .categories(categories).stuffType(list.get(i))
-                    .geometry("geometry").material("material").stuffGlbPath("glbPath")
-                    .build();
             requestDtoList.add( new UserStuffEditRequestDto(Long.valueOf(i), "alias", "DAILY",
                     0.5, 0.5 ,0.5, 0.5, 0.5, 0.5));
         }

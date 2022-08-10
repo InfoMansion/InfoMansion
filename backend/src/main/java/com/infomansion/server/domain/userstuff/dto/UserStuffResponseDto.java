@@ -10,6 +10,7 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @ToString
 @Getter
@@ -30,15 +31,15 @@ public class UserStuffResponseDto {
     private BigDecimal rotY;
     private BigDecimal rotZ;
 
-    private String geometry;
-    private String material;
+    private List<String> geometry;
+    private List<String> material;
     private String stuffGlbPath;
 
     private LocalDateTime createdTime;
     private LocalDateTime modifiedTime;
 
     @Builder
-    public UserStuffResponseDto(Long userStuffId, StuffType stuffType, String alias, Category category, Boolean selected, BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ, String geometry, String material, String stuffGlbPath, LocalDateTime createdTime, LocalDateTime modifiedTime) {
+    public UserStuffResponseDto(Long userStuffId, StuffType stuffType, String alias, Category category, Boolean selected, BigDecimal posX, BigDecimal posY, BigDecimal posZ, BigDecimal rotX, BigDecimal rotY, BigDecimal rotZ, List<String> geometry, List<String> material, String stuffGlbPath, LocalDateTime createdTime, LocalDateTime modifiedTime) {
         this.userStuffId = userStuffId;
         this.stuffType = stuffType;
         this.alias = alias;
@@ -67,8 +68,8 @@ public class UserStuffResponseDto {
                 .selected(userStuff.getSelected())
                 .posX(userStuff.getPosX()).posY(userStuff.getPosY()).posZ(userStuff.getPosZ())
                 .rotX(userStuff.getRotX()).rotY(userStuff.getRotY()).rotZ(userStuff.getRotZ())
-                .geometry(userStuff.getStuff().getGeometry())
-                .material(userStuff.getStuff().getMaterial())
+                .geometry(userStuff.getStuff().getGeometryList())
+                .material(userStuff.getStuff().getMaterialList())
                 .modifiedTime(userStuff.getCreatedDate())
                 .modifiedTime(userStuff.getModifiedDate())
                 .build();

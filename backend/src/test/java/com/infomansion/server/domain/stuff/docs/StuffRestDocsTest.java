@@ -177,8 +177,8 @@ public class StuffRestDocsTest {
                 fieldWithPath("categories.[].category").type(JsonFieldType.STRING).description(CATEGORY.getDescription()),
                 fieldWithPath("categories.[].categoryName").type(JsonFieldType.STRING).description(CATEGORY_NAME.getDescription()),
                 fieldWithPath("stuffType").type(JsonFieldType.STRING).description(STUFF_TYPE.getDescription()),
-                fieldWithPath("geometry").type(JsonFieldType.STRING).description(GEOMETRY.getDescription()),
-                fieldWithPath("material").type(JsonFieldType.STRING).description(MATERIAL.getDescription()),
+                fieldWithPath("geometry[]").type(JsonFieldType.ARRAY).description(GEOMETRY.getDescription()),
+                fieldWithPath("material[]").type(JsonFieldType.ARRAY).description(MATERIAL.getDescription()),
                 fieldWithPath("stuffGlbPath").type(JsonFieldType.STRING).description(STUFF_GLB_PATH.getDescription()),
                 fieldWithPath("createdTime").type(JsonFieldType.STRING).description(STUFF_CREATED.getDescription()).ignored(),
                 fieldWithPath("modifiedTime").type(JsonFieldType.STRING).description(STUFF_MODIFIED.getDescription()).ignored()

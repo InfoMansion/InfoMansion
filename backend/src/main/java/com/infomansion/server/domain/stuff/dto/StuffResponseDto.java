@@ -22,8 +22,8 @@ public class StuffResponseDto {
     private Long price;
     private List<CategoryMapperValue> categories;
     private StuffType stuffType;
-    private String geometry;
-    private String material;
+    private List<String> geometry;
+    private List<String> material;
     private String stuffGlbPath;
     private LocalDateTime createdTime;
     private LocalDateTime modifiedTime;
@@ -35,8 +35,8 @@ public class StuffResponseDto {
         this.price = stuff.getPrice();
         this.categories = getCategories(stuff.getCategories());
         this.stuffType = stuff.getStuffType();
-        this.geometry = stuff.getGeometry();
-        this.material = stuff.getMaterial();
+        this.geometry = stuff.getGeometryList();
+        this.material = stuff.getMaterialList();
         this.stuffGlbPath = stuff.getStuffGlbPath();
         this.createdTime = stuff.getCreatedDate();
         this.modifiedTime = stuff.getModifiedDate();

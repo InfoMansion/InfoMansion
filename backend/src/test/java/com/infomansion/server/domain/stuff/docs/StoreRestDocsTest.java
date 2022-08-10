@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.infomansion.server.global.util.restdocs.FieldDescription.*;
@@ -83,8 +84,8 @@ public class StoreRestDocsTest {
                                         fieldWithPath("slice.content.[].id").type(STUFF_ID.getJsonFieldType()).description(STUFF_ID.getDescription()),
                                         fieldWithPath("slice.content.[].stuffNameKor").type(STUFF_NAME_KOR.getJsonFieldType()).description(STUFF_NAME_KOR.getDescription()),
                                         fieldWithPath("slice.content.[].price").type(STUFF_PRICE.getJsonFieldType()).description(STUFF_PRICE.getDescription()),
-                                        fieldWithPath("slice.content.[].geometry").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
-                                        fieldWithPath("slice.content.[].material").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
+                                        fieldWithPath("slice.content.[].geometry[]").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
+                                        fieldWithPath("slice.content.[].material[]").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
                                         fieldWithPath("slice.content.[].stuffGlbPath").type(STUFF_GLB_PATH.getJsonFieldType()).description(STUFF_GLB_PATH.getDescription()),
                                         fieldWithPath("slice.numberOfElements").type(SLICE_NUMBER_OF_ELEMENTS.getJsonFieldType()).description(SLICE_NUMBER_OF_ELEMENTS.getDescription()),
                                         fieldWithPath("slice.first").type(SLICE_FIRST.getJsonFieldType()).description(SLICE_FIRST.getDescription()),
@@ -125,8 +126,8 @@ public class StoreRestDocsTest {
                                         fieldWithPath("content.[].id").type(STUFF_ID.getJsonFieldType()).description(STUFF_ID.getDescription()),
                                         fieldWithPath("content.[].stuffNameKor").type(STUFF_NAME_KOR.getJsonFieldType()).description(STUFF_NAME_KOR.getDescription()),
                                         fieldWithPath("content.[].price").type(STUFF_PRICE.getJsonFieldType()).description(STUFF_PRICE.getDescription()),
-                                        fieldWithPath("content.[].geometry").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
-                                        fieldWithPath("content.[].material").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
+                                        fieldWithPath("content.[].geometry[]").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
+                                        fieldWithPath("content.[].material[]").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
                                         fieldWithPath("content.[].stuffGlbPath").type(STUFF_GLB_PATH.getJsonFieldType()).description(STUFF_GLB_PATH.getDescription()),
                                         fieldWithPath("numberOfElements").type(SLICE_NUMBER_OF_ELEMENTS.getJsonFieldType()).description(SLICE_NUMBER_OF_ELEMENTS.getDescription()),
                                         fieldWithPath("first").type(SLICE_FIRST.getJsonFieldType()).description(SLICE_FIRST.getDescription()),
@@ -157,8 +158,8 @@ public class StoreRestDocsTest {
                                         fieldWithPath("id").type(STUFF_ID.getJsonFieldType()).description(STUFF_ID.getDescription()),
                                         fieldWithPath("stuffNameKor").type(STUFF_NAME_KOR.getJsonFieldType()).description(STUFF_NAME_KOR.getDescription()),
                                         fieldWithPath("price").type(STUFF_PRICE.getJsonFieldType()).description(STUFF_PRICE.getDescription()),
-                                        fieldWithPath("geometry").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
-                                        fieldWithPath("material").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
+                                        fieldWithPath("geometry[]").type(GEOMETRY.getJsonFieldType()).description(GEOMETRY.getDescription()),
+                                        fieldWithPath("material[]").type(MATERIAL.getJsonFieldType()).description(MATERIAL.getDescription()),
                                         fieldWithPath("stuffGlbPath").type(STUFF_GLB_PATH.getJsonFieldType()).description(STUFF_GLB_PATH.getDescription())
                                 )
                 ));

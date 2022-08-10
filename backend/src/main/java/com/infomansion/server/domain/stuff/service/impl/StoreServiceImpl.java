@@ -42,7 +42,7 @@ public class StoreServiceImpl implements StoreService {
 
             // 같은 stuffType인 경우 stuffs 목록에 responseDto 형태로 추가
             if(stuffType == stuff.getStuffType()) {
-                stuffs.add(new StoreResponseDto(stuff));
+                stuffs.add(StoreResponseDto.toResponseDto(stuff));
             }
             // 다른 stuffType일 경우 현재까지의 stuffs를 Slice로 만들어 responseDtoList에 추가
             else {
@@ -51,7 +51,7 @@ public class StoreServiceImpl implements StoreService {
                 // 현재 stuffType으로 초기화
                 stuffType = stuff.getStuffType();
                 stuffs = new ArrayList<>();
-                stuffs.add(new StoreResponseDto(stuff));
+                stuffs.add(StoreResponseDto.toResponseDto(stuff));
             }
         }
         responseDtoList.add(entityToResponseDto(pageSize, stuffs, stuffType));
@@ -67,7 +67,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public List<StoreResponseDto> findTheLatestStuff() {
-        return stuffRepository.findTop10ByOrderByCreatedDateDesc().stream().map(StoreResponseDto::new)
+        return stuffRepository.findTop10ByOrderByCreatedDateDesc().stream().map(StoreResponseDto::toResponseDto)
                 .collect(Collectors.toList());
     }
 
