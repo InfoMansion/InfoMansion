@@ -31,7 +31,7 @@ docker run --name redis -d -p 6380:6379 -v redis-volume:/data redis:0.0.1
 cd ../frontend
 
 echo "[BUILD] React"
-docker build --tag react:0.0.2
+docker build --tag react:0.0.2 .
 
 echo "[RUN] React"
 docker run --name react -d -p 3000:3000 -e CI=true react:0.0.2
