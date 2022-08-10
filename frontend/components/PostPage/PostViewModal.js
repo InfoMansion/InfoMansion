@@ -16,6 +16,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Follow from '../Follow';
 import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
+import Router from 'next/router';
+import { postDetailState } from '../../state/postDetailState';
+import { useRecoilState } from 'recoil';
 
 export default function PostViewModal({ post, showModal, setShowModal }) {
   const [cookies] = useCookies(['cookie-name']);
@@ -23,6 +26,10 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
   const [star, setStar] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
+  const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+  const [profileImageUrl, setProfileImageUrl] = useState(
+    'https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png',
+  );
 
   const handleMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -50,6 +57,41 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
     }
   };
 
+  const loadDetail = async () => {
+    try {
+      const { data } = await axios.get(`/api/v1/posts/detail/${post.id}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          withCredentials: true,
+        },
+      });
+      console.log(data);
+      setPostDetail(data.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const loadProfileImage = async () => {
+    try {
+      const { data } = await axios.get(`/api/v1/users/info/simple`, {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          withCredentials: true,
+        },
+      });
+      setProfileImageUrl(data.data.profileImage);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    loadDetail();
+    loadProfileImage();
+    console.log('a');
+  }, [post.id]);
+
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -66,7 +108,15 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>글수정</MenuItem>
+      <MenuItem
+        onClick={() => {
+          Router.push({
+            pathname: '/post/CreatePost',
+          });
+        }}
+      >
+        글수정
+      </MenuItem>
 
       <MenuItem onClick={postDelete}>글삭제</MenuItem>
     </Menu>
@@ -118,7 +168,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
               }}
             >
               <img
-                src="https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png"
+                src={profileImageUrl}
                 style={{ minHeight: '0', height: '100%', marginRight: '8px' }}
               ></img>
               <div
@@ -128,7 +178,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
                   marginRight: '8px',
                 }}
               >
-                SSAFYkim
+                {postDetail.userName}
               </div>
               <Follow></Follow>
             </div>

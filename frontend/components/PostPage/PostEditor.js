@@ -13,6 +13,9 @@ import { Input, Autocomplete, TextField, styled } from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
 import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
+import { postDetailState } from '../../state/postDetailState';
+import { useRecoilState } from 'recoil';
+import { Quill } from 'react-quill';
 
 const ReactQuill = dynamic(
   async () => {
@@ -54,12 +57,21 @@ const Editor = ({
   imageUrlList,
   ...rest
 }) => {
+  const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   const [cookies] = useCookies(['cookie-name']);
   const QuillRef = useRef();
   const onChange = (content, delta, soruce, editor) => {
     setContent(content);
     console.log(content);
   };
+
+  // const loadPrevContent = () => {
+  //   const range = QuillRef.current.getEditor().getSelection().index;
+  //   if (range !== null && range !== undefined) {
+  //     let quill = QuillRef.current.getEditor();
+  //     quill.clipboard.dangerouslyPasteHTML(0, `${postDetail.content}`);
+  //   }
+  // };
 
   const ImageHandler = () => {
     const imageInput = document.createElement('input');
@@ -128,7 +140,7 @@ const Editor = ({
       {...rest}
       placeholder={placeholder}
       forwardRef={QuillRef}
-      value={content}
+      value={postDetail.content}
       theme="snow"
       modules={modules}
       formats={formats}
@@ -151,6 +163,7 @@ export default function PostEditor({
   const [windowSize, setWindowSize] = useState();
   const [categoryList, setCategoryList] = useState([]);
   const [cookies] = useCookies(['cookie-name']);
+  const [postDetail, setPostDetail] = useRecoilState(postDetailState);
 
   const handleResize = useCallback(() => {
     setWindowSize({
@@ -245,6 +258,7 @@ export default function PostEditor({
               width: '100%',
               margin: '16px 0 8px',
             }}
+            value={postDetail.title}
           />
           <Editor
             wrapperClassName={styles.wrapper}
