@@ -357,6 +357,26 @@ include::{snippets}/post-find-by-postid/response-fields.adoc[]
 
 ---
 
+[[Post-delete]]
+== Post 삭제
+
+postId로 Post를 삭제하는 API
+자신이 작성한 Post인 경우, 자신의 UserStuff에 게시된 Post인 경우에만 삭제가 가능합니다.
+
+=== Http Request
+include::{snippets}/post-delete-by-post-id/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/post-delete-by-post-id/path-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/post-delete-by-post-id/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-delete-by-post-id/response-fields.adoc[]
+
+---
+
 [[Post-likes]]
 == Post 좋아요 표시
 

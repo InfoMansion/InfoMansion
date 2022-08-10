@@ -86,4 +86,10 @@ public class PostApiController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userLikePostService.findPostsUserLikes()));
     }
+
+    @PatchMapping("/api/v1/posts/{postId}")
+    public ResponseEntity<? extends BasicResponse> deletePost(@Valid @PathVariable Long postId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(postService.deletePost(postId)));
+    }
 }

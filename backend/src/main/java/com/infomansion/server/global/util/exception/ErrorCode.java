@@ -18,6 +18,8 @@ public enum ErrorCode {
     NOT_ENOUGH_CREDIT(HttpStatus.BAD_REQUEST, 40006, "크레딧이 부족합니다."),
     NEGATIVE_AMOUNT_OF_CREDIT(HttpStatus.BAD_REQUEST, 40007, "음수인 크레딧입니다"),
     NOT_PUBLIC_USER(HttpStatus.BAD_REQUEST, 40008, "비공개 사용자의 계정입니다."),
+    USER_NO_PERMISSION(HttpStatus.BAD_REQUEST, 40009, "권한이 없는 사용자입니다."),
+
     // JWT
     NOT_VALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST,40020, "유효하지 않은 Refresh Token입니다."),
     EXPIRED_TOKEN(HttpStatus.BAD_REQUEST, 40021, "만료된 JWT 토큰입니다."),

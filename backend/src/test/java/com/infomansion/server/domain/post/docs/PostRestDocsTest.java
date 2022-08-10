@@ -374,4 +374,24 @@ public class PostRestDocsTest {
 
                 ));
     }
+
+    @Test
+    public void postId로_Post_삭제() throws Exception {
+        // given
+        Long requestDto = 10L;
+        Boolean response = true;
+        given(postService.deletePost(any(Long.class))).willReturn(response);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/v1/posts/{postId}", requestDto))
+                .andExpect(status().isOk())
+                .andDo(document("post-delete-by-post-id",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("postId").description("삭제할 post Id")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("삭제 성공 여부")))
+                ));
+    }
 }

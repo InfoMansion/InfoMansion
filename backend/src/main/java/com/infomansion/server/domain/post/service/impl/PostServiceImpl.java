@@ -158,4 +158,16 @@ public class PostServiceImpl implements PostService {
         return top5RecentPost;
     }
 
+    @Transactional
+    @Override
+    public boolean deletePost(Long postId) {
+        Post post = postRepository.findPostWithUser(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        if(post.getUser().getId() != SecurityUtil.getCurrentUserId() && post.getUserStuff().getUser().getId() != SecurityUtil.getCurrentUserId())
+            throw new CustomException(ErrorCode.USER_NO_PERMISSION);
+
+        post.deletePost();
+        return true;
+    }
+
 }

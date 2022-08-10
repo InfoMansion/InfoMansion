@@ -1,7 +1,6 @@
 package com.infomansion.server.domain.post.service.impl;
 
 import com.infomansion.server.domain.category.domain.Category;
-import com.infomansion.server.domain.category.domain.CategoryMapperValue;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
@@ -11,10 +10,13 @@ import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.repository.StuffRepository;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.UserRepository;
+import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import com.infomansion.server.domain.userstuff.dto.UserStuffEditRequestDto;
 import com.infomansion.server.domain.userstuff.dto.UserStuffSaveRequestDto;
 import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
+import com.infomansion.server.global.util.exception.CustomException;
+import com.infomansion.server.global.util.exception.ErrorCode;
 import com.infomansion.server.global.util.security.WithCustomUserDetails;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,11 +28,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.infomansion.server.domain.user.domain.User.builder;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
@@ -59,6 +64,9 @@ public class PostServiceImplTest {
 
     @Autowired
     private LikesPostService likesPostService;
+
+    @Autowired
+    private EntityManager em;
 
     private Long userId;
     private Long stuffId;
@@ -134,7 +142,6 @@ public class PostServiceImplTest {
         for(int i=0;i<7;i++){
             Post post = Post.builder().user(user).userStuff(userStuffRepository.findById(userStuffId).get())
                     .title("EffectiveJava ver." + (10-i)).content("자바개발자 필독서 ver."+ (10-i)).build();
-            System.out.println("post = " + post.getCategory());
             postRepository.saveAndFlush(post);
         }
 
@@ -152,7 +159,116 @@ public class PostServiceImplTest {
         for (PostSimpleResponseDto postSimpleResponseDto : response) {
             assertThat(postSimpleResponseDto.getCategory().getCategory()).isEqualTo("DAILY");
         }
+    }
 
+    @DisplayName("Post 삭제 성공")
+    @WithCustomUserDetails
+    @Transactional
+    @Test
+    public void Post_삭제_성공() {
+        // UserStuff 생성
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffId).build();
+        userStuffId = userStuffService.saveUserStuff(createDto);
+
+        //UserStuff 배치
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .posX(0.2).posY(0.3).posZ(3.1)
+                .rotX(1.5).rotY(0.0).rotZ(0.9)
+                .build();
+        List<UserStuffEditRequestDto> includeDtoList = new ArrayList<>();
+        includeDtoList.add(includeDto);
+        userStuffService.editUserStuff(includeDtoList);
+
+        // Post 생성
+        Post post = Post.builder().user(user).userStuff(userStuffRepository.findById(userStuffId).get())
+                .title("EffectiveJava").content("자바개발자 필독서").build();
+        Post savedPost = postRepository.save(post);
+        postService.deletePost(savedPost.getId());
+        em.flush();
+        em.clear();
+
+
+        Optional<Post> result = postRepository.findById(savedPost.getId());
+        assertThat(result).isEmpty();
+    }
+
+    @DisplayName("Post 작성자가 아닐 경우 삭제 실패")
+    @WithCustomUserDetails
+    @Transactional
+    @Test
+    public void Post_삭제_실패() {
+        // user 생성
+        String email = "infomansion2@test.com";
+        String password = "testPassword1$";
+        String tel = "01012345678";
+        String username = "infomansion2";
+        String uCategories = "IT,COOK";
+
+        user = userRepository.save(builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username(username)
+                .categories(uCategories)
+                .build());
+
+        // UserStuff 생성 및 배치
+        UserStuff userStuff = UserStuff.builder()
+                .user(user).stuff(stuffRepository.findById(stuffId).get())
+                .selected(true).category(Category.IT).alias("Java 정리").build();
+        userStuff = userStuffRepository.save(userStuff);
+
+        // Post 생성
+        Post post = Post.builder()
+                .user(user).userStuff(userStuff)
+                .title("EffectiveJava").content("자바개발자 필독서").build();
+        Post savedPost = postRepository.save(post);
+
+        assertThatThrownBy(() ->  {postService.deletePost(savedPost.getId()); })
+                .isInstanceOf(CustomException.class)
+                        .extracting("errorCode").isEqualTo(ErrorCode.USER_NO_PERMISSION);
+    }
+
+    @DisplayName("로그인한 사용자는 자신의 게시판에 누가 작성했더라도 삭제 성공")
+    @WithCustomUserDetails
+    @Transactional
+    @Test
+    public void 사용자의_UserStuff에_작성된_어떠한_Post라도_삭제_성공() {
+        // user 생성
+        String email = "infomansion2@test.com";
+        String password = "testPassword1$";
+        String tel = "01012345678";
+        String username = "infomansion2";
+        String uCategories = "IT,COOK";
+
+        user = userRepository.save(builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username(username)
+                .categories(uCategories)
+                .build());
+
+        // UserStuff 생성 및 배치
+        UserStuff userStuff = UserStuff.builder()
+                .user(userRepository.findById(userId).get()).stuff(stuffRepository.findById(stuffId).get())
+                .selected(true).category(Category.IT).alias("Java 정리").build();
+        userStuff = userStuffRepository.save(userStuff);
+
+        // Post 생성
+        Post post = Post.builder()
+                .user(user).userStuff(userStuff)
+                .title("EffectiveJava").content("자바개발자 필독서").build();
+        Post savedPost = postRepository.save(post);
+
+        postService.deletePost(savedPost.getId());
+        em.flush();
+        em.clear();
+
+        Optional<Post> result = postRepository.findById(savedPost.getId());
+        assertThat(result).isEmpty();
     }
 
 }
