@@ -39,12 +39,13 @@ export default function SignUp() {
   const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
     inputPassword,
   );
+  const confirmUsername = /^[a-zA-Zㄱ-힣0-9_]{3,15}$/.test(inputUsername);
   const confirmPwSame = !!(inputPassword === inputPassword2);
   const inputUnFinish = !(
     confirmEmail &&
     confirmPassword &&
     confirmPwSame &&
-    inputUsername
+    confirmUsername
   );
 
   function handleInput(event) {

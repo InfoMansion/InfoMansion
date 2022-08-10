@@ -9,6 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useRef, useEffect } from 'react';
+import useAuth from '../../hooks/useAuth';
 import { profileState } from '../../state/profileState';
 import axios from '../../utils/axios';
 import {
@@ -38,6 +39,7 @@ const theme = createTheme({
 
 export default function Profile({ ...props }) {
   const [cookies] = useCookies(['cookie-name']);
+  const { auth, setAuth } = useAuth();
   const setPageLoading = useSetRecoilState(pageLoading);
   const userInfo = props.userInfo;
   const setUserInfo = props.setUserInfo;
@@ -146,6 +148,11 @@ export default function Profile({ ...props }) {
       setPageLoading(false);
       setUserInfo(data.data);
       setProfileState(true);
+      setAuth({
+        isAuthorized: true,
+        accessToken: cookies.InfoMansionAccessToken,
+        username: userInfo.username,
+      });
       alert('프로필 수정이 완료됐습니다.');
     } catch (e) {
       setPageLoading(false);
@@ -173,6 +180,8 @@ export default function Profile({ ...props }) {
   } = state;
 
   const [inputUsername, setInputUsername] = useState(userInfo.username);
+  const confirmUsername = /^[a-zA-Zㄱ-힣0-9_]{3,15}$/.test(inputUsername);
+  const inputFinish = confirmUsername && cateCount >= 1 && cateCount <= 5;
   const [inputIntroduce, setInputIntroduce] = useState(userInfo.introduce);
   function handleInput(event) {
     event.preventDefault();
@@ -459,7 +468,7 @@ export default function Profile({ ...props }) {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2, color: 'white' }}
-            disabled={cateCount > 5 || cateCount < 1}
+            disabled={!inputFinish}
           >
             UPDATE
           </Button>
