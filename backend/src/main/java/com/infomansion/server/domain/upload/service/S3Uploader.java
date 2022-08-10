@@ -40,8 +40,10 @@ public class S3Uploader {
     public void deleteFiles(List<String> deleteImages) {
         try {
             DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket);
-            for (String deleteImage : deleteImages)
-                deleteObjectsRequest = deleteObjectsRequest.withKeys(deleteImage.substring(bucketUrl.length()+1));
+            String[] keys = new String[deleteImages.size()];
+            for(int i = 0; i < deleteImages.size(); i++)
+                keys[i] = deleteImages.get(i).substring(bucketUrl.length() + 1);
+            deleteObjectsRequest.withKeys(keys);
             amazonS3Client.deleteObjects(deleteObjectsRequest);
         } catch (AmazonServiceException e) {
             throw new RuntimeException(e);

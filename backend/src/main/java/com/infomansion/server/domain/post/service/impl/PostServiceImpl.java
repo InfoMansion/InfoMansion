@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -165,7 +167,7 @@ public class PostServiceImpl implements PostService {
         if (post.getUser().getId() != SecurityUtil.getCurrentUserId() && post.getUserStuff().getUser().getId() != SecurityUtil.getCurrentUserId())
             throw new CustomException(ErrorCode.USER_NO_PERMISSION);
 
-        post.deletePost();
+        post.deletePost(s3Uploader);
         return true;
     }
 

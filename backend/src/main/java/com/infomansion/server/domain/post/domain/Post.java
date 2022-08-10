@@ -2,6 +2,7 @@ package com.infomansion.server.domain.post.domain;
 
 import com.infomansion.server.domain.base.BaseTimeEntityAtSoftDelete;
 import com.infomansion.server.domain.category.domain.Category;
+import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import lombok.Builder;
@@ -12,6 +13,8 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Getter
 @NoArgsConstructor
@@ -91,7 +94,17 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         System.out.println("category = " + category);
     }
 
-    public void deletePost(){
+    public void deletePost(S3Uploader s3Uploader){
+        Pattern regex = Pattern.compile("<img[^>]*src=[\\\"']?([^>\\\"']+)[\\\"']?[^>]*>");
+
+        List<String> deleteImages = new ArrayList<>();
+        Matcher matcher = regex.matcher(this.content);
+        while (matcher.find()){
+            deleteImages.add(matcher.group(1));
+        }
+        if(deleteImages.size() > 0)
+            s3Uploader.deleteFiles(deleteImages);
+
         this.deleteFlag = true;
         this.isPublic = false;
         setDeletedDate();
