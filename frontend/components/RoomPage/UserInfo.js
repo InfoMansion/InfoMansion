@@ -18,18 +18,6 @@ import { useRouter } from 'next/router';
 import { loginUserState } from '../../state/roomState';
 import { useRecoilState } from 'recoil';
 
-const Root = styled('div')(({ theme }) => ({
-  padding: theme.spacing(1),
-  margin: '30px auto',
-
-  [theme.breakpoints.down('lg')]: {
-    width: '600px',
-  },
-  [theme.breakpoints.up('lg')]: {
-    width: '1280px',
-  },
-}));
-
 export default function UserInfo({ userName }) {
   const router = useRouter();
   const [cookies] = useCookies(['cookie-name']);

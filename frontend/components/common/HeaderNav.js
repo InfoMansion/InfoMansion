@@ -66,17 +66,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function HeaderNav() {
   const { push, pathname } = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
-
-  const { setAuth } = useAuth();
   const [cookies, , removeCookies] = useCookies(['cookie-name']);
   const isMenuOpen = Boolean(anchorEl);
   const [simpleUser, setSimpleUser] = useState({
     username: '',
     profileImage: '',
   });
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const [keyword, setKeyword] = useState('');
   const [profile, setProfileState] = useRecoilState(profileState);
+  //const [auth, setAuth] = useAuth();
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -95,7 +94,11 @@ export default function HeaderNav() {
         },
       });
       removeCookies('InfoMansionAccessToken', { path: '/' });
-      setAuth({ isAuthorized: false, accessToken: undefined });
+      setAuth({
+        isAuthorized: false,
+        accessToken: undefined,
+        username: undefined,
+      });
       window.localStorage.removeItem('expiresAt');
       if (pathname !== '/') window.location.replace('/');
     } catch (e) {
@@ -115,12 +118,21 @@ export default function HeaderNav() {
           withCredentials: true,
         },
       });
+
       setSimpleUser(data.data);
       setProfileState(false);
     } catch (e) {
       console.log(e);
     }
   }, [cookies]);
+
+  useEffect(() => {
+    setAuth({
+      isAuthorized: true,
+      accessToken: cookies.InfoMansionAccessToken,
+      username: simpleUser.username,
+    });
+  }, [simpleUser]);
 
   useEffect(() => {
     if (!auth.isAuthorized || !cookies.InfoMansionAccessToken) {
@@ -162,13 +174,18 @@ export default function HeaderNav() {
   );
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{ background: '#FFFFFF' }}>
+      <AppBar
+        elevation={0}
+        position="static"
+        style={{ background: 'transParent' }}
+      >
         <Toolbar
           variant="dense"
           style={{
             justifyContent: 'space-between',
             maxWidth: '1280px',
             width: '100%',
+            height: '80px',
             margin: '0 auto',
           }}
         >
@@ -181,17 +198,27 @@ export default function HeaderNav() {
                 cursor: 'pointer',
               }}
             >
-              <Image src="/vectorLogo.svg" alt="" width={30} height={30} />
+              <Image src="/vectorLogo.svg" alt="" width={40} height={40} />
               <div
-                style={{ color: 'black', fontSize: '20px', padding: '10px' }}
+                style={{ color: 'white', fontSize: '30px', padding: '10px' }}
               >
                 InfoMansion
               </div>
             </div>
           </Link>
-          <Search style={{ postiion: 'relative' }}>
+          <Search
+            style={{
+              postiion: 'relative',
+              fontSize: '40px',
+              border: 'solid',
+              borderColor: 'white',
+              backgroundColor: 'transparent',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
             <SearchIconWrapper style={{ color: '#9e9e9e' }}>
-              <SearchIcon />
+              <SearchIcon style={{ color: 'white', fontSize: '30px' }} />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="검색"
@@ -205,7 +232,11 @@ export default function HeaderNav() {
                     })
                   : '';
               }}
-              style={{ paddingRight: '25px' }}
+              style={{
+                paddingRight: '25px',
+                color: 'white',
+                paddingLeft: '7px',
+              }}
             />
             {keyword.length > 0 && (
               <HighlightOffIcon
@@ -214,8 +245,9 @@ export default function HeaderNav() {
                   transform: 'translateY(-50%)',
                   right: '5',
                   position: 'absolute',
-                  color: '#9e9e9e',
+                  color: 'white',
                   cursor: 'pointer',
+                  fontSize: '20px',
                 }}
                 onClick={() => {
                   setKeyword('');
@@ -234,17 +266,19 @@ export default function HeaderNav() {
                 color="inherit"
                 style={{ color: '#9e9e9e' }}
               >
-                <AddIcon />
+                <AddIcon style={{ color: 'white', fontSize: '50px' }} />
               </IconButton>
             </Link>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
-              style={{ color: '#9e9e9e' }}
+              style={{ color: '#FFFFFF' }}
             >
               <Badge badgeContent={3} color="error">
-                <NotificationsIcon />
+                <NotificationsIcon
+                  style={{ color: 'white', fontSize: '40px' }}
+                />
               </Badge>
             </IconButton>
             <IconButton
@@ -259,7 +293,7 @@ export default function HeaderNav() {
             >
               <img
                 src={`${simpleUser.profileImage}`}
-                style={{ height: '30px', width: '30px', borderRadius: '50%' }}
+                style={{ height: '50px', width: '50px', borderRadius: '50%' }}
               />
             </IconButton>
           </div>

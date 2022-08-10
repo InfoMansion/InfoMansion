@@ -36,18 +36,6 @@ const theme = createTheme({
   },
 });
 
-const Root = styled('div')(({ theme }) => ({
-  padding: theme.spacing(1),
-  margin: '30px auto',
-
-  [theme.breakpoints.down('lg')]: {
-    width: '600px',
-  },
-  [theme.breakpoints.up('lg')]: {
-    width: '1280px',
-  },
-}));
-
 export default function Profile({ ...props }) {
   const [cookies] = useCookies(['cookie-name']);
   const setPageLoading = useSetRecoilState(pageLoading);

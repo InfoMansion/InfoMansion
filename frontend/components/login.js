@@ -118,7 +118,7 @@ export default function LogIn({ onSignIn }) {
                 >
                   <CardMedia
                     component="img"
-                    image="/LoginTemp.jpg"
+                    image="/LoginTemp2.png"
                     style={{ width: '80%', height: '80%' }}
                   ></CardMedia>
                 </Box>

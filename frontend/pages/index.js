@@ -77,27 +77,7 @@ export default function Home() {
               alignItems: 'center',
             }}
           >
-            <img
-              src="/image/mainCover.svg"
-              style={{
-                position: 'absolute',
-                top: 49,
-                width: '100%',
-                height: 'auto',
-              }}
-            />
-            <div
-              style={{
-                paddingTop: '5%',
-                fontSize: '56px',
-                color: 'white',
-                fontWeight: 'medium',
-                zIndex: 1,
-              }}
-            >
-              InfoMansion
-            </div>
-            <div style={{ height: '100%', paddingTop: '3%' }}>
+            <div style={{ height: '100%', paddingTop: '1%' }}>
               <ul className={styles.container}>
                 {roomImgs.map(v => (
                   <Item
