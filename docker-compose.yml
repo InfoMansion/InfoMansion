@@ -7,19 +7,6 @@ networks:
     driver: bridge
 
 services:
-  jenkins:
-    container_name: jenkins-compose
-    build:
-      context: ./jenkins
-      dockerfile: Dockerfile
-    user: root
-    ports:
-      - "32773:8080"
-      - "50000:50000"
-    volumes:
-      - /home/ubuntu/compose/jenkins:/var/jenkins_home
-      - /home/ubuntu/compose/.ssh:/root/.ssh
-
   spring-1:
     container_name: spring-infomansion-1
     build:
