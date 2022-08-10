@@ -25,7 +25,7 @@ public class UserStuffEditRequestDto {
 
     @ValidEnum(enumClass = Category.class, ignoreCase = true)
     @NotBlank
-    private String category;
+    private String selectedCategory;
 
     @Range(min = 0, max = 4)
     private BigDecimal posX;
@@ -42,10 +42,10 @@ public class UserStuffEditRequestDto {
     private BigDecimal rotZ;
 
     @Builder
-    public UserStuffEditRequestDto(Long userStuffId, String alias, String category, Double posX, Double posY, Double posZ, Double rotX, Double rotY, Double rotZ) {
+    public UserStuffEditRequestDto(Long userStuffId, String alias, String selectedCategory, Double posX, Double posY, Double posZ, Double rotX, Double rotY, Double rotZ) {
         this.userStuffId = userStuffId;
         this.alias = alias;
-        this.category = category;
+        this.selectedCategory = selectedCategory;
         this.posX = new BigDecimal(posX);
         this.posY = new BigDecimal(posY);
         this.posZ = new BigDecimal(posZ);

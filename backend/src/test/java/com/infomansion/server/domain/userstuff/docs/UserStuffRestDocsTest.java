@@ -407,7 +407,7 @@ public class UserStuffRestDocsTest {
                                 fieldWithPath("[]").description("배치할 UserStuff"),
                                 fieldWithPath("[].userStuffId").type(USERSTUFF_ID.getJsonFieldType()).description(USERSTUFF_ID.getDescription()),
                                 fieldWithPath("[].alias").type(ALIAS.getJsonFieldType()).description(ALIAS.getDescription()),
-                                fieldWithPath("[].category").type(JsonFieldType.STRING).description("선택된 카테고리"),
+                                fieldWithPath("[].selectedCategory").type(JsonFieldType.STRING).description("선택된 카테고리"),
                                 fieldWithPath("[].posX").type(POS_X.getJsonFieldType()).description(POS_X.getDescription()),
                                 fieldWithPath("[].posY").type(POS_Y.getJsonFieldType()).description(POS_Y.getDescription()),
                                 fieldWithPath("[].posZ").type(POS_Z.getJsonFieldType()).description(POS_Z.getDescription()),

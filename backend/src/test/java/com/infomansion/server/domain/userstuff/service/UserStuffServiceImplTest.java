@@ -178,7 +178,7 @@ public class UserStuffServiceImplTest {
 
         UserStuffEditRequestDto requestDto = UserStuffEditRequestDto.builder()
                 .userStuffId(userStuffId)
-                .category("IT").alias("Java 모음집")
+                .selectedCategory("IT").alias("Java 모음집")
                 .posX(1.1).posY(0.5).posZ(0.0)
                 .rotX(0.0).rotY(0.2).rotZ(2.2)
                 .build();
@@ -213,7 +213,7 @@ public class UserStuffServiceImplTest {
 
         UserStuffEditRequestDto requestDto = UserStuffEditRequestDto.builder()
                 .userStuffId(userStuffId)
-                .category("IT").alias("Java 모음집")
+                .selectedCategory("IT").alias("Java 모음집")
                 .posX(1.1).posY(0.5).posZ(0.0)
                 .rotX(0.0).rotY(0.2).rotZ(2.2)
                 .build();
@@ -270,7 +270,7 @@ public class UserStuffServiceImplTest {
         List<UserStuffEditRequestDto> placed = new ArrayList<>();
         UserStuffEditRequestDto postboxIncludeRequestDto = UserStuffEditRequestDto.builder()
                 .userStuffId(postboxusId)
-                .category("POSTBOX")
+                .selectedCategory("POSTBOX")
                 .alias("POST저장소")
                 .posX(1.1).posY(0.5).posZ(0.0)
                 .rotX(0.0).rotY(0.2).rotZ(2.2)
@@ -285,7 +285,7 @@ public class UserStuffServiceImplTest {
             userStuffId[i] = userStuffService.saveUserStuff(usRequestDto);
         }
         UserStuffEditRequestDto usRequestDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId[0]).category("IT").alias("Java 모음집1")
+                .userStuffId(userStuffId[0]).selectedCategory("IT").alias("Java 모음집1")
                 .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
         placed.add(usRequestDto);
         userStuffService.editUserStuff(placed);
@@ -346,7 +346,7 @@ public class UserStuffServiceImplTest {
         List<UserStuffEditRequestDto> placed = new ArrayList<>();
         UserStuffEditRequestDto postboxIncludeRequestDto = UserStuffEditRequestDto.builder()
                 .userStuffId(postboxusId)
-                .category("POSTBOX")
+                .selectedCategory("POSTBOX")
                 .alias("POST저장소")
                 .posX(1.1).posY(0.5).posZ(0.0)
                 .rotX(0.0).rotY(0.2).rotZ(2.2)
@@ -362,7 +362,7 @@ public class UserStuffServiceImplTest {
             userStuffId[i] = userStuffService.saveUserStuff(usRequestDto);
 
             UserStuffEditRequestDto usIncludeRequestDto = UserStuffEditRequestDto.builder()
-                    .userStuffId(userStuffId[i]).category(categories.get(i)).alias("Java 모음집1")
+                    .userStuffId(userStuffId[i]).selectedCategory(categories.get(i)).alias("Java 모음집1")
                     .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
             placed.add(usIncludeRequestDto);
         }
@@ -400,7 +400,7 @@ public class UserStuffServiceImplTest {
             userStuffId[i] = userStuffService.saveUserStuff(requestDto);
         }
         UserStuffEditRequestDto requestDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId[0]).category("IT").alias("Java 모음집1")
+                .userStuffId(userStuffId[0]).selectedCategory("IT").alias("Java 모음집1")
                 .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
         List<UserStuffEditRequestDto> placed = new ArrayList<>();
         placed.add(requestDto);
@@ -408,7 +408,7 @@ public class UserStuffServiceImplTest {
 
         // when
         UserStuffEditRequestDto requestDto2 = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId[1]).category("IT").alias("Java 모음집2")
+                .userStuffId(userStuffId[1]).selectedCategory("IT").alias("Java 모음집2")
                 .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
         placed.add(requestDto2);
 
@@ -429,7 +429,7 @@ public class UserStuffServiceImplTest {
 
         // when
         UserStuffEditRequestDto includeRequestDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).category("BEAUTY").alias("Java 모음집2")
+                .userStuffId(userStuffId).selectedCategory("BEAUTY").alias("Java 모음집2")
                 .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
         List<UserStuffEditRequestDto> placed = new ArrayList<>();
         placed.add(includeRequestDto);
@@ -450,7 +450,7 @@ public class UserStuffServiceImplTest {
         Long userStuffId = userStuffService.saveUserStuff(requestDtoGiven);
 
         UserStuffEditRequestDto requestDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).category("IT").alias("Java 모음집")
+                .userStuffId(userStuffId).selectedCategory("IT").alias("Java 모음집")
                 .posX(1.1).posY(0.5).posZ(0.0).rotX(0.0).rotY(0.2).rotZ(2.2).build();
         List<UserStuffEditRequestDto> placed = new ArrayList<>();
         placed.add(requestDto);
@@ -479,7 +479,7 @@ public class UserStuffServiceImplTest {
             Long userStuffId = userStuffService.saveUserStuff(requestDto);
             if(i < stuffIds.size()/2) { // 5개만 배치
                 UserStuffEditRequestDto arrangedDto = UserStuffEditRequestDto.builder()
-                        .userStuffId(userStuffId).category(categories.get(i % categories.size())).alias("Java 모음집")
+                        .userStuffId(userStuffId).selectedCategory(categories.get(i % categories.size())).alias("Java 모음집")
                         .posX(1.1).posY(0.5).posZ(0.0)
                         .rotX(0.0).rotY(0.2).rotZ(2.2)
                         .build();
@@ -519,7 +519,7 @@ public class UserStuffServiceImplTest {
             Long userStuffId = userStuffService.saveUserStuff(UserStuffSaveRequestDto.builder()
                     .stuffId(stuffId).build());
             placed.add(UserStuffEditRequestDto.builder()
-                    .userStuffId(userStuffId).category("NONE").alias("NONE배치")
+                    .userStuffId(userStuffId).selectedCategory("NONE").alias("NONE배치")
                     .posX(0.0).posY(0.0).posZ(0.0)
                     .rotX(0.0).rotY(0.0).rotZ(0.0).build());
         }
@@ -602,7 +602,7 @@ public class UserStuffServiceImplTest {
             Long userStuffId = userStuffService.saveUserStuff(requestDto);
             if(i < stuffIds.size()/2) { // 5개만 배치
                 UserStuffEditRequestDto arrangedDto = UserStuffEditRequestDto.builder()
-                        .userStuffId(userStuffId).category(categories.get(i % categories.size())).alias("Java 모음집")
+                        .userStuffId(userStuffId).selectedCategory(categories.get(i % categories.size())).alias("Java 모음집")
                         .posX(1.1).posY(0.5).posZ(0.0)
                         .rotX(0.0).rotY(0.2).rotZ(2.2)
                         .build();

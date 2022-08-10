@@ -85,11 +85,11 @@ public class UserStuff extends BaseTimeEntityAtSoftDelete {
      */
     public void changePlacedStatus(UserStuffEditRequestDto requestDto) {
         this.alias = requestDto.getAlias();
-        if(this.category != Category.valueOf(requestDto.getCategory())) {
-            changeCategoryOfPost(Category.valueOf(requestDto.getCategory()));
+        if(this.category != Category.valueOf(requestDto.getSelectedCategory())) {
+            changeCategoryOfPost(Category.valueOf(requestDto.getSelectedCategory()));
         }
         changeIsPublicOfPost(true);
-        this.category = Category.valueOf(requestDto.getCategory());
+        this.category = Category.valueOf(requestDto.getSelectedCategory());
         this.selected = true;
         changePosAndRot(requestDto.getPosX(), requestDto.getPosY(), requestDto.getPosZ(),
                 requestDto.getRotX(), requestDto.getRotY(), requestDto.getRotZ());

@@ -197,10 +197,10 @@ public class UserStuffServiceImpl implements UserStuffService {
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
 
             // 새롭게 배치할 UserStuff의 카테고리 중복 검사 및 Stuff에 적용가능한 지 검사
-            if(!userStuffEditRequestDto.getCategory().equals("NONE") && checkDuplicateCategory.contains(userStuffEditRequestDto.getCategory()))
+            if(!userStuffEditRequestDto.getSelectedCategory().equals("NONE") && checkDuplicateCategory.contains(userStuffEditRequestDto.getSelectedCategory()))
                 throw new CustomException(ErrorCode.DUPLICATE_CATEGORY);
-            checkAcceptableCategory(userStuff.getStuff(), userStuffEditRequestDto.getCategory());
-            checkDuplicateCategory.add(userStuffEditRequestDto.getCategory());
+            checkAcceptableCategory(userStuff.getStuff(), userStuffEditRequestDto.getSelectedCategory());
+            checkDuplicateCategory.add(userStuffEditRequestDto.getSelectedCategory());
 
             userStuff.changePlacedStatus(userStuffEditRequestDto);
         });

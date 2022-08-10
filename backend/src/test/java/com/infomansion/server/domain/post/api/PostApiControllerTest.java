@@ -125,7 +125,7 @@ public class PostApiControllerTest {
 
         //UserStuff 배치
         UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
@@ -162,7 +162,7 @@ public class PostApiControllerTest {
 
         //UserStuff 배치
         UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
@@ -197,7 +197,7 @@ public class PostApiControllerTest {
 
         //UserStuff 배치
         UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
@@ -238,7 +238,7 @@ public class PostApiControllerTest {
 
         //UserStuff 배치
         UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
@@ -296,7 +296,7 @@ public class PostApiControllerTest {
 
         //UserStuff 배치
         UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
@@ -342,7 +342,7 @@ public class PostApiControllerTest {
 
         //UserStuff 배치
         UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
@@ -387,7 +387,7 @@ public class PostApiControllerTest {
 
         //UserStuff 배치
         UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();

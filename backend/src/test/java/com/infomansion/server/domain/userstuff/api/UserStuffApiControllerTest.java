@@ -161,7 +161,7 @@ public class UserStuffApiControllerTest {
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
         UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
@@ -198,7 +198,7 @@ public class UserStuffApiControllerTest {
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
         UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
@@ -278,7 +278,7 @@ public class UserStuffApiControllerTest {
         String alias = "POST저장소";
 
         UserStuffEditRequestDto postboxIncludeRequestDto = UserStuffEditRequestDto.builder()
-                .userStuffId(postboxusId).alias(alias).category(category)
+                .userStuffId(postboxusId).alias(alias).selectedCategory(category)
                 .posX(1.1).posY(0.0).posZ(1.0).rotX(0.0).rotY(0.1).rotZ(0.1).build();
         List<UserStuffEditRequestDto> placed = new ArrayList<>();
         placed.add(postboxIncludeRequestDto);
@@ -289,7 +289,7 @@ public class UserStuffApiControllerTest {
         Long userStuffId = userStuffService.saveUserStuff(createDto);
 
         UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
-                .userStuffId(userStuffId).alias("Java 정리").category("IT")
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
                 .posX(0.2).posY(0.3).posZ(3.1)
                 .rotX(1.5).rotY(0.0).rotZ(0.9)
                 .build();
