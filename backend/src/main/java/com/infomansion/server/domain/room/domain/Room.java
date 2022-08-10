@@ -6,6 +6,7 @@ import com.infomansion.server.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.io.IOException;
 
 @Getter
 @NoArgsConstructor
+@Where(clause = "delete_flag = false")
 @Entity
 public class Room extends BaseTimeEntity {
 

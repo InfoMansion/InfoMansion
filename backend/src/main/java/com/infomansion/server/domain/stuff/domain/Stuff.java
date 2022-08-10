@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @ToString
 @Getter
 @NoArgsConstructor
+@Where(clause = "delete_flag = false")
 @Entity
 public class Stuff extends BaseTimeEntityAtSoftDelete {
 

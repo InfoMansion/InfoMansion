@@ -9,6 +9,7 @@ import com.infomansion.server.domain.userstuff.dto.UserStuffEditRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@Where(clause = "delete_flag = false")
 @Entity
 public class UserStuff extends BaseTimeEntityAtSoftDelete {
 

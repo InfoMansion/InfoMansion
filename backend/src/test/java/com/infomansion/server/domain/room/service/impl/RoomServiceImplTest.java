@@ -60,7 +60,7 @@ public class RoomServiceImplTest {
 
     @AfterEach
     public void cleanUp(){
-        roomRepository.deleteAll();
+        roomRepository.deleteAllInBatch();
         userRepository.deleteAll();
     }
 
@@ -113,6 +113,6 @@ public class RoomServiceImplTest {
 
         //then
         Optional<Room> findRoom = roomRepository.findById(roomId);
-        assertThat(findRoom.get().isDeleteFlag()).isEqualTo(true);
+        assertThat(findRoom).isEmpty();
     }
 }

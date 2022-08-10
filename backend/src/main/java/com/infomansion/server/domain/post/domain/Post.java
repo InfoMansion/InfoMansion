@@ -7,6 +7,7 @@ import com.infomansion.server.domain.userstuff.domain.UserStuff;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@Where(clause = "delete_flag = false")
 @Entity
 public class Post extends BaseTimeEntityAtSoftDelete {
 
