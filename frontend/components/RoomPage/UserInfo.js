@@ -113,6 +113,9 @@ export default function UserInfo({ userName }) {
             }}
           >
             <Typography variant="h4">{userInfo.username}</Typography>
+            <div>팔로워 {userInfo.following}</div>
+
+            <div>팔로우 {userInfo.follower}</div>
 
             {loginUser ? (
               <Link href={userName + '/dashboard'}>
