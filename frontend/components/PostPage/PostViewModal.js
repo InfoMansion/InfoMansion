@@ -8,25 +8,19 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 import CloseIcon from '@mui/icons-material/Close';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Follow from '../Follow';
 
 export default function PostViewModal({ post, showModal, setShowModal }) {
   const handleClose = () => setShowModal(false);
-  const [follow, setFollow] = useState(false);
   const [star, setStar] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
 
-  useEffect(() => {
-    setFollow(false);
-    setStar(false);
-  }, [post]);
   const handleMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -58,6 +52,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
     </Menu>
   );
 
+  console.log(post);
   return (
     <>
       <Dialog
@@ -115,20 +110,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
               >
                 SSAFYkim
               </div>
-              <IconButton
-                onClick={() => {
-                  setFollow(prev => {
-                    prev ? alert('팔로우 취소') : alert('팔로우');
-                    return !prev;
-                  });
-                }}
-              >
-                {!follow ? (
-                  <PersonAddAlt1Icon color="primary" />
-                ) : (
-                  <PersonRemoveAlt1Icon />
-                )}
-              </IconButton>
+              <Follow></Follow>
             </div>
             <IconButton onClick={handleClose}>
               <CloseIcon />

@@ -17,6 +17,7 @@ import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import { loginUserState } from '../../state/roomState';
 import { useRecoilState } from 'recoil';
+import Follow from '../Follow';
 
 export default function UserInfo({ userName }) {
   const router = useRouter();
@@ -24,14 +25,15 @@ export default function UserInfo({ userName }) {
   const [loginUser, setLoginUser] = useRecoilState(loginUserState);
   const [posts, setPosts] = useState([]);
   // username 가지고 userinfo 가져와야 함.
-  const [userinfo, setUserinfo] = useState({
+  const [userInfo, setUserInfo] = useState({
     userEmail: 'infomansion@google.co.kr',
     profileImage:
       '/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png',
     username: 'infomansion',
     introduce: ``,
-    followcount: 10,
-    followingcount: 20,
+    following: 10,
+    follower: 20,
+    follow: undefined,
     categories: [],
   });
 
@@ -47,7 +49,7 @@ export default function UserInfo({ userName }) {
         .then(res => {
           console.log('user', res.data);
           setLoginUser(res.data.data.loginUser);
-          setUserinfo(res.data.data);
+          setUserInfo(res.data.data);
         });
     } catch (e) {
       console.log(e);
@@ -93,7 +95,7 @@ export default function UserInfo({ userName }) {
         >
           <Avatar
             alt="profile"
-            src={userinfo.profileImage}
+            src={userInfo.profileImage}
             sx={{
               width: '100%',
               maxWidth: '80px',
@@ -110,18 +112,21 @@ export default function UserInfo({ userName }) {
               alignItems: 'center',
             }}
           >
-            <Typography variant="h4">{userinfo.username}</Typography>
+            <Typography variant="h4">{userInfo.username}</Typography>
 
             {loginUser ? (
               <Link href={userName + '/dashboard'}>
                 <SettingsIcon sx={{ mx: 2 }} style={{ color: '#777777' }} />
               </Link>
             ) : (
-              <></>
+              <Follow
+                isFollow={userInfo.follow}
+                username={userInfo.username}
+              ></Follow>
             )}
           </Box>
           <Typography variant="body2" color="text.secondary">
-            {userinfo.userEmail}
+            {userInfo.userEmail}
           </Typography>
           <Box
             sx={{
@@ -129,7 +134,7 @@ export default function UserInfo({ userName }) {
               my: 1,
             }}
           >
-            {userinfo.categories.map((category, index) => (
+            {userInfo.categories.map((category, index) => (
               <Typography
                 variant="body2"
                 style={{
@@ -149,7 +154,7 @@ export default function UserInfo({ userName }) {
         </Grid>
 
         <Divider />
-        <Typography sx={{ m: 2 }}>{userinfo.introduce}</Typography>
+        <Typography sx={{ m: 2 }}>{userInfo.introduce}</Typography>
 
         {/* 여기 브레이크포인트에 따라 더보기 버튼과 recentpost 바꿔 사용할 것. */}
         <RecentPost posts={posts} />
