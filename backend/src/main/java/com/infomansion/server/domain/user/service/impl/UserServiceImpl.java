@@ -231,6 +231,10 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         User toUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if(followRepository.existsByFromUserIdAndToUserIs(fromUser.getId(), toUser)){
+            throw new CustomException(ErrorCode.ALREADY_FOLLOW_USER);
+        }
         followRepository.save(Follow.createFollow(fromUser, toUser));
         notificationRepository.save(Notification.createNotification(fromUser.getUsername(), toUser.getUsername(), NotificationType.FOLLOW_USER, fromUser.getId()));
         return true;
