@@ -8,6 +8,7 @@ import com.infomansion.server.domain.post.dto.*;
 import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.post.service.UserLikePostService;
+import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
 import com.infomansion.server.domain.userstuff.domain.UserStuff;
@@ -60,6 +61,9 @@ public class PostRestDocsTest {
 
     @MockBean
     private UserLikePostService userLikePostService;
+
+    @MockBean
+    private S3Uploader s3Uploader;
 
     @Test
     public void post_작성() throws Exception {
@@ -180,7 +184,7 @@ public class PostRestDocsTest {
         given(likesPostService.addLikes(any(Long.class))).willReturn(responseDto);
 
         // when, then
-        mockMvc.perform(put("/api/v1/posts/likes/{postId}", requestDto))
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/posts/likes/{postId}", requestDto))
                 .andExpect(status().isOk())
                 .andDo(document("post-likes",
                         preprocessRequest(prettyPrint()),
@@ -422,6 +426,25 @@ public class PostRestDocsTest {
                                 fieldWithPath("images").description("업로드한 이미지 주소들")
                         ),
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("수정 성공 여부")))
+                ));
+    }
+
+    @Test
+    public void post_작성_취소_시_업로드_되었던_image_삭제() throws Exception {
+        // given
+        List<String> deleteImages = new ArrayList<>();
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/posts/reset")
+                .content(objectMapper.writeValueAsString(deleteImages))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("post-reset",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("[]").description("삭제할 image Url")
+                        )
                 ));
     }
 }

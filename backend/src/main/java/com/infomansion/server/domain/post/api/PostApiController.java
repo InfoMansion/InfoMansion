@@ -4,6 +4,7 @@ import com.infomansion.server.domain.post.dto.*;
 import com.infomansion.server.domain.post.service.LikesPostService;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.post.service.UserLikePostService;
+import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class PostApiController {
     private final PostService postService;
     private final LikesPostService likesPostService;
     private final UserLikePostService userLikePostService;
+    private final S3Uploader s3Uploader;
 
     @PostMapping("/api/v1/posts")
     public ResponseEntity<CommonResponse<Long>> createPost(@Valid @RequestBody PostCreateRequestDto requestDto){
@@ -94,5 +96,11 @@ public class PostApiController {
     public ResponseEntity<? extends BasicResponse> modifyPost(@Valid @RequestBody PostModifyRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postService.modifyPost(requestDto)));
+    }
+
+    @PostMapping("/api/v1/posts/reset")
+    public ResponseEntity<? extends BasicResponse> removeUploadImages(@Valid @RequestBody List<String> deleteImages) {
+        s3Uploader.deleteFiles(deleteImages);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

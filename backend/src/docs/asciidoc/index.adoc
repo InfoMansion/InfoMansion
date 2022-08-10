@@ -396,6 +396,22 @@ include::{snippets}/post-delete-by-post-id/response-fields.adoc[]
 
 ---
 
+[[Post-reset]]
+== Post 작성 초기화
+
+Post 작성 취소 시 작성 도중 업로드 했던 이미지들 삭제 API
+
+=== Http Request
+include::{snippets}/post-reset/http-request.adoc[]
+
+=== Request fields
+include::{snippets}/post-reset/request-fields.adoc[]
+
+=== Http Response
+include::{snippets}/post-reset/http-response.adoc[]
+
+---
+
 [[Post-likes]]
 == Post 좋아요 표시
 
