@@ -13,6 +13,9 @@ import { Input, Autocomplete, TextField, styled } from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
 import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
+import { postDetailState } from '../../state/postDetailState';
+import { useRecoilState } from 'recoil';
+import { Quill } from 'react-quill';
 
 const ReactQuill = dynamic(
   async () => {
@@ -54,12 +57,40 @@ const Editor = ({
   imageUrlList,
   ...rest
 }) => {
+  const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   const [cookies] = useCookies(['cookie-name']);
   const QuillRef = useRef();
-  const onChange = (content, delta, soruce, editor) => {
+  const [prevContent, setPrevContent] = useState('');
+
+  const onChange = (content, delta, source, editor) => {
     setContent(content);
-    console.log(content);
+    setPrevContent(content);
   };
+
+  const setFirstImgList = () => {
+    const tagList = (postDetail.content ?? '').split('src=');
+    const firstImgList = [];
+    if (tagList.length > 1) {
+      let idx = 1;
+      while (idx < tagList.length) {
+        const closeIndex = tagList[idx].indexOf('>');
+        const imgUrl = tagList[idx].slice(1, closeIndex - 1);
+        firstImgList.push(imgUrl);
+        idx += 2;
+      }
+      console.log(firstImgList);
+      setImageUrlList([...firstImgList]);
+      console.log(imageUrlList);
+    }
+  };
+
+  useEffect(() => {
+    setPrevContent(postDetail.content);
+  }, []);
+
+  useEffect(() => {
+    setFirstImgList();
+  }, [prevContent]);
 
   const ImageHandler = () => {
     const imageInput = document.createElement('input');
@@ -83,9 +114,14 @@ const Editor = ({
             },
           });
           let imageUrl = data.data;
-          let tempUrlList = imageUrlList;
-          tempUrlList.push(imageUrl);
-          setImageUrlList(tempUrlList);
+          if (imageUrlList.length) {
+            setImageUrlList(prev => [...prev, imageUrl]);
+          } else {
+            const templist = imageUrlList;
+            templist.push(imageUrl);
+            setImageUrlList(templist);
+          }
+          console.log(imageUrlList);
           const range = QuillRef.current.getEditor().getSelection().index;
           if (range !== null && range !== undefined) {
             let quill = QuillRef.current.getEditor();
@@ -128,7 +164,7 @@ const Editor = ({
       {...rest}
       placeholder={placeholder}
       forwardRef={QuillRef}
-      value={content}
+      value={prevContent}
       theme="snow"
       modules={modules}
       formats={formats}
@@ -151,6 +187,7 @@ export default function PostEditor({
   const [windowSize, setWindowSize] = useState();
   const [categoryList, setCategoryList] = useState([]);
   const [cookies] = useCookies(['cookie-name']);
+  const [postDetail, setPostDetail] = useRecoilState(postDetailState);
 
   const handleResize = useCallback(() => {
     setWindowSize({
@@ -245,6 +282,7 @@ export default function PostEditor({
               width: '100%',
               margin: '16px 0 8px',
             }}
+            value={postDetail.title}
           />
           <Editor
             wrapperClassName={styles.wrapper}

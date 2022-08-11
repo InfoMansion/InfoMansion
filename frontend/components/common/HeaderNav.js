@@ -23,6 +23,7 @@ import useAuth from '../../hooks/useAuth';
 import axios from '../../utils/axios';
 import { useRecoilState } from 'recoil';
 import { profileState } from '../../state/profileState';
+import { postDetailState } from '../../state/postDetailState';
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -75,6 +76,7 @@ export default function HeaderNav() {
   const { auth, setAuth } = useAuth();
   const [keyword, setKeyword] = useState('');
   const [profile, setProfileState] = useRecoilState(profileState);
+  const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   //const [auth, setAuth] = useAuth();
 
   const handleProfileMenuOpen = event => {
@@ -265,6 +267,9 @@ export default function HeaderNav() {
                 size="large"
                 color="inherit"
                 style={{ color: '#9e9e9e' }}
+                onClick={() => {
+                  setPostDetail('');
+                }}
               >
                 <AddIcon style={{ color: 'white', fontSize: '50px' }} />
               </IconButton>
