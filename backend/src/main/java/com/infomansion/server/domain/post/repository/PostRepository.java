@@ -21,6 +21,7 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query(value = "select distinct p.user.id from Post p left join UserLikePost ulp on p.id = ulp.post.id " +
             "where p.modifiedDate BETWEEN :start and :end " +
             "and p.category in :categories and not p.user = :user " +
+            "and not p.category = 'GUESTBOOK'" +
             "group by p.id " +
             "order by count (ulp.post) desc")
     List<Long> findTop27PostByUserLikePost(@Param("user") User user, @Param("categories") List<Category> categories, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
@@ -28,16 +29,16 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query("select p from Post p where p.userStuff = :userStuff and p.deleteFlag = false order by p.modifiedDate")
     Slice<Post> findByUserStuffId(@Param("userStuff") UserStuff userStuff, Pageable pageable);
 
-    @Query("select p from Post p where p.title like %:searchWord% and p.user.privateFlag=false")
+    @Query("select p from Post p where p.title like %:searchWord% and not p.category = 'GUESTBOOK' and p.user.privateFlag=false")
     Slice<Post> findByTitle(@Param("searchWord") String searchWord, Pageable pageable);
 
-    @Query("select p from Post p where p.content like %:searchWord% and p.user.privateFlag=false")
+    @Query("select p from Post p where p.content like %:searchWord% and not p.category = 'GUESTBOOK' and p.user.privateFlag=false")
     Slice<Post> findByContent(@Param("searchWord") String searchWord, Pageable pageable);
 
     @Query("select p from Post p join fetch p.user where p.id=:id")
     Optional<Post> findPostWithUser(@Param("id") Long id);
 
-    @Query("select p from Post p join fetch p.user where p.user.id = :userId")
+    @Query("select p from Post p join fetch p.user where p.user.id = :userId and not p.category = 'GUESTBOOK'")
     List<Post> findTop5Post(@Param("userId") Long userId, Pageable pageable);
 
     @Modifying(clearAutomatically = true)
