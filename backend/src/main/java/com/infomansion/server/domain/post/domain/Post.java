@@ -81,13 +81,8 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         updatePost(title, content);
     }
 
-    public void updateIsPublic(boolean isPublic) {
-        this.isPublic = isPublic;
-    }
-
     public void updateCategory(Category category) {
         this.category = category;
-        System.out.println("category = " + category);
     }
 
     public void deletePost(S3Uploader s3Uploader){

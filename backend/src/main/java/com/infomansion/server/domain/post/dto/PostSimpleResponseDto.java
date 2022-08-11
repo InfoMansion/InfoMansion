@@ -22,7 +22,8 @@ public class PostSimpleResponseDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.category = new CategoryMapperValue(post.getCategory());
+        if(post.getCategory() != null)
+            this.category = new CategoryMapperValue(post.getCategory());
         this.defaultPostThumbnail = post.getDefaultPostThumbnail();
         this.modifiedDate = post.getModifiedDate();
         this.likes = (long) post.getUserLikePostList().size();

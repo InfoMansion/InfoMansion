@@ -5,6 +5,7 @@ import com.infomansion.server.domain.payment.domain.Payment;
 import com.infomansion.server.domain.payment.domain.PaymentLine;
 import com.infomansion.server.domain.payment.repository.PaymentLineRepository;
 import com.infomansion.server.domain.payment.repository.PaymentRepository;
+import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.dto.PostCreateRequestDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.PostService;
@@ -614,6 +615,44 @@ public class UserStuffServiceImplTest {
         // when,then
         List<UserStuffCategoryResponseDto> responseList = userStuffService.findCategoryPlacedInRoom();
         assertThat(responseList.size()).isEqualTo(4);
+    }
+
+    @DisplayName("UserStuff의 배치를 제외하면 종속된 Post가 Postbox로 이동")
+    @WithCustomUserDetails
+    @Test
+    public void userstuff_배치_제외시_post를_postbox로_이동_성공() {
+        // given
+        User user = userRepository.findById(userId).get();
+
+        Stuff postbox = Stuff.builder()
+                .stuffName("postbox").stuffNameKor("박스")
+                .stuffType(StuffType.POSTBOX).categories("POSTBOX").build();
+        stuffRepository.save(postbox);
+
+        UserStuff userPostbox = UserStuff.builder()
+                .user(user).stuff(postbox).selected(true)
+                .alias("POSTBOX").category(Category.POSTBOX).build();
+        userPostbox = userStuffRepository.save(userPostbox);
+
+        UserStuff itUserStuff = UserStuff.builder()
+                .user(user).stuff(stuffRepository.findById(stuffIds.get(0)).get())
+                .alias("JAVA 모음집").selected(true).category(Category.IT).build();
+        itUserStuff = userStuffRepository.save(itUserStuff);
+
+        Post post = Post.builder()
+                .user(user).userStuff(itUserStuff).title("Effective Java 정리").content("아이템 1").build();
+        postRepository.save(post);
+
+        List<UserStuffEditRequestDto> placed = new ArrayList<>();
+        placed.add(UserStuffEditRequestDto.builder()
+                .userStuffId(userPostbox.getId()).alias("postbox").selectedCategory("POSTBOX")
+                .posX(0.0).posY(0.0).posZ(0.0)
+                .rotX(0.0).rotY(0.0).rotZ(0.0).build());
+        userStuffService.editUserStuff(placed);
+
+        // when,then
+        post = postRepository.findById(post.getId()).get();
+        assertThat(post.getUserStuff().getId()).isEqualTo(userPostbox.getId());
     }
 
 }

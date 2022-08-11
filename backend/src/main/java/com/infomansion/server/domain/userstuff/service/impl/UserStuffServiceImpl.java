@@ -188,8 +188,17 @@ public class UserStuffServiceImpl implements UserStuffService {
         List<Long> placedUserStuffIds = requestDtos.stream().map(UserStuffEditRequestDto::getUserStuffId).collect(Collectors.toList());
 
         // 방에서 제외되어야 할 UserStuff들
-        userStuffRepository.findByUserIsAndIdNotInAndSelectedIsTrue(loginUser, placedUserStuffIds)
-                .forEach(UserStuff::changeExcludedState);
+        List<UserStuff> excludedUserStuffs = userStuffRepository.findByUserIsAndIdNotInAndSelectedIsTrue(loginUser, placedUserStuffIds);
+        if(excludedUserStuffs != null && excludedUserStuffs.size() > 0) {
+            UserStuff garbage = userStuffRepository.findUserStuffByStuffType(SecurityUtil.getCurrentUserId(), StuffType.POSTBOX)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+            excludedUserStuffs.forEach(excludedUserStuff -> {
+                postRepository.movePostToAnotherStuff(excludedUserStuff, garbage);
+
+                excludedUserStuff.changeExcludedState();
+                userStuffRepository.save(excludedUserStuff);
+            });
+        }
 
         Set<String> checkDuplicateCategory = new HashSet<>();
         requestDtos.forEach(userStuffEditRequestDto -> {
@@ -203,6 +212,7 @@ public class UserStuffServiceImpl implements UserStuffService {
             checkDuplicateCategory.add(userStuffEditRequestDto.getSelectedCategory());
 
             userStuff.changePlacedStatus(userStuffEditRequestDto);
+            userStuffRepository.save(userStuff);
         });
         return true;
     }

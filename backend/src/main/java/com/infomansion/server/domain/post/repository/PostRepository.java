@@ -41,6 +41,6 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     List<Post> findTop5Post(@Param("userId") Long userId, Pageable pageable);
 
     @Modifying(clearAutomatically = true)
-    @Query("update Post p set p.userStuff = :anotherUs where p.userStuff = :us")
+    @Query("update Post p set p.userStuff = :anotherUs, p.category = null where p.userStuff = :us")
     int movePostToAnotherStuff(@Param("us") UserStuff us, @Param("anotherUs") UserStuff anotherUs);
 }

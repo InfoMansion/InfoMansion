@@ -88,7 +88,6 @@ public class UserStuff extends BaseTimeEntityAtSoftDelete {
         if(this.category != Category.valueOf(requestDto.getSelectedCategory())) {
             changeCategoryOfPost(Category.valueOf(requestDto.getSelectedCategory()));
         }
-        changeIsPublicOfPost(true);
         this.category = Category.valueOf(requestDto.getSelectedCategory());
         this.selected = true;
         changePosAndRot(requestDto.getPosX(), requestDto.getPosY(), requestDto.getPosZ(),
@@ -98,7 +97,6 @@ public class UserStuff extends BaseTimeEntityAtSoftDelete {
     public void changeExcludedState() {
         this.selected = false;
         changePosAndRot(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
-        changeIsPublicOfPost(false);
     }
 
     /**
@@ -117,10 +115,6 @@ public class UserStuff extends BaseTimeEntityAtSoftDelete {
         this.setDeletedDate();
         this.getPostList().clear();
         changePosAndRot(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
-    }
-
-    public void changeIsPublicOfPost(boolean isPublic) {
-        postList.forEach(post -> post.updateIsPublic(isPublic));
     }
 
     public void changeCategoryOfPost(Category category) {
