@@ -39,4 +39,7 @@ public interface UserStuffRepository extends JpaRepository<UserStuff, Long> {
 
     @Query("select us from UserStuff us join fetch us.stuff where us.user.id = :userId and us.stuff.stuffType = :stuffType")
     Optional<UserStuff> findUserStuffByStuffType(@Param("userId")Long userId, @Param("stuffType") StuffType stuffType);
+
+    @Query("SELECT us FROM UserStuff us join fetch us.stuff WHERE us.id in :userStuffIds")
+    List<UserStuff> findByIdIn(@Param("userStuffIds") List<Long> userStuffIds);
 }

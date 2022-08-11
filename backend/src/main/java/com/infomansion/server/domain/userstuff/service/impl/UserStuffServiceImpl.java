@@ -186,36 +186,40 @@ public class UserStuffServiceImpl implements UserStuffService {
 
         // 배치할 UserStuffIds
         List<Long> placedUserStuffIds = requestDtos.stream().map(UserStuffEditRequestDto::getUserStuffId).collect(Collectors.toList());
-        // 방에서 제외되어야 할 UserStuff들
+
+        // 방에서 제외되어야 할 UserStuff들의 selected와 Position, Rotation만 변경
         List<UserStuff> excludedUserStuffs = userStuffRepository.findByUserIsAndIdNotInAndSelectedIsTrue(loginUser, placedUserStuffIds);
-        if(excludedUserStuffs != null && excludedUserStuffs.size() > 0) {
-            UserStuff garbage = userStuffRepository.findUserStuffByStuffType(SecurityUtil.getCurrentUserId(), StuffType.POSTBOX)
-                    .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+        if(excludedUserStuffs.size() > 0) {
             excludedUserStuffs.forEach(excludedUserStuff -> {
                 if(excludedUserStuff.getCategory() == Category.GUESTBOOK || excludedUserStuff.getCategory() == Category.POSTBOX) {
                     throw new CustomException(ErrorCode.USER_STUFF_NOT_EXCLUDED);
                 }
-                postRepository.movePostToAnotherStuff(excludedUserStuff, garbage);
-
                 excludedUserStuff.changeExcludedState();
-                userStuffRepository.save(excludedUserStuff);
             });
         }
 
         Set<String> checkDuplicateCategory = new HashSet<>();
-        requestDtos.forEach(userStuffEditRequestDto -> {
-            UserStuff userStuff = userStuffRepository.findById(userStuffEditRequestDto.getUserStuffId())
-                    .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+        userStuffRepository.findByIdIn(placedUserStuffIds).forEach(placedUserStuff -> {
+            for (UserStuffEditRequestDto requestDto : requestDtos) {
+                if(requestDto.getUserStuffId() == placedUserStuff.getId()) {
+                    // 새롭게 배치할 UserStuff의 카테고리 중복 검사 및 Stuff에 적용가능한 지 검사
+                    if(!requestDto.getSelectedCategory().equals("NONE") && checkDuplicateCategory.contains(requestDto.getSelectedCategory()))
+                        throw new CustomException(ErrorCode.DUPLICATE_CATEGORY);
+                    checkAcceptableCategory(placedUserStuff.getStuff(), requestDto.getSelectedCategory());
+                    checkDuplicateCategory.add(requestDto.getSelectedCategory());
 
-            // 새롭게 배치할 UserStuff의 카테고리 중복 검사 및 Stuff에 적용가능한 지 검사
-            if(!userStuffEditRequestDto.getSelectedCategory().equals("NONE") && checkDuplicateCategory.contains(userStuffEditRequestDto.getSelectedCategory()))
-                throw new CustomException(ErrorCode.DUPLICATE_CATEGORY);
-            checkAcceptableCategory(userStuff.getStuff(), userStuffEditRequestDto.getSelectedCategory());
-            checkDuplicateCategory.add(userStuffEditRequestDto.getSelectedCategory());
-
-            userStuff.changePlacedStatus(userStuffEditRequestDto);
-            userStuffRepository.save(userStuff);
+                    placedUserStuff.changePlacedStatus(requestDto);
+                    break;
+                }
+            }
         });
+
+        // 배치에서 제외된 UserStuff에 종속된 Post들을 PostBox로 이동
+        if(excludedUserStuffs.size() > 0) {
+            UserStuff garbage = userStuffRepository.findUserStuffByStuffType(SecurityUtil.getCurrentUserId(), StuffType.POSTBOX)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+            postRepository.movePostToAnotherStuffs(excludedUserStuffs, garbage);
+        }
         return true;
     }
 

@@ -44,4 +44,8 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Modifying(clearAutomatically = true)
     @Query("update Post p set p.userStuff = :anotherUs, p.category = null where p.userStuff = :us")
     int movePostToAnotherStuff(@Param("us") UserStuff us, @Param("anotherUs") UserStuff anotherUs);
+
+    @Modifying(clearAutomatically = true)
+    @Query("update Post p set p.userStuff = :anotherUs, p.category = null where p.userStuff in :us")
+    int movePostToAnotherStuffs(@Param("us") List<UserStuff> us, @Param("anotherUs") UserStuff anotherUs);
 }
