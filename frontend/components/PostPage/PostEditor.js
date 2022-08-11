@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useCallback,
   useEffect,
   useMemo,
@@ -15,7 +14,6 @@ import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
 import { postDetailState } from '../../state/postDetailState';
 import { useRecoilState } from 'recoil';
-import { Quill } from 'react-quill';
 
 const ReactQuill = dynamic(
   async () => {
