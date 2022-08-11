@@ -24,6 +24,9 @@ import axios from '../../utils/axios';
 import { useRecoilState } from 'recoil';
 import { profileState } from '../../state/profileState';
 import { postDetailState } from '../../state/postDetailState';
+import { notificationState } from '../../state/notificationState';
+import Nofication from '../Notification';
+import Notification from '../Notification';
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -77,14 +80,39 @@ export default function HeaderNav() {
   const [keyword, setKeyword] = useState('');
   const [profile, setProfileState] = useRecoilState(profileState);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+  const [notification, setNotification] = useRecoilState(notificationState);
+  const [showModal, setShowModal] = useState(false);
+
   //const [auth, setAuth] = useAuth();
 
   const handleProfileMenuOpen = event => {
+    console.log(event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
+  const handleMenuClose = async button => {
     setAnchorEl(null);
+    if (button === 'notification') {
+      try {
+        const { data } = await axios.post(
+          '/api/v1/notifications',
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            },
+          },
+        );
+        setNotification([]);
+        console.log(data);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
+  const openModal = () => {
+    setShowModal(true);
   };
 
   const handleLogout = async () => {
@@ -143,7 +171,6 @@ export default function HeaderNav() {
     init();
   }, [init, auth.isAuthorized, profile]);
 
-  const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -151,160 +178,182 @@ export default function HeaderNav() {
         vertical: 'bottom',
         horizontal: 'left',
       }}
-      id={menuId}
+      //id={menuId}
       keepMounted
       transformOrigin={{
         vertical: 'top',
         horizontal: 'left',
       }}
       open={isMenuOpen}
-      onClose={handleMenuClose}
+      onClose={() => handleMenuClose(anchorEl?.id)}
     >
-      <Link href={`/${simpleUser.username}`}>
-        <MenuItem onClick={handleMenuClose}>마이룸</MenuItem>
-      </Link>
-
-      <MenuItem
-        onClick={() => {
-          handleMenuClose();
-          handleLogout();
-        }}
-      >
-        로그아웃
-      </MenuItem>
+      {anchorEl?.id === 'profile' ? (
+        <>
+          <Link href={`/${simpleUser.username}`}>
+            <MenuItem onClick={handleMenuClose}>마이룸</MenuItem>
+          </Link>
+          <MenuItem
+            onClick={() => {
+              handleMenuClose();
+              handleLogout();
+            }}
+          >
+            {anchorEl?.id}
+            로그아웃
+          </MenuItem>
+        </>
+      ) : (
+        <>
+          {notification.length === 0 ? (
+            <div>알림이 없습니다.</div>
+          ) : (
+            <>
+              {notification.map(noti => (
+                <Notification notification={noti} />
+              ))}
+            </>
+          )}
+        </>
+      )}
     </Menu>
   );
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar
-        elevation={0}
-        position="static"
-        style={{ background: 'transParent' }}
-      >
-        <Toolbar
-          variant="dense"
-          style={{
-            justifyContent: 'space-between',
-            maxWidth: '1280px',
-            width: '100%',
-            height: '80px',
-            margin: '0 auto',
-          }}
+    <>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar
+          elevation={0}
+          position="static"
+          style={{ background: 'transParent' }}
         >
-          <Link href="/">
-            <div
-              style={{
-                display: 'flex',
-                height: '30px',
-                alignItems: 'center',
-                cursor: 'pointer',
-              }}
-            >
-              <Image src="/vectorLogo.svg" alt="" width={40} height={40} />
-              <div
-                style={{ color: 'white', fontSize: '30px', padding: '10px' }}
-              >
-                InfoMansion
-              </div>
-            </div>
-          </Link>
-          <Search
+          <Toolbar
+            variant="dense"
             style={{
-              postiion: 'relative',
-              fontSize: '40px',
-              border: 'solid',
-              borderColor: 'white',
-              backgroundColor: 'transparent',
-              display: 'flex',
-              alignItems: 'center',
+              justifyContent: 'space-between',
+              maxWidth: '1280px',
+              width: '100%',
+              height: '80px',
+              margin: '0 auto',
             }}
           >
-            <SearchIconWrapper style={{ color: '#9e9e9e' }}>
-              <SearchIcon style={{ color: 'white', fontSize: '30px' }} />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="검색"
-              onChange={handleChange}
-              value={keyword}
-              onKeyPress={event => {
-                event.key === 'Enter'
-                  ? push({
-                      pathname: '/post/SearchPost',
-                      query: { keyword },
-                    })
-                  : '';
-              }}
-              style={{
-                paddingRight: '25px',
-                color: 'white',
-                paddingLeft: '7px',
-              }}
-            />
-            {keyword.length > 0 && (
-              <HighlightOffIcon
+            <Link href="/">
+              <div
                 style={{
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  right: '5',
-                  position: 'absolute',
-                  color: 'white',
+                  display: 'flex',
+                  height: '30px',
+                  alignItems: 'center',
                   cursor: 'pointer',
-                  fontSize: '20px',
-                }}
-                onClick={() => {
-                  setKeyword('');
-                }}
-              ></HighlightOffIcon>
-            )}
-          </Search>
-          <div
-            style={{ display: 'flex', height: '30px', alignItems: 'center' }}
-          >
-            <Link href="/post/CreatePost">
-              <IconButton
-                baseClassName="fas"
-                className="fa-plus-circle"
-                size="large"
-                color="inherit"
-                style={{ color: '#9e9e9e' }}
-                onClick={() => {
-                  setPostDetail('');
                 }}
               >
-                <AddIcon style={{ color: 'white', fontSize: '50px' }} />
-              </IconButton>
+                <Image src="/vectorLogo.svg" alt="" width={40} height={40} />
+                <div
+                  style={{ color: 'white', fontSize: '30px', padding: '10px' }}
+                >
+                  InfoMansion
+                </div>
+              </div>
             </Link>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-              style={{ color: '#FFFFFF' }}
+            <Search
+              style={{
+                postiion: 'relative',
+                fontSize: '40px',
+                border: 'solid',
+                borderColor: 'white',
+                backgroundColor: 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+              }}
             >
-              <Badge badgeContent={3} color="error">
-                <NotificationsIcon
-                  style={{ color: 'white', fontSize: '40px' }}
-                />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="false"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-              style={{ color: '#9e9e9e' }}
-            >
-              <img
-                src={`${simpleUser.profileImage}`}
-                style={{ height: '50px', width: '50px', borderRadius: '50%' }}
+              <SearchIconWrapper style={{ color: '#9e9e9e' }}>
+                <SearchIcon style={{ color: 'white', fontSize: '30px' }} />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="검색"
+                onChange={handleChange}
+                value={keyword}
+                onKeyPress={event => {
+                  event.key === 'Enter'
+                    ? push({
+                        pathname: '/post/SearchPost',
+                        query: { keyword },
+                      })
+                    : '';
+                }}
+                style={{
+                  paddingRight: '25px',
+                  color: 'white',
+                  paddingLeft: '7px',
+                }}
               />
-            </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
-      {renderMenu}
-    </Box>
+              {keyword.length > 0 && (
+                <HighlightOffIcon
+                  style={{
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    right: '5',
+                    position: 'absolute',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '20px',
+                  }}
+                  onClick={() => {
+                    setKeyword('');
+                  }}
+                ></HighlightOffIcon>
+              )}
+            </Search>
+            <div
+              style={{ display: 'flex', height: '30px', alignItems: 'center' }}
+            >
+              <Link href="/post/CreatePost">
+                <IconButton
+                  baseClassName="fas"
+                  className="fa-plus-circle"
+                  size="large"
+                  color="inherit"
+                  style={{ color: '#9e9e9e' }}
+                  onClick={() => {
+                    setPostDetail('');
+                  }}
+                >
+                  <AddIcon style={{ color: 'white', fontSize: '50px' }} />
+                </IconButton>
+              </Link>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                id="notification"
+                aria-controls="notification"
+                color="inherit"
+                style={{ color: '#FFFFFF' }}
+                onClick={handleProfileMenuOpen}
+              >
+                <Badge badgeContent={notification.length} color="error">
+                  <NotificationsIcon
+                    style={{ color: 'white', fontSize: '40px' }}
+                  />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                id="profile"
+                aria-controls="profile"
+                aria-haspopup="false"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+                style={{ color: '#9e9e9e' }}
+              >
+                <img
+                  src={`${simpleUser.profileImage}`}
+                  style={{ height: '50px', width: '50px', borderRadius: '50%' }}
+                />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+        {renderMenu}
+      </Box>
+    </>
   );
 }

@@ -1,12 +1,14 @@
 import HeaderNav from './common/HeaderNav';
 import { styled } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
-import { Paper } from '@mui/material';
+import { useEffect, useState, useCallback } from 'react';
 import useAuth from '../hooks/useAuth';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { pageLoading } from '../state/pageLoading';
 import Loading from './Loading';
 import { useRouter } from 'next/router';
+import axios from '../utils/axios';
+import { useCookies } from 'react-cookie';
+import { notificationState } from '../state/notificationState';
 
 const backgroundColor = [
   'linear-gradient(to bottom, #17223b, #1a2640, #1d2a46, #1f2e4b, #223251, #293958, #30405f, #374766, #445370, #515f79, #5e6b83, #6b778d)',
@@ -41,10 +43,32 @@ export default function Layout({ children }) {
   const { auth } = useAuth();
   const [loading] = useRecoilState(pageLoading);
   const { pathname } = useRouter();
+  const [cookies] = useCookies(['cookie-name']);
+  const setNotification = useSetRecoilState(notificationState);
+
   const [colorIdx, setColorIdx] = useState(0);
   useEffect(() => {
     if (!auth.isAuthorized) setColorIdx(Math.floor(Math.random() * 13));
   }, [auth.isAuthorized]);
+
+  const init = useCallback(async () => {
+    try {
+      const { data } = await axios.get('/api/v1/notifications', {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+        },
+      });
+      console.log('notific', data);
+      setNotification(data.data);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    init();
+  }, [init, pathname, notificationState]);
+
   console.log(auth.username);
   return (
     <div>

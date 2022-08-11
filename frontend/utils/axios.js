@@ -15,6 +15,7 @@ axiosApiInstance.interceptors.request.use(
 
     const expireAt = new Date(localStorage.getItem('expiresAt'));
     const diffTime = moment().diff(expireAt, 'minutes');
+    if (diffTime > 0) return;
 
     if (diffTime >= -5) {
       try {
@@ -29,6 +30,7 @@ axiosApiInstance.interceptors.request.use(
       } catch (e) {
         alert('세션이 만료됐습니다.');
         console.log(e);
+        localStorage.clear();
         window.location.replace('/');
       }
     }
