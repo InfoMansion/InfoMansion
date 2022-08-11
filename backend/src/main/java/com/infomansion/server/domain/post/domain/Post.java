@@ -123,4 +123,8 @@ public class Post extends BaseTimeEntityAtSoftDelete {
     public void addUserLikePost(UserLikePost ulp){
         this.userLikePostList.add(ulp);
     }
+
+    public void removeUserLikePost(UserLikePost ulp){
+        this.userLikePostList.remove(ulp);
+    }
 }

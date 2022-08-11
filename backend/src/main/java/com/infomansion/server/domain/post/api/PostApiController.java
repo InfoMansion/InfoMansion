@@ -65,6 +65,12 @@ public class PostApiController {
                 .body(new CommonResponse<>(userLikePostService.likePost(postId)));
     }
 
+    @DeleteMapping("/api/v2/posts/likes/{postId}")
+    public ResponseEntity<? extends BasicResponse> userUnlikesPost(@Valid @PathVariable Long postId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userLikePostService.unlikePost(postId)));
+    }
+
     @GetMapping("/api/v2/posts/likes/{postId}")
     public ResponseEntity<? extends BasicResponse> getLikesOnPost(@Valid @PathVariable Long postId) {
         return ResponseEntity.status(HttpStatus.OK)

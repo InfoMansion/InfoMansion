@@ -50,6 +50,23 @@ public class UserLikePostServiceImpl implements UserLikePostService {
     }
 
     @Override
+    @Transactional
+    public Long unlikePost(Long postId) {
+        Post post = postRepository.findPostWithUser(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        UserLikePost ulp = userLikePostRepository.findByPostAndUser(post, user)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_LIKES_NOT_FOUND));
+
+        userLikePostRepository.delete(ulp);
+        post.removeUserLikePost(ulp);
+        return postId;
+    }
+
+    @Override
     public List<UserSimpleProfileResponseDto> findUsersLikeThisPost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));

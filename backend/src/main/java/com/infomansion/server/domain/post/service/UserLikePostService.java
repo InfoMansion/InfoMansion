@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserLikePostService {
     Long likePost(Long postId);
+    Long unlikePost(Long postId);
     List<UserSimpleProfileResponseDto> findUsersLikeThisPost(Long postId);
     List<PostSimpleResponseDto> findPostsUserLikes();
 }

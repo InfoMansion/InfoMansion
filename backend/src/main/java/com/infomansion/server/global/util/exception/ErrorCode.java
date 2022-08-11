@@ -48,6 +48,7 @@ public enum ErrorCode {
 
     //POST
     POST_NOT_FOUND(HttpStatus.BAD_REQUEST, 40080, "해당 Post가 존재하지 않습니다."),
+    POST_LIKES_NOT_FOUND(HttpStatus.BAD_REQUEST, 40081, "해당 Post를 좋아요한 내역이 존재하지 않습니다."),
 
     // FOLLOW
     ALREADY_FOLLOW_USER(HttpStatus.BAD_REQUEST, 40090, "이미 팔로우한 유저입니다."),

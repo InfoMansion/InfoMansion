@@ -234,6 +234,57 @@ public class PostApiControllerTest {
 
     }
 
+    @DisplayName("Unlike하면 Post의 Likes가 감소한다.")
+    @WithCustomUserDetails
+    @Transactional
+    @Test
+    public void Post_좋아요_취소_성공() throws Exception{
+
+        // UserStuff생성,배치
+        UserStuffSaveRequestDto createDto =UserStuffSaveRequestDto.builder()
+                .stuffId(stuffId).build();
+        userStuffId = userStuffService.saveUserStuff(createDto);
+
+        //UserStuff배치
+        UserStuffEditRequestDto includeDto =UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
+                .posX(0.2).posY(0.3).posZ(3.1)
+                .rotX(1.5).rotY(0.0).rotZ(0.9)
+                .build();
+        List<UserStuffEditRequestDto> includeDtoList = new ArrayList<>();
+        includeDtoList.add(includeDto);
+
+        userStuffService.editUserStuff(includeDtoList);
+
+        //post작성
+        PostCreateRequestDto postCreateDto =PostCreateRequestDto.builder()
+                .userStuffId(userStuffId)
+                .title("EffectiveJava")
+                .content("자바개발자 필독서")
+                .images(new ArrayList<>())
+                .build();
+
+        Long postId = postService.createPost(postCreateDto);
+
+
+        mockMvc.perform(post("/api/v2/posts/likes/"+postId))
+                .andExpect(status().isCreated());
+
+        int page = 0;
+        int size = 3;
+
+        mockMvc.perform(get("/api/v1/posts/"+userStuffId+ "?page="+page+"&size="+size))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher)jsonPath("$.data.['postsByUserStuff'].['content'][0].['likes']").value(1));
+
+        userLikePostService.unlikePost(postId);
+
+        mockMvc.perform(get("/api/v1/posts/"+userStuffId+ "?page="+page+"&size="+size))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher)jsonPath("$.data.['postsByUserStuff'].['content'][0].['likes']").value(0));
+
+    }
+
     @DisplayName("Post 검색에 성공하였습니다.")
     @WithCustomUserDetails
     @Transactional
