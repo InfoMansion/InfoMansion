@@ -30,7 +30,7 @@ public class PostApiController {
     }
 
     @GetMapping("api/v1/posts/{userStuffId}")
-    public ResponseEntity<CommonResponse<List<PostSimpleResponseDto>>> findPostByUserStuff(@Valid @PathVariable Long userStuffId, Pageable pageable){
+    public ResponseEntity<CommonResponse<PostbyUserStuffResponseDto>> findPostByUserStuff(@Valid @PathVariable Long userStuffId, Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postService.findPostByUserStuffId(userStuffId, pageable)));
     }

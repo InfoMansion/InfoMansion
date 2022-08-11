@@ -26,8 +26,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -82,16 +80,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostSimpleResponseDto> findPostByUserStuffId(Long userStuffId, Pageable pageable) {
+    public PostbyUserStuffResponseDto findPostByUserStuffId(Long userStuffId, Pageable pageable) {
 
         UserStuff userStuff = userStuffRepository.findById(userStuffId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
 
-        List<PostSimpleResponseDto> simpleResponseDtos = new ArrayList<>();
-        postRepository.findByUserStuffId(userStuff, pageable)
-                .forEach(post -> simpleResponseDtos.add(new PostSimpleResponseDto(post)));
+        Slice<PostSimpleResponseDto> postsByUserStuff
+                = postRepository.findByUserStuffId(userStuff, pageable)
+                .map(PostSimpleResponseDto::new);
 
-        return simpleResponseDtos;
+        return new PostbyUserStuffResponseDto(postsByUserStuff);
     }
 
     @Override

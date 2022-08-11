@@ -7,7 +7,6 @@ import com.infomansion.server.domain.post.dto.*;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.post.service.UserLikePostService;
 import com.infomansion.server.domain.upload.service.S3Uploader;
-import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
@@ -91,9 +91,9 @@ public class PostRestDocsTest {
     public void userStuffId로_userStuff에_존재하는_모든_post_조회() throws Exception {
         // given
         Long requestDto = 10L;
-        List<PostSimpleResponseDto> responseDtoList = new ArrayList<>();
+        List<PostSimpleResponseDto> postsByUserStuffId = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
-            responseDtoList.add(PostSimpleResponseDto.builder()
+            postsByUserStuffId.add(PostSimpleResponseDto.builder()
                     .id((long) i)
                     .title("title"+i)
                     .content("content"+i)
@@ -104,29 +104,42 @@ public class PostRestDocsTest {
                     .build());
         }
 
-        given(postService.findPostByUserStuffId(any(Long.class), any(Pageable.class))).willReturn(responseDtoList);
+        Slice<PostSimpleResponseDto> postByUserStuffId = new SliceImpl<>(postsByUserStuffId,Pageable.ofSize(10), true);
+        PostbyUserStuffResponseDto responseDto = new PostbyUserStuffResponseDto(postByUserStuffId);
+
+        given(postService.findPostByUserStuffId(any(Long.class), any(Pageable.class))).willReturn(responseDto);
 
         // when, then
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/{userStuffId}", requestDto))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/{userStuffId}", requestDto)
+                        .param("page", "1")
+                        .param("size", "3"))
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andDo(document("post-find-by-userstuffid",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
                                 parameterWithName("userStuffId").description("조회할 userStuff Id")
                         ),
-                        responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("조회할 "+ USERSTUFF_ID.getDescription())))
-                                .andWithPrefix("data.[].",
-                                        fieldWithPath("id").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
-                                        fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
-                                        fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
-                                        fieldWithPath("likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
-                                        fieldWithPath("category").type(JsonFieldType.OBJECT).description(CATEGORY.getDescription()),
-                                        fieldWithPath("category.category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
-                                        fieldWithPath("category.categoryName").type(CATEGORY_NAME.getJsonFieldType()).description(CATEGORY_NAME.getDescription()),
-                                        fieldWithPath("modifiedDate").type(MODIFIED_DATE.getJsonFieldType()).description(MODIFIED_DATE.getDescription()).optional(),
-                                        fieldWithPath("defaultPostThumbnail").type(DEFAULTPOSTTHUMBNAIL.getJsonFieldType()).description(DEFAULTPOSTTHUMBNAIL.getDescription())
-                                )
+                        requestParameters(
+                                parameterWithName("page").description("조회할 페이지의 번호"),
+                                parameterWithName("size").description("한 번에 보여줄 데이터의 개수")
+                        ),
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("조회할 "+ USERSTUFF_ID.getDescription())))
+                                .andWithPrefix("data.postsByUserStuff.",
+                                        fieldWithPath("content.[].id").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("content.[].title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content.[].content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
+                                        fieldWithPath("content.[].likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
+                                        fieldWithPath("content.[].category").type(JsonFieldType.OBJECT).description(CATEGORY.getDescription()),
+                                        fieldWithPath("content.[].category.category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
+                                        fieldWithPath("content.[].category.categoryName").type(CATEGORY_NAME.getJsonFieldType()).description(CATEGORY_NAME.getDescription()),
+                                        fieldWithPath("content.[].modifiedDate").type(MODIFIED_DATE.getJsonFieldType()).description(MODIFIED_DATE.getDescription()).optional(),
+                                        fieldWithPath("content.[].defaultPostThumbnail").type(DEFAULTPOSTTHUMBNAIL.getJsonFieldType()).description(DEFAULTPOSTTHUMBNAIL.getDescription()),
+                                        fieldWithPath("first").type(SLICE_FIRST.getJsonFieldType()).description(SLICE_FIRST.getDescription()),
+                                        fieldWithPath("last").type(SLICE_LAST.getJsonFieldType()).description(SLICE_LAST.getDescription()),
+                                        fieldWithPath("number").type(SLICE_NUMBER.getJsonFieldType()).description(SLICE_NUMBER.getDescription()),
+                                        fieldWithPath("size").type(SLICE_SIZE.getJsonFieldType()).description(SLICE_SIZE.getDescription())                                )
                 ));
     }
 
@@ -212,13 +225,17 @@ public class PostRestDocsTest {
         given(postService.findPostBySearchWordForTitle(anyString(), any(Pageable.class))).willReturn(titleResponse);
 
         // when, then
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/search/title?searchWord=", searchWord))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/search/title?searchWord=", searchWord)
+                .param("page", "1")
+                .param("size", "3"))
                 .andExpect(status().isOk())
                 .andDo(document("post-search-title",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(
-                                parameterWithName("searchWord").description("검색어")
+                                parameterWithName("searchWord").description("검색어"),
+                                parameterWithName("page").description("조회할 페이지의 번호"),
+                                parameterWithName("size").description("한 번에 보여줄 데이터의 개수")
                         ),
                         relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.VARIES).description("타이틀 검색 결과")))
                                 .andWithPrefix("data.postsByTitleOrContent.",
@@ -258,13 +275,17 @@ public class PostRestDocsTest {
         given(postService.findPostBySearchWordForContent(anyString(), any(Pageable.class))).willReturn(contentResponse);
 
         // when, then
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/search/content?searchWord=검색어"))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/search/content?searchWord=검색어")
+                        .param("page", "1")
+                        .param("size", "3"))
                 .andExpect(status().isOk())
                 .andDo(document("post-search-content",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(
-                                parameterWithName("searchWord").description("검색어")
+                                parameterWithName("searchWord").description("검색어"),
+                                parameterWithName("page").description("조회할 페이지 번호"),
+                                parameterWithName("size").description("한 페이지에서 조회할 데이터 개수")
                         ),
                         relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.VARIES).description("post 제목으로 검색한 결과")))
                                 .andWithPrefix("data.postsByTitleOrContent.",

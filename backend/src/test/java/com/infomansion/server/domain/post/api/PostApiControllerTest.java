@@ -33,7 +33,6 @@ import java.util.List;
 import static com.infomansion.server.domain.user.domain.User.builder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -186,7 +185,7 @@ public class PostApiControllerTest {
 
         mockMvc.perform(get("/api/v1/posts/"+userStuffId+ "?page="+page+"&size="+size))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.data[0].['title']").value("EffectiveJava ver.1"));
+                .andExpect((ResultMatcher) jsonPath("$.data.['postsByUserStuff'].['content'][0].['content']").value("자바개발자 필독서 ver.1"));
     }
 
     @DisplayName("좋아요 버튼을 누르면 Post의 Likes가 증가한다.")
@@ -230,7 +229,8 @@ public class PostApiControllerTest {
 
         mockMvc.perform(get("/api/v1/posts/"+userStuffId+ "?page="+page+"&size="+size))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.data[0].['likes']").value(1));
+                .andExpect((ResultMatcher) jsonPath("$.data.['postsByUserStuff'].['content'][0].['likes']").value(1));
+
 
     }
 
@@ -277,15 +277,15 @@ public class PostApiControllerTest {
         int page = 0;
         int size = 3;
 
-        mockMvc.perform(get("/api/v1/users/search/username"+"?searchWord="+searchWord+"&page"+page+"&size="+size))
+        mockMvc.perform(get("/api/v1/users/search/username"+"?searchWord="+searchWord+"&page="+page+"&size="+size))
                 .andExpect(status().isOk())
                 .andExpect((ResultMatcher) jsonPath("$.data.['usersByUserName'].['content'].size()").value(1));
 
-        mockMvc.perform(get("/api/v1/posts/search/title"+"?searchWord="+searchWord+"&page"+page+"&size="+size))
+        mockMvc.perform(get("/api/v1/posts/search/title"+"?searchWord="+searchWord+"&page="+page+"&size="+size))
                 .andExpect(status().isOk())
                 .andExpect((ResultMatcher) jsonPath("$.data.['postsByTitleOrContent'].['content'][0].['title']").value("EffectiveJava자바 infomansion"));
 
-        mockMvc.perform(get("/api/v1/posts/search/content"+"?searchWord="+searchWord+"&page"+page+"&size="+size))
+        mockMvc.perform(get("/api/v1/posts/search/content"+"?searchWord="+searchWord+"&page="+page+"&size="+size))
                 .andExpect(status().isOk())
                 .andExpect((ResultMatcher) jsonPath("$.data.['postsByTitleOrContent'].['content'][1].['content']").value("Java개발자 infomansion 필독서"));
 

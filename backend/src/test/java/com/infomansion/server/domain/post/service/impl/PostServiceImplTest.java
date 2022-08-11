@@ -4,6 +4,7 @@ import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.dto.PostModifyRequestDto;
 import com.infomansion.server.domain.post.dto.PostSimpleResponseDto;
+import com.infomansion.server.domain.post.dto.PostbyUserStuffResponseDto;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.stuff.domain.Stuff;
@@ -158,8 +159,8 @@ public class PostServiceImplTest {
         userStuffService.editUserStuff(includeDtoList);
 
         Pageable pageable = PageRequest.of(0, 5);
-        List<PostSimpleResponseDto> response = postService.findPostByUserStuffId(userStuffId, pageable);
-        for (PostSimpleResponseDto postSimpleResponseDto : response) {
+        PostbyUserStuffResponseDto response = postService.findPostByUserStuffId(userStuffId, pageable);
+        for (PostSimpleResponseDto postSimpleResponseDto : response.getPostsByUserStuff().getContent()) {
             assertThat(postSimpleResponseDto.getCategory().getCategory()).isEqualTo("DAILY");
         }
     }

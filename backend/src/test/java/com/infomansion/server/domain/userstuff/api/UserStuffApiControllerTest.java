@@ -26,6 +26,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -316,10 +317,18 @@ public class UserStuffApiControllerTest {
                 .andExpect(jsonPath("$.code").value(ErrorCode.USER_STUFF_NOT_FOUND.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.USER_STUFF_NOT_FOUND.getMessage()));
 
-        mockMvc.perform(get("/api/v1/posts/"+postboxusId))
+//        mockMvc.perform(get("/api/v1/posts/"+postboxusId))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.data.size()").value(1))
+//                .andExpect(jsonPath("$.data[0].id").value(postId));
+
+        int page = 0;
+        int size = 3;
+
+        mockMvc.perform(get("/api/v1/posts/"+postboxusId+ "?page="+page+"&size="+size))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.size()").value(1))
-                .andExpect(jsonPath("$.data[0].id").value(postId));
+                .andExpect(jsonPath("$.data.['postsByUserStuff'].['content'].size()").value(1))
+                .andExpect((ResultMatcher) jsonPath("$.data.['postsByUserStuff'].['content'][0].['id']").value(postId));
 
     }
 

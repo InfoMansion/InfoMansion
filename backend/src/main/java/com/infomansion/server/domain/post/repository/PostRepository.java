@@ -26,7 +26,7 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     List<Long> findTop27PostByUserLikePost(@Param("user") User user, @Param("categories") List<Category> categories, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
     @Query("select p from Post p where p.userStuff = :userStuff and p.deleteFlag = false order by p.modifiedDate")
-    List<Post> findByUserStuffId(@Param("userStuff") UserStuff userStuff, Pageable pageable);
+    Slice<Post> findByUserStuffId(@Param("userStuff") UserStuff userStuff, Pageable pageable);
 
     @Query("select p from Post p where p.title like %:searchWord% and p.user.privateFlag=false")
     Slice<Post> findByTitle(@Param("searchWord") String searchWord, Pageable pageable);
