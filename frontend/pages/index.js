@@ -39,7 +39,7 @@ export default function Home() {
   const init = useCallback(
     async token => {
       try {
-        const { data } = await axios.get('/api/v1/rooms/recommend', {
+        const { data } = await axios.get('/api/v2/rooms/recommend', {
           headers: {
             Authorization: `Bearer ${token}`,
             withCredentials: true,

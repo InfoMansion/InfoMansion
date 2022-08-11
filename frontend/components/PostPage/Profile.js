@@ -11,28 +11,31 @@ import {
   Typography,
 } from '@mui/material';
 
-export default function Profile({ post }) {
-  console.log(post);
+export default function Profile({ user }) {
+  console.log(user);
   return (
     <>
-      <Card
-        sx={{ marginBottom: '10px' }}
-        onClick={() => Router.push(`/${post.username}`)}
+      <div
+        onClick={() => window.location.replace(`/${user.username}`)}
+        style={{
+          height: '100px',
+          display: 'grid',
+          gridTemplateColumns: '1fr 3fr',
+          alignItems: 'center',
+          margin: '0 10px',
+          cursor: 'pointer',
+        }}
       >
+        <img
+          src={user.profileImage}
+          style={{ height: '80px', width: '80px', borderRadius: '50%' }}
+        ></img>
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 3fr',
-            alignItems: 'center',
-          }}
+          style={{ fontWeight: '700', fontSize: '25px', marginLeft: '20px' }}
         >
-          <img
-            src={post.profileImage}
-            style={{ height: '80px', width: '80px', borderRadius: '50%' }}
-          ></img>
-          <div>{post.username}</div>
+          {user.username}
         </div>
-      </Card>
+      </div>
     </>
   );
 }

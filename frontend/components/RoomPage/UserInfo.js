@@ -18,12 +18,14 @@ import { useRouter } from 'next/router';
 import { loginUserState } from '../../state/roomState';
 import { useRecoilState } from 'recoil';
 import Follow from '../Follow';
+import FollowList from './atoms/FollowList';
 
 export default function UserInfo() {
   const router = useRouter();
   const [cookies] = useCookies(['cookie-name']);
   const [loginUser, setLoginUser] = useRecoilState(loginUserState);
   const [posts, setPosts] = useState([]);
+  const [modalInfo, setModalInfo] = useState(undefined);
   // username 가지고 userinfo 가져와야 함.
   const [userInfo, setUserInfo] = useState({
     userEmail: 'infomansion@google.co.kr',
@@ -36,6 +38,7 @@ export default function UserInfo() {
     follow: undefined,
     categories: [],
   });
+  const [nowFollow, setNowFollow] = useState();
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -50,6 +53,7 @@ export default function UserInfo() {
           console.log('user', res.data);
           setLoginUser(res.data.data.loginUser);
           setUserInfo(res.data.data);
+          setNowFollow(res.data.data.follower);
         });
     } catch (e) {
       console.log(e);
@@ -77,8 +81,51 @@ export default function UserInfo() {
     getRecentPost();
   }, [getRecentPost]);
 
+  const handleModalClose = () => {
+    setModalInfo(undefined);
+  };
+
+  const getFollowingInfo = async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/follow/following/${userInfo.username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        },
+      );
+      setModalInfo({ title: '팔로우', data: data.data });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getFollowerInfo = async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/follow/follower/${userInfo.username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        },
+      );
+      console.log(data);
+      setModalInfo({ title: '팔로워', data: data.data });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <Card>
+      {modalInfo !== undefined && (
+        <FollowList
+          modalInfo={modalInfo}
+          handleModalClose={handleModalClose}
+        ></FollowList>
+      )}
       <Grid
         sx={{
           p: 2,
@@ -113,7 +160,8 @@ export default function UserInfo() {
             }}
           >
             <Typography variant="h4">{userInfo.username}</Typography>
-
+            <div onClick={getFollowingInfo}>팔로우 {userInfo.following}</div>
+            <div onClick={getFollowerInfo}>팔로워 {nowFollow}</div>
             {loginUser ? (
               <Link href={userInfo.username + '/dashboard'}>
                 <SettingsIcon sx={{ mx: 2 }} style={{ color: '#777777' }} />
@@ -122,6 +170,7 @@ export default function UserInfo() {
               <Follow
                 isFollow={userInfo.follow}
                 username={userInfo.username}
+                setNowFollow={setNowFollow}
               ></Follow>
             )}
           </Box>

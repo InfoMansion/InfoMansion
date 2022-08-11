@@ -6,13 +6,16 @@ import { IconButton } from '@mui/material';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 
-export default function Follow({ isFollow, username }) {
+export default function Follow({ isFollow, username, setNowFollow }) {
   const [follow, setFollow] = useState(isFollow);
   const [cookies] = useCookies(['cookie-name']);
 
   useEffect(() => {
     setFollow(isFollow);
   }, [isFollow]);
+
+  console.log('isFollow? : ', isFollow);
+  console.log('username : ', username);
 
   const postFollow = async () => {
     try {
@@ -22,10 +25,12 @@ export default function Follow({ isFollow, username }) {
         {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            withCredentials: true,
           },
         },
       );
       setFollow(prev => !prev);
+      setNowFollow(prev => prev + 1);
       alert('팔로우');
     } catch (e) {
       console.log('error', e);
@@ -40,25 +45,22 @@ export default function Follow({ isFollow, username }) {
         },
       });
       setFollow(prev => !prev);
+      setNowFollow(prev => prev - 1);
       alert('팔로우 취소');
     } catch (e) {
-      console.log('error', e);
+      console.log(e);
     }
   };
 
   return follow !== undefined ? (
-    <div>
-      <IconButton
-        onClick={() => {
-          follow ? postUnFollow() : postFollow();
-        }}
-      >
+    <>
+      <IconButton onClick={() => (follow ? postUnFollow() : postFollow())}>
         {!follow ? (
           <PersonAddAlt1Icon color="primary" />
         ) : (
           <PersonRemoveAlt1Icon />
         )}
       </IconButton>
-    </div>
+    </>
   ) : null;
 }
