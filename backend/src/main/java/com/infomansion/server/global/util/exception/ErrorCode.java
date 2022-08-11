@@ -42,6 +42,7 @@ public enum ErrorCode {
     EXCLUDED_USER_STUFF(HttpStatus.BAD_REQUEST, 40061, "제외된 Stuff입니다."),
     INCLUDED_USER_STUFF(HttpStatus.BAD_REQUEST, 40062, "배치된 Stuff입니다."),
     NULL_VALUE_OF_ALIAS_AND_CATEGORY(HttpStatus.BAD_REQUEST, 40063, "별칭 또는 카테고리 값이 필요합니다."),
+    USER_STUFF_NOT_EXCLUDED(HttpStatus.BAD_REQUEST, 40064, "제외할 수 없는 UserStuff입니다."),
 
     //ROOM
     ROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, 40070, "해당 RoomId를 찾을 수 없습니다."),

@@ -186,13 +186,15 @@ public class UserStuffServiceImpl implements UserStuffService {
 
         // 배치할 UserStuffIds
         List<Long> placedUserStuffIds = requestDtos.stream().map(UserStuffEditRequestDto::getUserStuffId).collect(Collectors.toList());
-
         // 방에서 제외되어야 할 UserStuff들
         List<UserStuff> excludedUserStuffs = userStuffRepository.findByUserIsAndIdNotInAndSelectedIsTrue(loginUser, placedUserStuffIds);
         if(excludedUserStuffs != null && excludedUserStuffs.size() > 0) {
             UserStuff garbage = userStuffRepository.findUserStuffByStuffType(SecurityUtil.getCurrentUserId(), StuffType.POSTBOX)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
             excludedUserStuffs.forEach(excludedUserStuff -> {
+                if(excludedUserStuff.getCategory() == Category.GUESTBOOK || excludedUserStuff.getCategory() == Category.POSTBOX) {
+                    throw new CustomException(ErrorCode.USER_STUFF_NOT_EXCLUDED);
+                }
                 postRepository.movePostToAnotherStuff(excludedUserStuff, garbage);
 
                 excludedUserStuff.changeExcludedState();
