@@ -277,6 +277,7 @@ public class PostApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect((ResultMatcher)jsonPath("$.data.['postsByUserStuff'].['content'][0].['likes']").value(1));
 
+
         userLikePostService.unlikePost(postId);
 
         mockMvc.perform(get("/api/v1/posts/"+userStuffId+ "?page="+page+"&size="+size))
@@ -384,7 +385,49 @@ public class PostApiControllerTest {
                 .andExpect((ResultMatcher) jsonPath("$.data.['category']").value("IT"))
                 .andExpect((ResultMatcher) jsonPath("$.data.['likes']").value(3))
                 .andExpect((ResultMatcher) jsonPath("$.data.['defaultPostThumbnail']").value("https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/thumbnail/IT_defaultThumbnail.jpeg"));
+    }
 
+    @DisplayName("Post 좋아요 여부 반환 성공")
+    @WithCustomUserDetails
+    @Transactional
+    @Test
+    public void Post_좋아요_반환_성공() throws Exception{
+
+        // UserStuff 생성
+        UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
+                .stuffId(stuffId).build();
+        userStuffId = userStuffService.saveUserStuff(createDto);
+
+        //UserStuff 배치
+        UserStuffEditRequestDto includeDto = UserStuffEditRequestDto.builder()
+                .userStuffId(userStuffId).alias("Java 정리").selectedCategory("IT")
+                .posX(0.2).posY(0.3).posZ(3.1)
+                .rotX(1.5).rotY(0.0).rotZ(0.9)
+                .build();
+        List<UserStuffEditRequestDto> includeDtoList = new ArrayList<>();
+        includeDtoList.add(includeDto);
+
+        userStuffService.editUserStuff(includeDtoList);
+
+        //post 작성
+        PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
+                .userStuffId(userStuffId)
+                .title("EffectiveJava")
+                .content("자바개발자 필독서")
+                .images(new ArrayList<>())
+                .build();
+
+        Long postId = postService.createPost(postCreateDto);
+
+        mockMvc.perform(get("/api/v1/posts/detail/"+postId))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher)jsonPath("$.data.['likeFlag']").value(false));
+
+        userLikePostService.likePost(postId);
+
+        mockMvc.perform(get("/api/v1/posts/detail/"+postId))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher)jsonPath("$.data.['likeFlag']").value(true));
 
     }
 

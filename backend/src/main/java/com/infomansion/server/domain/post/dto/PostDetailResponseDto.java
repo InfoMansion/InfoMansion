@@ -19,10 +19,11 @@ public class PostDetailResponseDto {
     private LocalDateTime modifiedDate;
     private Long likes;
     private boolean followFlag;
+    private boolean likeFlag;
 
 
     @Builder
-    public PostDetailResponseDto(Long id, String userName, String title, String content, Category category, String defaultPostThumbnail, LocalDateTime modifiedDate, Long likes, boolean followFlag) {
+    public PostDetailResponseDto(Long id, String userName, String title, String content, Category category, String defaultPostThumbnail, LocalDateTime modifiedDate, Long likes, boolean followFlag, boolean likeFlag) {
         this.id = id;
         this.userName = userName;
         this.title = title;
@@ -32,10 +33,11 @@ public class PostDetailResponseDto {
         this.modifiedDate = modifiedDate;
         this.likes = likes;
         this.followFlag = followFlag;
+        this.likeFlag = likeFlag;
     }
 
 
-    public static PostDetailResponseDto toDto(Post post, boolean followFlag){
+    public static PostDetailResponseDto toDto(Post post, boolean followFlag, boolean likeFlag){
         return PostDetailResponseDto.builder()
                 .id(post.getId())
                 .userName(post.getUser().getUsername())
@@ -46,6 +48,7 @@ public class PostDetailResponseDto {
                 .modifiedDate(post.getModifiedDate())
                 .likes((long) post.getUserLikePostList().size())
                 .followFlag(followFlag)
+                .likeFlag(likeFlag)
                 .build();
     }
 }

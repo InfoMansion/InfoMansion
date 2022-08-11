@@ -21,4 +21,6 @@ public interface UserLikePostRepository extends JpaRepository<UserLikePost, Long
     List<UserLikePost> findUsersLikeThisPost(@Param("post") Post post);
 
     Optional<UserLikePost> findByPostAndUser(Post post, User user);
+
+    boolean existsUserLikePostByPostAndUserId(Post post, Long userId);
 }

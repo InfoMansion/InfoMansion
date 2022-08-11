@@ -65,6 +65,7 @@ public enum FieldDescription {
     LIKES_POST(JsonFieldType.NUMBER, "좋아요 수"),
     DEFAULTPOSTTHUMBNAIL(JsonFieldType.STRING, "대표 이미지"),
     FOLLOW_FLAG(JsonFieldType.BOOLEAN, "post 작성자를 following 하는지 여부"),
+    LIKE_FLAG(JsonFieldType.BOOLEAN, "해당 post를 좋아요 하고 있는지 여부"),
 
     // Base
     MODIFIED_DATE(JsonFieldType.STRING, "마지막 수정날짜"),
