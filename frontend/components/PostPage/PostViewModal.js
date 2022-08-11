@@ -19,6 +19,7 @@ import { useCookies } from 'react-cookie';
 import Router from 'next/router';
 import { postDetailState } from '../../state/postDetailState';
 import { useRecoilState } from 'recoil';
+import useAuth from '../../hooks/useAuth';
 
 export default function PostViewModal({ post, showModal, setShowModal }) {
   const [cookies] = useCookies(['cookie-name']);
@@ -30,6 +31,8 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
   const [profileImageUrl, setProfileImageUrl] = useState(
     'https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png',
   );
+  const { auth, setAuth } = useAuth();
+  const [isUserSame, setIsUserSame] = useState(false);
 
   const handleMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -89,7 +92,9 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
   useEffect(() => {
     loadDetail();
     loadProfileImage();
-    console.log('a');
+    if (postDetail.userName === auth.username) {
+      setIsUserSame(true);
+    }
   }, [post.id]);
 
   const renderMenu = (
@@ -281,7 +286,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
             <DialogContentText>댓글기능 추후 추가 예정</DialogContentText>
           </DialogContent>
         </div>
-        {renderMenu}
+        {isUserSame && renderMenu}
       </Dialog>
     </>
   );
