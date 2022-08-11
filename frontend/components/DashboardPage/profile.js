@@ -236,6 +236,7 @@ export default function Profile({ ...props }) {
                   value={inputUsername}
                   onChange={handleInput}
                   name="username"
+                  helperText="3~15 글자가 가능하며(한글, 영어, 숫자 및 ' _ '로 구성 가능합니다)"
                 ></TextField>
               </Grid>
               {/* <Typography variant="body2" color="text.secondary">

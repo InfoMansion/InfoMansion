@@ -145,6 +145,7 @@ export default function SignUp() {
                   onChange={handleInput}
                   color="primary"
                   focused
+                  helperText="8~20자, 영문자, 숫자, 특수문자 포함"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -159,6 +160,7 @@ export default function SignUp() {
                   onChange={handleInput}
                   color="primary"
                   focused
+                  helperText="위에 작성한 비밀번호와 일치해야 합니다."
                 />
               </Grid>
               <Grid item xs={12}>
@@ -172,6 +174,7 @@ export default function SignUp() {
                   onChange={handleInput}
                   color="primary"
                   focused
+                  helperText="3~15 글자가 가능하며(한글, 영어, 숫자 및 ' _ '로 구성 가능합니다)"
                 />
               </Grid>
             </Grid>
