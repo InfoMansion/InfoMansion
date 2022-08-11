@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -57,6 +58,8 @@ public class RoomServiceImpl implements RoomService {
         Room loginUserRoom = roomRepository.findRoomWithUser(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
 
+        if(!loginUserRoom.getRoomImg().equals("https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/room/default.jpg"))
+            s3Uploader.deleteFiles(Arrays.asList(loginUserRoom.getRoomImg()));
         try {
             loginUserRoom.changeRoomImage(s3Uploader, roomImage);
         } catch (IOException e) {
