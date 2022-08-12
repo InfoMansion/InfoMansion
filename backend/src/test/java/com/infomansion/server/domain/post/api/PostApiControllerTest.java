@@ -177,7 +177,7 @@ public class PostApiControllerTest {
             Post post = Post.builder().user(user).userStuff(userStuffRepository.findById(userStuffId).get())
                     .title("EffectiveJava ver." + (i+1)).content("자바개발자 필독서 ver."+ (i+1)).build();
             postRepository.saveAndFlush(post);
-            for(int j=0;j<i+1;j++) userLikePostService.likePost(post.getId());
+            userLikePostService.likePost(post.getId());
         }
 
         int page = 0;
@@ -389,7 +389,7 @@ public class PostApiControllerTest {
 
         Long postId = postService.createPost(postCreateDto);
 
-        for(int i=0;i<3;i++) userLikePostService.likePost(postId);
+        userLikePostService.likePost(postId);
 
         mockMvc.perform(get("/api/v1/posts/detail/"+postId))
                 .andExpect(status().isOk())
@@ -397,7 +397,7 @@ public class PostApiControllerTest {
                 .andExpect((ResultMatcher) jsonPath("$.data.['title']").value("EffectiveJava"))
                 .andExpect((ResultMatcher) jsonPath("$.data.['content']").value("자바개발자 필독서"))
                 .andExpect((ResultMatcher) jsonPath("$.data.['category']").value("IT"))
-                .andExpect((ResultMatcher) jsonPath("$.data.['likes']").value(3))
+                .andExpect((ResultMatcher) jsonPath("$.data.['likes']").value(1))
                 .andExpect((ResultMatcher) jsonPath("$.data.['defaultPostThumbnail']").value("https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/thumbnail/IT_defaultThumbnail.jpeg"));
     }
 
@@ -477,7 +477,7 @@ public class PostApiControllerTest {
 
         Long postId = postService.createPost(postCreateDto);
 
-        for(int i=0;i<3;i++) userLikePostService.likePost(postId);
+        userLikePostService.likePost(postId);
 
         mockMvc.perform(get("/api/v1/posts/detail/"+postId))
                 .andExpect(status().isOk())
@@ -485,7 +485,7 @@ public class PostApiControllerTest {
                 .andExpect((ResultMatcher) jsonPath("$.data.['title']").value("EffectiveJava"))
                 .andExpect((ResultMatcher) jsonPath("$.data.['content']").value("자바개발자 필독서, <img src=\"https://cdn.pixabay.com/photo/2021/08/25/07/21/cat-6572630_1280.jpg\"> "))
                 .andExpect((ResultMatcher) jsonPath("$.data.['category']").value("IT"))
-                .andExpect((ResultMatcher) jsonPath("$.data.['likes']").value(3))
+                .andExpect((ResultMatcher) jsonPath("$.data.['likes']").value(1))
                 .andExpect((ResultMatcher) jsonPath("$.data.['defaultPostThumbnail']").value("https://cdn.pixabay.com/photo/2021/08/25/07/21/cat-6572630_1280.jpg"));
 
 
@@ -517,8 +517,7 @@ public class PostApiControllerTest {
             Post post = Post.builder().user(user).userStuff(userStuffRepository.findById(userStuffId).get())
                     .title("EffectiveJava ver." + (10-i)).content("자바개발자 필독서 ver."+ (10-i)).build();
             postRepository.saveAndFlush(post);
-            for(int j=0;j<i+1;j++) userLikePostService.likePost(post.getId());
-        }
+            userLikePostService.likePost(post.getId());        }
 
         mockMvc.perform(get("/api/v1/posts/recent?userName="+userName))
                 .andExpect(status().isOk())

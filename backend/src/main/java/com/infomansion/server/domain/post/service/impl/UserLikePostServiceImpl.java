@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -41,6 +42,9 @@ public class UserLikePostServiceImpl implements UserLikePostService {
 
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if(userLikePostRepository.existsUserLikePostByPostAndUser(post, user))
+               throw new CustomException(ErrorCode.POST_ALREADY_LIKES);
 
         UserLikePost ulp = UserLikePost.likePost(post, user);
         userLikePostRepository.save(ulp);

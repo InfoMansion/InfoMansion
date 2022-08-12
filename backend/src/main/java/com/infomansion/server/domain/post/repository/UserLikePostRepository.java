@@ -24,4 +24,6 @@ public interface UserLikePostRepository extends JpaRepository<UserLikePost, Long
     Optional<UserLikePost> findByPostAndUser(Post post, User user);
 
     boolean existsUserLikePostByPostAndUserId(Post post, Long userId);
+
+    boolean existsUserLikePostByPostAndUser(Post post, User user);
 }
