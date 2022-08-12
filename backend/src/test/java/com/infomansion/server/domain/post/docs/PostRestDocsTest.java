@@ -7,6 +7,8 @@ import com.infomansion.server.domain.post.dto.*;
 import com.infomansion.server.domain.post.service.PostService;
 import com.infomansion.server.domain.post.service.UserLikePostService;
 import com.infomansion.server.domain.upload.service.S3Uploader;
+import com.infomansion.server.domain.user.dto.UserModifyProfileRequestDto;
+import com.infomansion.server.domain.user.dto.UserModifyProfileResponseDto;
 import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.infomansion.server.global.util.restdocs.FieldDescription.*;
@@ -31,10 +38,12 @@ import static com.infomansion.server.global.util.restdocs.RestDocsUtil.common;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -426,7 +435,7 @@ public class PostRestDocsTest {
                 .title("Post Title")
                 .content("Post Content")
                 .images(new ArrayList<>()).build();
-        given(postService.modifyPost(any(PostModifyRequestDto.class))).willReturn(true);
+        given(postService.modifyPostAndSaveAsTemp(any(PostModifyRequestDto.class))).willReturn(true);
 
         // when, then
         mockMvc.perform(put("/api/v1/posts")
@@ -463,6 +472,224 @@ public class PostRestDocsTest {
                         requestFields(
                                 fieldWithPath("[]").description("삭제할 image Url")
                         )
+                ));
+    }
+
+    @Test
+    public void post를_임시저장하면서_이미지를_업로드() throws Exception {
+        // given
+        TempPostImageUploadResponseDto responseDto = new TempPostImageUploadResponseDto(10L, "임시저장된 title", "임시저장된 content", "임시저장된 imgUrl");
+
+        TempPostSaveRequestDto requestDto = new TempPostSaveRequestDto("임시저장할 title", "임시저장할 content");
+        MockMultipartFile image = new MockMultipartFile("image", "imagefile.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        MockMultipartFile tempPost = new MockMultipartFile("post", "post", "application/json", objectMapper.writeValueAsString(requestDto).getBytes(StandardCharsets.UTF_8));
+        given(postService.createTempPostAndUploadImage(any(MockMultipartFile.class), any(TempPostSaveRequestDto.class))).willReturn(responseDto);
+
+        // when, then
+        mockMvc.perform(multipart(HttpMethod.POST, URI.create("/api/v2/posts/upload/temp"))
+                        .file(image).file(tempPost))
+                .andExpect(status().isCreated())
+                .andDo(document("post-create-temp-post-and-upload-image-v2",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParts(
+                                partWithName("image").description("임시저장할 image"),
+                                partWithName("post").description("임시저장할 title과 content를 담아주세요")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("임시저장된 post")))
+                                .andWithPrefix("data.",
+                                        fieldWithPath("postId").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
+                                        fieldWithPath("imgUrl").type(JsonFieldType.STRING).description("임시저장된 image url")
+                                )
+                ));
+    }
+
+    @Test
+    public void post를_임시저장() throws Exception {
+        // given
+        TempPostSaveResponseDto responseDto = new TempPostSaveResponseDto(10L, LocalDateTime.now(), "임시저장된 title", "임시저장된 content");
+        TempPostSaveRequestDto requestDto = new TempPostSaveRequestDto("임시저장할 title", "임시저장할 content");
+        given(postService.createTempPost(any(TempPostSaveRequestDto.class))).willReturn(responseDto);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v2/posts/temp")
+                .content(objectMapper.writeValueAsString(requestDto))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(document("post-create-temp-post-v2",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("title").description("임시저장할 title"),
+                                fieldWithPath("content").description("임시저장할 content")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("임시저장된 post")))
+                                .andWithPrefix("data.",
+                                        fieldWithPath("postId").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("modifiedDate").type(JsonFieldType.STRING).description("임시저장된 시간"),
+                                        fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription())
+                                )
+                ));
+    }
+
+    @Test
+    public void 새로_작성하는_post_발생() throws Exception {
+        // given
+        PostSaveRequestDto requestDto = new PostSaveRequestDto(10L, "post title", "post content");
+        PostSaveResponseDto responseDto = new PostSaveResponseDto(10L, 20L, "발행된 title", "발행된 content");
+        given(postService.createNewPost(any(PostSaveRequestDto.class))).willReturn(responseDto);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v2/posts")
+                        .content(objectMapper.writeValueAsString(requestDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(document("post-create-v2",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("userStuffId").description("저장될 UserStuffId"),
+                                fieldWithPath("title").description("title"),
+                                fieldWithPath("content").description("content")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("발행된 post")))
+                                .andWithPrefix("data.",
+                                        fieldWithPath("userStuffId").type(USERSTUFF_ID.getJsonFieldType()).description("post가 저장되는 UserStuffId"),
+                                        fieldWithPath("postId").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription())
+                                )
+                ));
+    }
+
+    @Test
+    public void post를_수정하고_임시저장하고_이미지_업로드() throws Exception {
+        // given
+        TempPostImageUploadResponseDto responseDto = new TempPostImageUploadResponseDto(10L, "임시저장된 title", "임시저장된 content", "임시저장된 imgUrl");
+
+        Long postId = 10L;
+        MockMultipartFile image = new MockMultipartFile("image", "imagefile.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        TempPostSaveRequestDto requestDto = new TempPostSaveRequestDto("임시저장할 title", "임시저장할 content");
+        MockMultipartFile tempPost = new MockMultipartFile("post", "post", "application/json", objectMapper.writeValueAsString(requestDto).getBytes(StandardCharsets.UTF_8));
+        given(postService.modifyPostAndImageUpload(any(MockMultipartFile.class), any(TempPostSaveRequestDto.class), anyLong())).willReturn(responseDto);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.multipart("/api/v2/posts/upload/{postId}", postId)
+                        .file(image).file(tempPost))
+                .andExpect(status().isCreated())
+                .andDo(document("post-modify-temp-post-or-post-and-upload-image-v2",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("postId").description("임시저장할 postId")
+                        ),
+                        requestParts(
+                                partWithName("image").description("임시저장할 image"),
+                                partWithName("post").description("임시저장할 title과 content를 담아주세요")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("임시저장된 post")))
+                                .andWithPrefix("data.",
+                                        fieldWithPath("postId").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
+                                        fieldWithPath("imgUrl").type(JsonFieldType.STRING).description("임시저장된 image url")
+                                )
+                ));
+    }
+
+    @Test
+    public void post를_수정하고_임시저장() throws Exception {
+        // given
+        Long postId = 10L;
+        TempPostSaveResponseDto responseDto = new TempPostSaveResponseDto(postId, LocalDateTime.now(), "임시저장된 title", "임시저장된 content");
+        TempPostSaveRequestDto requestDto = new TempPostSaveRequestDto("임시저장할 title", "임시저장할 content");
+        given(postService.modifyPostAndSaveAsTemp(any(TempPostSaveRequestDto.class), anyLong())).willReturn(responseDto);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v2/posts/temp/{postId}", postId)
+                        .content(objectMapper.writeValueAsString(requestDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(document("post-modify-temp-post-v2",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("postId").description("임시저장할 postId")
+                        ),
+                        requestFields(
+                                fieldWithPath("title").description("임시저장할 title"),
+                                fieldWithPath("content").description("임시저장할 content")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("임시저장된 post")))
+                                .andWithPrefix("data.",
+                                        fieldWithPath("postId").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("modifiedDate").type(JsonFieldType.STRING).description("임시저장된 시간"),
+                                        fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription())
+                                )
+                ));
+    }
+
+    @Test
+    public void 임시_포스트을_발행하거나_발행된_포스트를_재발생() throws Exception {
+        // given
+        Long postId = 20L;
+        PostSaveRequestDto requestDto = new PostSaveRequestDto(10L, "post title", "post content");
+        PostSaveResponseDto responseDto = new PostSaveResponseDto(10L, postId, "발행된 title", "발행된 content");
+        given(postService.publishPost(any(PostSaveRequestDto.class), anyLong())).willReturn(responseDto);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v2/posts/{postId}", postId)
+                        .content(objectMapper.writeValueAsString(requestDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(document("post-re-create-v2",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("postId").description("post Id")
+                        ),
+                        requestFields(
+                                fieldWithPath("userStuffId").description("저장될 UserStuffId"),
+                                fieldWithPath("title").description("title"),
+                                fieldWithPath("content").description("content")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("발행된 post")))
+                                .andWithPrefix("data.",
+                                        fieldWithPath("userStuffId").type(USERSTUFF_ID.getJsonFieldType()).description("post가 저장되는 UserStuffId"),
+                                        fieldWithPath("postId").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription())
+                                )
+                ));
+    }
+
+    @Test
+    public void 임시_목록_조회() throws Exception {
+        // given
+        List<TempPostSaveResponseDto> responseDtoList = new ArrayList<>();
+        TempPostSaveResponseDto responseDto1 = new TempPostSaveResponseDto(10L, LocalDateTime.now(), "title1", "content1");
+        TempPostSaveResponseDto responseDto2 = new TempPostSaveResponseDto(11L, LocalDateTime.now(), "title2", "content2");
+        responseDtoList.add(responseDto1);
+        responseDtoList.add(responseDto2);
+        given(postService.findTempPosts()).willReturn(responseDtoList);
+
+        mockMvc.perform(get("/api/v2/posts/temp"))
+                .andExpect(status().isOk())
+                .andDo(document("post-find-temp-post",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("임시 저장된 post 목록")))
+                                .andWithPrefix("data.[].",
+                                        fieldWithPath("postId").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("modifiedDate").type(JsonFieldType.STRING).description("임시저장된 시간"),
+                                        fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription())
+                                )
+
                 ));
     }
 }

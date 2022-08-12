@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -90,14 +91,98 @@ public class PostApiController {
     }
 
     @PutMapping("/api/v1/posts")
-    public ResponseEntity<? extends BasicResponse> modifyPost(@Valid @RequestBody PostModifyRequestDto requestDto) {
+    public ResponseEntity<? extends BasicResponse> modifyPostAndSaveAsTemp(@Valid @RequestBody PostModifyRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(postService.modifyPost(requestDto)));
+                .body(new CommonResponse<>(postService.modifyPostAndSaveAsTemp(requestDto)));
     }
 
     @PostMapping("/api/v1/posts/reset")
     public ResponseEntity<? extends BasicResponse> removeUploadImages(@Valid @RequestBody List<String> deleteImages) {
         s3Uploader.deleteFiles(deleteImages);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(true));
+    }
+
+    /**
+     * 새로 작성하는 포스트를 임시 저장하면서 이미지를 업로드
+     * @param multipartFile
+     * @param requestDto
+     * @return
+     */
+    @PostMapping(value = "/api/v2/posts/upload/temp", consumes = {"multipart/form-data"})
+    public ResponseEntity<? extends BasicResponse> createTempPostAndUploadImage(@Valid @RequestPart("image") MultipartFile multipartFile,
+                                                                                @Valid @RequestPart("post") TempPostSaveRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new CommonResponse<>(postService.createTempPostAndUploadImage(multipartFile, requestDto)));
+    }
+
+    /**
+     * 새로 작성하는 포스트를 임시 저장
+     * @param requestDto
+     * @return
+     */
+    @PostMapping("/api/v2/posts/temp")
+    public ResponseEntity<? extends BasicResponse> createTempPost(@Valid @RequestBody TempPostSaveRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new CommonResponse<>(postService.createTempPost(requestDto)));
+    }
+
+    /**
+     * 새로 작성하는 포스트를 발행
+     * @param requestDto
+     * @return
+     */
+    @PostMapping("/api/v2/posts")
+    public ResponseEntity<? extends BasicResponse> createNewPost(@Valid @RequestBody PostSaveRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new CommonResponse<>(postService.createNewPost(requestDto)));
+    }
+
+    /**
+     * 임시 포스트 또는 발행된 포스트에 이미지 업로드
+     * @param multipartFile
+     * @param requestDto
+     * @param postId
+     * @return
+     */
+    @PostMapping(value = "/api/v2/posts/upload/{postId}", consumes = {"multipart/form-data"})
+    public ResponseEntity<? extends BasicResponse> modifyPostAndImageUpload(@Valid @RequestPart(value = "image") MultipartFile multipartFile,
+                                                                                @Valid @RequestPart("post") TempPostSaveRequestDto requestDto,
+                                                                                @Valid @PathVariable Long postId) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new CommonResponse<>(postService.modifyPostAndImageUpload(multipartFile, requestDto, postId)));
+    }
+
+    /**
+     * 임시 포스트 또는 발행된 포스트를 수정하고 임시 포스트로 저장
+     * @param requestDto
+     * @param postId
+     * @return
+     */
+    @PostMapping("/api/v2/posts/temp/{postId}")
+    public ResponseEntity<? extends BasicResponse> modifyPostAndSaveAsTemp(@Valid @RequestBody TempPostSaveRequestDto requestDto, @Valid @PathVariable Long postId) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new CommonResponse<>(postService.modifyPostAndSaveAsTemp(requestDto, postId)));
+    }
+
+    /**
+     * 임시 포스트를 발행하거나, 발행된 포스트를 재 발행
+     * @param requestDto
+     * @param postId
+     * @return
+     */
+    @PostMapping("/api/v2/posts/{postId}")
+    public ResponseEntity<? extends BasicResponse> publishPost(@Valid @RequestBody PostSaveRequestDto requestDto, @Valid @PathVariable Long postId) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new CommonResponse<>(postService.publishPost(requestDto, postId)));
+    }
+
+    /**
+     * 임시 포스트 목록을 조회
+     */
+    @GetMapping("/api/v2/posts/temp")
+    public ResponseEntity<? extends BasicResponse> findTempPosts() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(postService.findTempPosts()));
     }
 }

@@ -304,7 +304,7 @@ public class PostServiceImplTest {
                 .userStuffId(userStuffId).postId(post.getId())
                 .title("EffectiveJava ver.1").content("자바개발자 필독서 ver.1").images(new ArrayList<>())
                 .build();
-        postService.modifyPost(requestDto);
+        postService.modifyPostAndSaveAsTemp(requestDto);
 
         Optional<Post> findPost = postRepository.findById(post.getId());
         assertThat(findPost).isNotEmpty();
@@ -349,7 +349,7 @@ public class PostServiceImplTest {
                 .userStuffId(userStuffId).postId(post.getId())
                 .title("EffectiveJava").content("자바개발자 필독서").images(new ArrayList<>())
                 .build();
-        postService.modifyPost(requestDto);
+        postService.modifyPostAndSaveAsTemp(requestDto);
 
         Optional<Post> findPost = postRepository.findById(post.getId());
         assertThat(findPost).isNotEmpty();

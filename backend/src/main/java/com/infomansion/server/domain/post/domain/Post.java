@@ -9,12 +9,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -44,19 +48,27 @@ public class Post extends BaseTimeEntityAtSoftDelete {
 
     private String defaultPostThumbnail;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserLikePost> userLikePostList = new ArrayList<>();
 
     private boolean isPublic;
 
     private boolean deleteFlag;
 
+    private boolean isPublished;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PostImage> imageUrls = new ArrayList<>();
+
+    private Long originPostId;
+
     @Builder
-    public Post(User user, UserStuff userStuff, String title, String content) {
+    public Post(User user, UserStuff userStuff, String title, String content, boolean isPublished) {
         this.title = title;
         this.content = content;
         this.deleteFlag = false;
         this.isPublic = true;
+        this.isPublished = isPublished;
         setUserAndUserStuff(user, userStuff);
         replaceDefaultPostThumbnail(content);
     }
@@ -67,6 +79,16 @@ public class Post extends BaseTimeEntityAtSoftDelete {
                 .userStuff(userStuff)
                 .title(title)
                 .content(content)
+                .isPublished(true)
+                .build();
+    }
+
+    public static Post createTempPost(User user, String title, String content) {
+        return Post.builder()
+                .user(user)
+                .title(title)
+                .content(content)
+                .isPublished(false)
                 .build();
     }
 
@@ -79,6 +101,10 @@ public class Post extends BaseTimeEntityAtSoftDelete {
         this.userStuff = userStuff;
         this.category = userStuff.getCategory();
         updatePost(title, content);
+    }
+
+    public void updateIsPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public void updateCategory(Category category) {
@@ -126,5 +152,61 @@ public class Post extends BaseTimeEntityAtSoftDelete {
 
     public void removeUserLikePost(UserLikePost ulp){
         this.userLikePostList.remove(ulp);
+    }
+
+    public String uploadImage(MultipartFile multipartFile, S3Uploader s3Uploader, String username) throws IOException {
+        String imageUrl = s3Uploader.uploadFiles(multipartFile, "post/" + username);
+        this.imageUrls.add(new PostImage(this, imageUrl));
+        return imageUrl;
+    }
+
+    public void deleteImage(PostImage postImage) {
+        this.imageUrls.remove(postImage);
+    }
+
+    public void publish() {
+        this.isPublished = false;
+    }
+
+    public void linkOriginalPost(Long id) {
+        this.originPostId = id;
+    }
+
+    /**
+     * 사본 만들기
+     * 사본을 만들고 원본의 id를 기록해준다.
+     * @return
+     */
+    public Post makeCopy() {
+        Post tempPost = Post.builder()
+                .user(this.user)
+                .userStuff(this.userStuff)
+                .title(this.title)
+                .content(this.content)
+                .isPublished(false)
+                .build();
+        tempPost.linkOriginalPost(this.id);
+        tempPost.copyImageUrls(this);
+        return tempPost;
+    }
+
+    /**
+     * 원본의 imageUrl들을 사본으로 다 복사
+     * @param original
+     */
+    public void copyImageUrls(Post original) {
+        List<String> imgUrls = original.getImageUrls().stream().map(PostImage::getImageUrl).collect(Collectors.toList());
+        for(String imgUrl : imgUrls) {
+            this.imageUrls.add(new PostImage(this, imgUrl));
+        }
+    }
+
+    public void updateOriginalByCopy(Post copy) {
+        this.updatePost(copy.getTitle(), copy.getContent());
+        this.copyImageUrls(copy);
+    }
+
+    public void changeUserStuff(UserStuff userStuff) {
+        this.userStuff = userStuff;
     }
 }
