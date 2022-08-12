@@ -39,15 +39,18 @@ export default function Home() {
   const init = useCallback(
     async token => {
       try {
-        const { data } = await axios.get('/api/v2/rooms/recommend', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            withCredentials: true,
+        const { data } = await axios.get(
+          '/api/v2/rooms/recommend?page=0&size=10',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              withCredentials: true,
+            },
           },
-        });
+        );
         console.log(data);
         console.log(data.data.roomResponseDtos);
-        setRoomImgs(data.data.roomResponseDtos);
+        setRoomImgs(data.data.roomResponseDtos.content);
       } catch (e) {
         console.log(e);
       }

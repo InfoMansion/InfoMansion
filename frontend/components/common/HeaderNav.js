@@ -81,7 +81,6 @@ export default function HeaderNav() {
   const [profile, setProfileState] = useRecoilState(profileState);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   const [notification, setNotification] = useRecoilState(notificationState);
-  const [showModal, setShowModal] = useState(false);
 
   //const [auth, setAuth] = useAuth();
 
@@ -91,7 +90,6 @@ export default function HeaderNav() {
   };
 
   const handleMenuClose = async button => {
-    setAnchorEl(null);
     if (button === 'notification') {
       try {
         const { data } = await axios.post(
@@ -109,10 +107,7 @@ export default function HeaderNav() {
         console.log(e);
       }
     }
-  };
-
-  const openModal = () => {
-    setShowModal(true);
+    setAnchorEl(null);
   };
 
   const handleLogout = async () => {
@@ -187,7 +182,7 @@ export default function HeaderNav() {
       open={isMenuOpen}
       onClose={() => handleMenuClose(anchorEl?.id)}
     >
-      {anchorEl?.id === 'profile' ? (
+      {anchorEl?.id === 'profile' && (
         <>
           <Link href={`/${simpleUser.username}`}>
             <MenuItem onClick={handleMenuClose}>마이룸</MenuItem>
@@ -198,11 +193,11 @@ export default function HeaderNav() {
               handleLogout();
             }}
           >
-            {anchorEl?.id}
             로그아웃
           </MenuItem>
         </>
-      ) : (
+      )}
+      {anchorEl?.id === 'notification' && (
         <>
           {notification.length === 0 ? (
             <div>알림이 없습니다.</div>

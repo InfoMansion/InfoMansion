@@ -65,7 +65,6 @@ export default function searchPost() {
           },
         })
         .then(res => {
-          console.log(res.data);
           setPostDetail(res.data.data);
           if (postDetail.userName === auth.username) {
             setLoginUser(true);

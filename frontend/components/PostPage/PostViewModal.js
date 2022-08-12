@@ -21,20 +21,21 @@ import { postDetailState } from '../../state/postDetailState';
 import { loginUserState } from '../../state/roomState';
 import { useRecoilState } from 'recoil';
 import useAuth from '../../hooks/useAuth';
+import FollowList from '../RoomPage/atoms/FollowList';
 
 export default function PostViewModal({ showModal, handleModalClose }) {
   const [cookies] = useCookies(['cookie-name']);
-  const handleClose = () => setShowModal(false);
   const [star, setStar] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   const [postUserInfo, setPostUserInfo] = useState('');
-  const { auth, setAuth } = useAuth();
   const [, setNowFollow] = useState();
   const [isUser, setIsUser] = useState(false);
-  const [loginUser, setLoginUser] = useRecoilState(loginUserState);
+  const [isLike, setIsLike] = useState(false);
+  const [modalInfo, setModalInfo] = useState(undefined);
 
+  console.log(postDetail);
   const handleMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -76,6 +77,7 @@ export default function PostViewModal({ showModal, handleModalClose }) {
           setPostUserInfo(res.data.data);
           setNowFollow(res.data.data.follower);
         });
+      setIsLike(postDetail.likeFlag);
     } catch (e) {
       console.log(e);
     }
@@ -84,6 +86,66 @@ export default function PostViewModal({ showModal, handleModalClose }) {
   useEffect(() => {
     getPostUserInfo();
   }, [postDetail]);
+
+  const handleLikeClick = async () => {
+    try {
+      await axios.post(
+        `/api/v2/posts/likes/${postDetail.id}`,
+        //{},
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        },
+      );
+      setPostDetail(prev => ({
+        ...prev,
+        likeFlag: !prev.likeFlag,
+        likes: prev.likes + 1,
+      }));
+      setIsLike(prev => !prev);
+      alert('게시글 좋아요!');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleUnLikeClick = async () => {
+    try {
+      await axios.delete(`/api/v2/posts/likes/${postDetail.id}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+        },
+      });
+      setPostDetail(prev => ({
+        ...prev,
+        likes: prev.likes - 1,
+        likeFlag: !prev.likeFlag,
+      }));
+      setIsLike(prev => !prev);
+      alert('게시글 좋아요 취소!');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleLikeList = async () => {
+    try {
+      const { data } = await axios.get(`/api/v2/posts/likes/${postDetail.id}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+        },
+      });
+      console.log(data);
+      setModalInfo({ title: '좋아요 누른 사람들', data: data.data });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleListClose = () => {
+    setModalInfo(undefined);
+  };
 
   const renderMenu = (
     <Menu
@@ -117,6 +179,12 @@ export default function PostViewModal({ showModal, handleModalClose }) {
 
   return (
     <>
+      {modalInfo !== undefined && (
+        <FollowList
+          modalInfo={modalInfo}
+          handleModalClose={handleListClose}
+        ></FollowList>
+      )}
       <Dialog
         open={showModal}
         onClose={handleModalClose}
@@ -248,14 +316,11 @@ export default function PostViewModal({ showModal, handleModalClose }) {
               }}
             >
               <IconButton
-                onClick={() => {
-                  setStar(prev => {
-                    prev ? alert('좋아요 취소') : alert('좋아요');
-                    return !prev;
-                  });
-                }}
+                onClick={() =>
+                  isLike ? handleUnLikeClick() : handleLikeClick()
+                }
               >
-                {!star ? (
+                {!isLike ? (
                   <StarBorderIcon />
                 ) : (
                   <StarIcon
@@ -265,8 +330,8 @@ export default function PostViewModal({ showModal, handleModalClose }) {
                   />
                 )}
               </IconButton>
-              <IconButton>
-                <MoveToInboxIcon />
+              <IconButton onClick={handleLikeList}>
+                {postDetail.likes}
               </IconButton>
               {isUser ? (
                 <IconButton
