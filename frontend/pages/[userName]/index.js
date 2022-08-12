@@ -24,21 +24,15 @@ export default function RoomPage() {
   const [userInfo, setUserInfo] = useState({categories : []});
   const router = useRouter();
   const [cookies] = useCookies(['cookie-name']);
+  const [stuffPageLoc, setStuffPageLoc] = useState([0, 0]);
 
   const [hovered, setHovered] = useState(false); 
   function StuffClick(stuff) {
-    // 여기서 stuffpage로 변수 전달하면 됨.
-    setStuffon(!stuffon);
+    console.log(stuff);
+
+    setStuffon(stuff);
     setStuff(stuff);
   }
-
-  function handleResize() {
-    if (window.innerWidth >= 1200) setUseron(true);
-    else setUseron(false);
-  }
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-  });
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -46,16 +40,17 @@ export default function RoomPage() {
   }, [router.isReady]);
 
   useEffect(() => {
+    if(!userName) return;
+    console.log(userName);
+
     try {
       axiosApiInstance
-        .get(`/api/v1/users/${router.query.userName}`, {
+        .get(`/api/v1/users/${userName}`, {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
           },
         })
         .then(res => {
-          console.log('user', res.data);
-
           setLoginUser(res.data.data.loginUser);
           setFollow(res.data.follow);
           setUserInfo(res.data.data);
@@ -79,6 +74,7 @@ export default function RoomPage() {
     from : { 
       position : 'absolute',
       left : '15%',
+      top : 65,
       zIndex : '2',
       maxHeight : '150px' 
     },
@@ -91,12 +87,21 @@ export default function RoomPage() {
   })
 
   const StuffAnimation = useSpring({
-    from: { opacity: '0.3', maxHeight: '0px' },
+    from: { 
+      position : 'absolute',
+      left : 0,
+      top : 0,
+      zIndex : '3',
+      opacity: '0.3', 
+      maxHeight: '0px' 
+    },
     to: async (next, cancel) => {
       await next({
         opacity: stuffon ? '1' : '0.3',
         maxHeight: stuffon ? '600px' : '0px',
-        height: stuffon ? '600px' : '0px',
+        // height: stuffon ? '600px' : '0px',
+        left : stuffPageLoc[0],
+        top : stuffPageLoc[1],
         position: 'absolute',
       });
     },
@@ -119,9 +124,13 @@ export default function RoomPage() {
           focused={hovered}
         />
       </animated.div>
+      <animated.div className={styles.stuffPage} style={StuffAnimation}>
+        {stuff ? <StuffPage data={stuff} /> : <></> }
+      </animated.div>
 
       <Room
         StuffClick={StuffClick} 
+        setClickLoc={setStuffPageLoc}
         userName={userName} 
         router={router} 
         pagePush={pagePush} 
@@ -129,17 +138,6 @@ export default function RoomPage() {
         setNowFollow={setNowFollow}
       />
 
-      <Box
-        sx={{
-          zIndex: 'tooltip',
-          width: 650,
-        }}
-      >
-        {/* 페이지 */}
-        <animated.div className={styles.stuffPage} style={StuffAnimation}>
-          <StuffPage data={stuff} />
-        </animated.div>
-      </Box>
     </Box>
   );
 }

@@ -2,27 +2,53 @@ import { Box, Divider, Typography } from '@mui/material';
 import { useState } from 'react';
 import Post from './atoms/Post';
 import PostViewModal from '../PostPage/PostViewModal';
+import { useCookies } from 'react-cookie';
+import useAuth from '../../hooks/useAuth';
+import { useRecoilState } from 'recoil';
+import { postDetailState } from '../../state/postDetailState';
+import axios from '../../utils/axios';
 
 export default function RecentPost({ posts }) {
-  // 여기에 post를 몇개 넘겨줄지 혹시 백에서 정했나요?
+  const [cookies] = useCookies(['cookie-name']);
   const [post, setPost] = useState('');
+  const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+  const [showModal, setShowModal] = useState(false);
+  const { auth } = useAuth();
 
   const openModal = post => {
-    setPost(post);
-    setShowModal(true);
+      setPost(post);
+      try {
+        axios
+          .get(`/api/v1/posts/detail/${post.id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            },
+          })
+          .then(res => {
+            console.log(res.data);
+            setPostDetail(res.data.data);
+            if (postDetail.userName === auth.username) {
+              setLoginUser(true);
+            }
+          })
+          .then(setShowModal(true));
+      } catch (e) {
+        console.log(e);
+      }
   };
-  const [showModal, setShowModal] = useState(false);
+  const handleModalClose = () => {
+      setShowModal(false);
+      setPostDetail('');
+  };
 
-  console.log('post', posts);
   // post의 css를 모듈화해서, 여기랑 stuffpage에 각각 적용
   return (
     <Box
       sx={{ m : 1 }}
     >
       <PostViewModal
-        post={post}
-        showModal={showModal}
-        setShowModal={setShowModal}
+          showModal={showModal}
+          handleModalClose={handleModalClose}
       ></PostViewModal>
 
       <Typography variant="h6">

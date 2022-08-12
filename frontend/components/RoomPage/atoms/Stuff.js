@@ -33,11 +33,11 @@ export default function Model({ tagon, Hover, Click, data, ...props }) {
   })
 
   // 클릭 애니메이션 관리.
-  const { spring } = useSpring({
-    spring : clicked,
-    config: {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
-  });
-  const positionY = spring.to([0, 1], [0, 5 + (data.posX + data.posZ)/2 - data.posY/1.5]);
+  // const { spring } = useSpring({
+  //   spring : clicked,
+  //   config: {mass : 5, tension : 400, friction : 70, precision : 0.0001 },
+  // });
+  // const positionY = spring.to([0, 1], [0, 5 + (data.posX + data.posZ)/2 - data.posY/1.5]);
 
   // Tag 컨트롤
   const color = new Color();
@@ -76,7 +76,7 @@ export default function Model({ tagon, Hover, Click, data, ...props }) {
           onPointerEnter={() => setHovered(true)}
           onPointerLeave={() => setHovered(false)}
           
-          position-y={positionY}
+          // position-y={positionY}
           rotation={[data.rotX, data.rotY, data.rotZ]}
           scale={scale}
           {...props} dispose={null}

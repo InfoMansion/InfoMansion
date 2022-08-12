@@ -45,7 +45,7 @@ export default function searchPost() {
   const [showModal, setShowModal] = useState(false);
   const [post, setPost] = useState('');
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
-  const { auth, setAuth } = useAuth();
+  const { auth } = useAuth();
   const [cookies] = useCookies(['cookie-name']);
   const [loginUser, setLoginUser] = useRecoilState(loginUserState);
 

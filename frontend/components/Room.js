@@ -1,6 +1,5 @@
 import { Canvas } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import { Box, Button } from '@mui/material';
 import RoomManageMenu from './RoomPage/RoomManageMenu';
 import MapStuffs from './RoomPage/MapStuffs';
@@ -21,7 +20,7 @@ import Particles from './RoomPage/atoms/Particles'
 import ConfigStuffs from './jsonData/ConfigStuffs.json'
 import ConfigStuff from './RoomPage/atoms/ConfigStuff' 
 
-export default function Room({ StuffClick, userName, pagePush, profileImage, setNowFollow }) {
+export default function Room({ StuffClick, setClickLoc, userName, pagePush, profileImage, setNowFollow }) {
   const [cookies] = useCookies(['cookie-name']);
   const [zoomscale] = useState(100);
 
@@ -40,9 +39,7 @@ export default function Room({ StuffClick, userName, pagePush, profileImage, set
   // 마운트시 stuff 로드
   useEffect(() => {
     // stuff 가져오기
-    console.log(`/api/v1/userstuffs/room/${userName}`);
     if(!userName) return;
-
     try {
       setPageLoading(true);
       axios
@@ -71,16 +68,35 @@ export default function Room({ StuffClick, userName, pagePush, profileImage, set
   function Click(e, stuff) {
     if (stuff.category == 'NONE') return null;
 
-    // setClicked 동기처리 되도록 바꿔야 함.
-    setClicked(() => {
-      if (clicked) return 0;
-      else return stuff.stuffNameKor;
-    });
+    let midx = Number(window.innerWidth/2);
+    let maxy = window.innerHeight - 620;
+
+    
+    let x = e.clientX < midx ? e.clientX : e.clientX - 400;
+    let y = e.clientY > maxy ? maxy : e.clientY;
+    
+    // console.log("화면 " + midx + " " + maxy)
+    // console.log("클릭 " + x + " " + y)
+
+    setClickLoc([x, y])
+
+    console.log(stuff);
+    
+    setClicked(clicked.id == stuff.id ? 0 : stuff);
     setClickedStuffCategory(stuff.category);
-    StuffClick(stuff);
+  }
+
+  useEffect(() => {
+    StuffClick(clicked);
+  }, [clicked])
+
+  function cancelClick() {
+    // setClicked(0);
   }
   
   const postFollow = async () => {
+    if(loginUser) return;
+    
     try {
       await axios.post(
         `/api/v1/follow/${userName}`,
@@ -153,7 +169,7 @@ export default function Room({ StuffClick, userName, pagePush, profileImage, set
       )}
 
       {/* 캔버스 영역 */}
-      <Canvas shadows>
+      <Canvas shadows onPointerLeave={cancelClick}>
         <RoomLight />
         <RoomCamera camloc={camloc} clicked={clicked} zoomscale={zoomscale} />
         <PostProcessing />

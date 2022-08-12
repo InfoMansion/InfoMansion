@@ -14,13 +14,14 @@ export default function RoomCamera({camloc, clicked, zoomscale}) {
         const xoff = mouse.x*con;
         const yoff = mouse.y*con;
         
-        if(clicked && clicky < 5) setClicky(clicky + 0.1);
-        if(!clicked && clicky > 0) setClicky(clicky - 0.1);
+        // if(clicked && clicky < 5) setClicky(clicky + 0.1);
+        // if(!clicked && clicky > 0) setClicky(clicky - 0.1);
 
         camera.position.lerp(
             v.set(
                 distance - xoff + camloc[0],
-                distance - yoff + camloc[1] + ( clicked ? 5 : 0),
+                // distance - yoff + camloc[1] + ( clicked ? 5 : 0),
+                distance - yoff + camloc[1],
                 distance + camloc[2]
             ), 0.05);
         camera.updateProjectionMatrix();

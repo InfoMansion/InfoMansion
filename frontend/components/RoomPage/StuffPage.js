@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CssBaseline, Divider, Paper, Slide, Toolbar, Typography, useScrollTrigger } from '@mui/material'
+import { Box, CssBaseline, Divider, Paper, Slide, Toolbar, Typography, useScrollTrigger } from '@mui/material'
 import { Container } from "@mui/system";
 import Post from "./atoms/Post";
 
@@ -7,6 +7,9 @@ import {useRecoilState} from 'recoil';
 import {clickedStuffCategoryState} from '../../state/roomState'
 import axios from "../../utils/axios";
 import { useCookies } from "react-cookie";
+import PostViewModal from "../PostPage/PostViewModal";
+import { postDetailState } from "../../state/postDetailState";
+import useAuth from "../../hooks/useAuth";
 
 function ElevationScroll(props) {
     const { children, window } = props;
@@ -25,10 +28,40 @@ export default function StuffPage( {data} ) {
     const [cookies] = useCookies(['cookie-name']);
     const [clickedStuffCategory] = useRecoilState(clickedStuffCategoryState);
     const [posts, setPosts] = useState([]);
+    
+    const [post, setPost] = useState('');
+    const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+    const [showModal, setShowModal] = useState(false);
+    const { auth } = useAuth();
+
+    const openModal = post => {
+        setPost(post);
+        try {
+          axios
+            .get(`/api/v1/posts/detail/${post.id}`, {
+              headers: {
+                Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+              },
+            })
+            .then(res => {
+              console.log(res.data);
+              setPostDetail(res.data.data);
+              if (postDetail.userName === auth.username) {
+                setLoginUser(true);
+              }
+            })
+            .then(setShowModal(true));
+        } catch (e) {
+          console.log(e);
+        }
+    };
+    const handleModalClose = () => {
+        setShowModal(false);
+        setPostDetail('');
+    };
 
     useEffect(() => {
         if(!data.id) return;
-        console.log(data.id);
         try {
             axios.get(`/api/v1/posts/${data.id}`, {
                 headers: {
@@ -36,8 +69,8 @@ export default function StuffPage( {data} ) {
                 },
             })
             .then( res => {
-                console.log(res.data.data);
-                setPosts(res.data.data);
+                // console.log(res.data.data.postsByUserStuff);
+                setPosts(res.data.data.postsByUserStuff.content);
             })
         }catch(e) {
             console.log(e);
@@ -51,11 +84,16 @@ export default function StuffPage( {data} ) {
                 backgroundColor : 'rgba(255,255,255,0.8)'
             }}
             sx={{
-                width : '634px',
+                width : '100%',
                 borderRadius : 1,
                 m : 1,  
             }}
         >
+            <PostViewModal
+                showModal={showModal}
+                handleModalClose={handleModalClose}
+            ></PostViewModal>
+
             <CssBaseline />
             {/* 타이틀 영역 */}
             <Toolbar
@@ -90,8 +128,7 @@ export default function StuffPage( {data} ) {
             <Container
                 sx={{
                     maxHeight : '500px',
-                    p : 2,
-                    mb : 2
+                    p : 1,
                 }}
                 style={{
                     overflowY : 'scroll'
@@ -100,12 +137,16 @@ export default function StuffPage( {data} ) {
             
             {/* 포스트 영역 */}
             {posts.map( post => (
-                <Post 
-                    post={post} 
-                    totheight={150}
-                    picwidth={150} 
-                    maxcontent={150}
-                />
+                <Box>
+                    <Post 
+                        post={post} 
+                        totheight={150}
+                        picwidth={150} 
+                        maxcontent={150}
+                        openModal={openModal}
+                    />
+                    <Divider />
+                </Box>
             ))}
             </Container>
         </Paper>

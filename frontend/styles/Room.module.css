@@ -1,6 +1,7 @@
 .stuffPage {
     overflow: hidden;
     max-height: 0px;
+    width : 400px;
 }
 
 .userPage {

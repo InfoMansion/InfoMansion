@@ -1,30 +1,20 @@
-import { OrbitControls, OrthographicCamera } from '@react-three/drei';
+import { OrthographicCamera } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import ConfigStuffs from '../jsonData/ConfigStuffs.json'
 import ConfigStuff from './atoms/ConfigStuff'
-import ProfileMesh from './atoms/ProfileMesh';
 
 
 export default function ConfigItems({loginUser, pagePush, userName, profileImage}) {
-
     const locref = useRef();
     useFrame(({camera}) => {
         locref.current.quaternion.copy(camera.quaternion);
     }, [])
 
-    console.log(ConfigStuffs);
     const [positions] = useState([
         [0.4, 0.5, -2],
         [-0.4, -0.5, -2]
     ])
-
-    function ClickFollow() {
-        
-    }
-    function ClickUserInfo() {
-        
-    }
     function ClickShop() {
         pagePush("/Shop");
     }
@@ -32,7 +22,7 @@ export default function ConfigItems({loginUser, pagePush, userName, profileImage
         pagePush(`/${userName}/dashboard`);
     }
     function ClickWrite() {
-
+        pagePush(`/post/CreatePost`)
     }
 
     return (
