@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -425,5 +426,21 @@ class UserServiceImplTest {
         List<Notification> notificationsToInfomansion2 = notificationRepository.findSimpleUnReadNotificationsByUsername("infomansion2");
         assertThat(notificationsToInfomansion1.size()).isEqualTo(0);
         assertThat(notificationsToInfomansion2.size()).isEqualTo(1);
+    }
+
+    @WithCustomUserDetails
+    @Transactional
+    @Test
+    public void 사용자_회원탈퇴_성공() {
+
+        // when
+        Optional<User> beforeDeleteUser = userRepository.findByUsername("infomansion");
+        assertThat(beforeDeleteUser.get().getUsername()).isEqualTo("infomansion");
+
+        userService.deleteUser();
+        Optional<User> afterDeleteUser = userRepository.findByUsername("infomansion");
+
+        // then
+        assertThat(afterDeleteUser).isEmpty();
     }
 }

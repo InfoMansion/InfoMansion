@@ -63,4 +63,10 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userService.changeUserState(username)));
     }
+
+    @PatchMapping("api/v1/users/resign")
+    public ResponseEntity<CommonResponse<Long>> deleteUser(){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userService.deleteUser()));
+    }
 }

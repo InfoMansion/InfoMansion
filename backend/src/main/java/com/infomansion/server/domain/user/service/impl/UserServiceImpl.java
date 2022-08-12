@@ -286,6 +286,17 @@ public class UserServiceImpl implements UserService {
         return user.isPrivateFlag();
     }
 
+    @Override
+    @Transactional
+    public Long deleteUser() {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.deleteUser();
+        userRepository.save(user);
+        return user.getId();
+    }
+
     private String getRandomPassword(int size) {
         final String regex = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}";
 

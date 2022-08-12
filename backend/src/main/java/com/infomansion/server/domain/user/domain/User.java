@@ -4,6 +4,7 @@ import com.infomansion.server.domain.base.BaseTimeEntityAtSoftDelete;
 import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.dto.UserModifyProfileRequestDto;
 import lombok.*;
+import org.hibernate.annotations.Where;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @ToString
 @Getter
+@Where(clause = "delete_flag = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class User extends BaseTimeEntityAtSoftDelete {
@@ -47,6 +49,8 @@ public class User extends BaseTimeEntityAtSoftDelete {
 
     private boolean privateFlag;
 
+    private boolean deleteFlag;
+
     @Builder
     public User(String email, String password, String username, String tel, String categories) {
         this.email = email;
@@ -59,6 +63,7 @@ public class User extends BaseTimeEntityAtSoftDelete {
         this.introduce = "";
         this.userCredit = new UserCredit(this);
         this.privateFlag = false;
+        this.deleteFlag = false;
     }
 
     /**
@@ -124,5 +129,14 @@ public class User extends BaseTimeEntityAtSoftDelete {
      */
     public void changePrivate(){
         this.privateFlag = !this.privateFlag;
+    }
+
+    /**
+     * User를 SoftDelete를 이용해 삭제한다.
+     */
+
+    public void deleteUser(){
+        this.deleteFlag = true;
+        this.setDeletedDate();
     }
 }
