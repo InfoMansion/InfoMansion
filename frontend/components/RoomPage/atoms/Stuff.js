@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Text, useGLTF } from '@react-three/drei'
+import { Plane, Text, useGLTF } from '@react-three/drei'
 import { animated, config, useSpring } from '@react-spring/three';
 import { Color } from 'three';
 import { useFrame } from '@react-three/fiber';
+import categoryData from '../../jsonData/category.json'
 
 export default function Model({ tagon, Hover, Click, data, ...props }) {
   
@@ -17,7 +18,7 @@ export default function Model({ tagon, Hover, Click, data, ...props }) {
   // glb 임포트
   const { nodes, materials } = useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath)
   
-  if(!nodes[geometry]) return
+  if(!nodes[geometry[0]]) return
   // stuff 컨트롤
   function onHover(e) { Hover(e, data); }
   function onClick(e) { 
@@ -59,7 +60,7 @@ export default function Model({ tagon, Hover, Click, data, ...props }) {
   useFrame(({camera}) => {
     if(tagon && data.category.category != 'NONE'){
       locref.current.quaternion.copy(camera.quaternion);
-      textref.current.material.color.lerp(color.set(hovered ? '#ffa0a0' : 'black'), 0.1);
+      textref.current.material.color.lerp(color.set(hovered ? 'black' : 'white'), 0.1);
     }
   }, [tagon])
 
@@ -82,7 +83,7 @@ export default function Model({ tagon, Hover, Click, data, ...props }) {
           >
           {geometry.map((geo, i) => ( 
             <mesh
-            geometry={nodes[geometry].geometry} material={materials[material]} castShadow
+            geometry={nodes[geo].geometry} material={materials[material[i]]} castShadow
             scale={100}
             />
             ))}
@@ -93,7 +94,7 @@ export default function Model({ tagon, Hover, Click, data, ...props }) {
       >
           {geometry.map((geo, i) => ( 
             <mesh
-              geometry={nodes[geometry].geometry} material={materials[material]} castShadow
+              geometry={nodes[geo].geometry} material={materials[material[i]]} castShadow
               scale={100}
             />
           ))}
@@ -105,18 +106,26 @@ export default function Model({ tagon, Hover, Click, data, ...props }) {
       (tagon && data.category.category != 'NONE') ?
       <group ref={locref} position={[1, 1.5, 1]}>
         <mesh>
-          <circleGeometry attach="geometry" args={[0.3, 20]} />
+          <circleGeometry attach="geometry" args={[0.2, 20]} />
           <meshBasicMaterial 
-              attacj="material" 
-              color={ hovered ? 'white' : '#ffa0a0'} />
+              attach="material" 
+              color={ hovered ? 'white' : categoryData[data.category.category].color} />
         </mesh>
-        <Text
-          ref={textref}
-          {...fontProps} 
-          children={data.stuffNameKor}
-        
-          position={[0, 0, 0.01]}
-        />
+        <group
+          position={[0.25, 0, -0.01]}
+        >
+          <mesh>
+            <planeBufferGeometry attach="geometry" args={[data.category.category.length * 0.1, 0.2]} />
+            <meshPhongMaterial attach="material" color={ hovered ? 'white' : categoryData[data.category.category].color} />
+          </mesh>
+
+          <Text
+            position={[0, 0, 0.02]}
+            ref={textref} {...fontProps} 
+            children={data.category.category}
+
+          />
+        </group>
       </group> 
       : <></>
     }

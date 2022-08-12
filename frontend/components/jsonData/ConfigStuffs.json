@@ -1,0 +1,42 @@
+[
+    {
+        "id" : "0",
+        "category" : "NONE",
+        "stuffAlias" : "하트",
+        "stuffName" : "heart",
+        "stuffNameKor" : "하트",
+        "stuffGlbPath" : "/stuff-assets/heart.glb",
+        "geometry" : [ "Love" ],
+        "material" : [ "Love" ]
+    },
+    {
+        "id" : "0",
+        "category" : "NONE",
+        "stuffAlias" : "설정",
+        "stuffName" : "setting",
+        "stuffNameKor" : "설정",
+        "stuffGlbPath" : "/stuff-assets/setting.glb",
+        "geometry" : [ "RepairBox" ],
+        "material" : [ "07 - Default" ]
+    },
+    {
+        "id" : "0",
+        "category" : "NONE",
+        "stuffAlias" : "상점",
+        "stuffName" : "shop",
+        "stuffNameKor" : "상점",
+        "stuffGlbPath" : "/stuff-assets/shop.glb",
+        "geometry" : [ "pitsOfficeRoof_1","pitsOfficeRoof_2","pitsOfficeRoof_3","pitsOfficeRoof_4" ],
+        "material" : [ "grey","red","glass","_defaultMat" ]
+    },
+    {
+        "id" : "0",
+        "category" : "NONE",
+        "stuffAlias" : "별",
+        "stuffName" : "heart",
+        "stuffNameKor" : "별",
+        "stuffGlbPath" : "/stuff-assets/star.glb",
+        "geometry" : [ "Star001" ],
+        "material" : [ "07 - Default" ]
+    }
+]

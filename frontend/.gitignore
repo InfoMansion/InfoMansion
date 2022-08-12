@@ -12,8 +12,6 @@
 /.next/
 /out/
 
-/public/stuffAssets/*.glb
-
 # production
 /build
 
@@ -34,5 +32,5 @@ yarn-error.log*
 .vercel
 
 # glb
-/public/stuffAssets/*.glb
-!/public/stuffAssets/IM.glb
+/public/stuff-assets/*.glb
+!/public/stuff-assets/IM.glb

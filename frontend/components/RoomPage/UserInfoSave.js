@@ -1,10 +1,13 @@
 import {
   Avatar,
   Box,
+  Card,
   Divider,
+  formControlLabelClasses,
   Grid,
   Typography,
 } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useEffect, useState, useCallback } from 'react';
 import RecentPost from './RecentPosts';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -12,18 +15,17 @@ import Link from 'next/link';
 import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
+import { loginUserState } from '../../state/roomState';
+import { useRecoilState } from 'recoil';
 import Follow from '../Follow';
 import FollowList from './atoms/FollowList';
 
-export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, focused}) {
+export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow}) {
   const router = useRouter();
   const [posts, setPosts] = useState([]);
   const [modalInfo, setModalInfo] = useState(undefined);
+  
   const [cookies] = useCookies(['cookie-name']);
-
-  const textStyle = {
-    color : focused ? 'black' : 'white'
-  }
 
   const getRecentPost = useCallback(async () => {
     try {
@@ -85,10 +87,7 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, 
 
   return (
     <Box
-      style={{ 
-        background : 'transparent',
-        width : '400px'
-      }}
+      style={{ background : 'transparent', }}
     >
       {modalInfo !== undefined && (
         <FollowList
@@ -96,9 +95,13 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, 
           handleModalClose={handleModalClose}
         ></FollowList>
       )}
-      
-      <Grid container sx={{ p: 2 }} >
-        <Grid item
+      <Grid
+        sx={{ p: 2, }}
+        container
+      >
+        <Grid
+          item
+          xs={3}
           sx={{
             display: 'flex',
             justifyContent: 'center',
@@ -108,86 +111,43 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, 
             alt="profile"
             src={userInfo.profileImage}
             sx={{
-              width: '75px',
-              height: '75px',
-              mr : 2,
+              width: '100%',
+              maxWidth: '80px',
+              height: '100%',
+              maxHeight: '80px',
             }}
             style={{ objectFit: 'fill' }}
           />
         </Grid>
-        <Grid item>
+        <Grid item xs={9}>
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
             }}
           >
-            <Typography variant="h4" 
-              style={textStyle}
-            >
-              {userInfo.username}
-            </Typography>
-
+            <Typography variant="h4">{userInfo.username}</Typography>
+            <div onClick={getFollowingInfo}>팔로우 {userInfo.following}</div>
+            <div onClick={getFollowerInfo}>팔로워 {nowFollow}</div>
             {loginUser ? (
               <Link href={userInfo.username + '/dashboard'}>
-                <SettingsIcon sx={{ mx: 2 }} style={textStyle} />
+                <SettingsIcon sx={{ mx: 2 }} style={{ color: '#777777' }} />
               </Link>
             ) : (
-              <></>
-              // <Follow
-              //   isFollow={userInfo.follow}
-              //   username={userInfo.username}
-              //   setNowFollow={setNowFollow}
-              // ></Follow>
+              <Follow
+                isFollow={userInfo.follow}
+                username={userInfo.username}
+                setNowFollow={setNowFollow}
+              ></Follow>
             )}
           </Box>
-
+          <Typography variant="body2" color="text.secondary">
+            {userInfo.userEmail}
+          </Typography>
           <Box
-            style={{
-              display : 'flex',
-              flexDirection : 'row',
-              color : '#aaaaaa'
-            }}
-          >
-            <Typography 
-              variant="body2" 
-              onClick={getFollowingInfo}
-              style={{display : 'flex'}}
-            > 
-              팔로우
-              <Typography
-                style={textStyle}
-                sx={{ml : 1, mr : 2}}
-              >
-                {userInfo.following}
-              </Typography>
-            </Typography>
-
-            <Typography
-              variant="body2"
-              onClick={getFollowerInfo}
-              style={{display : 'flex'}}
-            >
-              팔로잉 
-              
-              <Typography
-                style={textStyle}
-                sx={{ml : 1}}
-              >
-                {nowFollow}
-              </Typography>
-            </Typography>
-          </Box>
-
-        </Grid>
-          <Box 
-            style={{
-              height : '30px',
-            }}
-            sx={{ 
-              display: 'flex', 
-              flexWrap : 'wrap',
-              my: 1
+            sx={{
+              display: 'flex',
+              my: 1,
             }}
           >
             {userInfo.categories.map((category, index) => (
@@ -196,12 +156,10 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, 
                 style={{
                   backgroundColor: '#fc7a71',
                   color: 'white',
-                  height : '20px'
                 }}
                 sx={{
                   px: 2,
-                  mr : 1,
-                  mb : 1,
+                  mr: 1,
                   borderRadius: 4,
                 }}
               >
@@ -209,11 +167,14 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, 
               </Typography>
             ))}
           </Box>
-      </Grid>
-        <Divider color={"white"} />
+        </Grid>
+
+        <Divider />
         <Typography sx={{ m: 2 }}>{userInfo.introduce}</Typography>
-        
+
+        {/* 여기 브레이크포인트에 따라 더보기 버튼과 recentpost 바꿔 사용할 것. */}
         <RecentPost posts={posts} />
+      </Grid>
     </Box>
   );
 }

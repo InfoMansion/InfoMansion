@@ -17,3 +17,8 @@ export const loginUserState = atom({
     key : 'loginUserState',
     default : false
 })
+
+export const followState = atom({
+    key : 'followState',
+    default : false
+})

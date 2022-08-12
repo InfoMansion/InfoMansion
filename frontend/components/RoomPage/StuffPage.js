@@ -24,8 +24,6 @@ function ElevationScroll(props) {
 export default function StuffPage( {data} ) {
     const [cookies] = useCookies(['cookie-name']);
     const [clickedStuffCategory] = useRecoilState(clickedStuffCategoryState);
-    // 사용자 PK, stuffID 같이 넘겨주면 받을 수 있음.
-    // 여기서 넘겨주고 받아와야 함.
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {
@@ -104,7 +102,7 @@ export default function StuffPage( {data} ) {
             {posts.map( post => (
                 <Post 
                     post={post} 
-                    totheight={150} 
+                    totheight={150}
                     picwidth={150} 
                     maxcontent={150}
                 />

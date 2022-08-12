@@ -1,4 +1,4 @@
-import { Divider, Typography } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import { useState } from 'react';
 import Post from './atoms/Post';
 import PostViewModal from '../PostPage/PostViewModal';
@@ -16,25 +16,41 @@ export default function RecentPost({ posts }) {
   console.log('post', posts);
   // post의 css를 모듈화해서, 여기랑 stuffpage에 각각 적용
   return (
-    <div>
+    <Box
+      sx={{ m : 1 }}
+    >
       <PostViewModal
         post={post}
         showModal={showModal}
         setShowModal={setShowModal}
       ></PostViewModal>
+
+      <Typography variant="h6">
+        Recent post
+      </Typography>
       <Divider />
-      <Typography variant="h6">Recent post</Typography>
-      {posts.map(post => (
-        <div>
-          <Post
-            post={post}
-            totheight={70}
-            picwidth={70}
-            maxcontent={50}
-            openModal={openModal}
-          />
-        </div>
-      ))}
-    </div>
+
+      <Box
+        sx={{
+          maxHeight : '160px'
+        }}
+        style={{
+          overflowY : 'scroll'
+        }}
+      >
+        {posts.map(post => (
+          <Box>
+            <Post
+              post={post}
+              totheight={100}
+              picwidth={70}
+              maxcontent={50}
+              openModal={openModal}
+            />
+            <Divider sx={{m : 0}}/>
+          </Box>
+        ))}
+      </Box>
+    </Box>
   );
 }

@@ -5,46 +5,52 @@ import {
   CardContent,
   CardMedia,
   Divider,
+  Paper,
   Typography,
 } from '@mui/material';
-import IMG_S3_URL from '../../../constants';
 
 export default function Post({
   post,
   totheight,
   picwidth,
-  maxcontent,
   openModal,
 }) {
   return (
-    <Card
+    <Box
       key={post.title}
       sx={{
         maxHeight: totheight,
         my: 1,
-        backgroundColor: 'rgba(255,255,255,0.5)',
+        backgroundColor: 'rgba(255,255,255,0)',
+        overflow : 'hidden', 
       }}
     >
       <CardActionArea
         sx={{
           display: 'flex',
-          alignItems: 'flex-start',
+          justifyContent : 'flex-start', 
+          my : 1
         }}
         onClick={() => openModal(post)}
       >
-        <CardMedia
-          component="img"
-          sx={{
-            width: picwidth,
+        <Box
+          sx={{ 
+            maxWidth : picwidth,
+            height : '100%',
+            mr : 2
           }}
-          image={`${post.defaultPostThumbnail}`}
-          alt="no img"
-        />
+        >
+          <img
+            src={`${post.defaultPostThumbnail}`}
+            alt="no img"
+          />
+        </Box>
 
         <CardContent
           sx={{
             display: 'flex',
             flexDirection: 'column',
+            p : 0
           }}
         >
           <Box
@@ -54,20 +60,20 @@ export default function Post({
               alignItems: 'center',
             }}
           >
-            <Typography variant="h6" color="text.primary">
+            <Typography variant="h6" sx={{mr : 2}} color="text.primary">
               {post.title}
             </Typography>
             <Typography variant="body4" color="#aaaaaa">
-              {post.date}
+              {post.modifiedDate.substr(0, 10)}
             </Typography>
           </Box>
-          <Divider sx={{ m: 1 }} />
+          <Divider style={{width : '100%'}}/>
 
           <Typography variant="body2" color="text.secondary">
-            <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+            <div dangerouslySetInnerHTML={{ __html : post.content }}></div>
           </Typography>
         </CardContent>
       </CardActionArea>
-    </Card>
+    </Box>
   );
 }

@@ -8,19 +8,23 @@ import Stuffs from './RoomPage/Stuffs';
 
 import RoomCamera from './RoomPage/atoms/RoomCamera';
 import RoomLight from './RoomPage/atoms/RoomLight';
+import PostProcessing from './RoomPage/atoms/PostProcessing'
 import axios from '../utils/axios';
 import { useCookies } from 'react-cookie';
 
-import { clickedStuffCategoryState, loginUserState } from '../state/roomState';
+import { clickedStuffCategoryState, followState, loginUserState } from '../state/roomState';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { pageLoading } from '../state/pageLoading';
+import ConfigItems from './RoomPage/ConfigItems';
+import Particles from './RoomPage/atoms/Particles'
 
-export default function Room({ StuffClick, userName }) {
+import ConfigStuffs from './jsonData/ConfigStuffs.json'
+import ConfigStuff from './RoomPage/atoms/ConfigStuff' 
+
+export default function Room({ StuffClick, userName, pagePush, profileImage, setNowFollow }) {
   const [cookies] = useCookies(['cookie-name']);
-  // 화면 확대 정도 조정.
-  const [zoomscale] = useState(90);
+  const [zoomscale] = useState(100);
 
-  // 사용자 가구들.
   const [mapstuffs, setMapstuffs] = useState([]);
   const [stuffs, setStuffs] = useState([]);
   const [hovered, setHovered] = useState(0);
@@ -31,20 +35,24 @@ export default function Room({ StuffClick, userName }) {
   const [, setClickedStuffCategory] = useRecoilState(clickedStuffCategoryState);
   const [loginUser] = useRecoilState(loginUserState);
   const setPageLoading = useSetRecoilState(pageLoading);
+  const [isFollow, setIsFollow] = useRecoilState(followState);
+
   // 마운트시 stuff 로드
-  const router = useRouter();
   useEffect(() => {
-    if (!router.isReady) return;
     // stuff 가져오기
+    console.log(`/api/v1/userstuffs/room/${userName}`);
+    if(!userName) return;
+
     try {
       setPageLoading(true);
       axios
-        .get(`/api/v1/userstuffs/room/${router.query.userName}`, {
+        .get(`/api/v1/userstuffs/room/${userName}`, {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
           },
         })
         .then(res => {
+
           setMapstuffs(res.data.data.slice(0, 2));
           setStuffs(res.data.data.slice(2));
           setPageLoading(false);
@@ -53,13 +61,12 @@ export default function Room({ StuffClick, userName }) {
       setPageLoading(false);
       console.log(e);
     }
-  }, [router.isReady]);
+  }, [userName]);
 
   // stuff 호버 이벤트.
   function Hover(e, stuff) {
     setHovered();
   }
-
   // stuff 클릭 이벤트.
   function Click(e, stuff) {
     if (stuff.category == 'NONE') return null;
@@ -72,13 +79,46 @@ export default function Room({ StuffClick, userName }) {
     setClickedStuffCategory(stuff.category);
     StuffClick(stuff);
   }
+  
+  const postFollow = async () => {
+    try {
+      await axios.post(
+        `/api/v1/follow/${userName}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            withCredentials: true,
+          },
+        },
+      );
+      setIsFollow(prev => !prev);
+      setNowFollow(prev => prev + 1);
+      alert('팔로우');
+    } catch (e) {
+      console.log('error', e);
+    }
+  };
+
+  const postUnFollow = async () => {
+    try {
+      await axios.delete(`/api/v1/follow/${userName}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+        },
+      });
+      setIsFollow(prev => !prev);
+      setNowFollow(prev => prev - 1);
+      alert('팔로우 취소');
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <div
       style={{
-        width: '600px',
-        height: '700px',
-        // margin : '30px auto'
+        height: '900px',
         position: 'relative',
       }}
     >
@@ -87,6 +127,7 @@ export default function Room({ StuffClick, userName }) {
         variant="outlined"
         style={{
           position: 'absolute',
+          right : 0,
           zIndex: '2',
         }}
         sx={{ m: 2 }}
@@ -112,13 +153,10 @@ export default function Room({ StuffClick, userName }) {
       )}
 
       {/* 캔버스 영역 */}
-      <Canvas
-        shadows
-        style={{ zIndex: '1' }}
-      >
+      <Canvas shadows>
         <RoomLight />
-
         <RoomCamera camloc={camloc} clicked={clicked} zoomscale={zoomscale} />
+        <PostProcessing />
 
         {/* 벽, 바닥 */}
         <MapStuffs stuffs={mapstuffs} Hover={Hover} Click={Click} />
@@ -131,7 +169,33 @@ export default function Room({ StuffClick, userName }) {
           tagon={tagon}
         />
 
+        {/* 팔로우버튼 */}
+        <ConfigStuff data={ConfigStuffs[0]} pos={[2, 3.5, -2]} iniscale={12} 
+          Click={() => (isFollow ? postUnFollow() : postFollow())}
+          color="#fa7070" inicolor="#FFA78C"
+          isFollow={isFollow}
+          speed={0.002}
+        />
+        <Particles />
         {/* <Stuff_s3test /> */}
+      </Canvas>
+
+      <Canvas
+        style={{
+          position : 'absolute',
+          right : '3%',
+          bottom : 50,
+          width : '250px',
+          height : '250px'
+        }}
+      >
+        {/* 팔로우 버튼 */}
+        <ConfigItems
+            loginUser={loginUser}
+            pagePush={pagePush}
+            userName={userName}
+            profileImage={profileImage}
+          />
       </Canvas>
     </div>
   );

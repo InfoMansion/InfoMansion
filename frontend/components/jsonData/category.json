@@ -1,70 +1,66 @@
-[
-    {
-        "name" : "SPORTS",
-        "alias" : "스포츠"
+{
+    "SPORTS" : {
+        "alias" : "스포츠",
+        "color" : "#757F94"
     },
-    {
-        "name" : "DAILY",
-        "alias" : "데일리"
+    "DAILY" : {
+        "alias" : "데일리",
+        "color" : "#B0F0CE"
     },
-    {
-        "name" : "FASHION",
-        "alias" : "패션"
+    "FASHION" : {
+        "alias" : "패션",
+        "color" : "#FF8BB9"
     },
-    {
-        "name" : "BEAUTY",
-        "alias" : "뷰티"
+    "BEAUTY" : {
+        "alias" : "뷰티",
+        "color" : "#F082B5"
     },
-    {
-        "name" : "TRAVEL",
-        "alias" : "여행"
+    "TRAVEL" : {
+        "alias" : "여행",
+        "color" : "#C3A2F5"
     },
-    {
-        "name" : "COOK",
-        "alias" : "쿠킹"
+    "COOK" : {
+        "alias" : "쿠킹",
+        "color" : "#825F53"
     },
-    {
-        "name" : "ART",
-        "alias" : "미술"
+    "ART" : {
+        "alias" : "미술",
+        "color" : "#F082B5"
     },
-    {
-        "name" : "MUSIC",
-        "alias" : "음악"
+    "MUSIC" : {
+        "alias" : "음악",
+        "color" : "#FFFD92"
     },
-    {
-        "name" : "INTERIOR",
-        "alias" : "인테리어"
+    "INTERIOR" : {
+        "alias" : "인테리어",
+        "color" : "#F0BFAF"
     },
-    {
-        "name" : "NATURE",
-        "alias" : "자연"
+    "NATURE" : {
+        "alias" : "자연",
+        "color" : "#B7EBA8"
     },
-    {
-        "name" : "IT",
-        "alias" : "IT"
+    "IT" : {
+        "alias" : "IT",
+        "color" : "#C0F593"
     },
-    {
-        "name" : "GAME",
-        "alias" : "게임"
+    "GAME" : {
+        "alias" : "게임",
+        "color" : "#E7B2EE"
     },
-    {
-        "name" : "CLEANING",
-        "alias" : "청소"
+    "CLEANING" : {
+        "alias" : "청소",
+        "color" : "#123456"
     },
-    {
-        "name" : "CULTURE",
-        "alias" : "문화/시사"
+    "CULTURE" : {
+        "alias" : "문화/시사",
+        "color" : "#F0B789"
     },
-    {
-        "name" : "STUDY",
-        "alias" : "공부"
+    "STUDY" : {
+        "alias" : "공부",
+        "color" : "#B3E1FF"
     },
-    {
-        "name" : "HOMEAPPLIANCES",
-        "alias" : "가전제품"
-    }, 
-    {
-        "name" : "PET",
-        "alias" : "애완동물"
+    "HOMEAPPLIANCES" : {
+        "alias" : "가전제품",
+        "color" : "#AEC2B9"
     }
-]
+}

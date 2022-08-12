@@ -10,7 +10,7 @@ export default function RoomCamera({camloc, clicked, zoomscale}) {
 
     useFrame(({mouse, camera}) => {
         const distance = 40;
-        const con = 1.5;
+        const con = 0.5;
         const xoff = mouse.x*con;
         const yoff = mouse.y*con;
         

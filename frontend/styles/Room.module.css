@@ -2,3 +2,8 @@
     overflow: hidden;
     max-height: 0px;
 }
+
+.userPage {
+    overflow: hidden;
+    border-radius: 10px;
+}

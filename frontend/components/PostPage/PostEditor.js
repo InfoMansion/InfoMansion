@@ -228,7 +228,7 @@ export default function PostEditor({
     UpdateUserCategory();
   }, []);
 
-  return (
+  return typeof window !== 'undefined' ? (
     <>
       {windowSize && (
         <div
@@ -315,5 +315,5 @@ export default function PostEditor({
       )}
       <br />
     </>
-  );
+  ) : null;
 }
