@@ -91,7 +91,7 @@ export default function PostViewModal({ showModal, handleModalClose }) {
     try {
       await axios.post(
         `/api/v2/posts/likes/${postDetail.id}`,
-        //{},
+        {},
         {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
