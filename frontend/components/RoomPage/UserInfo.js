@@ -1,10 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Divider,
-  Grid,
-  Typography,
-} from '@mui/material';
+import { Avatar, Box, Divider, Grid, Typography } from '@mui/material';
 import { useEffect, useState, useCallback } from 'react';
 import RecentPost from './RecentPosts';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -15,15 +9,21 @@ import { useRouter } from 'next/router';
 import Follow from '../Follow';
 import FollowList from './atoms/FollowList';
 
-export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, focused}) {
+export default function UserInfo({
+  loginUser,
+  userInfo,
+  nowFollow,
+  setNowFollow,
+  focused,
+}) {
   const router = useRouter();
   const [posts, setPosts] = useState([]);
   const [modalInfo, setModalInfo] = useState(undefined);
   const [cookies] = useCookies(['cookie-name']);
 
   const textStyle = {
-    color : focused ? 'black' : 'white'
-  }
+    color: focused ? 'black' : 'white',
+  };
 
   const getRecentPost = useCallback(async () => {
     try {
@@ -85,9 +85,9 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, 
 
   return (
     <Box
-      style={{ 
-        background : 'transparent',
-        width : '400px'
+      style={{
+        background: 'transparent',
+        width: '400px',
       }}
     >
       {modalInfo !== undefined && (
@@ -96,9 +96,10 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, 
           handleModalClose={handleModalClose}
         ></FollowList>
       )}
-      
-      <Grid container sx={{ p: 2 }} >
-        <Grid item
+
+      <Grid container sx={{ p: 2 }}>
+        <Grid
+          item
           sx={{
             display: 'flex',
             justifyContent: 'center',
@@ -110,7 +111,7 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, 
             sx={{
               width: '75px',
               height: '75px',
-              mr : 2,
+              mr: 2,
             }}
             style={{ objectFit: 'fill' }}
           />
@@ -122,9 +123,7 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, 
               alignItems: 'center',
             }}
           >
-            <Typography variant="h4" 
-              style={textStyle}
-            >
+            <Typography variant="h4" style={textStyle}>
               {userInfo.username}
             </Typography>
 
@@ -144,21 +143,18 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, 
 
           <Box
             style={{
-              display : 'flex',
-              flexDirection : 'row',
-              color : '#aaaaaa'
+              display: 'flex',
+              flexDirection: 'row',
+              color: '#aaaaaa',
             }}
           >
-            <Typography 
-              variant="body2" 
+            <Typography
+              variant="body2"
               onClick={getFollowingInfo}
-              style={{display : 'flex'}}
-            > 
+              style={{ display: 'flex', ...textStyle }}
+            >
               팔로우
-              <Typography
-                style={textStyle}
-                sx={{ml : 1, mr : 2}}
-              >
+              <Typography style={textStyle} sx={{ ml: 1, mr: 2 }}>
                 {userInfo.following}
               </Typography>
             </Typography>
@@ -166,54 +162,49 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow, 
             <Typography
               variant="body2"
               onClick={getFollowerInfo}
-              style={{display : 'flex'}}
+              style={{ display: 'flex' }}
             >
-              팔로잉 
-              
-              <Typography
-                style={textStyle}
-                sx={{ml : 1}}
-              >
+              팔로잉
+              <Typography style={textStyle} sx={{ ml: 1 }}>
                 {nowFollow}
               </Typography>
             </Typography>
           </Box>
-
         </Grid>
-          <Box 
-            style={{
-              height : '30px',
-            }}
-            sx={{ 
-              display: 'flex', 
-              flexWrap : 'wrap',
-              my: 1
-            }}
-          >
-            {userInfo.categories.map((category, index) => (
-              <Typography
-                variant="body2"
-                style={{
-                  backgroundColor: '#fc7a71',
-                  color: 'white',
-                  height : '20px'
-                }}
-                sx={{
-                  px: 2,
-                  mr : 1,
-                  mb : 1,
-                  borderRadius: 4,
-                }}
-              >
-                {category}
-              </Typography>
-            ))}
-          </Box>
+        <Box
+          style={{
+            height: '30px',
+          }}
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            my: 1,
+          }}
+        >
+          {userInfo.categories.map((category, index) => (
+            <Typography
+              variant="body2"
+              style={{
+                backgroundColor: '#fc7a71',
+                color: 'white',
+                height: '20px',
+              }}
+              sx={{
+                px: 2,
+                mr: 1,
+                mb: 1,
+                borderRadius: 4,
+              }}
+            >
+              {category}
+            </Typography>
+          ))}
+        </Box>
       </Grid>
-        <Divider color={"white"} />
-        <Typography sx={{ m: 2 }}>{userInfo.introduce}</Typography>
-        
-        <RecentPost posts={posts} />
+      <Divider color={'white'} />
+      <Typography sx={{ m: 2 }}>{userInfo.introduce}</Typography>
+
+      <RecentPost posts={posts} />
     </Box>
   );
 }

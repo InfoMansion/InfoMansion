@@ -66,10 +66,11 @@ export default function Layout({ children }) {
   }, [pathname]);
 
   useEffect(() => {
+    if (!auth.Authorization) return;
     init();
   }, [init, pathname, notificationState]);
 
-  console.log(auth.username);
+  console.log(auth);
   return (
     <div>
       <div

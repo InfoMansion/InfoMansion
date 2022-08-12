@@ -20,11 +20,16 @@ import { useRecoilState } from 'recoil';
 import Follow from '../Follow';
 import FollowList from './atoms/FollowList';
 
-export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow}) {
+export default function UserInfo({
+  loginUser,
+  userInfo,
+  nowFollow,
+  setNowFollow,
+}) {
   const router = useRouter();
   const [posts, setPosts] = useState([]);
   const [modalInfo, setModalInfo] = useState(undefined);
-  
+
   const [cookies] = useCookies(['cookie-name']);
 
   const getRecentPost = useCallback(async () => {
@@ -86,19 +91,14 @@ export default function UserInfo({loginUser, userInfo, nowFollow, setNowFollow})
   };
 
   return (
-    <Box
-      style={{ background : 'transparent', }}
-    >
+    <Box style={{ background: 'transparent' }}>
       {modalInfo !== undefined && (
         <FollowList
           modalInfo={modalInfo}
           handleModalClose={handleModalClose}
         ></FollowList>
       )}
-      <Grid
-        sx={{ p: 2, }}
-        container
-      >
+      <Grid sx={{ p: 2 }} container>
         <Grid
           item
           xs={3}

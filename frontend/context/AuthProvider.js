@@ -6,7 +6,7 @@ const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
   const [cookies] = useCookies(['cookie-name']);
   const [auth, setAuth] = useState();
-
+  console.log(auth);
   useEffect(() => {
     const accessToken = cookies['InfoMansionAccessToken'];
     if (accessToken) {
