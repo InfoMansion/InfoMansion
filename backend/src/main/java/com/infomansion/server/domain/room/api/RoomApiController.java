@@ -1,12 +1,13 @@
 package com.infomansion.server.domain.room.api;
 
-import com.infomansion.server.domain.room.dto.RoomRecommendResponseDto;
 import com.infomansion.server.domain.room.dto.RoomResponseDto;
+import com.infomansion.server.domain.room.dto.RoomUserRecommendResponseDto;
 import com.infomansion.server.domain.room.service.RoomService;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +39,8 @@ public class RoomApiController {
     }
 
     @GetMapping("/api/v2/rooms/recommend")
-    private ResponseEntity<CommonResponse<RoomRecommendResponseDto>> findRecommendRoomByUserLikePost(){
-        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomService.findRecommendRoomByUserLikePost()));
+    private ResponseEntity<CommonResponse<RoomUserRecommendResponseDto>> findRecommendRoomByUserLikePost(Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomService.findRecommendRoomByUserLikePost(pageable)));
     }
 
     @PutMapping(value = "/api/v1/rooms/edit", consumes = {"multipart/form-data"})

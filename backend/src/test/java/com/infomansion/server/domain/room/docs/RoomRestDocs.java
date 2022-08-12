@@ -2,8 +2,8 @@ package com.infomansion.server.domain.room.docs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infomansion.server.domain.room.domain.Room;
-import com.infomansion.server.domain.room.dto.RoomRecommendResponseDto;
 import com.infomansion.server.domain.room.dto.RoomResponseDto;
+import com.infomansion.server.domain.room.dto.RoomUserRecommendResponseDto;
 import com.infomansion.server.domain.room.service.RoomService;
 import com.infomansion.server.domain.user.domain.User;
 import org.junit.jupiter.api.Test;
@@ -31,16 +31,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureRestDocs
@@ -64,19 +59,29 @@ public class RoomRestDocs {
             roomResponseDtos.add(new RoomResponseDto(Room.builder()
                     .user(User.builder().username("test"+i).build()).build()));
         }
-        given(roomService.findRecommendRoomByUserLikePost()).willReturn(new RoomRecommendResponseDto(roomResponseDtos));
+        Slice<RoomResponseDto> roomSliceDto = new SliceImpl<>(roomResponseDtos, Pageable.ofSize(10), true);
+        RoomUserRecommendResponseDto responseDto = new RoomUserRecommendResponseDto(roomSliceDto);
+        given(roomService.findRecommendRoomByUserLikePost(any(Pageable.class))).willReturn(responseDto);
         // when, then
-        mockMvc.perform(get("/api/v2/rooms/recommend"))
+        mockMvc.perform(get("/api/v2/rooms/recommend")
+                        .param("page", "1")
+                        .param("size", "3"))
                 .andExpect(status().isOk())
                 .andDo(document("room-recommend",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.VARIES).description("사용자 이름으로 검색한 결과")))
-                                .andWithPrefix("data.",
-                                        fieldWithPath("roomResponseDtos[]").type(JsonFieldType.ARRAY).description("추천된 방의 정보"),
-                                        fieldWithPath("roomResponseDtos.[].userName").type(USERNAME.getJsonFieldType()).description(USERNAME.getDescription()),
-                                        fieldWithPath("roomResponseDtos.[].roomImg").type(ROOM_IMG.getJsonFieldType()).description(ROOM_IMG.getDescription())
-                                )
+                        requestParameters(
+                                parameterWithName("page").description("조회할 페이지의 번호"),
+                                parameterWithName("size").description("한 번에 보여줄 데이터의 개수")
+                        ),
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("사용자 이름으로 검색한 결과")))
+                                .andWithPrefix("data.roomResponseDtos.",
+                                        fieldWithPath("content.[].userName").type(USERNAME.getJsonFieldType()).description(USERNAME.getDescription()),
+                                        fieldWithPath("content.[].roomImg").type(ROOM_IMG.getJsonFieldType()).description(ROOM_IMG.getDescription()),
+                                        fieldWithPath("first").type(SLICE_FIRST.getJsonFieldType()).description(SLICE_FIRST.getDescription()),
+                                        fieldWithPath("last").type(SLICE_LAST.getJsonFieldType()).description(SLICE_LAST.getDescription()),
+                                        fieldWithPath("number").type(SLICE_NUMBER.getJsonFieldType()).description(SLICE_NUMBER.getDescription()),
+                                        fieldWithPath("size").type(SLICE_SIZE.getJsonFieldType()).description(SLICE_SIZE.getDescription())                                )
 
                 ));
     }

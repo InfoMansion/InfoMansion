@@ -1,8 +1,6 @@
 package com.infomansion.server.domain.post.service.impl;
 
-import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.domain.Post;
-import com.infomansion.server.domain.post.domain.UserLikePost;
 import com.infomansion.server.domain.post.dto.*;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.repository.UserLikePostRepository;
@@ -23,9 +21,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,27 +53,6 @@ public class PostServiceImpl implements PostService {
             s3Uploader.deleteFiles(deleteImages);
 
         return postRepository.save(requestDto.toEntity(user, userStuff)).getId();
-    }
-
-    @Override
-    public List<Long> findRecommendPostByUserLikePost() {
-        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        String userCategories = user.getCategories();
-
-        List<Category> categories = Arrays.stream(userCategories.split(",")).map(Category::valueOf)
-                .collect(Collectors.toList());
-
-        LocalDateTime start = LocalDateTime.now().minusDays(7);
-        LocalDateTime end = LocalDateTime.now();
-
-        List<Long> recommendUserIds = postRepository.findTop27PostByUserLikePost(user, categories, start, end);
-
-        if(recommendUserIds.size()>27){
-            return new ArrayList<>(recommendUserIds.subList(0,27));
-        }
-        return recommendUserIds;
     }
 
     @Override
@@ -120,7 +95,7 @@ public class PostServiceImpl implements PostService {
         return PostDetailResponseDto.toDto(post,
                 followRepository.existsByFromUserIdAndToUserIs(userId, post.getUser()),
                 userLikePostRepository.existsUserLikePostByPostAndUserId(post, userId)
-                );
+        );
     }
 
     @Override

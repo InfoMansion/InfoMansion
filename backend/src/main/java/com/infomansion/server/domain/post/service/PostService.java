@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface PostService {
     Long createPost(PostCreateRequestDto requestDto);
-    List<Long> findRecommendPostByUserLikePost();
     PostbyUserStuffResponseDto findPostByUserStuffId(Long userStuffId, Pageable pageable);
     PostSearchResponseDto findPostBySearchWordForTitle(String searchWord, Pageable pageable);
     PostSearchResponseDto findPostBySearchWordForContent(String searchWord, Pageable pageable);
@@ -16,3 +15,4 @@ public interface PostService {
     boolean deletePost(Long postId);
     boolean modifyPost(PostModifyRequestDto requestDto);
 }
+

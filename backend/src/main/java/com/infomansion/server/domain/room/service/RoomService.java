@@ -1,7 +1,6 @@
 package com.infomansion.server.domain.room.service;
 
 
-import com.infomansion.server.domain.room.dto.RoomRecommendResponseDto;
 import com.infomansion.server.domain.room.dto.RoomResponseDto;
 import com.infomansion.server.domain.room.dto.RoomUserRecommendResponseDto;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +20,7 @@ public interface RoomService {
     void deleteRoom(Long roomId);
 
     //UserId, UserLikePost를 통해 추천된 RoomImg와 UserName 반환
-    RoomRecommendResponseDto findRecommendRoomByUserLikePost();
+    RoomUserRecommendResponseDto findRecommendRoomByUserLikePost(Pageable pageable);
 
     RoomUserRecommendResponseDto findRecommendRoomByFollowingUsers(Pageable pageable);
 
