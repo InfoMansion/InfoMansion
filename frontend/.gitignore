@@ -34,3 +34,4 @@ yarn-error.log*
 # glb
 /public/stuff-assets/*.glb
 !/public/stuff-assets/IM.glb
+/public/stuffAssets/*.glb
