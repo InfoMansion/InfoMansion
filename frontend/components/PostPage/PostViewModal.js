@@ -18,21 +18,22 @@ import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
 import Router from 'next/router';
 import { postDetailState } from '../../state/postDetailState';
+import { loginUserState } from '../../state/roomState';
 import { useRecoilState } from 'recoil';
 import useAuth from '../../hooks/useAuth';
 
-export default function PostViewModal({ post, showModal, setShowModal }) {
+export default function PostViewModal({ showModal, handleModalClose }) {
   const [cookies] = useCookies(['cookie-name']);
   const handleClose = () => setShowModal(false);
   const [star, setStar] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
-  const [profileImageUrl, setProfileImageUrl] = useState(
-    'https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/profile/9b34c022-bcd5-496d-8d9a-47ac76dee556defaultProfile.png',
-  );
+  const [postUserInfo, setPostUserInfo] = useState('');
   const { auth, setAuth } = useAuth();
-  const [isUserSame, setIsUserSame] = useState(false);
+  const [nowFollow, setNowFollow] = useState();
+  const [userInfo, setUserInfo] = useState();
+  const [loginUser, setLoginUser] = useRecoilState(loginUserState);
 
   const handleMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -60,42 +61,47 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
     }
   };
 
-  const loadDetail = async () => {
+  const getPostUserInfo = async () => {
     try {
-      const { data } = await axios.get(`/api/v1/posts/detail/${post.id}`, {
-        headers: {
-          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-          withCredentials: true,
-        },
-      });
-      console.log(data);
-      setPostDetail(data.data);
+      axios
+        .get(`/api/v1/users/${postDetail.userName}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        })
+        .then(res => {
+          setLoginUser(res.data.data.loginUser);
+          setPostUserInfo(res.data.data);
+          setNowFollow(res.data.data.follower);
+        });
     } catch (e) {
       console.log(e);
     }
   };
 
-  const loadProfileImage = async () => {
+  const getUserInfo = async () => {
     try {
-      const { data } = await axios.get(`/api/v1/users/info/simple`, {
-        headers: {
-          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-          withCredentials: true,
-        },
-      });
-      setProfileImageUrl(data.data.profileImage);
+      axios
+        .get(`/api/v1/users/${auth.username}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        })
+        .then(res => {
+          setUserInfo(res.data.data);
+        });
     } catch (e) {
       console.log(e);
     }
   };
 
   useEffect(() => {
-    loadDetail();
-    loadProfileImage();
-    if (postDetail.userName === auth.username) {
-      setIsUserSame(true);
-    }
-  }, [post.id]);
+    getPostUserInfo();
+  }, [postDetail]);
+
+  useEffect(() => {
+    getUserInfo();
+  }, [postDetail]);
 
   const renderMenu = (
     <Menu
@@ -127,12 +133,11 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
     </Menu>
   );
 
-  console.log(post);
   return (
     <>
       <Dialog
         open={showModal}
-        onClose={handleClose}
+        onClose={handleModalClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         maxWidth="xl"
@@ -173,7 +178,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
               }}
             >
               <img
-                src={profileImageUrl}
+                src={postUserInfo.profileImage}
                 style={{ minHeight: '0', height: '100%', marginRight: '8px' }}
               ></img>
               <div
@@ -185,9 +190,17 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
               >
                 {postDetail.userName}
               </div>
-              <Follow></Follow>
+              {loginUser ? (
+                <div></div>
+              ) : (
+                <Follow
+                  isFollow={postUserInfo.follow}
+                  username={postUserInfo.username}
+                  setNowFollow={setNowFollow}
+                ></Follow>
+              )}
             </div>
-            <IconButton onClick={handleClose}>
+            <IconButton onClick={handleModalClose}>
               <CloseIcon />
             </IconButton>
           </div>
@@ -202,7 +215,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
           }}
         >
           <img
-            src={`${post.defaultPostThumbnail}`}
+            src={`${postDetail.defaultPostThumbnail}`}
             style={{
               display: 'block',
               minWidth: '0',
@@ -230,7 +243,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
                 },
               }}
             >
-              {post.title}
+              {postDetail.title}
             </DialogTitle>
             <DialogContentText
               sx={{
@@ -242,7 +255,9 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
                 },
               }}
             >
-              <div dangerouslySetInnerHTML={{ __html: post.content }}></div>{' '}
+              <div
+                dangerouslySetInnerHTML={{ __html: postDetail.content }}
+              ></div>{' '}
             </DialogContentText>
             <div
               style={{
@@ -271,13 +286,17 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
               <IconButton>
                 <MoveToInboxIcon />
               </IconButton>
-              <IconButton
-                aria-controls={menuId}
-                aria-haspopup="false"
-                onClick={handleMenuOpen}
-              >
-                <MoreVertIcon />
-              </IconButton>
+              {loginUser ? (
+                <IconButton
+                  aria-controls={menuId}
+                  aria-haspopup="false"
+                  onClick={handleMenuOpen}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              ) : (
+                <div></div>
+              )}
             </div>
           </div>
         </div>
@@ -286,7 +305,7 @@ export default function PostViewModal({ post, showModal, setShowModal }) {
             <DialogContentText>댓글기능 추후 추가 예정</DialogContentText>
           </DialogContent>
         </div>
-        {isUserSame && renderMenu}
+        {renderMenu}
       </Dialog>
     </>
   );

@@ -8,6 +8,10 @@ import Profile from '../../components/PostPage/Profile';
 import PostViewModal from '../../components/PostPage/PostViewModal';
 import { useCookies } from 'react-cookie';
 import axios from '../../utils/axios';
+import { postDetailState } from '../../state/postDetailState';
+import { loginUserState } from '../../state/roomState';
+import { useRecoilState } from 'recoil';
+import useAuth from '../../hooks/useAuth';
 
 function a11yProps(index) {
   return {
@@ -40,7 +44,10 @@ export default function searchPost() {
   const [posts, setPosts] = useState(defaultPosts);
   const [showModal, setShowModal] = useState(false);
   const [post, setPost] = useState('');
+  const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+  const { auth, setAuth } = useAuth();
   const [cookies] = useCookies(['cookie-name']);
+  const [loginUser, setLoginUser] = useRecoilState(loginUserState);
 
   const styles = theme => ({
     indicator: {
@@ -50,7 +57,24 @@ export default function searchPost() {
 
   const openModal = post => {
     setPost(post);
-    setShowModal(true);
+    try {
+      axios
+        .get(`/api/v1/posts/detail/${post.id}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        })
+        .then(res => {
+          console.log(res.data);
+          setPostDetail(res.data.data);
+          if (postDetail.userName === auth.username) {
+            setLoginUser(true);
+          }
+        })
+        .then(setShowModal(true));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const getResult = useCallback(
@@ -104,13 +128,17 @@ export default function searchPost() {
   }, [query.keyword]);
   console.log(posts[category]);
 
+  const handleModalClose = () => {
+    setShowModal(false);
+    setPostDetail('');
+  };
+
   const value = categories.indexOf(category);
   return (
     <Box sx={{ width: '100%' }}>
       <PostViewModal
-        post={post}
         showModal={showModal}
-        setShowModal={setShowModal}
+        handleModalClose={handleModalClose}
       ></PostViewModal>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
