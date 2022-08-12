@@ -218,9 +218,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserSearchResponseDto findUserBySearchWordForUserName(String searchWord, Pageable pageable) {
+        String loginUser = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND)).getUsername();
+
         Slice<UserSimpleProfileResponseDto> usersByUserName =
-                userRepository.findUserByUserName(searchWord, pageable)
+                userRepository.findUserByUserName(searchWord, loginUser, pageable)
                         .map(UserSimpleProfileResponseDto::toDto);
+
         return new UserSearchResponseDto(usersByUserName);
     }
 

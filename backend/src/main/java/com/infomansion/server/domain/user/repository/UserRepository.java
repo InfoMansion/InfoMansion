@@ -19,8 +19,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
     boolean existsByUsername(String username);
 
-    @Query("select u from User u where u.username like %:searchWord%")
-    Slice<User> findUserByUserName(@Param("searchWord") String searchWord, Pageable pageable);
+    @Query("select u from User u where u.username like %:searchWord% and not u.username = :loginUser")
+    Slice<User> findUserByUserName(@Param("searchWord") String searchWord, @Param("loginUser") String loginUser, Pageable pageable);
 
     @Query("SELECT u FROM User u JOIN FETCH u.userCredit WHERE u.id = :userId")
     Optional<User> findUserWithCredit(@Param("userId") Long userId);

@@ -292,6 +292,20 @@ public class PostApiControllerTest {
     @Test
     public void Post_검색_성공() throws Exception{
 
+        String email = "infomansion12@test.com";
+        String password = "testPassword11$";
+        String tel = "01012345670";
+        String username = "infomansion123";
+        String uCategories = "IT,COOK,DAILY";
+
+        User newuser = userRepository.save(builder()
+                .email(email)
+                .password(password)
+                .tel(tel)
+                .username(username)
+                .categories(uCategories)
+                .build());
+
         UserStuffSaveRequestDto createDto = UserStuffSaveRequestDto.builder()
                 .stuffId(stuffId).build();
         Long userStuffId = userStuffService.saveUserStuff(createDto);
@@ -331,7 +345,7 @@ public class PostApiControllerTest {
 
         mockMvc.perform(get("/api/v1/users/search/username"+"?searchWord="+searchWord+"&page="+page+"&size="+size))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.data.['usersByUserName'].['content'].size()").value(1));
+                .andExpect((ResultMatcher) jsonPath("$.data.['usersByUserName'].['content'][0].['username']").value("infomansion123"));
 
         mockMvc.perform(get("/api/v1/posts/search/title"+"?searchWord="+searchWord+"&page="+page+"&size="+size))
                 .andExpect(status().isOk())

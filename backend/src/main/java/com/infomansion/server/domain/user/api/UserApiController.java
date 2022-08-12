@@ -53,13 +53,13 @@ public class UserApiController {
     }
 
     @GetMapping("api/v1/users/search/username")
-    public ResponseEntity<CommonResponse<UserSearchResponseDto>> searchUsersByContent(@Valid @RequestParam String searchWord, Pageable pageable){
+    public ResponseEntity<CommonResponse<UserSearchResponseDto>> searchUserByUsername(@Valid @RequestParam String searchWord, Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userService.findUserBySearchWordForUserName(searchWord, pageable)));
     }
 
     @PatchMapping("api/v1/users/changestate")
-    public ResponseEntity<CommonResponse<Boolean>> searchUsersByContent(@Valid @RequestParam String username){
+    public ResponseEntity<CommonResponse<Boolean>> changeUserState(@Valid @RequestParam String username){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userService.changeUserState(username)));
     }
