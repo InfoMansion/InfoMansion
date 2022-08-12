@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -82,6 +83,12 @@ public class RoomServiceImpl implements RoomService {
             throw new RuntimeException(e);
         }
         return true;
+    }
+
+    @Override
+    public List<String> findRandomRoomImage() {
+        return roomRepository.findRandomRoom().stream().map(Room::getRoomImg)
+                .collect(Collectors.toList());
     }
 
     @Override

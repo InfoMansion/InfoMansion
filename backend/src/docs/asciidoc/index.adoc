@@ -826,6 +826,22 @@ include::{snippets}/room-recommend/response-fields.adoc[]
 
 ---
 
+[[Room-random]]
+== 랜덤으로 Room Image를 조회하는 API
+
+랜덤으로 20개의 Room Image를 조회하는 API
+
+=== Http Request
+include::{snippets}/room-random-image/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/room-random-image/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/room-random-image/response-fields.adoc[]
+
+---
+
 [[Room-edit]]
 == 수정된 Room Image 저장하는 API
 

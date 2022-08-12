@@ -46,6 +46,11 @@ public class RoomApiController {
     public ResponseEntity<? extends BasicResponse> editRoom(@RequestParam(value = "roomImg")MultipartFile roomImage) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(roomService.editRoomImg(roomImage)));
+    }
 
+    @GetMapping("/api/v1/rooms/random")
+    public ResponseEntity<? extends BasicResponse> findRandomRoomImage() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(roomService.findRandomRoomImage()));
     }
 }

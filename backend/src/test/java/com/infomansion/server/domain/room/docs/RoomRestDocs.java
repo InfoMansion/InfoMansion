@@ -99,4 +99,19 @@ public class RoomRestDocs {
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("room 이미지 수정 성공")))
                 ));
     }
+
+    @Test
+    public void Room_이미지_랜덤_조회() throws Exception {
+        List<String> response = new ArrayList<>();
+        for(int i = 1; i <= 5; i++) response.add("room image url " + i);
+        given(roomService.findRandomRoomImage()).willReturn(response);
+
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/rooms/random"))
+                .andExpect(status().isOk())
+                .andDo(document("room-random-image",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("랜덤으로 조회한 Room Image 20개")))
+                ));
+    }
 }

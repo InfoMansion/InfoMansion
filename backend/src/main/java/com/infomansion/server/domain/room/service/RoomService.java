@@ -27,4 +27,6 @@ public interface RoomService {
 
     boolean editRoomImg(MultipartFile roomImage);
 
+    List<String> findRandomRoomImage();
+
 }
