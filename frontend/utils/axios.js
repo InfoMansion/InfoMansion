@@ -31,24 +31,24 @@ axiosApiInstance.interceptors.request.use(
         alert('세션이 만료됐습니다.');
         console.log(e);
         localStorage.clear();
-        window.location.replace('/');
+        //window.location.replace('/');
       }
     }
     return config;
   },
-  error => {
-    Promise.reject(error);
-  },
+  // error => {
+  //   Promise.reject(error);
+  // },
 );
 
 axiosApiInstance.interceptors.response.use(
   response => response,
-  // async function (error) {
-  //   if (error.response.status === 401 && !originalRequest._retry) {
-  //     alert('세션이 만료됐습니다.');
-  //     window.location.replace('/');
-  //   }
-  // },
+  async function (error) {
+    if (error === 'cancleToken') {
+      //    window.location.replace('/');
+      //    console.log('ererer : ', error);
+    }
+  },
 );
 
 export default axiosApiInstance;

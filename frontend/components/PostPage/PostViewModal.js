@@ -31,8 +31,8 @@ export default function PostViewModal({ showModal, handleModalClose }) {
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   const [postUserInfo, setPostUserInfo] = useState('');
   const { auth, setAuth } = useAuth();
-  const [nowFollow, setNowFollow] = useState();
-  const [userInfo, setUserInfo] = useState();
+  const [, setNowFollow] = useState();
+  const [isUser, setIsUser] = useState(false);
   const [loginUser, setLoginUser] = useRecoilState(loginUserState);
 
   const handleMenuOpen = event => {
@@ -70,7 +70,9 @@ export default function PostViewModal({ showModal, handleModalClose }) {
           },
         })
         .then(res => {
-          setLoginUser(res.data.data.loginUser);
+          if (res === undefined) return;
+
+          setIsUser(res.data.data.loginUser);
           setPostUserInfo(res.data.data);
           setNowFollow(res.data.data.follower);
         });
@@ -79,28 +81,8 @@ export default function PostViewModal({ showModal, handleModalClose }) {
     }
   };
 
-  const getUserInfo = async () => {
-    try {
-      axios
-        .get(`/api/v1/users/${auth.username}`, {
-          headers: {
-            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-          },
-        })
-        .then(res => {
-          setUserInfo(res.data.data);
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
     getPostUserInfo();
-  }, [postDetail]);
-
-  useEffect(() => {
-    getUserInfo();
   }, [postDetail]);
 
   const renderMenu = (
@@ -190,7 +172,7 @@ export default function PostViewModal({ showModal, handleModalClose }) {
               >
                 {postDetail.userName}
               </div>
-              {loginUser ? (
+              {isUser ? (
                 <div></div>
               ) : (
                 <Follow
@@ -286,7 +268,7 @@ export default function PostViewModal({ showModal, handleModalClose }) {
               <IconButton>
                 <MoveToInboxIcon />
               </IconButton>
-              {loginUser ? (
+              {isUser ? (
                 <IconButton
                   aria-controls={menuId}
                   aria-haspopup="false"
