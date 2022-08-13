@@ -69,4 +69,10 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(userService.deleteUser()));
     }
+
+    @GetMapping("/api/v1/users/credit")
+    public ResponseEntity<? extends BasicResponse> getUserCredit() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(userService.findUserCredit()));
+    }
 }

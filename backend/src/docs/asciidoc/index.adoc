@@ -754,6 +754,21 @@ include::{snippets}/user-forgot-password/http-response.adoc[]
 include::{snippets}/user-forgot-password/response-fields.adoc[]
 
 ---
+[[User-Credit]]
+=== 사용자의 Credit 조회
+
+로그인한 사용자의 Credit을 조회하는 API
+
+=== Http Request
+include::{snippets}/user-credit/http-request.adoc[]
+
+=== Http Response
+include::{snippets}/user-credit/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/user-credit/response-fields.adoc[]
+
+---
 [[Search-API]]
 = Search API
 

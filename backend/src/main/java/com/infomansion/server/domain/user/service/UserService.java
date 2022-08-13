@@ -28,4 +28,5 @@ public interface UserService {
     List<UserFollowInfoResponseDto> findFollowingUserList(String username);
     Boolean changeUserState(String username);
     Long deleteUser();
+    UserCreditInfoResponseDto findUserCredit();
 }

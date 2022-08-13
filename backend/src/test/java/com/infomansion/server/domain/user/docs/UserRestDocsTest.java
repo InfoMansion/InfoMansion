@@ -238,4 +238,24 @@ public class UserRestDocsTest {
 
                 ));
     }
+
+    @Test
+    public void 로그인한_사용자의_credit을_조회() throws Exception {
+        // given
+        UserCreditInfoResponseDto responseDto = new UserCreditInfoResponseDto(350L);
+        given(userService.findUserCredit()).willReturn(responseDto);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/users/credit"))
+                .andExpect(status().isOk())
+                .andDo(document("user-credit",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("사용자의 크레딧 정보")))
+                                .andWithPrefix("data.",
+                                        fieldWithPath("credit").type(JsonFieldType.NUMBER).description("사용자가 보유한 크레딧")
+                                )
+
+                ));
+    }
 }

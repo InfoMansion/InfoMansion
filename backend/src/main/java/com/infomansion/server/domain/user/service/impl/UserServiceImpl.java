@@ -8,8 +8,10 @@ import com.infomansion.server.domain.room.repository.RoomRepository;
 import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.Follow;
 import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.domain.UserCredit;
 import com.infomansion.server.domain.user.dto.*;
 import com.infomansion.server.domain.user.repository.FollowRepository;
+import com.infomansion.server.domain.user.repository.UserCreditRepository;
 import com.infomansion.server.domain.user.repository.UserRepository;
 import com.infomansion.server.domain.user.service.UserService;
 import com.infomansion.server.domain.user.service.VerifyEmailService;
@@ -59,6 +61,7 @@ public class UserServiceImpl implements UserService {
     private final RoomRepository roomRepository;
     private final FollowRepository followRepository;
     private final NotificationRepository notificationRepository;
+    private final UserCreditRepository userCreditRepository;
 
 
     @Override
@@ -299,6 +302,15 @@ public class UserServiceImpl implements UserService {
         user.deleteUser();
         userRepository.save(user);
         return user.getId();
+    }
+
+    @Override
+    public UserCreditInfoResponseDto findUserCredit() {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        UserCredit userCredit = userCreditRepository.findById(user.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.CREDIT_NOT_FOUND));
+        return new UserCreditInfoResponseDto(userCredit.getCredit());
     }
 
     private String getRandomPassword(int size) {
