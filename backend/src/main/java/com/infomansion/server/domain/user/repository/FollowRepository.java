@@ -2,6 +2,7 @@ package com.infomansion.server.domain.user.repository;
 
 import com.infomansion.server.domain.user.domain.Follow;
 import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.dto.UserFollowInfoResponseDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,11 +18,27 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     boolean existsByFromUserIdAndToUserIs(Long fromUserId, User toUser);
 
-    @Query("SELECT f FROM Follow f join fetch f.toUser WHERE f.fromUser = :fromUser")
-    List<Follow> findFollowingUserList(@Param("fromUser") User fromUser);
+    @Query(value = "SELECT u.username, u.profile_image, " +
+            "CASE " +
+            "WHEN f2.from_user_id IS NULL THEN 0 " +
+            "    ELSE 1 " +
+            "END " +
+            "FROM follow f1 INNER JOIN user u ON f1.to_user_id = u.user_id " +
+            "LEFT JOIN follow f2 " +
+            "ON f2.from_user_id = :loginUserId AND f2.to_user_id = f1.to_user_id " +
+            "WHERE f1.from_user_id = :fromUserId", nativeQuery = true)
+    List<Object[]> findFollowingUserList(@Param("loginUserId") Long loginUserId, @Param("fromUserId") Long fromUserId);
 
-    @Query("SELECT f FROM Follow f join fetch f.toUser WHERE f.toUser = :toUser")
-    List<Follow> findFollowerUserList(@Param("toUser") User toUser);
+    @Query(value = "SELECT u.username AS username, u.profile_image AS profile_image, " +
+            "CASE " +
+            "WHEN f2.from_user_id IS NULL THEN 0 " +
+            "    ELSE 1 " +
+            "END follow_flag " +
+            "FROM follow f1 INNER JOIN user u ON f1.from_user_id = u.user_id " +
+            "LEFT JOIN follow f2 " +
+            "ON f2.from_user_id = :loginUserId AND f2.to_user_id = f1.from_user_id " +
+            "WHERE f1.to_user_id = :toUserId", nativeQuery = true)
+    List<Object[]> findFollowerUserList(@Param("loginUserId") Long loginUserId, @Param("toUserId") Long toUserId);
 
     @Query("SELECT f.toUser.id FROM Follow f WHERE f.fromUser = :fromUser")
     Slice<Long> findFollowingUserRecommend(@Param("fromUser") User fromUser, Pageable pageable);

@@ -14,13 +14,6 @@ import java.util.Optional;
 
 public interface StuffRepository extends JpaRepository<Stuff, Long> {
 
-    @Override
-    @Query("select s from Stuff s where s.id = :id")
-    Optional<Stuff> findById(@Param("id") Long id);
-
-    @Override
-    List<Stuff> findAll();
-
     @Query(value =
             "SELECT *" +
             "FROM " +

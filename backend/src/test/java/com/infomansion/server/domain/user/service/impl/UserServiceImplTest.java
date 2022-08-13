@@ -302,7 +302,7 @@ class UserServiceImplTest {
         }
 
         // then
-        List<UserSimpleProfileResponseDto> followingUserList = userService.findFollowingUserList("infomansion");
+        List<UserFollowInfoResponseDto> followingUserList = userService.findFollowingUserList("infomansion");
         assertThat(followingUserList.size()).isEqualTo(2);
     }
 
@@ -359,10 +359,7 @@ class UserServiceImplTest {
         }
 
         // when
-        List<UserSimpleProfileResponseDto> response = userService.findFollowingUserList("infomansion");
-        for (UserSimpleProfileResponseDto responseDto : response) {
-            System.out.println("responseDto = " + responseDto.getUsername());
-        }
+        List<UserFollowInfoResponseDto> response = userService.findFollowingUserList("infomansion");
         // then
         assertThat(response.size()).isEqualTo(5);
         for(int i = 0; i < 5; i++)
@@ -390,7 +387,7 @@ class UserServiceImplTest {
         userService.followUser(username);
 
         // when
-        List<UserSimpleProfileResponseDto> response = userService.findFollowerUserList(username);
+        List<UserFollowInfoResponseDto> response = userService.findFollowerUserList(username);
 
         // then
         assertThat(response.size()).isEqualTo(1);

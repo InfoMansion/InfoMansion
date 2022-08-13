@@ -24,8 +24,8 @@ public interface UserService {
     UserSearchResponseDto findUserBySearchWordForUserName(String searchWord, Pageable pageable);
     boolean followUser(String username);
     boolean unFollowUser(String username);
-    List<UserSimpleProfileResponseDto> findFollowerUserList(String username);
-    List<UserSimpleProfileResponseDto> findFollowingUserList(String username);
+    List<UserFollowInfoResponseDto> findFollowerUserList(String username);
+    List<UserFollowInfoResponseDto> findFollowingUserList(String username);
     Boolean changeUserState(String username);
     Long deleteUser();
 }

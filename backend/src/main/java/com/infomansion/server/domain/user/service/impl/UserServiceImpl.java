@@ -258,20 +258,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserSimpleProfileResponseDto> findFollowerUserList(String username) {
+    public List<UserFollowInfoResponseDto> findFollowerUserList(String username) {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         User toUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return followRepository.findFollowerUserList(toUser).stream()
-                .map(follow -> UserSimpleProfileResponseDto.toDto(follow.getFromUser()))
+        return followRepository.findFollowerUserList(user.getId(), toUser.getId())
+                .stream().map(UserFollowInfoResponseDto::toResponseDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<UserSimpleProfileResponseDto> findFollowingUserList(String username) {
+    public List<UserFollowInfoResponseDto> findFollowingUserList(String username) {
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         User fromUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return followRepository.findFollowingUserList(fromUser).stream()
-                .map(follow -> UserSimpleProfileResponseDto.toDto(follow.getToUser()))
+        return followRepository.findFollowingUserList(user.getId(), fromUser.getId())
+                .stream().map(UserFollowInfoResponseDto::toResponseDto)
                 .collect(Collectors.toList());
     }
 

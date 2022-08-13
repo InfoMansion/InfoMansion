@@ -1,6 +1,7 @@
 package com.infomansion.server.domain.user.docs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.infomansion.server.domain.user.dto.UserFollowInfoResponseDto;
 import com.infomansion.server.domain.user.dto.UserSimpleProfileResponseDto;
 import com.infomansion.server.domain.user.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -89,10 +90,10 @@ public class FollowRestDocsTest {
     public void 사용자의_팔로잉_리스트() throws Exception {
         // given
         String request = "infomansion";
-        List<UserSimpleProfileResponseDto> response = new ArrayList<>();
+        List<UserFollowInfoResponseDto> response = new ArrayList<>();
         for(int i = 0; i < 3; i++) {
-            response.add(UserSimpleProfileResponseDto.builder()
-                    .username("username"+i).profileImage("profileImage").build());
+            response.add(UserFollowInfoResponseDto.builder()
+                    .username("username"+i).profileImage("profileImage").followFlag(true).build());
         }
         given(userService.findFollowingUserList(anyString())).willReturn(response);
 
@@ -108,7 +109,8 @@ public class FollowRestDocsTest {
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("팔로잉 목록")))
                                 .andWithPrefix("data.[].",
                                         fieldWithPath("username").type(USERNAME.getJsonFieldType()).description(USERNAME.getDescription()),
-                                        fieldWithPath("profileImage").type(PROFILE_IMAGE.getJsonFieldType()).description(PROFILE_IMAGE.getDescription()))
+                                        fieldWithPath("profileImage").type(PROFILE_IMAGE.getJsonFieldType()).description(PROFILE_IMAGE.getDescription()),
+                                        fieldWithPath("followFlag").type(JsonFieldType.BOOLEAN).description("로그인한 사용자가 해당 user를 팔로우 했는지 구별"))
                 ));
     }
 
@@ -116,10 +118,10 @@ public class FollowRestDocsTest {
     public void 사용자의_팔로워_리스트() throws Exception {
         // given
         String request = "infomansion";
-        List<UserSimpleProfileResponseDto> response = new ArrayList<>();
+        List<UserFollowInfoResponseDto> response = new ArrayList<>();
         for(int i = 0; i < 3; i++) {
-            response.add(UserSimpleProfileResponseDto.builder()
-                    .username("username"+i).profileImage("profileImage").build());
+            response.add(UserFollowInfoResponseDto.builder()
+                    .username("username"+i).profileImage("profileImage").followFlag(true).build());
         }
         given(userService.findFollowerUserList(anyString())).willReturn(response);
 
@@ -135,7 +137,8 @@ public class FollowRestDocsTest {
                         responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("팔로워 목록")))
                                 .andWithPrefix("data.[].",
                                         fieldWithPath("username").type(USERNAME.getJsonFieldType()).description(USERNAME.getDescription()),
-                                        fieldWithPath("profileImage").type(PROFILE_IMAGE.getJsonFieldType()).description(PROFILE_IMAGE.getDescription()))
+                                        fieldWithPath("profileImage").type(PROFILE_IMAGE.getJsonFieldType()).description(PROFILE_IMAGE.getDescription()),
+                                        fieldWithPath("followFlag").type(JsonFieldType.BOOLEAN).description("로그인한 사용자가 해당 user를 팔로우 했는지 구별"))
                 ));
     }
 }
