@@ -129,6 +129,7 @@ public class Post extends BaseTimeEntityAtSoftDelete {
 
     public void setUserAndUserStuff(User user, UserStuff userStuff){
         this.user = user;
+        if(userStuff==null) return;
         this.userStuff = userStuff;
         this.category = userStuff.getCategory();
         this.defaultPostThumbnail = userStuff.getCategory().getCategoryDefaultThumbnail();
