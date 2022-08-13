@@ -17,6 +17,18 @@
   display: inline-block;
   margin: 0.4rem;
 }
+.itemlogin {
+  content: '';
+  background-image: url('/test.png');
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 1;
+  /* background-color: goldenrod; */
+  clip-path: polygon(50% 0, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+  scale : 1
+}
 .item::before {
   /* Goldenrod outline on the hexagon */
   content: '';

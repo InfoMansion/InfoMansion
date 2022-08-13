@@ -1,0 +1,106 @@
+[
+    {
+        "left" : 0,
+        "top" : 0,
+        "data" : [
+            {
+                "left" : -10,
+                "top" : 40,
+                "size" : 50,
+                "opacity" : 60
+            },
+            {
+                "left" : 22,
+                "top" : 16,
+                "size" : 35,
+                "opacity" : 60
+            },
+            {
+                "left" : 10,
+                "top" : -5,
+                "size" : 15,
+                "opacity" : 80
+            },
+            {
+                "left" : 70,
+                "top" : 50,
+                "size" : 18,
+                "opacity" : 85
+            }
+        ]
+    },
+    {
+        "right" : 0,
+        "top" : 0,
+        "data" : [
+            {
+                "right" : 10,
+                "top" : 5,
+                "size" : 30,
+                "opacity" : 65
+            },
+            {
+                "right" : 28,
+                "top" : 25,
+                "size" : 40,
+                "opacity" : 60
+            },
+            {
+                "right" : 52,
+                "top" : -20,
+                "size" : 60,
+                "opacity" : 40
+            },
+            {
+                "right" : 7,
+                "top" : 90,
+                "size" : 24,
+                "opacity" : 80
+            }
+        ]
+    },
+    {
+        "left" : 0,
+        "bottom" : 0,
+        "data" : [
+            {
+                "left" : 7,
+                "bottom" : 8,
+                "size" : 43,
+                "opacity" : 45
+            },
+            {
+                "left" : 47,
+                "bottom" : 27,
+                "size" : 30,
+                "opacity" : 60
+            }
+        ]
+    },
+    {
+        "width" : 400,
+        "height" : 400,
+        "right" : 0,
+        "bottom" : 0,
+        "data" : [
+            {
+                "right" : 10,
+                "bottom" : 5,
+                "size" : 40,
+                "opacity" : 50
+            },
+            {
+                "right" : 42,
+                "bottom" : -12,
+                "size" : 30,
+                "opacity" : 70
+            },
+            {
+                "right" : 70,
+                "bottom" : 35,
+                "size" : 18,
+                "opacity" : 75
+            }
+        ]
+    }
+]
