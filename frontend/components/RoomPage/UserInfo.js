@@ -1,4 +1,12 @@
-import { Avatar, Box, Divider, Grid, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Dialog,
+  Divider,
+  Grid,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState, useCallback } from 'react';
 import RecentPost from './RecentPosts';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -8,6 +16,13 @@ import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import Follow from '../Follow';
 import FollowList from './atoms/FollowList';
+import StarIcon from '@mui/icons-material/Star';
+import Post from './atoms/Post';
+import { useRecoilState } from 'recoil';
+import { postDetailState } from '../../state/postDetailState';
+import PostViewModal from '../PostPage/PostViewModal';
+import useAuth from '../../hooks/useAuth';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function UserInfo({
   loginUser,
@@ -20,6 +35,11 @@ export default function UserInfo({
   const [posts, setPosts] = useState([]);
   const [modalInfo, setModalInfo] = useState(undefined);
   const [cookies] = useCookies(['cookie-name']);
+  const [likePosts, setLikePosts] = useState(undefined);
+  const [openLikePostModal, setOpenLikePostModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+  const { auth } = useAuth();
 
   const textStyle = {
     color: focused ? 'black' : 'white',
@@ -83,6 +103,50 @@ export default function UserInfo({
     }
   };
 
+  const showLikePostList = async () => {
+    try {
+      const { data } = await axios.get(`/api/v2/posts/my-likes`, {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+        },
+      });
+      console.log(data);
+      setLikePosts(data.data);
+      setOpenLikePostModal(true);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const closeModal = () => {
+    setLikePosts([]);
+  };
+
+  const openModal = post => {
+    try {
+      axios
+        .get(`/api/v1/posts/detail/${post.id}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        })
+        .then(res => {
+          console.log(res.data);
+          setPostDetail(res.data.data);
+          if (postDetail.userName === auth.username) {
+            setLoginUser(true);
+          }
+        })
+        .then(setShowModal(true));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleLikeModalClose = () => {
+    setShowModal(false);
+    setPostDetail('');
+  };
+
   return (
     <Box
       style={{
@@ -90,6 +154,10 @@ export default function UserInfo({
         width: '400px',
       }}
     >
+      <PostViewModal
+        showModal={showModal}
+        handleModalClose={handleLikeModalClose}
+      ></PostViewModal>
       {modalInfo !== undefined && (
         <FollowList
           modalInfo={modalInfo}
@@ -97,6 +165,50 @@ export default function UserInfo({
         ></FollowList>
       )}
 
+      {likePosts !== undefined && (
+        <Dialog
+          open={openLikePostModal}
+          onClose={() => setOpenLikePostModal(prev => !prev)}
+          sx={{
+            '.MuiPaper-root': {
+              maxWidth: undefined,
+              maxHeight: '500px',
+              width: '80vw',
+              height: '80vh',
+              minHeight: '0',
+              borderRadius: '6px',
+            },
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              minHeight: '0',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              margin: '5px 10px',
+              borderBottom: '1px solid rgba(0, 0, 0, .2)',
+            }}
+          >
+            <div style={{ fontSize: '25px' }}>좋아요 글 목록</div>
+            <IconButton onClick={() => setOpenLikePostModal(prev => !prev)}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+          {likePosts.map(post => (
+            <Box>
+              <Post
+                post={post}
+                totheight={100}
+                picwidth={70}
+                maxcontent={50}
+                openModal={openModal}
+              />
+              <Divider sx={{ m: 0 }} />
+            </Box>
+          ))}
+        </Dialog>
+      )}
       <Grid container sx={{ p: 2 }}>
         <Grid
           item
@@ -128,9 +240,18 @@ export default function UserInfo({
             </Typography>
 
             {loginUser ? (
-              <Link href={userInfo.username + '/dashboard'}>
-                <SettingsIcon sx={{ mx: 2 }} style={textStyle} />
-              </Link>
+              <>
+                <Link href={userInfo.username + '/dashboard'}>
+                  <SettingsIcon
+                    sx={{ mx: 2 }}
+                    style={{ ...textStyle, cursor: 'pointer' }}
+                  />
+                </Link>
+                <StarIcon
+                  onClick={showLikePostList}
+                  style={{ ...textStyle, cursor: 'pointer' }}
+                />
+              </>
             ) : (
               <></>
               // <Follow
@@ -151,10 +272,13 @@ export default function UserInfo({
             <Typography
               variant="body2"
               onClick={getFollowingInfo}
-              style={{ display: 'flex', ...textStyle }}
+              style={{ ...textStyle, display: 'flex', cursor: 'pointer' }}
             >
               팔로우
-              <Typography style={textStyle} sx={{ ml: 1, mr: 2 }}>
+              <Typography
+                style={{ ...textStyle, cursor: 'pointer' }}
+                sx={{ ml: 1, mr: 2 }}
+              >
                 {userInfo.following}
               </Typography>
             </Typography>
@@ -162,7 +286,7 @@ export default function UserInfo({
             <Typography
               variant="body2"
               onClick={getFollowerInfo}
-              style={{ display: 'flex' }}
+              style={{ ...textStyle, display: 'flex', cursor: 'pointer' }}
             >
               팔로잉
               <Typography style={textStyle} sx={{ ml: 1 }}>
