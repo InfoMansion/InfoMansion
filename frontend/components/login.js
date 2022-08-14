@@ -45,8 +45,8 @@ export default function LogIn({ onSignIn }) {
   const [inputId, setInputId] = useState('');
   const [inputPw, setInputPw] = useState('');
   const { setAuth } = useAuth();
-  const [boxWidth, setBoxWidth] = useState(300);
-  const [boxHeight, setBoxHeight] = useState(300);
+  const [boxWidth, setBoxWidth] = useState(0.4 * window.innerWidth);
+  const [boxHeight, setBoxHeight] = useState(0.3 * window.innerWidth);
 
   const confirmId = /^[\w+_]\w+@\w+\.\w+/.test(inputId);
   const confirmPw = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(inputPw);
