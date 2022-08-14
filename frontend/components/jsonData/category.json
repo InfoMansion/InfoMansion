@@ -1,66 +1,74 @@
 {
-    "SPORTS" : {
-        "alias" : "스포츠",
-        "color" : "#757F94"
-    },
-    "DAILY" : {
-        "alias" : "데일리",
-        "color" : "#B0F0CE"
-    },
-    "FASHION" : {
-        "alias" : "패션",
-        "color" : "#FF8BB9"
-    },
-    "BEAUTY" : {
-        "alias" : "뷰티",
-        "color" : "#F082B5"
-    },
-    "TRAVEL" : {
-        "alias" : "여행",
-        "color" : "#C3A2F5"
-    },
-    "COOK" : {
-        "alias" : "쿠킹",
-        "color" : "#825F53"
-    },
-    "ART" : {
-        "alias" : "미술",
-        "color" : "#F082B5"
-    },
-    "MUSIC" : {
-        "alias" : "음악",
-        "color" : "#FFFD92"
-    },
-    "INTERIOR" : {
-        "alias" : "인테리어",
-        "color" : "#F0BFAF"
-    },
-    "NATURE" : {
-        "alias" : "자연",
-        "color" : "#B7EBA8"
-    },
-    "IT" : {
-        "alias" : "IT",
-        "color" : "#C0F593"
-    },
-    "GAME" : {
-        "alias" : "게임",
-        "color" : "#E7B2EE"
-    },
-    "CLEANING" : {
-        "alias" : "청소",
-        "color" : "#123456"
-    },
-    "CULTURE" : {
-        "alias" : "문화/시사",
-        "color" : "#F0B789"
-    },
-    "STUDY" : {
-        "alias" : "공부",
-        "color" : "#B3E1FF"
-    },
-    "HOMEAPPLIANCES" : {
-        "alias" : "가전제품",
-        "color" : "#AEC2B9"
-    }
+  "SPORTS": {
+    "alias": "스포츠",
+    "color": "#757F94"
+  },
+  "DAILY": {
+    "alias": "데일리",
+    "color": "#B0F0CE"
+  },
+  "FASHION": {
+    "alias": "패션",
+    "color": "#FF8BB9"
+  },
+  "BEAUTY": {
+    "alias": "뷰티",
+    "color": "#F082B5"
+  },
+  "TRAVEL": {
+    "alias": "여행",
+    "color": "#C3A2F5"
+  },
+  "COOK": {
+    "alias": "쿠킹",
+    "color": "#825F53"
+  },
+  "ART": {
+    "alias": "미술",
+    "color": "#F082B5"
+  },
+  "MUSIC": {
+    "alias": "음악",
+    "color": "#FFFD92"
+  },
+  "INTERIOR": {
+    "alias": "인테리어",
+    "color": "#F0BFAF"
+  },
+  "NATURE": {
+    "alias": "자연",
+    "color": "#B7EBA8"
+  },
+  "IT": {
+    "alias": "IT",
+    "color": "#C0F593"
+  },
+  "GAME": {
+    "alias": "게임",
+    "color": "#E7B2EE"
+  },
+  "CLEANING": {
+    "alias": "청소",
+    "color": "#123456"
+  },
+  "CULTURE": {
+    "alias": "문화/시사",
+    "color": "#F0B789"
+  },
+  "STUDY": {
+    "alias": "공부",
+    "color": "#B3E1FF"
+  },
+  "HOMEAPPLIANCES": {
+    "alias": "가전제품",
+    "color": "#AEC2B9"
+  },
+  "GUESTBOOK": {
+    "alias": "방명록",
+    "color": "#AEC2B9"
+  },
+  "POSTBOX": {
+    "alias": "정리함",
+    "color": "#AEC2B9"
+  }
 }

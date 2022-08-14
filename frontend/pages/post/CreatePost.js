@@ -10,24 +10,25 @@ import { useRecoilState } from 'recoil';
 export default function createPost() {
   //추후에 state관리 여기서 할 예정
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState([]);
+  const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
   const [stuffId, setStuffId] = useState('');
   const [cookies] = useCookies(['cookie-name']);
   const [imageUrlList, setImageUrlList] = useState([]);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+  const [tempId, setTempId] = useState('');
 
   const handleSave = async () => {
-    if (!postDetail) {
+    if (!tempId) {
       try {
         const userPost = {
           userStuffId: stuffId,
           title: title,
           content: content,
-          images: imageUrlList,
+          // images: imageUrlList,
         };
         console.log(userPost);
-        const { data } = await axios.post('/api/v1/posts', userPost, {
+        const { data } = await axios.post('/api/v2/posts', userPost, {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
             withCredentials: true,
@@ -40,13 +41,13 @@ export default function createPost() {
     } else {
       try {
         const userPost = {
-          postId: postDetail.id,
           userStuffId: stuffId,
           title: title,
           content: content,
-          images: imageUrlList,
+          // images: imageUrlList,
         };
-        const { data } = await axios.put('/api/v1/posts', userPost, {
+        console.log(userPost);
+        const { data } = await axios.post(`/api/v2/posts/${tempId}`, userPost, {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
             withCredentials: true,
@@ -58,8 +59,68 @@ export default function createPost() {
       }
     }
   };
+
+  const handleTempSave = async () => {
+    if (!tempId) {
+      try {
+        const userPost = {
+          title: title,
+          content: content,
+        };
+        console.log(userPost);
+        const { data } = await axios.post('/api/v2/posts/temp', userPost, {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            withCredentials: true,
+          },
+        });
+        console.log(data);
+        alert('임시저장 되었습니다.');
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      try {
+        const userPost = {
+          title: title,
+          content: content,
+        };
+        console.log(userPost);
+        const { data } = await axios.post(
+          `/api/v2/posts/temp/${tempId}`,
+          userPost,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+              withCredentials: true,
+            },
+          },
+        );
+        console.log(data);
+        alert('임시저장 되었습니다.');
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
   return (
     <div style={{ position: 'relative' }}>
+      <Button
+        type="submit"
+        variant="contained"
+        style={{
+          position: 'absolute',
+          right: 100,
+          top: 20,
+          backgroundColor: MAIN_COLOR,
+          display: 'block',
+          marginBottom: '0px',
+        }}
+        onClick={handleTempSave}
+      >
+        임시저장
+      </Button>
       <Button
         type="submit"
         variant="contained"
@@ -83,8 +144,10 @@ export default function createPost() {
         category={category}
         onCategoryChange={setCategory}
         setStuffId={setStuffId}
-        setImageUrlList={setImageUrlList}
-        imageUrlList={imageUrlList}
+        tempId={tempId}
+        setTempId={setTempId}
+        // setImageUrlList={setImageUrlList}
+        // imageUrlList={imageUrlList}
       />
     </div>
   );

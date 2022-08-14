@@ -166,7 +166,7 @@ export default function PostViewModal({ showModal, handleModalClose }) {
       <MenuItem
         onClick={() => {
           Router.push({
-            pathname: '/post/CreatePost',
+            pathname: '/post/UpdatePost',
           });
         }}
       >

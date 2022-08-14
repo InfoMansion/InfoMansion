@@ -16,6 +16,11 @@ import { postDetailState } from '../../state/postDetailState';
 import { useRecoilState } from 'recoil';
 import Router from 'next/router';
 
+Router.events.on('routeChangeStart', () => {
+  localStorage.removeItem('title');
+  localStorage.removeItem('content');
+});
+
 const ReactQuill = dynamic(
   async () => {
     const { default: RQ } = await import('react-quill');
@@ -55,61 +60,42 @@ const Editor = ({
   setContent,
   setImageUrlList,
   imageUrlList,
-  setTempId,
-  tempId,
   ...rest
 }) => {
+  const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   const [cookies] = useCookies(['cookie-name']);
   const QuillRef = useRef();
-  const [nowContent, setNowContent] = useState('content');
-  const [nowTitle, setNowTitle] = useState('title');
-
+  const [prevContent, setPrevContent] = useState('');
+  const [prevTitle, setPrevTitle] = useState('');
   const onChange = (content, delta, source, editor) => {
     setContent(content);
-    setNowContent(content);
+    setPrevContent(content);
     localStorage.setItem('content', content);
-    console.log(nowContent);
   };
 
-  // const setFirstImgList = () => {
-  //   const tagList = (postDetail.content ?? '').split('src=');
-  //   const firstImgList = [];
-  //   if (tagList.length > 1) {
-  //     let idx = 1;
-  //     while (idx < tagList.length) {
-  //       const closeIndex = tagList[idx].indexOf('>');
-  //       const imgUrl = tagList[idx].slice(1, closeIndex - 1);
-  //       firstImgList.push(imgUrl);
-  //       idx += 2;
-  //     }
-  //     console.log(firstImgList);
-  //     setImageUrlList([...firstImgList]);
-  //     console.log(imageUrlList);
-  //   }
-  // };
-
   useEffect(() => {
-    setNowTitle(title);
+    setPrevTitle(title);
     localStorage.setItem('title', title);
-    console.log(nowTitle);
   }, [title]);
 
   const ImageHandler = () => {
     const imageInput = document.createElement('input');
+    const tempTitle = localStorage.getItem('title');
+    const tempContent = localStorage.getItem('content');
+    const post = {
+      title: tempTitle,
+      content: tempContent,
+    };
+    console.log(post);
+    const userPost = JSON.stringify(post);
+    const formData = new FormData();
     imageInput.setAttribute('type', 'file');
     imageInput.setAttribute('accept', 'image/jpg,image/png,image/jpeg');
     imageInput.click();
-    const tempTitle = localStorage.getItem('title');
-    const tempContent = localStorage.getItem('content');
+
     imageInput.onchange = async event => {
       const files = event.target.files;
       if (files[0]) {
-        const userPostJson = {
-          title: tempTitle,
-          content: tempContent,
-        };
-        const userPost = JSON.stringify(userPostJson);
-        const formData = new FormData();
         formData.append('image', files[0]);
         formData.append(
           'post',
@@ -119,7 +105,7 @@ const Editor = ({
         );
         try {
           const { data } = await axios.post(
-            '/api/v2/posts/upload/temp',
+            `/api/v2/posts/upload/${postDetail.id}`,
             formData,
             {
               headers: {
@@ -129,10 +115,7 @@ const Editor = ({
               },
             },
           );
-          console.log(data);
           let imageUrl = data.data.imgUrl;
-          let postId = data.data.postId;
-          setTempId(postId);
           // imageUrlList //
           // if (imageUrlList.length) {
           //   setImageUrlList(prev => [...prev, imageUrl]);
@@ -147,7 +130,6 @@ const Editor = ({
           const range = QuillRef.current.getEditor().getSelection().index;
           if (range !== null && range !== undefined) {
             let quill = QuillRef.current.getEditor();
-            console.log(quill);
             quill.setSelection(range, 1);
             quill.clipboard.dangerouslyPasteHTML(
               range,
@@ -190,18 +172,16 @@ const Editor = ({
       {...rest}
       placeholder={placeholder}
       forwardRef={QuillRef}
-      // value={content}
+      value={prevContent}
       theme="snow"
       modules={modules}
       formats={formats}
       onChange={onChange}
-      title={title}
-      content={content}
     ></ReactQuill>
   );
 };
 
-export default function PostEditor({
+export default function UpdatePostEditor({
   title,
   onTitleChange,
   content,
@@ -209,13 +189,13 @@ export default function PostEditor({
   category,
   onCategoryChange,
   setStuffId,
-  setTempId,
   setImageUrlList,
   imageUrlList,
 }) {
   const [windowSize, setWindowSize] = useState();
   const [categoryList, setCategoryList] = useState([]);
   const [cookies] = useCookies(['cookie-name']);
+  const [postDetail, setPostDetail] = useRecoilState(postDetailState);
 
   const handleResize = useCallback(() => {
     setWindowSize({
@@ -303,6 +283,7 @@ export default function PostEditor({
           <Input
             placeholder="제목을 입력하세요"
             inputProps={title}
+            value={title}
             onChange={onTitleChange}
             disableUnderline={true} //here
             style={{
@@ -334,15 +315,14 @@ export default function PostEditor({
             title={title}
             content={content}
             setContent={setContent}
-            setTempId={setTempId}
             // 기타
             // imageUrlList={imageUrlList}
             // setImageUrlList={setImageUrlList}
           />
         </div>
         /* <IntroduceContent
-              dangerouslySetInnerHTML={{ __html: editorToHtml }}
-            /> */
+                dangerouslySetInnerHTML={{ __html: editorToHtml }}
+              /> */
       )}
       <br />
     </>
