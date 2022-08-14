@@ -78,15 +78,18 @@ const Editor = ({
     localStorage.setItem('title', title);
   }, [title]);
 
+  useEffect(() => {
+    setPrevContent(content);
+  }, []);
+
   const ImageHandler = () => {
     const imageInput = document.createElement('input');
-    const tempTitle = localStorage.getItem('title');
-    const tempContent = localStorage.getItem('content');
+    const tempTitle = localStorage.getItem('title') ?? '임시 제목';
+    const tempContent = localStorage.getItem('content') ?? "<p>' '</p>";
     const post = {
       title: tempTitle,
       content: tempContent,
     };
-    console.log(post);
     const userPost = JSON.stringify(post);
     const formData = new FormData();
     imageInput.setAttribute('type', 'file');
@@ -116,16 +119,6 @@ const Editor = ({
             },
           );
           let imageUrl = data.data.imgUrl;
-          // imageUrlList //
-          // if (imageUrlList.length) {
-          //   setImageUrlList(prev => [...prev, imageUrl]);
-          // } else {
-          //   const templist = imageUrlList;
-          //   templist.push(imageUrl);
-          //   setImageUrlList(templist);
-          // }
-          // console.log(imageUrlList);
-          // imageUrlList //
 
           const range = QuillRef.current.getEditor().getSelection().index;
           if (range !== null && range !== undefined) {
@@ -196,6 +189,7 @@ export default function UpdatePostEditor({
   const [categoryList, setCategoryList] = useState([]);
   const [cookies] = useCookies(['cookie-name']);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+  const [nowCategory, setNowCategory] = useState('카테고리');
 
   const handleResize = useCallback(() => {
     setWindowSize({
@@ -212,12 +206,15 @@ export default function UpdatePostEditor({
         },
       });
       let userCategoryList = [];
-      console.log(data.data);
       data.data.forEach(stuff => {
         let categoryLabel = {
           label: stuff.category.categoryName,
           userStuffId: stuff.userStuffId,
         };
+        if (stuff.category.category === postDetail.category) {
+          setNowCategory(stuff.category.category);
+          setStuffId(stuff.userStuffId);
+        }
         userCategoryList.push(categoryLabel);
       });
       setCategoryList(userCategoryList);
@@ -276,7 +273,7 @@ export default function UpdatePostEditor({
               }}
               sy={{ height: 1 }}
               renderInput={params => (
-                <TextField {...params} label="카테고리" size="small" />
+                <TextField {...params} label={nowCategory} size="small" />
               )}
             />
           </div>

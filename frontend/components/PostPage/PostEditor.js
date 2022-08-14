@@ -16,6 +16,11 @@ import { postDetailState } from '../../state/postDetailState';
 import { useRecoilState } from 'recoil';
 import Router from 'next/router';
 
+Router.events.on('routeChangeStart', () => {
+  localStorage.removeItem('title');
+  localStorage.removeItem('content');
+});
+
 const ReactQuill = dynamic(
   async () => {
     const { default: RQ } = await import('react-quill');
@@ -68,30 +73,11 @@ const Editor = ({
     setContent(content);
     setNowContent(content);
     localStorage.setItem('content', content);
-    console.log(nowContent);
   };
-
-  // const setFirstImgList = () => {
-  //   const tagList = (postDetail.content ?? '').split('src=');
-  //   const firstImgList = [];
-  //   if (tagList.length > 1) {
-  //     let idx = 1;
-  //     while (idx < tagList.length) {
-  //       const closeIndex = tagList[idx].indexOf('>');
-  //       const imgUrl = tagList[idx].slice(1, closeIndex - 1);
-  //       firstImgList.push(imgUrl);
-  //       idx += 2;
-  //     }
-  //     console.log(firstImgList);
-  //     setImageUrlList([...firstImgList]);
-  //     console.log(imageUrlList);
-  //   }
-  // };
 
   useEffect(() => {
     setNowTitle(title);
     localStorage.setItem('title', title);
-    console.log(nowTitle);
   }, [title]);
 
   const ImageHandler = () => {
@@ -99,8 +85,8 @@ const Editor = ({
     imageInput.setAttribute('type', 'file');
     imageInput.setAttribute('accept', 'image/jpg,image/png,image/jpeg');
     imageInput.click();
-    const tempTitle = localStorage.getItem('title');
-    const tempContent = localStorage.getItem('content');
+    const tempTitle = localStorage.getItem('title') ?? '임시 제목';
+    const tempContent = localStorage.getItem('content') ?? "<p>' '</p>";
     imageInput.onchange = async event => {
       const files = event.target.files;
       if (files[0]) {
@@ -129,25 +115,13 @@ const Editor = ({
               },
             },
           );
-          console.log(data);
           let imageUrl = data.data.imgUrl;
           let postId = data.data.postId;
           setTempId(postId);
-          // imageUrlList //
-          // if (imageUrlList.length) {
-          //   setImageUrlList(prev => [...prev, imageUrl]);
-          // } else {
-          //   const templist = imageUrlList;
-          //   templist.push(imageUrl);
-          //   setImageUrlList(templist);
-          // }
-          // console.log(imageUrlList);
-          // imageUrlList //
 
           const range = QuillRef.current.getEditor().getSelection().index;
           if (range !== null && range !== undefined) {
             let quill = QuillRef.current.getEditor();
-            console.log(quill);
             quill.setSelection(range, 1);
             quill.clipboard.dangerouslyPasteHTML(
               range,
@@ -232,7 +206,6 @@ export default function PostEditor({
         },
       });
       let userCategoryList = [];
-      console.log(data.data);
       data.data.forEach(stuff => {
         let categoryLabel = {
           label: stuff.category.categoryName,

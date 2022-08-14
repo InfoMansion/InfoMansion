@@ -6,8 +6,9 @@ import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
 import { postDetailState } from '../../state/postDetailState';
 import { useRecoilState } from 'recoil';
+import { useRouter } from 'next/router';
 
-export default function createPost() {
+export default function updatePost() {
   //추후에 state관리 여기서 할 예정
   const [title, setTitle] = useState('');
   const [content, setContent] = useState([]);
@@ -16,6 +17,7 @@ export default function createPost() {
   const [cookies] = useCookies(['cookie-name']);
   const [imageUrlList, setImageUrlList] = useState([]);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+  const router = useRouter();
 
   const handleSave = async () => {
     try {
@@ -34,7 +36,7 @@ export default function createPost() {
           },
         },
       );
-      console.log(data);
+      router.back();
     } catch (e) {
       console.log(e);
     }
@@ -46,7 +48,6 @@ export default function createPost() {
         title: title,
         content: content,
       };
-      console.log(userPost);
       const { data } = await axios.post(
         `/api/v2/posts/temp/${postDetail.id}`,
         userPost,
@@ -57,7 +58,7 @@ export default function createPost() {
           },
         },
       );
-      console.log(data);
+      router.back();
     } catch (e) {
       console.log(e);
     }
@@ -65,6 +66,7 @@ export default function createPost() {
 
   useEffect(() => {
     setTitle(postDetail.title);
+    setContent(postDetail.content);
   }, []);
 
   return (

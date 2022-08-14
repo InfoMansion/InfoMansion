@@ -6,6 +6,7 @@ import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
 import { postDetailState } from '../../state/postDetailState';
 import { useRecoilState } from 'recoil';
+import { useRouter } from 'next/router';
 
 export default function createPost() {
   //추후에 state관리 여기서 할 예정
@@ -17,6 +18,7 @@ export default function createPost() {
   const [imageUrlList, setImageUrlList] = useState([]);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   const [tempId, setTempId] = useState('');
+  const router = useRouter();
 
   const handleSave = async () => {
     if (!tempId) {
@@ -27,14 +29,13 @@ export default function createPost() {
           content: content,
           // images: imageUrlList,
         };
-        console.log(userPost);
         const { data } = await axios.post('/api/v2/posts', userPost, {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
             withCredentials: true,
           },
         });
-        console.log(data);
+        router.back();
       } catch (e) {
         console.log(e);
       }
@@ -46,14 +47,13 @@ export default function createPost() {
           content: content,
           // images: imageUrlList,
         };
-        console.log(userPost);
         const { data } = await axios.post(`/api/v2/posts/${tempId}`, userPost, {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
             withCredentials: true,
           },
         });
-        console.log(data);
+        router.back();
       } catch (e) {
         console.log(e);
       }
@@ -67,15 +67,14 @@ export default function createPost() {
           title: title,
           content: content,
         };
-        console.log(userPost);
         const { data } = await axios.post('/api/v2/posts/temp', userPost, {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
             withCredentials: true,
           },
         });
-        console.log(data);
         alert('임시저장 되었습니다.');
+        router.back();
       } catch (e) {
         console.log(e);
       }
@@ -85,7 +84,6 @@ export default function createPost() {
           title: title,
           content: content,
         };
-        console.log(userPost);
         const { data } = await axios.post(
           `/api/v2/posts/temp/${tempId}`,
           userPost,
@@ -96,8 +94,8 @@ export default function createPost() {
             },
           },
         );
-        console.log(data);
         alert('임시저장 되었습니다.');
+        router.back();
       } catch (e) {
         console.log(e);
       }
