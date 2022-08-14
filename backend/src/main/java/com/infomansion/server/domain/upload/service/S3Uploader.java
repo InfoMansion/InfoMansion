@@ -32,7 +32,7 @@ public class S3Uploader {
     private String bucketUrl;
 
     public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
-        File uploadFile = convert(multipartFile)
+        File uploadFile = convert(multipartFile, dirName)
                 .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
         return upload(uploadFile, dirName);
     }
@@ -70,8 +70,12 @@ public class S3Uploader {
         System.out.println("File delete fail");
     }
 
-    private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(System.getProperty("user.dir") + "/" + UUID.randomUUID() + "." + StringUtils.getFilenameExtension(file.getOriginalFilename()));
+    private Optional<File> convert(MultipartFile file, String dirName) throws IOException {
+        File convertFile;
+        if(dirName.equals("room"))
+            convertFile = new File(System.getProperty("user.dir") + "/" + UUID.randomUUID() + ".png");
+        else
+            convertFile = new File(System.getProperty("user.dir") + "/" + UUID.randomUUID() + "." + StringUtils.getFilenameExtension(file.getOriginalFilename()));
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());

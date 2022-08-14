@@ -58,7 +58,7 @@ public class UserStuffServiceImpl implements UserStuffService {
 
         List<Category> categories = Arrays.asList(Category.GUESTBOOK, Category.POSTBOX);
         return userStuffRepository.findByUser(user).stream()
-                .filter(userStuff -> userStuff.getCategory() == null || !categories.contains(userStuff.getStuff()))
+                .filter(userStuff -> userStuff.getCategory() == null || !categories.contains(userStuff.getCategory()))
                 .map(UserStuffEditResponseDto::toDto)
                 .collect(Collectors.toList());
     }
@@ -195,16 +195,17 @@ public class UserStuffServiceImpl implements UserStuffService {
         List<Category> categories = Arrays.asList(Category.GUESTBOOK, Category.POSTBOX);
         List<UserStuff> excludedUserStuffs = userStuffRepository.findByUserIsAndIdNotInAndSelectedIsTrueAndCategoryNotIn(loginUser, placedUserStuffIds, categories);
         if(excludedUserStuffs.size() > 0) {
-            excludedUserStuffs.forEach(UserStuff::changeExcludedState);
+            excludedUserStuffs.forEach(userStuff -> userStuff.changeExcludedState());
         }
 
         Set<String> checkDuplicateCategory = new HashSet<>();
         userStuffRepository.findByIdIn(placedUserStuffIds).forEach(placedUserStuff -> {
             for (UserStuffEditRequestDto requestDto : requestDtos) {
-                if(requestDto.getUserStuffId() == placedUserStuff.getId()) {
+                if(requestDto.getUserStuffId().equals(placedUserStuff.getId())) {
                     // 새롭게 배치할 UserStuff의 카테고리 중복 검사 및 Stuff에 적용가능한 지 검사
-                    if(!requestDto.getSelectedCategory().equals("NONE") && checkDuplicateCategory.contains(requestDto.getSelectedCategory()))
+                    if(!requestDto.getSelectedCategory().equals("NONE") && checkDuplicateCategory.contains(requestDto.getSelectedCategory())) {
                         throw new CustomException(ErrorCode.DUPLICATE_CATEGORY);
+                    }
                     checkAcceptableCategory(placedUserStuff.getStuff(), requestDto.getSelectedCategory());
                     checkDuplicateCategory.add(requestDto.getSelectedCategory());
 
