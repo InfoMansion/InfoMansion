@@ -153,6 +153,105 @@ public class PostRestDocsTest {
     }
 
     @Test
+    public void username의_postbox에_존재하는_모든_post_조회() throws Exception {
+        // given
+        Long requestDto = 10L;
+        List<PostSimpleResponseDto> postsByUserStuffId = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            postsByUserStuffId.add(PostSimpleResponseDto.builder()
+                    .id((long) i)
+                    .title("title"+i)
+                    .content("content"+i)
+                    .category(new CategoryMapperValue(Category.DAILY))
+                    .defaultPostThumbnail("default")
+                    .modifiedDate(LocalDateTime.now())
+                    .likes(2L)
+                    .build());
+        }
+
+        Slice<PostSimpleResponseDto> responseDto = new SliceImpl<>(postsByUserStuffId,Pageable.ofSize(10), true);
+        given(postService.findPostInThePostbox(anyString(), any(Pageable.class))).willReturn(responseDto);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/postbox/{username}", requestDto)
+                        .param("page", "1")
+                        .param("size", "3"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("post-find-post-in-the-postbox",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("username").description(USERNAME.getDescription())
+                        ),
+                        requestParameters(
+                                parameterWithName("page").description("조회할 페이지의 번호"),
+                                parameterWithName("size").description("한 번에 보여줄 데이터의 개수")
+                        ),
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("Postbox에 들어있는 post")))
+                                .andWithPrefix("data.",
+                                        fieldWithPath("content.[].id").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("content.[].title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content.[].content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
+                                        fieldWithPath("content.[].likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
+                                        fieldWithPath("content.[].category").type(JsonFieldType.OBJECT).description(CATEGORY.getDescription()),
+                                        fieldWithPath("content.[].category.category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
+                                        fieldWithPath("content.[].category.categoryName").type(CATEGORY_NAME.getJsonFieldType()).description(CATEGORY_NAME.getDescription()),
+                                        fieldWithPath("content.[].modifiedDate").type(MODIFIED_DATE.getJsonFieldType()).description(MODIFIED_DATE.getDescription()).optional(),
+                                        fieldWithPath("content.[].defaultPostThumbnail").type(DEFAULTPOSTTHUMBNAIL.getJsonFieldType()).description(DEFAULTPOSTTHUMBNAIL.getDescription()),
+                                        fieldWithPath("first").type(SLICE_FIRST.getJsonFieldType()).description(SLICE_FIRST.getDescription()),
+                                        fieldWithPath("last").type(SLICE_LAST.getJsonFieldType()).description(SLICE_LAST.getDescription()),
+                                        fieldWithPath("number").type(SLICE_NUMBER.getJsonFieldType()).description(SLICE_NUMBER.getDescription()),
+                                        fieldWithPath("size").type(SLICE_SIZE.getJsonFieldType()).description(SLICE_SIZE.getDescription())                                )
+                ));
+    }
+
+    @Test
+    public void username의_guestbook에_존재하는_모든_post_조회() throws Exception {
+        // given
+        Long requestDto = 10L;
+        List<PostGuestBookResponseDto> postsByUserStuffId = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            postsByUserStuffId.add(PostGuestBookResponseDto.builder()
+                    .id((long) i)
+                    .content("content"+i)
+                    .modifiedDate(LocalDateTime.now())
+                    .likes(2L)
+                    .build());
+        }
+        Slice<PostGuestBookResponseDto> responseDto = new SliceImpl<>(postsByUserStuffId,Pageable.ofSize(10), true);
+        given(postService.findPostInTheGuestbook(anyString(), any(Pageable.class))).willReturn(responseDto);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/posts/guestbook/{username}", requestDto)
+                        .param("page", "1")
+                        .param("size", "3"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("post-find-post-in-the-guestbook",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("username").description(USERNAME.getDescription())
+                        ),
+                        requestParameters(
+                                parameterWithName("page").description("조회할 페이지의 번호"),
+                                parameterWithName("size").description("한 번에 보여줄 데이터의 개수")
+                        ),
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("Guestbook에 들어있는 post")))
+                                .andWithPrefix("data.",
+                                        fieldWithPath("content.[].id").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("content.[].content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
+                                        fieldWithPath("content.[].likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
+                                        fieldWithPath("content.[].modifiedDate").type(MODIFIED_DATE.getJsonFieldType()).description(MODIFIED_DATE.getDescription()).optional(),
+                                        fieldWithPath("first").type(SLICE_FIRST.getJsonFieldType()).description(SLICE_FIRST.getDescription()),
+                                        fieldWithPath("last").type(SLICE_LAST.getJsonFieldType()).description(SLICE_LAST.getDescription()),
+                                        fieldWithPath("number").type(SLICE_NUMBER.getJsonFieldType()).description(SLICE_NUMBER.getDescription()),
+                                        fieldWithPath("size").type(SLICE_SIZE.getJsonFieldType()).description(SLICE_SIZE.getDescription())                                )
+                ));
+    }
+
+    @Test
     public void post_상세_조회() throws Exception {
         // given
         Long requestDto = 10L;

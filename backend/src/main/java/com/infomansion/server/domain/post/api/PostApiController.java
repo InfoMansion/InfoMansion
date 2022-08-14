@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +35,18 @@ public class PostApiController {
     public ResponseEntity<CommonResponse<PostbyUserStuffResponseDto>> findPostByUserStuff(@Valid @PathVariable Long userStuffId, Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CommonResponse<>(postService.findPostByUserStuffId(userStuffId, pageable)));
+    }
+
+    @GetMapping("/api/v1/posts/postbox/{username}")
+    public ResponseEntity<? extends BasicResponse> findPostInThePostbox(@Valid @PathVariable String username, Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(postService.findPostInThePostbox(username, pageable)));
+    }
+
+    @GetMapping("/api/v1/posts/guestbook/{username}")
+    public ResponseEntity<? extends BasicResponse> findPostInTheGuestbook(@Valid @PathVariable String username, Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(postService.findPostInTheGuestbook(username, pageable)));
     }
 
     @GetMapping("api/v1/posts/search/title")

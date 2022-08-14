@@ -26,7 +26,7 @@ public interface PostRepository extends JpaRepository<Post, Long>{
             "order by count (ulp.post) desc")
     Slice<Long> findTop27PostByUserLikePost(@Param("user") User user, @Param("categories") List<Category> categories, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end, Pageable pageable);
 
-    @Query("select p from Post p where p.userStuff = :userStuff and p.deleteFlag = false order by p.modifiedDate")
+    @Query("select p from Post p where p.userStuff = :userStuff order by p.modifiedDate")
     Slice<Post> findByUserStuffId(@Param("userStuff") UserStuff userStuff, Pageable pageable);
 
     @Query("select p from Post p where p.title like %:searchWord% and not p.category = 'GUESTBOOK' and p.user.privateFlag=false")

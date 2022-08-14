@@ -7,6 +7,7 @@ import com.infomansion.server.domain.post.repository.PostImageRepository;
 import com.infomansion.server.domain.post.repository.PostRepository;
 import com.infomansion.server.domain.post.repository.UserLikePostRepository;
 import com.infomansion.server.domain.post.service.PostService;
+import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.domain.user.domain.User;
 import com.infomansion.server.domain.user.repository.FollowRepository;
@@ -378,6 +379,26 @@ public class PostServiceImpl implements PostService {
     public List<TempPostSaveResponseDto> findTempPosts() {
         return postRepository.findTempPostsByUserId(SecurityUtil.getCurrentUserId())
                 .stream().map(TempPostSaveResponseDto::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public Slice<PostSimpleResponseDto> findPostInThePostbox(String username, Pageable pageable) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        UserStuff postbox = userStuffRepository.findUserStuffByStuffType(user.getId(), StuffType.POSTBOX)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+        return postRepository.findByUserStuffId(postbox, pageable)
+                .map(PostSimpleResponseDto::new);
+    }
+
+    @Override
+    public Slice<PostGuestBookResponseDto> findPostInTheGuestbook(String username, Pageable pageable) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        UserStuff guestbook = userStuffRepository.findUserStuffByStuffType(user.getId(), StuffType.GUESTBOOK)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+        return postRepository.findByUserStuffId(guestbook, pageable)
+                .map(PostGuestBookResponseDto::new);
     }
 
     /**
