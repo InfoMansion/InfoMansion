@@ -8,7 +8,7 @@ import { useCookies } from "react-cookie";
 import EditRoom from "../../components/EditRoom";
 import MyStuffList from "../../components/RoomEditPage/MyStuffList";
 import EditConsole from "../../components/RoomEditPage/EditConsole";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { categoryState, editingState, editStuffState, fromState, positionState, rotationState } from "../../state/editRoomState";
 import useAuth from "../../hooks/useAuth";
 import { pageLoading } from '../../state/pageLoading';
@@ -30,7 +30,7 @@ export default function RoomEdit() {
     const [floorStuffs, setFloorStuffs] = useState([]);
     const [locatedStuffs, setLocatedStuffs] = useState([]);
     const [unlocatedStuffs, setUnlocatedStuffs] = useState([]);
-    const [, setPageLoading] = useSetRecoilState(pageLoading);
+    const setPageLoading = useSetRecoilState(pageLoading);
 
     // 현재 편집중인 스터프.
     const [editing, setEditing] = useRecoilState(editingState);
