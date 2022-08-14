@@ -8,7 +8,11 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Container,
+  Grid,
+  MenuItem,
 } from '@mui/material';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import { useEffect, useState } from 'react';
 import ShowWindow from '../components/ShopPage/ShowWindow';
 
@@ -26,8 +30,13 @@ export default function Shop() {
   const setPageLoading = useSetRecoilState(pageLoading);
   const [stuffBundles, setStuffBundles] = useState([]);
 
+  const [nowStuffBundle, setNowStuffBunele] = useState();
+  const [bundleIndex, setBundleIndex] = useState();
+
   const [nowStuff, setNowStuff] = useState({});
   const [open, setOpen] = useState(false);
+
+  const [nowStuffType, setNowStuffType] = useState("DAI");
 
   useEffect(() => {
     try {
@@ -39,8 +48,7 @@ export default function Shop() {
           },
         })
         .then(res => {
-          //   setStuffBundles(res.data.data);
-          setStuffBundles(res.data.data.slice(5, 10));
+          setStuffBundles(res.data.data);
           setPageLoading(false);
         });
     } catch (e) {
@@ -48,6 +56,11 @@ export default function Shop() {
       console.log(e);
     }
   }, []);
+
+  function changeBundle(i) {
+    setNowStuffBunele(stuffBundles[i]);
+    setBundleIndex(i);
+  }
 
   function click(e, stuff) {
     setNowStuff(stuff);
@@ -107,11 +120,6 @@ export default function Shop() {
           >
             <ShopStuff data={nowStuff} pos={[0, 0, 0]} dist={0} />
             <ambientLight />
-            {/* <OrthographicCamera
-                            makeDefault
-                            postion={[8, 8, 9]}
-                            zoom={50}
-                        /> */}
           </Canvas>
           <Card>
             <CardHeader
@@ -153,48 +161,102 @@ export default function Shop() {
   }
 
   return (
-    <Box>
-      <Typography variant="h4">Shop</Typography>
-      <Divider />
-      {/* <Box>
-                크레딧이랑, 그런거 보여주기. navbar가 될 예정.
-            </Box> */}
-      {stuffBundles.map(stuffBundle => (
-        <Card
-          key={stuffBundle.stuffType}
-          sx={{
-            m: 2,
+    <Container>
+      <Grid container
+        style={{
+          justifyContent : 'center',
+          alignItems : 'center'
+        }}
+      >
+        <Grid item sm={3}>
+          <Typography variant="h4" color="white">Shop</Typography>
+        </Grid>
+        <Grid item sm={9}
+          style={{
+            display : 'flex',
+            justifyContent : 'end',
+            alignItems : 'center',
+            color : 'white'
           }}
         >
-          <Typography
-            variant="h5"
-            sx={{
-              m: 1,
-            }}
-          >
-            {stuffBundle.stuffTypeName}
-          </Typography>
+        <RadioButtonCheckedIcon sx={{mx : 1}}/>
+            15354
+        </Grid>
+      </Grid>
+      
+      <Divider 
+        style={{backgroundColor : 'white'}} 
+        color={'white'}
+      />
+      <Grid container spacing={0}>
 
-          <Canvas
-            style={{
-              height: '200px',
-              backgroundColor: '#eeeeee',
-            }}
-            sx={{
-              m: 1,
-            }}
-          >
-            <ShowWindow
-              ScrollTarget={scrollTarget}
-              stuffs={stuffBundle.slice.content}
-              click={click}
-            />
+        {/* 좌측 메뉴 */}
+        <Grid item xs={2} 
+          style={{
+            height : '600px',
+            overflowY : 'scroll',
+            color : 'white',
+            
+          }}
+          sx={{my : 2}}
+        >
+          <Divider sx={{my : 1}} style={{backgroundColor : 'white'}} />
+            {stuffBundles.map((stuffBundle, i) => (
+              <Box>
+                <MenuItem
+                  onClick={() => changeBundle(i)}  
+                >
+                  {stuffBundle.stuffTypeName}
+                </MenuItem>
+                <Divider style={{backgroundColor : 'white'}} />
+              </Box>
+            ))}
+        </Grid>
 
-            <OrthographicCamera makeDefault position={[0, 0, 4]} zoom={50} />
-          </Canvas>
-        </Card>
-      ))}
+        <Grid item xs={1} style={{display : 'flex', justifyContent : 'center'}}>
+          <Divider color={'white'} sx={{my : 2}} orientation="vertical"/> 
+        </Grid>
+        
+        {/* 상점 페이지 */}
+        <Grid item xs={9}>
+          {nowStuffBundle ?
+            <Card
+            key={nowStuffBundle.stuffType}
+            sx={{ m: 2, }}
+            >
+              <Typography
+                variant="h5"
+                sx={{ m: 1, }}
+              >
+                {nowStuffBundle.stuffTypeName}
+              </Typography>
+
+              <Canvas
+                style={{
+                  height: '200px',
+                  backgroundColor: '#eeeeee',
+                }}
+                sx={{
+                  m: 1,
+                }}
+              >
+                <ShowWindow
+                  ScrollTarget={scrollTarget}
+                  stuffs={nowStuffBundle.slice.content}
+                  click={click}
+                />
+
+                <OrthographicCamera makeDefault position={[0, 0, 4]} zoom={50} />
+              </Canvas>
+            </Card>
+            : <></> 
+          }
+        </Grid>
+      </Grid>
+
+      <Box>
+      </Box>
       <BuyModal />
-    </Box>
+    </Container>
   );
 }

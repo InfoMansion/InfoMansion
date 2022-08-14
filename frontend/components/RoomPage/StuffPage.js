@@ -127,7 +127,7 @@ export default function StuffPage( {data} ) {
             <Divider />
             <Container
                 sx={{
-                    maxHeight : '500px',
+                    height : '500px',
                     p : 1,
                 }}
                 style={{

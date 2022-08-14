@@ -34,6 +34,8 @@ export default function ShopStuff({ data, Click, pos, dist, tmp }) {
           />
       ))}
       <pointLight position={[2, 5, 2]} intensity={0.04} />
+
+      {/* 가격, 이름 등 태그 띄워주기 */}
     </group>
   );
 }

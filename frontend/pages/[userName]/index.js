@@ -99,7 +99,7 @@ export default function RoomPage() {
       await next({
         opacity: stuffon ? '1' : '0.3',
         maxHeight: stuffon ? '600px' : '0px',
-        // height: stuffon ? '600px' : '0px',
+        height: stuffon ? '600px' : '0px',
         left : stuffPageLoc[0],
         top : stuffPageLoc[1],
         position: 'absolute',
