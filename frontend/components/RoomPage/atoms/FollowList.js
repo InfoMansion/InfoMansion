@@ -48,7 +48,7 @@ export default function FollowList({ modalInfo, handleModalClose }) {
             <CloseIcon />
           </IconButton>
         </div>
-        <div>
+        <div style={{ maxHeight: '400px', overflow: 'auto' }}>
           {modalInfo.data.map(user => (
             <Profile user={user} width={400} />
           ))}
