@@ -60,8 +60,9 @@ export default function Confirm(props) {
       <Container 
         component="main"
         style={{ 
-          height : window.innerHeight,
+          height : window.innerHeight - 80,
           display : 'flex',
+          flexDirection : 'column',
           justifyContent : 'center',
           alignItems : 'center'
         }}
@@ -112,6 +113,8 @@ export default function Confirm(props) {
             Confirm Password
           </Button>
         </Box>
+      <Box style={{width : 100, height : 400 }}>
+      </Box>
       </Container>
     </ThemeProvider>
   );

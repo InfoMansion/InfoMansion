@@ -160,7 +160,7 @@ export default function Dashboard() {
   return (
     <Box
       sx={{
-        height : window.innerHeight,
+        height : window.innerHeight - 80,
       }}
     >
       {dashContent}
