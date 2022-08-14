@@ -79,6 +79,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostSearchResponseDto findPostBySearchWordForTitle(String searchWord, Pageable pageable) {
+
+        if(searchWord==null || searchWord.length()==0) {
+            throw new CustomException(ErrorCode.SEARCH_WORD_NOT_BLANK);
+        }
+
         Slice<PostSimpleResponseDto> postsByTitle =
                 postRepository.findByTitle(searchWord, pageable)
                         .map(PostSimpleResponseDto::new);
@@ -87,6 +92,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostSearchResponseDto findPostBySearchWordForContent(String searchWord, Pageable pageable) {
+
+        if(searchWord==null || searchWord.length()==0) {
+            throw new CustomException(ErrorCode.SEARCH_WORD_NOT_BLANK);
+        }
+
         Slice<PostSimpleResponseDto> postsByTitle =
                 postRepository.findByContent(searchWord, pageable)
                         .map(PostSimpleResponseDto::new);

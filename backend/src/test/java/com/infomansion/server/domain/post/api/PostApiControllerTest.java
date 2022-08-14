@@ -355,6 +355,15 @@ public class PostApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect((ResultMatcher) jsonPath("$.data.['postsByTitleOrContent'].['content'][1].['content']").value("Java개발자 infomansion 필독서"));
 
+        mockMvc.perform(get("/api/v1/users/search/username"+"?searchWord="+"&page="+page+"&size="+size))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(get("/api/v1/posts/search/title"+"?searchWord="))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(get("/api/v1/posts/search/content"+"?searchWord="+"&page="+page+"&size="+size))
+                .andExpect(status().isBadRequest());
+
     }
 
     @DisplayName("대표 이미지 없는 Post 상세 조회 성공")

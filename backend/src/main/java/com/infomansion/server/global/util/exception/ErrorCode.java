@@ -57,6 +57,8 @@ public enum ErrorCode {
     ALREADY_FOLLOW_USER(HttpStatus.BAD_REQUEST, 40090, "이미 팔로우한 유저입니다."),
     FOLLOW_NOT_FOUND(HttpStatus.BAD_REQUEST, 40091, "팔로우 관계를 찾을 수 없습니다."),
 
+    // SEARCH
+    SEARCH_WORD_NOT_BLANK(HttpStatus.BAD_REQUEST, 40092, "검색어가 없습니다."),
 
     //== 401 ==//
     TOKEN_WITHOUT_AUTHORITY(HttpStatus.UNAUTHORIZED,40101, "권한 정보가 없는 토큰입니다."),
