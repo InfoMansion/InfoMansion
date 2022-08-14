@@ -19,6 +19,7 @@ import Particles from './RoomPage/atoms/Particles'
 
 import ConfigStuffs from './jsonData/ConfigStuffs.json'
 import ConfigStuff from './RoomPage/atoms/ConfigStuff' 
+import PostItems from './RoomPage/PostItems';
 
 export default function Room({ StuffClick, setClickLoc, userName, pagePush, profileImage, setNowFollow }) {
   const [cookies] = useCookies(['cookie-name']);
@@ -74,9 +75,6 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
     
     let x = e.clientX < midx ? e.clientX : e.clientX - 400;
     let y = e.clientY > maxy ? maxy : e.clientY;
-    
-    // console.log("화면 " + midx + " " + maxy)
-    // console.log("클릭 " + x + " " + y)
 
     setClickLoc([x, y])
 
@@ -94,6 +92,10 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
     // setClicked(0);
   }
   
+  function popupPosts(type) {
+    console.log(type);
+  }
+
   const postFollow = async () => {
     if(loginUser) return;
     
@@ -196,22 +198,43 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
         {/* <Stuff_s3test /> */}
       </Canvas>
 
+      
+      {
+        loginUser ?
+        <div>
+          <Canvas
+            style={{
+              position : 'absolute',
+              right : '3%',
+              bottom : 50,
+              width : '250px',
+              height : '250px'
+            }}
+          >
+            {/* 팔로우 버튼 */}
+            <ConfigItems
+                pagePush={pagePush}
+                userName={userName}
+                profileImage={profileImage}
+              />
+          </Canvas>
+        </div>
+        : <></>
+      }
       <Canvas
         style={{
           position : 'absolute',
-          right : '3%',
+          left : '3%',
           bottom : 50,
           width : '250px',
           height : '250px'
         }}
       >
-        {/* 팔로우 버튼 */}
-        <ConfigItems
-            loginUser={loginUser}
-            pagePush={pagePush}
-            userName={userName}
-            profileImage={profileImage}
-          />
+        <PostItems
+          popupPosts={popupPosts}
+          userName={userName}
+          profileImage={profileImage}
+        />
       </Canvas>
     </div>
   );

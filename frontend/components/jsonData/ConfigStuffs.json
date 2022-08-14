@@ -10,7 +10,7 @@
         "material" : [ "Love" ]
     },
     {
-        "id" : "0",
+        "id" : "1",
         "category" : "NONE",
         "stuffAlias" : "설정",
         "stuffName" : "setting",
@@ -20,7 +20,7 @@
         "material" : [ "07 - Default" ]
     },
     {
-        "id" : "0",
+        "id" : "2",
         "category" : "NONE",
         "stuffAlias" : "상점",
         "stuffName" : "shop",
@@ -30,7 +30,7 @@
         "material" : [ "grey","red","glass","_defaultMat" ]
     },
     {
-        "id" : "0",
+        "id" : "3",
         "category" : "NONE",
         "stuffAlias" : "별",
         "stuffName" : "heart",
@@ -38,5 +38,25 @@
         "stuffGlbPath" : "/stuff-assets/star.glb",
         "geometry" : [ "Star001" ],
         "material" : [ "07 - Default" ]
+    },
+    {
+        "id" : "4",
+        "category" : "NONE",
+        "stuffAlias" : "POSTBOX",
+        "stuffName" : "postbox",
+        "stuffNameKor" : "포스트박스",
+        "stuffGlbPath" : "/stuff-assets/postbox.glb",
+        "geometry" : [ "Mesh_boxOpen","Mesh_boxOpen_1","Mesh_boxOpen_2" ],
+        "material" : [ "woodDark","wood","rock" ]
+    },
+    {
+        "id" : "5",
+        "category" : "NONE",
+        "stuffAlias" : "GusetBook",
+        "stuffName" : "GuestBook",
+        "stuffNameKor" : "방명록",
+        "stuffGlbPath" : "/stuff-assets/guestbook_367.glb",
+        "geometry" : [ "low_poly_interior367" ],
+        "material" : [ "low_poly_interior" ]
     }
 ]
