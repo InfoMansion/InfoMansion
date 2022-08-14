@@ -10,6 +10,10 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Box, Container } from '@mui/material';
+
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 const theme = createTheme({
   palette: {
@@ -19,6 +23,10 @@ const theme = createTheme({
       dark: '#ba000d',
       contrastText: '#000',
     },
+    white : {
+      main : '#ffffff',
+      contrastText: '#fff',
+    }
   },
 });
 
@@ -108,10 +116,9 @@ export default function Alarm() {
       <Divider />
       <List
         sx={{
-          width: 200,
           height: 230,
           bgcolor: 'background.paper',
-          overflow: 'auto',
+          overflowY: 'scroll',
         }}
         dense
         component="div"
@@ -148,34 +155,38 @@ export default function Alarm() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <Grid item>{customList('Alarm?', left)}</Grid>
+      <Container>
         <Grid item>
-          <Grid container direction="column" alignItems="center">
-            <Button
-              sx={{ my: 0.5 }}
-              variant="outlined"
-              size="small"
-              onClick={handleCheckedRight}
-              disabled={leftChecked.length === 0}
-              aria-label="move selected right"
-            >
-              &gt;
-            </Button>
-            <Button
-              sx={{ my: 0.5 }}
-              variant="outlined"
-              size="small"
-              onClick={handleCheckedLeft}
-              disabled={rightChecked.length === 0}
-              aria-label="move selected left"
-            >
-              &lt;
-            </Button>
-          </Grid>
+          {customList('비활성화된 알람', left)}
         </Grid>
-        <Grid item>{customList('Alarm!', right)}</Grid>
-      </Grid>
+        
+        <Box sx={{display : 'flex', m : 2, justifyContent : 'space-evenly'}}>
+          <Button
+            sx={{ my: 0.5 }}
+            size="small"
+            onClick={handleCheckedRight}
+            disabled={leftChecked.length === 0}
+            aria-label="move selected right"
+          >
+            <KeyboardArrowDownIcon />
+          </Button>
+          <Button
+            sx={{ my: 0.5}}
+            size="small"
+            onClick={handleCheckedLeft}
+            disabled={rightChecked.length === 0}
+            aria-label="move selected left"
+          >
+            <KeyboardArrowUpIcon/>
+          </Button>
+
+        </Box>
+
+        <Grid item>
+          {customList('활성화된 알람', right)}
+        </Grid>
+
+      </Container>
     </ThemeProvider>
   );
 }

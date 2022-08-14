@@ -28,6 +28,7 @@ const Drawer = styled(MuiDrawer, {
   '& .MuiDrawer-paper': {
     position: 'relative',
     whiteSpace: 'nowrap',
+    backgroundColor : 'transparent',
     width: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
@@ -48,7 +49,16 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const mdTheme = createTheme();
+const mdTheme = createTheme({
+  palette: {
+    primary: {
+      light: '#ff7961',
+      main: '#ffffff',
+      dark: '#fc7a71',
+      contrastText: 'white',
+    }
+  }
+});
 
 function DashboardContent(props) {
   const [dashNum, setDashNum] = useRecoilState(dashNumState);
@@ -62,54 +72,60 @@ function DashboardContent(props) {
       <Profile
         userInfo={props.userInfo}
         setUserInfo={props.setUserInfo}
-      ></Profile>
-    );
-  } else if (dashNum === 1) {
-    content = <Change></Change>;
-  } else if (dashNum === 2) {
-    content = <Alarm></Alarm>;
-  } else if (dashNum === 3) {
-    content = <Privacy></Privacy>;
-  }
+      />
+    );} 
+  else if (dashNum === 1) { content = <Change />; } 
+  else if (dashNum === 2) { content = <Alarm />; } 
+  else if (dashNum === 3) { content = <Privacy />; }
 
   return (
     <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <Drawer variant="permanent" open={open}>
+      <Container sx={{ display : 'flex' }}>
+
+        {/* navbar */}
+        <Drawer
+          variant="permanent" 
+          open={open}
+          sx={{color : 'primary.main'}}
+        >
           <Toolbar
             sx={{
               display: 'flex',
-              alignItems: 'center',
               justifyContent: 'flex-end',
               px: [1],
             }}
           >
             <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
+              <ChevronLeftIcon color="primary" />
             </IconButton>
           </Toolbar>
-          <Divider />
-          <List component="nav">
-            <MainListItems />
-            <Divider sx={{ my: 1 }} />
+          
+          <Divider color="white"/>
+
+          <List component="nav"
+            sx={{color : 'primary.main'}}
+          >
+            <MainListItems/>
+            <Divider sx={{ my: 1 }} color="white" />
           </List>
         </Drawer>
+        
+        <Divider color={'white'} sx={{my : 2}} orientation="vertical"/>
+
+        {/* dashboard Contents */}
         <Box
           component="main"
           sx={{
-            backgroundColor: theme =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
+            backgroundColor: 'rgba(255,255,255,0)',
             flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
+            height: window.innerHeight,
           }}
         >
-          <Container sx={{ mt: 4, mb: 4 }}>{content}</Container>
+          <Box sx={{ mt: 4, mb: 4 }}>
+              {content}
+          </Box>
         </Box>
-      </Box>
+      </Container>
     </ThemeProvider>
   );
 }
@@ -124,7 +140,6 @@ export default function Dashboard() {
     introduce: '',
     profileImageUrl: '',
   });
-  console.log('dashboard', userInfo);
 
   if (isConfirmed) {
     dashContent = (
@@ -142,5 +157,13 @@ export default function Dashboard() {
     );
   }
 
-  return <>{dashContent}</>;
+  return (
+    <Box
+      sx={{
+        height : window.innerHeight,
+      }}
+    >
+      {dashContent}
+    </Box>
+  )
 }

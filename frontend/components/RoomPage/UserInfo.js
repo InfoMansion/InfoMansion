@@ -209,7 +209,9 @@ export default function UserInfo({
           ))}
         </Dialog>
       )}
-      <Grid container sx={{ p: 2 }}>
+      <Grid container sx={{ px : 2, pt : 2 }}>
+
+        {/* 프로필 이미지 */}
         <Grid
           item
           sx={{
@@ -228,6 +230,8 @@ export default function UserInfo({
             style={{ objectFit: 'fill' }}
           />
         </Grid>
+        
+        {/* 유저인포 */}
         <Grid item>
           <Box
             sx={{
@@ -295,36 +299,38 @@ export default function UserInfo({
             </Typography>
           </Box>
         </Grid>
-        <Box
-          style={{
-            height: '30px',
-          }}
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            my: 1,
-          }}
-        >
-          {userInfo.categories.map((category, index) => (
-            <Typography
-              variant="body2"
-              style={{
-                backgroundColor: '#fc7a71',
-                color: 'white',
-                height: '20px',
-              }}
-              sx={{
-                px: 2,
-                mr: 1,
-                mb: 1,
-                borderRadius: 4,
-              }}
-            >
-              {category}
-            </Typography>
-          ))}
-        </Box>
       </Grid>
+
+      <Box
+        style={{
+          height: '50px',
+        }}
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          m : 2,
+        }}
+      >
+        {userInfo.categories.map((category, index) => (
+          <Typography
+            variant="body2"
+            style={{
+              backgroundColor: '#fc7a71',
+              color: 'white',
+              height: '20px',
+            }}
+            sx={{
+              px: 2,
+              mr: 1,
+              mb: 1,
+              borderRadius: 4,
+            }}
+          >
+            {category}
+          </Typography>
+        ))}
+      </Box>
+
       <Divider color={'white'} />
       <Typography sx={{ m: 2 }}>{userInfo.introduce}</Typography>
 

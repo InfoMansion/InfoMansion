@@ -16,15 +16,13 @@ const theme = createTheme({
     primary: {
       light: '#ff7961',
       main: '#fc7a71',
-      dark: '#ba000d',
-      contrastText: '#000',
+      dark: '#fc0000',
     },
   },
 });
 
 export default function Confirm(props) {
   const [cookies] = useCookies(['cookie-name']);
-  const router = useRouter();
   const [inputPassword, setInputPassword] = useState('');
   const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
     inputPassword,
@@ -43,8 +41,6 @@ export default function Confirm(props) {
       currentPassword: formData.get('password'),
     };
     try {
-      console.log(credentials);
-      console.log(`Bearer ${cookies.InfoMansionAccessToken}`);
       const { data } = await axios.post('/api/v1/users/password', credentials, {
         headers: {
           Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
@@ -61,49 +57,60 @@ export default function Confirm(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+      <Container 
+        component="main"
+        style={{ 
+          height : window.innerHeight,
+          display : 'flex',
+          justifyContent : 'center',
+          alignItems : 'center'
+        }}
+      >
         <Box
+          component="form"
+          onSubmit={handleSubmit}
           sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            backgroundColor: 'white',
+            width : '400px'
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography 
+            sx={{color : 'white'}}
+            variant="h5"
+          >
             Confirm Password
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+          <TextField
+            required
+            name="password"
+            label="Password"
+            type="password"
+            autoComplete="current-password"
+            color="primary"
+            variant="outlined"
+            onChange={handleInput}
+            sx={{
+              m : 1,
+              width : '70%'
+            }}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ 
+              mt : 1, 
+              color: 'white', 
+              width : '65%',
+            }}
+            disabled={inputUnFinish}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password1"
-              autoComplete="current-password"
-              onChange={handleInput}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2, color: 'white' }}
-              disabled={inputUnFinish}
-            >
-              Confirm Password
-            </Button>
-          </Box>
+            Confirm Password
+          </Button>
         </Box>
       </Container>
     </ThemeProvider>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, Card, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
 import Avatar from '@mui/material/Avatar';
@@ -69,69 +69,63 @@ export default function Change() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
+      <Container component="main">
+        <Card
           sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            backgroundColor: 'white',
+            marginTop: 2,
+            p : 2,
+            display : 'flex',
+            flexDirection : 'column',
+            justifyContent : 'center',
+            alignItems : 'center',
+            backgroundColor : 'white',
           }}
+          component="form"
+          onSubmit={handleSubmit}
         >
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Change Password
-          </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="New Password"
-              type="password"
-              id="password1"
-              autoComplete="current-password"
-              value={inputPassword}
-              onChange={handleInput}
-              color="primary"
-              focused
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password2"
-              label="Confirm Password"
-              type="password"
-              id="password2"
-              autoComplete="new-password"
-              value={inputPassword2}
-              onChange={handleInput}
-              color="primary"
-              focused
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2, color: 'white' }}
-              disabled={inputUnFinish}
-              color="primary"
-            >
+              <LockOutlinedIcon />
+            </Avatar>
+
+            <Typography variant="h5">
               Change Password
-            </Button>
-          </Box>
-        </Box>
+            </Typography>
+
+          <TextField
+            required
+            name="password"
+            label="New Password"
+            type="password"
+            id="password1"
+            autoComplete="current-password"
+            value={inputPassword}
+            onChange={handleInput}
+            color="primary"
+            sx={{m : 1}}
+          />
+          <TextField
+            required
+            name="password2"
+            label="Confirm Password"
+            type="password"
+            id="password2"
+            autoComplete="new-password"
+            value={inputPassword2}
+            onChange={handleInput}
+            color="primary"
+            sx={{m : 1}}
+          />
+
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ m : 1, color: 'white' }}
+            disabled={inputUnFinish}
+            color="primary"
+          >
+            Change Password
+          </Button>
+        </Card>
       </Container>
     </ThemeProvider>
   );

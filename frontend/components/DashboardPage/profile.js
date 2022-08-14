@@ -12,16 +12,16 @@ import { useState, useRef, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { profileState } from '../../state/profileState';
 import axios from '../../utils/axios';
+import categories from '../jsonData/category.json'
+
 import {
   Avatar,
   Box,
   Card,
-  Divider,
   Grid,
   Typography,
   TextField,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { useCookies } from 'react-cookie';
 import { useSetRecoilState } from 'recoil';
 import { pageLoading } from '../../state/pageLoading';
@@ -84,8 +84,29 @@ export default function Profile({ ...props }) {
     HOMEAPPLIANCES: false,
     STUDY: false,
   };
+  const [categoryArray] = useState([
+    "IT",
+    "COOK",
+    "MUSIC",
+    "GAME",
+    "SPORTS",
+    "FASHION",
+    "DAILY",
+    "TRAVEL",
+    "NATURE",
+    "ART",
+    "INTERIOR",
+    "CULTURE",
+    "BEAUTY",
+    "CLEANING",
+    "HOMEAPPLIANCES",
+    "STUDY",
+  ]);
 
   let selectedCate = '';
+  const [state, setState] = useState(allCategories);
+  const setProfileState = useSetRecoilState(profileState);
+  const [changeCate, setChangeCate] = useState(selectedCate);
 
   useEffect(() => {
     userInfo.categories.forEach(function (category) {
@@ -99,10 +120,6 @@ export default function Profile({ ...props }) {
     setProfileImageUrl(props.userInfo.profileImageUrl);
   }, [props.userInfo]);
 
-  const [state, setState] = useState(allCategories);
-  const setProfileState = useSetRecoilState(profileState);
-
-  const [changeCate, setChangeCate] = useState(selectedCate);
   const cateCount = changeCate.split(',').length - 1;
   const handleChange = event => {
     setState({
@@ -160,25 +177,6 @@ export default function Profile({ ...props }) {
     }
   };
 
-  const {
-    IT,
-    COOK,
-    MUSIC,
-    GAME,
-    DAILY,
-    FASHION,
-    NATURE,
-    TRAVEL,
-    ART,
-    INTERIOR,
-    CULTURE,
-    BEAUTY,
-    CLEANING,
-    HOMEAPPLIANCES,
-    STUDY,
-    SPORTS,
-  } = state;
-
   const [inputUsername, setInputUsername] = useState(userInfo.username);
   const confirmUsername = /^[a-zA-Zㄱ-힣0-9_]{3,15}$/.test(inputUsername);
   const inputFinish = confirmUsername && cateCount >= 1 && cateCount <= 5;
@@ -196,32 +194,41 @@ export default function Profile({ ...props }) {
     <ThemeProvider theme={theme}>
       <Container component="main">
         <CssBaseline />
+
         <Box
           component="form"
           encType="multipart/form-data"
           onSubmit={handleSubmit}
         >
-          <Card>
-            <Grid
-              sx={{
-                p: 2,
+          <Card
+            sx={{
+              py : 2
+            }}
+          >
+            <Box
+              sx={{ 
+                display : 'flex',
+                alignItems : 'start'
               }}
               container
             >
-              <Grid item xs={3}>
+              <Box
+                sx={{
+                  display : 'flex',
+                  flexDirection : 'column',
+                  alignItems : 'center',
+                  m : 2
+                }}
+              >
                 <Avatar
                   alt="profile"
                   src={profileImageUrl}
                   sx={{
-                    width: '100%',
-                    maxWidth: '80px',
-                    height: '100%',
-                    maxHeight: '80px',
+                    width: '80px',
+                    height: '80px',
+                    mb : 1
                   }}
-                  onClick={() => {
-                    fileInput.current.click();
-                  }}
-                />
+                  />
                 <input
                   type="file"
                   style={{ display: 'none' }}
@@ -229,20 +236,30 @@ export default function Profile({ ...props }) {
                   name="profile_img"
                   onChange={onChange}
                   ref={fileInput}
-                />
-              </Grid>
-              <Grid item xs={9}>
+                  />
+                <Button
+                  variant="outlined"
+                  onClick={() => {fileInput.current.click();}}
+                >
+                  사진 변경
+                </Button>
+              </Box>
+
+              <Box
+                sx={{m : 2}}
+              >
+                <Typography>userName</Typography>
                 <TextField
                   value={inputUsername}
                   onChange={handleInput}
                   name="username"
                   helperText="3~15 글자가 가능하며(한글, 영어, 숫자 및 ' _ '로 구성 가능합니다)"
-                ></TextField>
-              </Grid>
-              {/* <Typography variant="body2" color="text.secondary">
-                {userInfo.email}
-              </Typography> */}
-              <Divider />
+                />
+              </Box>
+            </Box>
+
+            <Box sx={{mx : 2}} >
+              <Typography> Introduce</Typography>
               <TextField
                 multiline
                 maxRows={5}
@@ -250,22 +267,20 @@ export default function Profile({ ...props }) {
                 value={inputIntroduce}
                 onChange={handleInput}
                 fullWidth
-              ></TextField>
-            </Grid>
+              />
+            </Box>
           </Card>
+
           <ThemeProvider theme={theme}>
-            <Container component="main">
               <CssBaseline />
-              <Box
+              <Card
                 sx={{
-                  marginTop: 8,
+                  mt : 8,
                   display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
                   backgroundColor: 'white',
                 }}
               >
-                <Box component="form" noValidate sx={{ mt: 3 }}>
+                <Box component="form">
                   <Box sx={{ display: 'flex' }}>
                     <FormControl
                       sx={{ m: 3 }}
@@ -275,184 +290,23 @@ export default function Profile({ ...props }) {
                       <FormLabel component="legend">
                         Select Your Interest
                       </FormLabel>
+                      
                       <FormGroup>
-                        <Grid>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={IT}
-                                onChange={handleChange}
-                                name="IT"
+                        <Grid container>
+                          {categoryArray.map(category => (
+                            <Grid item xs={3}>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={state[category]}
+                                    onChange={handleChange}
+                                    name={category}
+                                  />
+                                }
+                                label={categories[category].alias}
                               />
-                            }
-                            label="IT"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={COOK}
-                                onChange={handleChange}
-                                name="COOK"
-                              />
-                            }
-                            label="쿠킹"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={MUSIC}
-                                onChange={handleChange}
-                                name="MUSIC"
-                              />
-                            }
-                            label="음악"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={GAME}
-                                onChange={handleChange}
-                                name="GAME"
-                              />
-                            }
-                            label="게임"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={SPORTS}
-                                onChange={handleChange}
-                                name="SPORTS"
-                              />
-                            }
-                            label="스포츠"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={FASHION}
-                                onChange={handleChange}
-                                name="FASHION"
-                              />
-                            }
-                            label="패션"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={TRAVEL}
-                                onChange={handleChange}
-                                name="TRAVEL"
-                              />
-                            }
-                            label="여행"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={DAILY}
-                                onChange={handleChange}
-                                name="DAILY"
-                              />
-                            }
-                            label="데일리"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={NATURE}
-                                onChange={handleChange}
-                                name="NATURE"
-                              />
-                            }
-                            label="자연"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={ART}
-                                onChange={handleChange}
-                                name="ART"
-                              />
-                            }
-                            label="미술"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={INTERIOR}
-                                onChange={handleChange}
-                                name="INTERIOR"
-                              />
-                            }
-                            label="인테리어"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={BEAUTY}
-                                onChange={handleChange}
-                                name="BEAUTY"
-                              />
-                            }
-                            label="뷰티"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={CLEANING}
-                                onChange={handleChange}
-                                name="CLEANING"
-                              />
-                            }
-                            label="청소"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={STUDY}
-                                onChange={handleChange}
-                                name="STUDY"
-                              />
-                            }
-                            label="공부"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={HOMEAPPLIANCES}
-                                onChange={handleChange}
-                                name="HOMEAPPLIANCES"
-                              />
-                            }
-                            label="가전제품"
-                            xs={3}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={CULTURE}
-                                onChange={handleChange}
-                                name="CULTURE"
-                              />
-                            }
-                            label="시사/문화"
-                            xs={3}
-                          />
+                            </Grid>
+                          ))}
                         </Grid>
                       </FormGroup>
                       <FormHelperText>
@@ -461,18 +315,25 @@ export default function Profile({ ...props }) {
                     </FormControl>
                   </Box>
                 </Box>
-              </Box>
-            </Container>
+              </Card>
           </ThemeProvider>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2, color: 'white' }}
-            disabled={!inputFinish}
+          
+          <Box
+            sx={{
+              display : 'flex',
+              justifyContent : 'end',
+            }}
           >
-            UPDATE
-          </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ mt: 3, mb: 2, color: 'white' }}
+              disabled={!inputFinish}
+            >
+              UPDATE
+            </Button>
+          </Box>
+
         </Box>
       </Container>
     </ThemeProvider>

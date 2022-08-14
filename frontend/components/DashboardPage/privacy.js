@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Card, Container } from '@mui/material';
 
 const theme = createTheme({
   palette: {
@@ -46,17 +47,21 @@ export default function Privacy() {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <FormControlLabel
-          label="공개 여부 설정하기"
-          control={
-            <Checkbox
-              checked={checked[0] && checked[1]}
-              indeterminate={checked[0] !== checked[1]}
-              onChange={handleChange1}
+        <Container>
+          <Card sx={{p : 2}}>
+            <FormControlLabel
+              label="공개 여부 설정하기"
+              control={
+                <Checkbox
+                  checked={checked[0] && checked[1]}
+                  indeterminate={checked[0] !== checked[1]}
+                  onChange={handleChange1}
+                />
+              }
             />
-          }
-        />
-        {children}
+            {children}
+          </Card>
+        </Container>
       </ThemeProvider>
     </div>
   );

@@ -76,11 +76,11 @@ export default function RoomPage() {
       left : '15%',
       top : 65,
       zIndex : '2',
-      maxHeight : '150px' 
+      maxHeight : '170px' 
     },
     to : async (next, cancel) => {
       await next({
-        maxHeight : hovered ? '550px' : '150px',
+        maxHeight : hovered ? '550px' : '170px',
         background : hovered ? 'rgba(255,255,255,0.8)' : 'transparent',
       })
     }
