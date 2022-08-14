@@ -14,58 +14,77 @@ export default function Post({ post, totheight, picwidth, openModal }) {
     <Box
       key={post.title}
       sx={{
-        maxHeight: totheight,
-        my: 1,
-        backgroundColor: 'rgba(255,255,255,0)',
-        //overflow: 'hidden',
+        backgroundColor: 'rgba(255,255,255,0.8)',
+        p: 3,
+        my: 2,
+        borderRadius: 2,
+        height: totheight,
+        overflow: 'hidden',
+        alignItems: 'center',
       }}
     >
-      <CardActionArea
-        sx={{
+      <div
+        style={{
           display: 'flex',
-          justifyContent: 'flex-start',
-          my: 1,
+          cursor: 'pointer',
         }}
         onClick={() => openModal(post)}
       >
         <Box
           sx={{
-            maxWidth: picwidth,
+            minWidth: picwidth,
             height: '100%',
             mr: 2,
           }}
         >
-          <img src={`${post.defaultPostThumbnail}`} alt="no img" />
+          <img
+            src={`${post.defaultPostThumbnail}`}
+            alt="no img"
+            style={{ width: picwidth, height: picwidth }}
+          />
         </Box>
-
         <CardContent
           sx={{
             display: 'flex',
             flexDirection: 'column',
+            width: '100%',
             p: 0,
           }}
         >
           <Box
             sx={{
-              display: 'flex',
+              display: 'grid',
+              gridTemplateColumns: '1fr auto',
               justifyContent: 'space-between',
-              alignItems: 'center',
             }}
           >
-            <Typography variant="h6" sx={{ mr: 2 }} color="text.primary">
+            <Typography
+              variant="h6"
+              sx={{ mr: 2 }}
+              color="text.primary"
+              style={{
+                width: '100%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {post.title}
             </Typography>
-            <Typography variant="body4" color="#aaaaaa">
+            <Typography
+              variant="body4"
+              color="text.secondary"
+              style={{ whiteSpace: 'nowrap' }}
+            >
               {post.modifiedDate.substring(0, 10)}
             </Typography>
           </Box>
           <Divider style={{ width: '100%' }} />
-
           <Typography variant="body2" color="text.secondary">
             <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
           </Typography>
         </CardContent>
-      </CardActionArea>
+      </div>
     </Box>
   );
 }

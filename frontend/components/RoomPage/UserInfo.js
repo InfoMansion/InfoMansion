@@ -111,7 +111,7 @@ export default function UserInfo({
         },
       });
       console.log(data);
-      setLikePosts(data.data);
+      setLikePosts(data.data.slice(0, 10));
       setOpenLikePostModal(true);
     } catch (e) {
       console.log(e);
@@ -172,7 +172,7 @@ export default function UserInfo({
           sx={{
             '.MuiPaper-root': {
               maxWidth: undefined,
-              maxHeight: '500px',
+              maxHeight: '700px',
               width: '80vw',
               height: '80vh',
               minHeight: '0',
@@ -184,10 +184,10 @@ export default function UserInfo({
             style={{
               display: 'flex',
               minHeight: '0',
+              height: '200px',
               alignItems: 'center',
               justifyContent: 'space-between',
               margin: '5px 10px',
-              borderBottom: '1px solid rgba(0, 0, 0, .2)',
             }}
           >
             <div style={{ fontSize: '25px' }}>좋아요 글 목록</div>
@@ -195,22 +195,28 @@ export default function UserInfo({
               <CloseIcon />
             </IconButton>
           </div>
-          {likePosts.map(post => (
-            <Box>
-              <Post
-                post={post}
-                totheight={100}
-                picwidth={70}
-                maxcontent={50}
-                openModal={openModal}
-              />
-              <Divider sx={{ m: 0 }} />
-            </Box>
-          ))}
+          <div
+            style={{
+              overflow: 'auto',
+              borderTop: '1px solid rgba(0, 0, 0, .2)',
+            }}
+          >
+            {likePosts.map(post => (
+              <Box>
+                <Post
+                  post={post}
+                  totheight={150}
+                  picwidth={100}
+                  maxcontent={50}
+                  openModal={openModal}
+                />
+                <Divider sx={{ m: 0 }} />
+              </Box>
+            ))}
+          </div>
         </Dialog>
       )}
-      <Grid container sx={{ px : 2, pt : 2 }}>
-
+      <Grid container sx={{ px: 2, pt: 2 }}>
         {/* 프로필 이미지 */}
         <Grid
           item
@@ -230,7 +236,7 @@ export default function UserInfo({
             style={{ objectFit: 'fill' }}
           />
         </Grid>
-        
+
         {/* 유저인포 */}
         <Grid item>
           <Box
@@ -308,7 +314,7 @@ export default function UserInfo({
         sx={{
           display: 'flex',
           flexWrap: 'wrap',
-          m : 2,
+          m: 2,
         }}
       >
         {userInfo.categories.map((category, index) => (

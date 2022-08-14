@@ -199,7 +199,7 @@ export default function PostViewModal({ showModal, handleModalClose }) {
             height: '80vh',
             minHeight: '400px',
             display: 'grid',
-            gridTemplateRows: '70px 2fr 1fr',
+            gridTemplateRows: '70px 1fr',
             borderRadius: '6px',
           },
         }}
@@ -279,7 +279,7 @@ export default function PostViewModal({ showModal, handleModalClose }) {
           <div
             style={{
               display: 'grid',
-              gridTemplateRows: '1fr 4fr 50px',
+              gridTemplateRows: '0.5fr 4fr 50px',
 
               minHeight: '0',
               height: '100%',
@@ -346,11 +346,6 @@ export default function PostViewModal({ showModal, handleModalClose }) {
               )}
             </div>
           </div>
-        </div>
-        <div style={{ borderTop: '1px solid rgba(0, 0, 0, .2)' }}>
-          <DialogContent>
-            <DialogContentText>댓글기능 추후 추가 예정</DialogContentText>
-          </DialogContent>
         </div>
         {renderMenu}
       </Dialog>

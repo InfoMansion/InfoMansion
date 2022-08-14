@@ -16,64 +16,60 @@ export default function RecentPost({ posts }) {
   const { auth } = useAuth();
 
   const openModal = post => {
-      setPost(post);
-      try {
-        axios
-          .get(`/api/v1/posts/detail/${post.id}`, {
-            headers: {
-              Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-            },
-          })
-          .then(res => {
-            console.log(res.data);
-            setPostDetail(res.data.data);
-            if (postDetail.userName === auth.username) {
-              setLoginUser(true);
-            }
-          })
-          .then(setShowModal(true));
-      } catch (e) {
-        console.log(e);
-      }
+    setPost(post);
+    try {
+      axios
+        .get(`/api/v1/posts/detail/${post.id}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        })
+        .then(res => {
+          console.log(res.data);
+          setPostDetail(res.data.data);
+          if (postDetail.userName === auth.username) {
+            setLoginUser(true);
+          }
+        })
+        .then(setShowModal(true));
+    } catch (e) {
+      console.log(e);
+    }
   };
   const handleModalClose = () => {
-      setShowModal(false);
-      setPostDetail('');
+    setShowModal(false);
+    setPostDetail('');
   };
 
   // post의 css를 모듈화해서, 여기랑 stuffpage에 각각 적용
   return (
-    <Box
-      sx={{ m : 1 }}
-    >
+    <Box sx={{ m: 1 }}>
       <PostViewModal
-          showModal={showModal}
-          handleModalClose={handleModalClose}
+        showModal={showModal}
+        handleModalClose={handleModalClose}
       ></PostViewModal>
 
-      <Typography variant="h6">
-        Recent post
-      </Typography>
+      <Typography variant="h6">Recent post</Typography>
       <Divider />
 
       <Box
         sx={{
-          maxHeight : '160px'
+          maxHeight: '160px',
         }}
         style={{
-          overflowY : 'scroll'
+          overflowY: 'scroll',
         }}
       >
         {posts.map(post => (
           <Box>
             <Post
               post={post}
-              totheight={100}
+              totheight={120}
               picwidth={70}
               maxcontent={50}
               openModal={openModal}
             />
-            <Divider sx={{m : 0}}/>
+            <Divider sx={{ m: 0 }} />
           </Box>
         ))}
       </Box>

@@ -134,28 +134,29 @@ export default function searchPost() {
 
   const value = categories.indexOf(category);
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', maxWidth: '1280px', margin: '0 auto' }}>
       <PostViewModal
         showModal={showModal}
         handleModalClose={handleModalClose}
       ></PostViewModal>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'rgba(255, 255, 255, 0.3)' }}>
         <Tabs
           value={value}
           onChange={(event, newValue) => {
             setCategory(categories[newValue]);
           }}
-          textColorPrimary="black"
+          textColorPrimary="white"
           sx={{
             '.MuiButtonBase-root': {
+              color: 'rgba(255, 255, 255, 0.5)',
               '&.Mui-selected': {
-                color: MAIN_COLOR,
+                color: 'white',
               },
             },
           }}
           TabIndicatorProps={{
             style: {
-              backgroundColor: MAIN_COLOR,
+              backgroundColor: 'white',
             },
           }}
         >
@@ -173,7 +174,7 @@ export default function searchPost() {
               ) : (
                 <Post
                   post={post}
-                  totheight={150}
+                  totheight={200}
                   picwidth={150}
                   maxcontent={150}
                   openModal={openModal}
