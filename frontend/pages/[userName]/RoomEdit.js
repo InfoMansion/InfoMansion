@@ -114,7 +114,7 @@ export default function RoomEdit() {
             // console.log(res);
         })
         // 사진 캡쳐. s3 정상화되면 살리면 됩니다.
-        // editRoomRef.current.ScreenShot();
+        editRoomRef.current.ScreenShot();
         router.push(`/${userName}`)
     }
     

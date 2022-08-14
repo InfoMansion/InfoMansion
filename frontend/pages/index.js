@@ -7,7 +7,6 @@ import Shop from './Shop_tmp';
 import { useCookies } from 'react-cookie';
 import axios from '../utils/axios';
 import { useRouter } from 'next/router';
-import { IMG_S3_URL } from '../constants';
 
 const Item = styled('li')(({ backgroundImage }) => ({
   ':before': {
@@ -85,7 +84,7 @@ export default function Home() {
                 {roomImgs.map(v => (
                   <Item
                     className={styles.item}
-                    backgroundImage={`url(${IMG_S3_URL}${v.roomImg})`}
+                    backgroundImage={`url(${v.roomImg})`}
                   >
                     <Link href={`/${v.userName}`} style={{ zIndex: 2 }}></Link>
                   </Item>
