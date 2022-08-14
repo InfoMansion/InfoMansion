@@ -168,7 +168,7 @@ public class UserServiceImpl implements UserService {
         Long following = followRepository.countByFromUserIs(user);
         Long follower = followRepository.countByToUserIs(user);
 
-        if(user.getId() == SecurityUtil.getCurrentUserId())
+        if(user.getId().equals(SecurityUtil.getCurrentUserId()))
             return UserInfoResponseDto.toDto(user,following, follower, true, false);
         else
             return UserInfoResponseDto.toDto(user, following, follower, false,

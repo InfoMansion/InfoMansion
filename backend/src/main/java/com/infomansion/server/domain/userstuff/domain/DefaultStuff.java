@@ -49,11 +49,11 @@ public enum DefaultStuff {
     }
 
     private static DefaultStuff valueOfStuffId(Long stuffId) {
-        if(stuffId == 514L) return WALL;
-        else if(stuffId == 202L) return FLOOR;
-        else if(stuffId == 469L) return TABLE;
-        else if(stuffId == 45L) return CHAIR;
-        else if(stuffId == 346L) return POSTBOX;
+        if(stuffId.equals(514L)) return WALL;
+        else if(stuffId.equals(202L)) return FLOOR;
+        else if(stuffId.equals(469L)) return TABLE;
+        else if(stuffId.equals(45L)) return CHAIR;
+        else if(stuffId.equals(346L)) return POSTBOX;
         else return GUESTBOOK;
     }
 
