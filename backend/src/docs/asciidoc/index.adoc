@@ -52,16 +52,16 @@ Info`Mansion REST API 명세서입니다.
 
 stuffId로 Stuff를 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/stuff-get-by-stuffid/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/stuff-get-by-stuffid/path-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/stuff-get-by-stuffid/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/stuff-get-by-stuffid/response-fields.adoc[]
 
 ---
@@ -71,13 +71,13 @@ include::{snippets}/stuff-get-by-stuffid/response-fields.adoc[]
 
 모든 Stuff를 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/stuff-all/http-request.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/stuff-all/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/stuff-all/response-fields.adoc[]
 
 ---
@@ -87,19 +87,19 @@ include::{snippets}/stuff-all/response-fields.adoc[]
 
 stuff의 일부를 수정하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/stuff-update/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/stuff-update/path-parameters.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/stuff-update/request-fields.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/stuff-update/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/stuff-update/response-fields.adoc[]
 
 ---
@@ -109,16 +109,16 @@ include::{snippets}/stuff-update/response-fields.adoc[]
 
 stuffId로 Stuff를 삭제하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/stuff-delete/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/stuff-delete/path-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/stuff-delete/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/stuff-delete/response-fields.adoc[]
 
 ---
@@ -132,16 +132,16 @@ include::{snippets}/stuff-delete/response-fields.adoc[]
 
 userId와 stuffId로 userStuff를 생성하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/userstuff-create/http-request.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/userstuff-create/request-fields.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/userstuff-create/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/userstuff-create/response-fields.adoc[]
 
 ---
@@ -151,16 +151,16 @@ include::{snippets}/userstuff-create/response-fields.adoc[]
 
 userStuffId로 UserStuff를 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/userstuff-get/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/userstuff-get/path-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/userstuff-get/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/userstuff-get/response-fields.adoc[]
 
 
@@ -171,13 +171,13 @@ include::{snippets}/userstuff-get/response-fields.adoc[]
 
 사용자의 UserStuff를 모두 조회
 
-==== Http Request
+=== Http Request
 include::{snippets}/userstuff-list-with-token/http-request.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/userstuff-list-with-token/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/userstuff-list-with-token/response-fields.adoc[]
 
 ---
@@ -190,16 +190,16 @@ username으로 배치된 UserStuff를 모두 조회
 
 StuffType.WALL이 data의 첫번째, StuffType.FLOOR이 data의 두번째 인덱스에 존재
 
-==== Http Request
+=== Http Request
 include::{snippets}/userstuff-get-arranged-userstuff-with-username/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/userstuff-get-arranged-userstuff-with-username/path-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/userstuff-get-arranged-userstuff-with-username/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/userstuff-get-arranged-userstuff-with-username/response-fields.adoc[]
 
 ---
@@ -209,16 +209,16 @@ include::{snippets}/userstuff-get-arranged-userstuff-with-username/response-fiel
 
 로그인한 사용자의 room이 수정될 경우 UserStuff 배치를 수정하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/userstuff-edit-room/http-request.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/userstuff-edit-room/request-fields.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/userstuff-edit-room/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/userstuff-edit-room/response-fields.adoc[]
 
 ---
@@ -228,16 +228,16 @@ include::{snippets}/userstuff-edit-room/response-fields.adoc[]
 
 userStuffId로 UserStuff를 삭제하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/userstuff-delete/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/userstuff-delete/path-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/userstuff-delete/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/userstuff-delete/response-fields.adoc[]
 
 ---
@@ -247,16 +247,16 @@ include::{snippets}/userstuff-delete/response-fields.adoc[]
 
 UserStuff의 별칭 또는 카테고리를 수정하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/userstuff-modify-alias-or-category/http-request.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/userstuff-modify-alias-or-category/request-fields.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/userstuff-modify-alias-or-category/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/userstuff-modify-alias-or-category/request-fields.adoc[]
 
 ---
@@ -266,16 +266,16 @@ include::{snippets}/userstuff-modify-alias-or-category/request-fields.adoc[]
 
 사용자가 상점에서 Stuff를 구매할 때 사용하는 API, 여러 개 Stuff를 구매 가능
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-stuff-purchase/http-request.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/user-stuff-purchase/request-fields.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-stuff-purchase/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-stuff-purchase/request-fields.adoc[]
 
 ---
@@ -285,13 +285,13 @@ include::{snippets}/user-stuff-purchase/request-fields.adoc[]
 
 배치된 UserStuff의 카테고리만 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/userstuff-category-placed/http-request.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/userstuff-category-placed/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/userstuff-category-placed/response-fields.adoc[]
 
 ---
@@ -304,16 +304,16 @@ include::{snippets}/userstuff-category-placed/response-fields.adoc[]
 
 임시저장된 포스트가 아닌 ``새롭게 작성하는 ``포스트를 발행하는 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-create-v2/http-request.adoc[]
 
-===== Request fields
+=== Request fields
 include::{snippets}/post-create-v2/request-fields.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-create-v2/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-create-v2/response-fields.adoc[]
 
 ---
@@ -323,19 +323,19 @@ include::{snippets}/post-create-v2/response-fields.adoc[]
 
 임시 포스트를 발행하거나, 발행된 포스트를 재 발행하는 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-re-create-v2/http-request.adoc[]
 
-===== Path variables
+=== Path variables
 include::{snippets}/post-re-create-v2/path-parameters.adoc[]
 
-===== Request fields
+=== Request fields
 include::{snippets}/post-re-create-v2/request-fields.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-re-create-v2/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-re-create-v2/response-fields.adoc[]
 
 ---
@@ -345,16 +345,16 @@ include::{snippets}/post-re-create-v2/response-fields.adoc[]
 
 새로 작성하는 포스트를 임시저장하고 포함된 이미지를 업로드하는 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-create-temp-post-and-upload-image-v2/http-request.adoc[]
 
-===== Request parts
+=== Request parts
 include::{snippets}/post-create-temp-post-and-upload-image-v2/request-parts.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-create-temp-post-and-upload-image-v2/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-create-temp-post-and-upload-image-v2/response-fields.adoc[]
 
 ---
@@ -366,16 +366,16 @@ include::{snippets}/post-create-temp-post-and-upload-image-v2/response-fields.ad
 
 (이미지 업로드 X)
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-create-temp-post-v2/http-request.adoc[]
 
-===== Request body
+=== Request body
 include::{snippets}/post-create-temp-post-v2/request-body.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-create-temp-post-v2/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-create-temp-post-v2/response-fields.adoc[]
 
 ---
@@ -385,19 +385,19 @@ include::{snippets}/post-create-temp-post-v2/response-fields.adoc[]
 
 임시 포스트 또는 발행된 포스트를 수정하고 임시저장하고 포함된 이미지까지 업로드하는 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-modify-temp-post-or-post-and-upload-image-v2/http-request.adoc[]
 
-===== Path parameters
+=== Path parameters
 include::{snippets}/post-modify-temp-post-or-post-and-upload-image-v2/path-parameters.adoc[]
 
-===== Request parts
+=== Request parts
 include::{snippets}/post-modify-temp-post-or-post-and-upload-image-v2/request-parts.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-modify-temp-post-or-post-and-upload-image-v2/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-modify-temp-post-or-post-and-upload-image-v2/response-fields.adoc[]
 
 ---
@@ -407,19 +407,19 @@ include::{snippets}/post-modify-temp-post-or-post-and-upload-image-v2/response-f
 
 임시 포스트 또는 발행된 포스트를 수정하고 임시저장하는 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-modify-temp-post-v2/http-request.adoc[]
 
-===== Path paramters
+=== Path paramters
 include::{snippets}/post-modify-temp-post-v2/path-parameters.adoc[]
 
-===== Request body
+=== Request body
 include::{snippets}/post-modify-temp-post-v2/request-body.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-modify-temp-post-v2/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-modify-temp-post-v2/response-fields.adoc[]
 
 ---
@@ -429,13 +429,13 @@ include::{snippets}/post-modify-temp-post-v2/response-fields.adoc[]
 
 임시 저장된 포스트를 조회하는 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-find-temp-post/http-request.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-find-temp-post/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-find-temp-post/response-fields.adoc[]
 
 ---
@@ -445,16 +445,16 @@ include::{snippets}/post-find-temp-post/response-fields.adoc[]
 
 UserStuff 클릭 시 해당 UserStuff에 포함된 모든 Post들 조회하는 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-find-by-userstuffid/http-request.adoc[]
 
-===== Path parameters
+=== Path parameters
 include::{snippets}/post-find-by-userstuffid/path-parameters.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-find-by-userstuffid/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-find-by-userstuffid/response-fields.adoc[]
 
 ---
@@ -464,19 +464,19 @@ include::{snippets}/post-find-by-userstuffid/response-fields.adoc[]
 
 Postbox에 포함된 모든 Post들 조회하는 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-find-post-in-the-postbox/http-request.adoc[]
 
-===== Path parameters
+=== Path parameters
 include::{snippets}/post-find-post-in-the-postbox/path-parameters.adoc[]
 
-==== Request parameters
+=== Request parameters
 include::{snippets}/post-find-post-in-the-postbox/request-parameters.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-find-post-in-the-postbox/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-find-post-in-the-postbox/response-fields.adoc[]
 
 ---
@@ -486,19 +486,19 @@ include::{snippets}/post-find-post-in-the-postbox/response-fields.adoc[]
 
 Guestbook에 포함된 모든 Post들 조회하는 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-find-post-in-the-guestbook/http-request.adoc[]
 
-===== Path parameters
+=== Path parameters
 include::{snippets}/post-find-post-in-the-guestbook/path-parameters.adoc[]
 
-==== Request parameters
+=== Request parameters
 include::{snippets}/post-find-post-in-the-guestbook/request-parameters.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-find-post-in-the-guestbook/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-find-post-in-the-guestbook/response-fields.adoc[]
 
 ---
@@ -508,16 +508,16 @@ include::{snippets}/post-find-post-in-the-guestbook/response-fields.adoc[]
 
 postId로 Post를 상세 조회하는 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-find-by-postid/http-request.adoc[]
 
-===== Path parameters
+=== Path parameters
 include::{snippets}/post-find-by-postid/path-parameters.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-find-by-postid/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-find-by-postid/response-fields.adoc[]
 
 ---
@@ -528,16 +528,16 @@ include::{snippets}/post-find-by-postid/response-fields.adoc[]
 postId로 Post를 삭제하는 API
 자신이 작성한 Post인 경우, 자신의 UserStuff에 게시된 Post인 경우에만 삭제가 가능합니다.
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-delete-by-post-id/http-request.adoc[]
 
-===== Path parameters
+=== Path parameters
 include::{snippets}/post-delete-by-post-id/path-parameters.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/post-delete-by-post-id/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-delete-by-post-id/response-fields.adoc[]
 
 ---
@@ -547,16 +547,16 @@ include::{snippets}/post-delete-by-post-id/response-fields.adoc[]
 
 Post에 좋아요를 누르는 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/user-likes-post/http-request.adoc[]
 
-===== Path parameters
+=== Path parameters
 include::{snippets}/user-likes-post/path-parameters.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/user-likes-post/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/user-likes-post/response-fields.adoc[]
 
 ---
@@ -566,13 +566,16 @@ include::{snippets}/user-likes-post/response-fields.adoc[]
 
 사용자가 좋아요를 누른 Post 목록 조회 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/post-list-user-likes/http-request.adoc[]
 
-===== Http Response
+=== Request parameters
+include::{snippets}/post-list-user-likes/request-parameters.adoc[]
+
+=== Http Response
 include::{snippets}/post-list-user-likes/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/post-list-user-likes/response-fields.adoc[]
 
 ---
@@ -582,16 +585,16 @@ include::{snippets}/post-list-user-likes/response-fields.adoc[]
 
 해당 Post에 좋아요를 누른 사용자 목록 조회 API
 
-===== Http Request
+=== Http Request
 include::{snippets}/users-like-this-post/http-request.adoc[]
 
-===== Path parameters
+=== Path parameters
 include::{snippets}/user-likes-post/path-parameters.adoc[]
 
-===== Http Response
+=== Http Response
 include::{snippets}/users-like-this-post/http-response.adoc[]
 
-===== Response fields
+=== Response fields
 include::{snippets}/users-like-this-post/response-fields.adoc[]
 
 ---
@@ -605,13 +608,13 @@ include::{snippets}/users-like-this-post/response-fields.adoc[]
 
 회원가입 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-create/http-request.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/user-create/request-fields.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-create/http-response.adoc[]
 
 ---
@@ -621,22 +624,22 @@ include::{snippets}/user-create/http-response.adoc[]
 
 로그인 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-login/http-request.adoc[]
 
-==== Request body
+=== Request body
 include::{snippets}/user-login/request-body.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/user-login/request-fields.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-login/http-response.adoc[]
 
-==== Response Headers
+=== Response Headers
 include::{snippets}/user-login/response-headers.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-login/response-fields.adoc[]
 
 ---
@@ -646,25 +649,25 @@ include::{snippets}/user-login/response-fields.adoc[]
 
 토큰 갱신 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-reissue/http-request.adoc[]
 
-==== Request Headers
+=== Request Headers
 include::{snippets}/user-reissue/response-headers.adoc[]
 
-==== Request Body
+=== Request Body
 include::{snippets}/user-reissue/request-body.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/user-reissue/request-fields.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-reissue/http-response.adoc[]
 
-==== Response Header
+=== Response Header
 include::{snippets}/user-reissue/response-headers.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-reissue/response-fields.adoc[]
 
 ---
@@ -674,16 +677,16 @@ include::{snippets}/user-reissue/response-fields.adoc[]
 
 로그아웃 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-logout/http-request.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-logout/http-response.adoc[]
 
-==== Response Headers
+=== Response Headers
 include::{snippets}/user-logout/response-headers.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-logout/response-fields.adoc[]
 
 ---
@@ -693,16 +696,16 @@ include::{snippets}/user-logout/response-fields.adoc[]
 
 username을 기반으로 사용자의 정보를 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-find-by-username/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/user-find-by-username/path-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-find-by-username/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-find-by-username/response-fields.adoc[]
 
 ---
@@ -712,13 +715,13 @@ include::{snippets}/user-find-by-username/response-fields.adoc[]
 
 로그인한 사용자의 프로필 사진 URL과 사용자이름을 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-simple-info/http-request.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-simple-info/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-simple-info/response-fields.adoc[]
 
 ---
@@ -728,16 +731,16 @@ include::{snippets}/user-simple-info/response-fields.adoc[]
 
 사용자의 프로필이미지나 기본정보를 수정하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-modify-profile/http-request.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/user-modify-profile/request-parts.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-modify-profile/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-modify-profile/response-fields.adoc[]
 
 ---
@@ -747,16 +750,16 @@ include::{snippets}/user-modify-profile/response-fields.adoc[]
 
 사용자의 비밀번호를 변경하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-chang-pw/http-request.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/user-chang-pw/request-fields.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-chang-pw/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-chang-pw/http-response.adoc[]
 
 ---
@@ -766,16 +769,16 @@ include::{snippets}/user-chang-pw/http-response.adoc[]
 
 사용자의 정보를 변경하기 전 인증하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-auth-before-change-info/http-request.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/user-auth-before-change-info/request-fields.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-auth-before-change-info/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-auth-before-change-info/response-fields.adoc[]
 
 ---
@@ -785,31 +788,31 @@ include::{snippets}/user-auth-before-change-info/response-fields.adoc[]
 
 사용자가 비밀번호를 잊었을 때 사용하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-forgot-password/http-request.adoc[]
 
-==== Request fields
+=== Request fields
 include::{snippets}/user-forgot-password/request-fields.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-forgot-password/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-forgot-password/response-fields.adoc[]
 
 ---
 [[User-Credit]]
-==== 사용자의 Credit 조회
+=== 사용자의 Credit 조회
 
 로그인한 사용자의 Credit을 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-credit/http-request.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-credit/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-credit/response-fields.adoc[]
 
 ---
@@ -821,16 +824,16 @@ include::{snippets}/user-credit/response-fields.adoc[]
 
 검색어로 post 제목을 검색하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/post-search-title/http-request.adoc[]
 
-==== Request parameters
+=== Request parameters
 include::{snippets}/post-search-title/request-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/post-search-title/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/post-search-title/response-fields.adoc[]
 
 ---
@@ -840,16 +843,16 @@ include::{snippets}/post-search-title/response-fields.adoc[]
 
 검색어로 post 내용을 검색하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/post-search-title/http-request.adoc[]
 
-==== Request parameters
+=== Request parameters
 include::{snippets}/post-search-title/request-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/post-search-title/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/post-search-title/response-fields.adoc[]
 
 ---
@@ -859,16 +862,16 @@ include::{snippets}/post-search-title/response-fields.adoc[]
 
 검색어로 사용자를 검색하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/user-search/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/user-search/request-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/user-search/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/user-search/response-fields.adoc[]
 
 ---
@@ -881,16 +884,16 @@ include::{snippets}/user-search/response-fields.adoc[]
 
 상점 첫 방문 시 모든 카테고리에 대한 Stuff를 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/store-all/http-request.adoc[]
 
-==== Request parameters
+=== Request parameters
 include::{snippets}/store-all/request-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/store-all/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/store-all/response-fields.adoc[]
 
 ---
@@ -900,19 +903,19 @@ include::{snippets}/store-all/response-fields.adoc[]
 
 가구타입으로 원하는 페이지의 Stuff 조회
 
-==== Http Request
+=== Http Request
 include::{snippets}/store-with-stufftype/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/store-with-stufftype/path-parameters.adoc[]
 
-==== Request parameters
+=== Request parameters
 include::{snippets}/store-with-stufftype/request-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/store-all/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/store-all/response-fields.adoc[]
 
 ---
@@ -922,13 +925,13 @@ include::{snippets}/store-all/response-fields.adoc[]
 
 최신 가구 10개를 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/ths-latest-stuff/http-request.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/ths-latest-stuff/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/ths-latest-stuff/response-fields.adoc[]
 
 ---
@@ -941,13 +944,13 @@ include::{snippets}/ths-latest-stuff/response-fields.adoc[]
 
 메인페이지에서 로그인한 사용자의 카테고리를 기반으로 다른 사용자의 Room을 추천하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/room-recommend/http-request.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/room-recommend/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/room-recommend/response-fields.adoc[]
 
 ---
@@ -957,13 +960,13 @@ include::{snippets}/room-recommend/response-fields.adoc[]
 
 랜덤으로 20개의 Room Image를 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/room-random-image/http-request.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/room-random-image/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/room-random-image/response-fields.adoc[]
 
 ---
@@ -973,19 +976,19 @@ include::{snippets}/room-random-image/response-fields.adoc[]
 
 Room 수정이 완료되었을 때 DB에 저장된 room Image를 변경하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/room-edit/http-request.adoc[]
 
-==== Request parts
+=== Request parts
 include::{snippets}/room-edit/request-parts.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/room-edit/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/room-edit/response-fields.adoc[]
 
-==== Request fields
+=== Request fields
 
 
 
@@ -998,16 +1001,16 @@ include::{snippets}/room-edit/response-fields.adoc[]
 
 username인 사용자를 팔로우하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/follow-user/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/follow-user/path-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/follow-user/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/follow-user/response-fields.adoc[]
 
 ---
@@ -1017,16 +1020,16 @@ include::{snippets}/follow-user/response-fields.adoc[]
 
 username인 사용자를 언팔로우하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/unfollow-user/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/unfollow-user/path-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/unfollow-user/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/unfollow-user/response-fields.adoc[]
 
 ---
@@ -1036,16 +1039,16 @@ include::{snippets}/unfollow-user/response-fields.adoc[]
 
 username인 사용자의 팔로우 목록을 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/following-list/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/following-list/path-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/following-list/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/following-list/response-fields.adoc[]
 
 ---
@@ -1055,16 +1058,16 @@ include::{snippets}/following-list/response-fields.adoc[]
 
 username인 사용자의 팔로워 목록을 조회하는 API
 
-==== Http Request
+=== Http Request
 include::{snippets}/follower-list/http-request.adoc[]
 
-==== Path parameters
+=== Path parameters
 include::{snippets}/follower-list/path-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/follower-list/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/follower-list/response-fields.adoc[]
 
 ---
@@ -1074,13 +1077,13 @@ include::{snippets}/follower-list/response-fields.adoc[]
 
 로그인한 사용자가 읽지 않은 Notification 목록 조회
 
-==== Http Request
+=== Http Request
 include::{snippets}/notifications-user-unread/http-request.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/notifications-user-unread/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/notifications-user-unread/response-fields.adoc[]
 
 ---
@@ -1090,16 +1093,16 @@ include::{snippets}/notifications-user-unread/response-fields.adoc[]
 
 로그인한 사용자의 모든 Notification 목록 조회 with 페이징
 
-==== Http Request
+=== Http Request
 include::{snippets}/notifications-all/http-request.adoc[]
 
-==== Request Params
+=== Request Params
 include::{snippets}/notifications-all/request-parameters.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/notifications-all/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/notifications-all/response-fields.adoc[]
 
 ---
@@ -1109,13 +1112,13 @@ include::{snippets}/notifications-all/response-fields.adoc[]
 
 로그인한 사용자가 읽지 않은 모든 Notification 읽음으로 처리
 
-==== Http Request
+=== Http Request
 include::{snippets}/read-unread-notifications/http-request.adoc[]
 
-==== Http Response
+=== Http Response
 include::{snippets}/read-unread-notifications/http-response.adoc[]
 
-==== Response fields
+=== Response fields
 include::{snippets}/read-unread-notifications/response-fields.adoc[]
 
 ---

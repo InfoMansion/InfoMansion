@@ -7,6 +7,7 @@ import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -92,9 +93,9 @@ public class PostApiController {
     }
 
     @GetMapping("/api/v2/posts/my-likes")
-    public ResponseEntity<? extends BasicResponse> getPostsUserLikes() {
+    public ResponseEntity<? extends BasicResponse> getPostsUserLikes(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new CommonResponse<>(userLikePostService.findPostsUserLikes()));
+                .body(new CommonResponse<>(userLikePostService.findPostsUserLikes(pageable)));
     }
 
     @PatchMapping("/api/v1/posts/{postId}")

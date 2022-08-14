@@ -16,6 +16,9 @@ import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
 import com.infomansion.server.global.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,16 +87,11 @@ public class UserLikePostServiceImpl implements UserLikePostService {
         return usersLikeThisPost.stream().map(userLikePost -> UserSimpleProfileResponseDto.toDto(userLikePost.getUser())).collect(Collectors.toList());
     }
 
-    public List<PostSimpleResponseDto> findPostsUserLikes() {
+    public Slice<PostSimpleResponseDto> findPostsUserLikes(Pageable pageable) {
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        List<UserLikePost> postsByUserLike = userLikePostRepository.findPostsByUserLike(user);
-
-        if(postsByUserLike.isEmpty()) {
-            return null;
-        }
-
-        return postsByUserLike.stream().map(userLikePost -> new PostSimpleResponseDto(userLikePost.getPost())).collect(Collectors.toList());
+        return userLikePostRepository.findPostsByUserLike(user, pageable)
+                .map(userLikePost -> new PostSimpleResponseDto(userLikePost.getPost()));
     }
 }

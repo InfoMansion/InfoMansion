@@ -438,9 +438,9 @@ public class PostRestDocsTest {
     @Test
     public void 사용자가_좋아요를_누른_Post_목록_조회() throws Exception {
         //given
-        List<PostSimpleResponseDto> responseDtoList = new ArrayList<>();
+        List<PostSimpleResponseDto> posts = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
-            responseDtoList.add(
+            posts.add(
                     PostSimpleResponseDto.builder()
                             .id((long) i)
                             .title("title"+i)
@@ -451,25 +451,34 @@ public class PostRestDocsTest {
                             .likes(2L)
                             .build());
         }
-        given(userLikePostService.findPostsUserLikes()).willReturn(responseDtoList);
+        Slice<PostSimpleResponseDto> responseDtos = new SliceImpl<>(posts);
+        given(userLikePostService.findPostsUserLikes(any(Pageable.class))).willReturn(responseDtos);
 
         //when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v2/posts/my-likes"))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v2/posts/my-likes")
+                        .param("size", "10")
+                        .param("page", "1"))
                 .andExpect(status().isOk())
                 .andDo(document("post-list-user-likes",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        responseFields(common(fieldWithPath("data").type(JsonFieldType.ARRAY).description("사용자가 좋아요를 누른 Post 목록")))
-                                .andWithPrefix("data.[].",
-                                        fieldWithPath("id").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
-                                        fieldWithPath("title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
-                                        fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
-                                        fieldWithPath("likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
-                                        fieldWithPath("category").type(JsonFieldType.OBJECT).description(CATEGORY.getDescription()),
-                                        fieldWithPath("category.category").type(CATEGORY.getJsonFieldType()).description(CATEGORY.getDescription()),
-                                        fieldWithPath("category.categoryName").type(CATEGORY_NAME.getJsonFieldType()).description(CATEGORY_NAME.getDescription()),
-                                        fieldWithPath("modifiedDate").type(MODIFIED_DATE.getJsonFieldType()).description(MODIFIED_DATE.getDescription()).optional(),
-                                        fieldWithPath("defaultPostThumbnail").type(DEFAULTPOSTTHUMBNAIL.getJsonFieldType()).description(DEFAULTPOSTTHUMBNAIL.getDescription())
+                        requestParameters(
+                                parameterWithName("page").description("조회할 페이지 번호"),
+                                parameterWithName("size").description("한 페이지에서 조회할 데이터 개수")
+                        ),
+                        relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("사용자가 좋아요를 누른 Post 목록")))
+                                .andWithPrefix("data..",
+                                        fieldWithPath("content[]").type(SLICE_CONTENT.getJsonFieldType()).description(SLICE_CONTENT.getDescription()),
+                                        fieldWithPath("content.[].id").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("content.[].title").type(POST_TITLE.getJsonFieldType()).description(POST_TITLE.getDescription()),
+                                        fieldWithPath("content.[].content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
+                                        fieldWithPath("content.[].defaultPostThumbnail").type(JsonFieldType.STRING).description("대표 이미지 사진"),
+                                        fieldWithPath("content.[].likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
+                                        fieldWithPath("numberOfElements").type(SLICE_NUMBER_OF_ELEMENTS.getJsonFieldType()).description(SLICE_NUMBER_OF_ELEMENTS.getDescription()),
+                                        fieldWithPath("first").type(SLICE_FIRST.getJsonFieldType()).description(SLICE_FIRST.getDescription()),
+                                        fieldWithPath("last").type(SLICE_LAST.getJsonFieldType()).description(SLICE_LAST.getDescription()),
+                                        fieldWithPath("number").type(SLICE_NUMBER.getJsonFieldType()).description(SLICE_NUMBER.getDescription()),
+                                        fieldWithPath("size").type(SLICE_SIZE.getJsonFieldType()).description(SLICE_SIZE.getDescription())
                                 )
                 ));
     }
