@@ -86,7 +86,7 @@ public class RoomServiceImpl implements RoomService {
         Room loginUserRoom = roomRepository.findRoomWithUser(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
 
-        if(!loginUserRoom.getRoomImg().equals("https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/room/default.jpg"))
+        if(!loginUserRoom.getRoomImg().equals("https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/room/default_room.png"))
             s3Uploader.deleteFiles(Arrays.asList(loginUserRoom.getRoomImg()));
         try {
             loginUserRoom.changeRoomImage(s3Uploader, roomImage);

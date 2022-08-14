@@ -34,7 +34,7 @@ public class Room extends BaseTimeEntity {
     @Builder
     public Room(User user) {
         this.user = user;
-        this.roomImg = "default";
+        this.roomImg = "https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com/room/default_room.png";
         this.deleteFlag = false;
     }
 
