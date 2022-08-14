@@ -111,11 +111,9 @@ export default function RoomEdit() {
             }
         })
         .then( res => {
-            // console.log(res);
+            editRoomRef.current.ScreenShot();
+            router.push(`/${userName}`)
         })
-        // 사진 캡쳐. s3 정상화되면 살리면 됩니다.
-        editRoomRef.current.ScreenShot();
-        router.push(`/${userName}`)
     }
     
     function addLocateStuff(e, stuff) {
