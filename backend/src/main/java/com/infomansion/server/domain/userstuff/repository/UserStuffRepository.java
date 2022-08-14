@@ -27,15 +27,16 @@ public interface UserStuffRepository extends JpaRepository<UserStuff, Long> {
     List<Long> findByUserId(@Param("userId") Long userId);
 
     @Query("select us from UserStuff us join fetch us.stuff where us.selected = true and us.user = :user " +
+            "and us.category not in :categories " +
             "order by (case when us.stuff.stuffType = 'WALL' then 1 " +
             "when us.stuff.stuffType = 'FLOOR' then 2 " +
             "else 3 end)")
-    List<UserStuff> findArrangedByUser(@Param("user") User user);
+    List<UserStuff> findArrangedByUser(@Param("user") User user, @Param("categories") List<Category> categories);
 
-    @Query("select us from UserStuff us where us.user = :user and us.selected = true and us.category <> :category ")
-    List<UserStuff> findCategoryPlacedInRoom(@Param("user") User user, @Param("category") Category category);
+    @Query("select us from UserStuff us where us.user = :user and us.selected = true and us.category not in :categories ")
+    List<UserStuff> findCategoryPlacedInRoom(@Param("user") User user, @Param("categories") List<Category> categories);
 
-    List<UserStuff> findByUserIsAndIdNotInAndSelectedIsTrue(User user, List<Long> userStuffIds);
+    List<UserStuff> findByUserIsAndIdNotInAndSelectedIsTrueAndCategoryNotIn(User user, List<Long> userStuffIds, List<Category> categories);
 
     @Query("select us from UserStuff us join fetch us.stuff where us.user.id = :userId and us.stuff.stuffType = :stuffType")
     Optional<UserStuff> findUserStuffByStuffType(@Param("userId")Long userId, @Param("stuffType") StuffType stuffType);

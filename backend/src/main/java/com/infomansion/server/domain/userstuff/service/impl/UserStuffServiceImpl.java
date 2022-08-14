@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,7 +56,9 @@ public class UserStuffServiceImpl implements UserStuffService {
         User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        List<Category> categories = Arrays.asList(Category.GUESTBOOK, Category.POSTBOX);
         return userStuffRepository.findByUser(user).stream()
+                .filter(userStuff -> userStuff.getCategory() == null || !categories.contains(userStuff.getStuff()))
                 .map(UserStuffEditResponseDto::toDto)
                 .collect(Collectors.toList());
     }
@@ -122,8 +125,8 @@ public class UserStuffServiceImpl implements UserStuffService {
         if(user.isPrivateFlag() && !user.getId().equals(SecurityUtil.getCurrentUserId())){
             throw new CustomException(ErrorCode.NOT_PUBLIC_USER);
         }
-
-        return userStuffRepository.findArrangedByUser(user).stream()
+        List<Category> categories = Arrays.asList(Category.GUESTBOOK, Category.POSTBOX);
+        return userStuffRepository.findArrangedByUser(user, categories).stream()
                 .map(userStuff -> UserStuffArrangedResponseDto.toDto(userStuff))
                 .collect(Collectors.toList());
     }
@@ -173,7 +176,8 @@ public class UserStuffServiceImpl implements UserStuffService {
     public List<UserStuffCategoryResponseDto> findCategoryPlacedInRoom() {
         User loginUser = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return userStuffRepository.findCategoryPlacedInRoom(loginUser, Category.NONE)
+        List<Category> categories = Arrays.asList(Category.NONE, Category.GUESTBOOK);
+        return userStuffRepository.findCategoryPlacedInRoom(loginUser, categories)
                 .stream().map(UserStuffCategoryResponseDto::toResponseDto)
                 .collect(Collectors.toList());
     }
@@ -188,14 +192,10 @@ public class UserStuffServiceImpl implements UserStuffService {
         List<Long> placedUserStuffIds = requestDtos.stream().map(UserStuffEditRequestDto::getUserStuffId).collect(Collectors.toList());
 
         // 방에서 제외되어야 할 UserStuff들의 selected와 Position, Rotation만 변경
-        List<UserStuff> excludedUserStuffs = userStuffRepository.findByUserIsAndIdNotInAndSelectedIsTrue(loginUser, placedUserStuffIds);
+        List<Category> categories = Arrays.asList(Category.GUESTBOOK, Category.POSTBOX);
+        List<UserStuff> excludedUserStuffs = userStuffRepository.findByUserIsAndIdNotInAndSelectedIsTrueAndCategoryNotIn(loginUser, placedUserStuffIds, categories);
         if(excludedUserStuffs.size() > 0) {
-            excludedUserStuffs.forEach(excludedUserStuff -> {
-                if(excludedUserStuff.getCategory() == Category.GUESTBOOK || excludedUserStuff.getCategory() == Category.POSTBOX) {
-                    throw new CustomException(ErrorCode.USER_STUFF_NOT_EXCLUDED);
-                }
-                excludedUserStuff.changeExcludedState();
-            });
+            excludedUserStuffs.forEach(UserStuff::changeExcludedState);
         }
 
         Set<String> checkDuplicateCategory = new HashSet<>();
