@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Room from '../../components/Room';
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import UserInfo from '../../components/RoomPage/UserInfo';
 import { useRouter } from 'next/router';
 import StuffPage from '../../components/RoomPage/StuffPage';
@@ -15,7 +15,6 @@ export default function RoomPage() {
   const [userName, setUserName] = useState();
   const [stuff, setStuff] = useState({});
   const [stuffon, setStuffon] = useState(false);
-  const [useron, setUseron] = useState(true);
 
   const [loginUser, setLoginUser] = useRecoilState(loginUserState);
   const [nowFollow, setNowFollow] = useState();
@@ -41,8 +40,6 @@ export default function RoomPage() {
 
   useEffect(() => {
     if(!userName) return;
-    console.log(userName);
-
     try {
       axiosApiInstance
         .get(`/api/v1/users/${userName}`, {
@@ -56,20 +53,11 @@ export default function RoomPage() {
           setUserInfo(res.data.data);
           setNowFollow(res.data.data.follower);
         });
-
     } catch (e) {
       console.log(e);
     }
   }, [userName])
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo])
-
-  function followToggle() {
-    console.log("클릭")
-  }
-  
   const userInfoAnimation = useSpring({
     from : { 
       position : 'absolute',

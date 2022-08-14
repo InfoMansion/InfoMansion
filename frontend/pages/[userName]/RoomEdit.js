@@ -11,6 +11,7 @@ import EditConsole from "../../components/RoomEditPage/EditConsole";
 import { useRecoilState } from "recoil";
 import { categoryState, editingState, editStuffState, fromState, positionState, rotationState } from "../../state/editRoomState";
 import useAuth from "../../hooks/useAuth";
+import { pageLoading } from '../../state/pageLoading';
 
 export default function RoomEdit() {
     const [cookies] = useCookies(['cookie-name']);
@@ -29,7 +30,8 @@ export default function RoomEdit() {
     const [floorStuffs, setFloorStuffs] = useState([]);
     const [locatedStuffs, setLocatedStuffs] = useState([]);
     const [unlocatedStuffs, setUnlocatedStuffs] = useState([]);
-    
+    const [, setPageLoading] = useSetRecoilState(pageLoading);
+
     // 현재 편집중인 스터프.
     const [editing, setEditing] = useRecoilState(editingState);
     const [editStuff, setEditStuff] = useRecoilState(editStuffState);
@@ -44,6 +46,7 @@ export default function RoomEdit() {
     // stuff 가져오기.
     useEffect(() => {
         try{
+            setPageLoading(true);
             axios.get(`/api/v1/userstuffs/list`, {
                 headers : { 
                     Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
@@ -53,6 +56,7 @@ export default function RoomEdit() {
                 setWallStuffs(res.data.data.filter(stuff => stuff.stuffType == 'WALL'))
                 setFloorStuffs(res.data.data.filter(stuff => stuff.stuffType == 'FLOOR'))
                 setStuffs(res.data.data.filter(stuff => stuff.stuffType != 'WALL' && stuff.stuffType != 'FLOOR'));
+                setPageLoading(false);
             })
         }catch(e) {
             console.log(e);
@@ -105,6 +109,7 @@ export default function RoomEdit() {
 
     function EndEdit() {
         let senddata = [{...wallStuff}, {...floorStuff}, ...locatedStuffs];
+        setPageLoading(true);
         axios.put('/api/v1/userstuffs/edit', senddata, {
             headers : {
                 Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
@@ -112,7 +117,9 @@ export default function RoomEdit() {
         })
         .then( res => {
             editRoomRef.current.ScreenShot();
-            router.push(`/${userName}`)
+            setTimeout(function () {
+                router.push(`/${userName}`);
+            }, 2000)
         })
     }
     
