@@ -47,6 +47,7 @@ export default function LogIn({ onSignIn }) {
   const { setAuth } = useAuth();
   const [boxWidth, setBoxWidth] = useState(0.4 * window.innerWidth);
   const [boxHeight, setBoxHeight] = useState(0.3 * window.innerWidth);
+  const [images, setImages] = useState([]);
 
   const confirmId = /^[\w+_]\w+@\w+\.\w+/.test(inputId);
   const confirmPw = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(inputPw);
@@ -62,6 +63,10 @@ export default function LogIn({ onSignIn }) {
 
   useEffect(() => {
     window.addEventListener('resize', handleBoxSize);
+    axios.get(`/api/v1/rooms/random`)
+    .then(res => {
+      setImages(res.data.data);
+    })
   }, []);
 
   function goSignUp(event) {
@@ -87,10 +92,11 @@ export default function LogIn({ onSignIn }) {
     };
 
     try {
-      console.log(credentials);
+      // console.log(credentials); 
       const { data } = await axios.post('/api/v1/auth/login', credentials, {
         withCredentials: true,
       });
+
       setAuth({ isAuthorized: true, accessToken: data.data.accessToken });
       localStorage.setItem('expiresAt', data.data.expiresAt);
       onSignIn(data.data.accessToken);
@@ -116,7 +122,7 @@ export default function LogIn({ onSignIn }) {
             height: boxHeight,
           }}
         >
-          {bundle.data.map(({ left, right, top, bottom, size, opacity }) => (
+          {bundle.data.map(({ id, left, right, top, bottom, size, opacity }) => (
             <div
               style={{
                 position: 'absolute',
@@ -128,7 +134,7 @@ export default function LogIn({ onSignIn }) {
               }}
             >
               <img
-                src="/test.png"
+                src={images[id]}
                 className={styles.itemlogin}
                 style={{ width: '100%' }}
               />

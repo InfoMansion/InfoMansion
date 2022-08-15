@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const handleBeforeUnload = event => {
-      console.log(event);
+      // console.log(event);
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
