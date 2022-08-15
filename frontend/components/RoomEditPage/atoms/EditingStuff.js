@@ -2,7 +2,6 @@ import { useGLTF } from "@react-three/drei";
 import { useState } from "react";
 
 export default function EditStuff({data, position, rotation}) {
-    console.log(data);
     const [geometry] = useState(data.geometry);
     const [material] = useState(data.material);
     const [glbpath] = useState(data.stuffGlbPath);

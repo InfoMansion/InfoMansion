@@ -26,7 +26,7 @@ export default function UpDownControl({part, tag, index, limit}) {
             display : 'flex',
         }}>
             <Grid container spacing={2} alignItems="center">
-                <Grid item xs={1}>
+                <Grid item xs={3} minWidth={80}>
                     {tag}
                 </Grid>
                 <Grid item xs>

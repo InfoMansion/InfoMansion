@@ -13,6 +13,7 @@ import { useRecoilState } from 'recoil'
 import { editingState, editStuffState, positionState, rotationState } from '../state/editRoomState'
 
 import EditingStuff from './RoomEditPage/atoms/EditingStuff'
+import TagButton from './RoomPage/atoms/TagButton'
 
 const EditRoom = forwardRef(( {mapStuffs, stuffs, StuffClick}, ref ) => {
     useImperativeHandle(ref, () => ({ ScreenShot }))
@@ -49,14 +50,37 @@ const EditRoom = forwardRef(( {mapStuffs, stuffs, StuffClick}, ref ) => {
             <ScreenshotButton ref={ScreenShotButtonRef} />
             <EditRoomCamera camloc={[0, 0, 0]}/>
             <OrthographicCamera makeDefault zoom={zoomscale} />
-            
+            {/* xyz 표시 */}
+            {editing ? 
+                <group>
+                    <TagButton 
+                        pos={[2.5, 0, 5.3]}
+                        rot={[-1.58,0,-1.58]}
+                        fontSize={0.7}
+                        text={"X"}
+                    />
+                    <TagButton
+                        pos={[1.6, 0, 4.9]}
+                        rot={[0,0.78,0]}
+                        fontSize={0.7}
+                        text={"Y"}
+                    />
+                    <TagButton 
+                        pos={[2, 0, 5.8]}
+                        rot={[-1.58,0,0]}
+                        fontSize={0.7}
+                        text={"Z"}
+                    />
+                </group>
+                : <></>
+            }
+
             {/* 벽, 바닥 */}
             <MapStuffs
                 Hover={Hover}
                 Click={Click}
                 stuffs={mapStuffs}
             />
-
             {/* stuffs */}
             <Stuffs 
                 stuffs={stuffs}

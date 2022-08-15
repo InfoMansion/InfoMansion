@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Container } from '@mui/material';
 import RoomManageMenu from './RoomPage/RoomManageMenu';
 import MapStuffs from './RoomPage/MapStuffs';
 import Stuffs from './RoomPage/Stuffs';
@@ -21,6 +21,7 @@ import ConfigStuffs from './jsonData/ConfigStuffs.json'
 import ConfigStuff from './RoomPage/atoms/ConfigStuff' 
 import PostItems from './RoomPage/PostItems';
 import GuestBookPage from './RoomPage/atoms/GuestBookPage'
+import TagButton from './RoomPage/atoms/TagButton';
 
 export default function Room({ StuffClick, setClickLoc, userName, pagePush, profileImage, setNowFollow }) {
   const [cookies] = useCookies(['cookie-name']);
@@ -31,7 +32,7 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
   const [hovered, setHovered] = useState(0);
   const [clicked, setClicked] = useState(0);
 
-  const [tagon, setTagon] = useState(true);
+  const [tagon, setTagon] = useState(false);
   const [camloc] = useState([0, 0, 0]);
   const [, setClickedStuffCategory] = useRecoilState(clickedStuffCategoryState);
   const [loginUser] = useRecoilState(loginUserState);
@@ -142,36 +143,6 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
         position: 'relative',
       }}
     >
-      {/* 태그 토글 버튼 */}
-      <Button
-        variant="outlined"
-        style={{
-          position: 'absolute',
-          right : 0,
-          zIndex: '2',
-        }}
-        sx={{ m: 2 }}
-        onClick={() => setTagon(!tagon)}
-      >
-        {tagon ? <div>태그 숨기기.</div> : <div>태그 보기.</div>}
-      </Button>
-      {/* 내 방일 때만 표시 */}
-
-      {loginUser ? (
-        <Box
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            zIndex: '2',
-          }}
-        >
-          <RoomManageMenu userName={userName} />
-        </Box>
-      ) : (
-        <></>
-      )}
-
       {/* 캔버스 영역 */}
       <Canvas shadows>
         <RoomLight />
@@ -196,48 +167,69 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
           isFollow={isFollow}
           speed={0.002}
         />
+
+        {/* userName 표시 */}
+        <TagButton 
+          pos={[3, 4.4, 0]}
+          rot={[0,0,0]}
+          fontSize={0.3}
+          text={userName}
+        />
+
+        {/* tagOnoff 표시 */}
+        <TagButton 
+          pos={[0, 4.3, 3.55]}
+          rot={[0,1.58,0]}
+          fontSize={0.2}
+          click={() => setTagon(!tagon)}
+          text={tagon ? 'Hide Tag' : 'Show Tag'}
+        />
+
         <Particles />
         {/* <Stuff_s3test /> */}
       </Canvas>
 
-      
-      {
-        loginUser ?
-        <div>
-          <Canvas
-            style={{
-              position : 'absolute',
-              right : '3%',
-              bottom : 50,
-              width : '250px',
-              height : '250px'
-            }}
-          >
-            {/* 팔로우 버튼 */}
-            <ConfigItems
-                pagePush={pagePush}
-                userName={userName}
-                profileImage={profileImage}
-              />
-          </Canvas>
-        </div>
-        : <></>
-      }
-      <Canvas
-        style={{
-          position : 'absolute',
-          left : '3%',
-          bottom : 50,
-          width : '250px',
-          height : '250px'
-        }}
+      <Container
+        style={{position : 'relative'}}
       >
-        <PostItems
-          popupPosts={popupPosts}
-          userName={userName}
-          profileImage={profileImage}
-        />
-      </Canvas>
+        {
+          loginUser ?
+          <div>
+            <Canvas
+              style={{
+                position : 'absolute',
+                right : '3%',
+                bottom : 50,
+                width : '250px',
+                height : '250px'
+              }}
+            >
+              {/* 팔로우 버튼 */}
+              <ConfigItems
+                  pagePush={pagePush}
+                  userName={userName}
+                  profileImage={profileImage}
+                />
+            </Canvas>
+          </div>
+          : <></>
+        }
+        <Canvas
+          style={{
+            position : 'absolute',
+            left : '3%',
+            bottom : 50,
+            width : '250px',
+            height : '250px'
+          }}
+        >
+          <PostItems
+            popupPosts={popupPosts}
+            userName={userName}
+            profileImage={profileImage}
+          />
+        </Canvas>
+      </Container>
 
       <GuestBookPage 
         open={guestBookOpen}

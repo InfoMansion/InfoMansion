@@ -58,7 +58,7 @@ export default function Model({ tagon, Hover, Click, data, ...props }) {
   }, [hovered])
   
   useFrame(({camera}) => {
-    if(tagon && data.category.category != 'NONE'){
+    if( (tagon || hovered) && data.category.category != 'NONE'){
       locref.current.quaternion.copy(camera.quaternion);
       textref.current.material.color.lerp(color.set(hovered ? 'black' : 'white'), 0.1);
     }
@@ -103,7 +103,7 @@ export default function Model({ tagon, Hover, Click, data, ...props }) {
     
     {/* 태그 */}
     {
-      (tagon && data.category.category != 'NONE') ?
+      ((tagon || hovered) && data.category.category != 'NONE') ?
       <group ref={locref} position={[1, 1.5, 1]}>
         <mesh>
           <circleGeometry attach="geometry" args={[0.2, 20]} />

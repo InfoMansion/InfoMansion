@@ -17,12 +17,40 @@ export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUn
         {
             "name" : "position",
             "nameKor" : "위치", 
-            "limit" : 4
+            "limit" : 4,
+            "data" : [
+                {
+                    idf : '가로X',
+                    idx : 0,
+                },
+                {
+                    idf : '세로Z',
+                    idx : 2,
+                },
+                {
+                    idf : '높이Y',
+                    idx : 1,  
+                },
+            ]
         },
         {
             "name" : "rotation",
             "nameKor" : "회전", 
-            "limit" : 6.28
+            "limit" : 6.28,
+            "data" : [
+                {
+                    idf : '돌리기Y',
+                    idx : 1,
+                },
+                {
+                    idf : '눕히기X',
+                    idx : 0,
+                },
+                {
+                    idf : '눕히기Z',
+                    idx : 2,
+                },
+            ]
         },
     ])
 
@@ -106,9 +134,7 @@ export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUn
             <Divider />
             
             {tags.map( tag => (
-                <Box
-                    sx={{ my : 2 }}
-                >
+                <Box sx={{ my : 2 }}>
                     <Typography>
                         {tag.nameKor}
                     </Typography>
@@ -121,8 +147,13 @@ export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUn
                         }}
                         sx={{ px : 2}}
                     >
-                        {['x', 'y', 'z'].map((tagname, index) => 
-                            <UpDownControl part={tag.name} tag={tagname} index={index} limit={tag.limit}/>
+                        {tag.data.map( data => 
+                            <UpDownControl 
+                                part={tag.name} 
+                                tag={data.idf} 
+                                index={data.idx} 
+                                limit={tag.limit}
+                            />
                         )}
                     </Box>
                 </Box>
