@@ -78,9 +78,10 @@ export default function updatePost() {
           position: 'absolute',
           right: 100,
           top: 20,
-          backgroundColor: MAIN_COLOR,
+          backgroundColor: 'white',
           display: 'block',
           marginBottom: '0px',
+          color: 'black',
         }}
         onClick={handleTempSave}
       >
@@ -93,9 +94,10 @@ export default function updatePost() {
           position: 'absolute',
           right: 20,
           top: 20,
-          backgroundColor: MAIN_COLOR,
+          backgroundColor: 'white',
           display: 'block',
           marginBottom: '0px',
+          color: 'black',
         }}
         onClick={handleSave}
       >

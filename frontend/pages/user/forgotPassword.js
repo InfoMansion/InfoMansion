@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { TextField, Grid, Box, Paper, CardMedia, Button } from '@mui/material';
+import {
+  TextField,
+  Grid,
+  Box,
+  Paper,
+  CardMedia,
+  Button,
+  Typography,
+} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import axios from '../../utils/axios';
@@ -10,8 +18,8 @@ const theme = createTheme({
   palette: {
     primary: {
       light: '#ff7961',
-      main: '#fc7a71',
-      dark: '#ba000d',
+      main: '#ffffff',
+      dark: '#ffffff',
       contrastText: '#000',
     },
   },
@@ -22,6 +30,7 @@ export default function forgotPassword() {
   const setPageLoading = useSetRecoilState(pageLoading);
   const [inputEmail, setInputEmail] = useState('');
   const [inputUsername, setInputUsername] = useState('');
+  const confirmUsername = /^[a-zA-Zㄱ-힣0-9_]{3,15}$/.test(inputUsername);
   const cookies = useCookies(['cookie-name']);
 
   const confirmEmail = /^[\w+_]\w+@\w+\.\w+/.test(inputEmail);
@@ -59,7 +68,14 @@ export default function forgotPassword() {
   };
 
   return (
-    <>
+    <div
+      style={{
+        height: window.innerHeight,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <ThemeProvider theme={theme}>
         <Box
           sx={{
@@ -71,7 +87,7 @@ export default function forgotPassword() {
             margin: '40px auto',
             alignItems: 'center',
           }}
-          boxShadow={3}
+          // boxShadow={3}
         >
           <Box
             sx={{
@@ -90,12 +106,23 @@ export default function forgotPassword() {
                 style={{ width: '25%', height: '25%' }}
               ></CardMedia>
             </div>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: '10px',
+              }}
+            >
+              <Typography variant="h3" style={{ color: 'white' }}>
+                비밀번호 찾기
+              </Typography>
+            </div>
             <Box
               component="form"
               onSubmit={handleSubmit}
               noValidate
               sx={{
-                mt: 1,
+                mt: 3,
               }}
             >
               <div
@@ -118,6 +145,7 @@ export default function forgotPassword() {
                   onChange={handleInput}
                   variant="outlined"
                   color="primary"
+                  placeholder="등록된 email주소"
                   focused
                 />
                 <TextField
@@ -132,25 +160,40 @@ export default function forgotPassword() {
                   onChange={handleInput}
                   variant="outlined"
                   color="primary"
+                  placeholder="등록된 닉네임"
                   focused
                 />
               </div>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  sx={{ mt: 3, mb: 2, color: 'white' }}
-                  disabled={!confirmEmail || !inputUsername}
-                  onClick={handleSubmit}
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
-                  비밀번호 찾기
-                </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    sx={{ mt: 3, mb: 2, mr: 3, color: 'grey' }}
+                    disabled={!confirmEmail || !confirmUsername}
+                    onClick={handleSubmit}
+                  >
+                    임시PW 발급
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ mt: 3, mb: 2, color: 'grey' }}
+                    onClick={() => {
+                      router.push('/');
+                    }}
+                  >
+                    돌아가기
+                  </Button>
+                </div>
               </div>
             </Box>
           </Box>
         </Box>
       </ThemeProvider>
-    </>
+    </div>
   );
 }
