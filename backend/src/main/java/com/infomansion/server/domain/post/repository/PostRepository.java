@@ -52,4 +52,7 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query("SELECT p FROM Post p WHERE p.user.id = :userId AND p.isPublished = false")
     List<Post> findTempPostsByUserId(@Param("userId") Long userId);
 
+    @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.userStuff = :guestbook")
+    Slice<Post> findPostInTheGuestBook(@Param("guestbook") UserStuff guestbook, Pageable pageable);
+
 }

@@ -481,6 +481,47 @@ include::{snippets}/post-find-post-in-the-postbox/response-fields.adoc[]
 
 ---
 
+[[Post-create-guestbook]]
+== Guestbook 작성
+
+Guestbook에 Post를 작성하는 API
+
+=== Http Request
+include::{snippets}/post-create-guestbook/http-request.adoc[]
+
+=== Path parameters
+include::{snippets}/post-create-guestbook/path-parameters.adoc[]
+
+=== Request parameters
+include::{snippets}/post-create-guestbook/request-body.adoc[]
+
+=== Http Response
+include::{snippets}/post-create-guestbook/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-create-guestbook/response-fields.adoc[]
+
+---
+
+[[Post-modify-guestbook]]
+== Guestbook 수정
+
+Guestbook에 자신이 작성한 Post를 수정하는 API
+
+=== Http Request
+include::{snippets}/post-modify-guestbook/http-request.adoc[]
+
+=== Request parameters
+include::{snippets}/post-modify-guestbook/request-body.adoc[]
+
+=== Http Response
+include::{snippets}/post-modify-guestbook/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/post-modify-guestbook/response-fields.adoc[]
+
+---
+
 [[Post-in-the-guestbook]]
 == Guestbook에 포함된 Post들 조회
 

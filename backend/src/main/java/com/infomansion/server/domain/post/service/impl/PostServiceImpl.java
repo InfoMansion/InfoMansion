@@ -407,8 +407,34 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         UserStuff guestbook = userStuffRepository.findUserStuffByStuffType(user.getId(), StuffType.GUESTBOOK)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
-        return postRepository.findByUserStuffId(guestbook, pageable)
-                .map(PostGuestBookResponseDto::new);
+        return postRepository.findPostInTheGuestBook(guestbook, pageable)
+                .map(PostGuestBookResponseDto::toDto);
+    }
+
+    @Transactional
+    @Override
+    public Long createGuestBookPost(String username, PostGuestBookRequestDto requestDto) {
+        User loginUser = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        UserStuff guestbook = userStuffRepository.findUserStuffByStuffType(user.getId(), StuffType.GUESTBOOK)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+        return postRepository.save(Post.createPost(loginUser, guestbook, "", requestDto.getContent())).getId();
+    }
+
+    @Transactional
+    @Override
+    public boolean modifyGuestBookPost(PostGuestBookModifyRequestDto requestDto) {
+        User loginUser = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Post post = postRepository.findById(requestDto.getPostId())
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if(!loginUser.getId().equals(post.getUser().getId())) throw new CustomException(ErrorCode.USER_NO_PERMISSION);
+
+        post.updatePost("", requestDto.getContent());
+        return true;
     }
 
     /**

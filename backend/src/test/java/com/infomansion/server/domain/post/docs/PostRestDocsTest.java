@@ -214,9 +214,9 @@ public class PostRestDocsTest {
         for (int i = 1; i <= 3; i++) {
             postsByUserStuffId.add(PostGuestBookResponseDto.builder()
                     .id((long) i)
+                    .username("username"+i)
                     .content("content"+i)
                     .modifiedDate(LocalDateTime.now())
-                    .likes(2L)
                     .build());
         }
         Slice<PostGuestBookResponseDto> responseDto = new SliceImpl<>(postsByUserStuffId,Pageable.ofSize(10), true);
@@ -241,8 +241,8 @@ public class PostRestDocsTest {
                         relaxedResponseFields(common(fieldWithPath("data").type(JsonFieldType.OBJECT).description("Guestbook에 들어있는 post")))
                                 .andWithPrefix("data.",
                                         fieldWithPath("content.[].id").type(POST_ID.getJsonFieldType()).description(POST_ID.getDescription()),
+                                        fieldWithPath("content.[].username").type(USERNAME.getJsonFieldType()).description("작성자"),
                                         fieldWithPath("content.[].content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription()),
-                                        fieldWithPath("content.[].likes").type(LIKES_POST.getJsonFieldType()).description(LIKES_POST.getDescription()),
                                         fieldWithPath("content.[].modifiedDate").type(MODIFIED_DATE.getJsonFieldType()).description(MODIFIED_DATE.getDescription()).optional(),
                                         fieldWithPath("first").type(SLICE_FIRST.getJsonFieldType()).description(SLICE_FIRST.getDescription()),
                                         fieldWithPath("last").type(SLICE_LAST.getJsonFieldType()).description(SLICE_LAST.getDescription()),
@@ -798,6 +798,57 @@ public class PostRestDocsTest {
                                         fieldWithPath("content").type(POST_CONTENT.getJsonFieldType()).description(POST_CONTENT.getDescription())
                                 )
 
+                ));
+    }
+
+    @Test
+    public void guestbook_작성() throws Exception {
+        // given
+        Long responseId = 20L;
+        PostGuestBookRequestDto requestDto = PostGuestBookRequestDto.builder()
+                .content("guestbook content").build();
+        given(postService.createGuestBookPost(anyString(), any(PostGuestBookRequestDto.class))).willReturn(responseId);
+
+        // when, then
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/v1/posts/guestbook/{username}", "infomansion")
+                        .content(objectMapper.writeValueAsString(requestDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(document("post-create-guestbook",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("username").description("GuestBook이 존재하는 방의 username")
+                        ),
+                        requestFields(
+                                fieldWithPath("content").description("방명록의 내용")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.NUMBER).description(POST_ID.getDescription())))
+                ));
+    }
+
+    @Test
+    public void guestbook_수정() throws Exception {
+        // given
+        Long responseId = 20L;
+        PostGuestBookModifyRequestDto requestDto = PostGuestBookModifyRequestDto.builder()
+                .postId(responseId)
+                .content("guestbook content").build();
+        given(postService.modifyGuestBookPost(any(PostGuestBookModifyRequestDto.class))).willReturn(true);
+
+        // when, then
+        mockMvc.perform(put("/api/v1/posts/guestbook")
+                        .content(objectMapper.writeValueAsString(requestDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("post-modify-guestbook",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("postId").description(POST_ID.getDescription()),
+                                fieldWithPath("content").description("방명록의 내용")
+                        ),
+                        responseFields(common(fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("수정 성공 여부")))
                 ));
     }
 }

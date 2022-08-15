@@ -117,6 +117,20 @@ public class PostApiController {
                 .body(new CommonResponse<>(true));
     }
 
+    @PostMapping("/api/v1/posts/guestbook/{username}")
+    public ResponseEntity<? extends BasicResponse> createGuestBookPost(@PathVariable String username, @Valid @RequestBody PostGuestBookRequestDto requestDto) {
+        System.out.println("username = " + username);
+        System.out.println("requestDto = " + requestDto.getContent());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new CommonResponse<>(postService.createGuestBookPost(username, requestDto)));
+    }
+
+    @PutMapping("/api/v1/posts/guestbook")
+    public ResponseEntity<? extends BasicResponse> modifyGuestBookPost(@Valid @RequestBody PostGuestBookModifyRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(postService.modifyGuestBookPost(requestDto)));
+    }
+
     /**
      * 새로 작성하는 포스트를 임시 저장하면서 이미지를 업로드
      * @param multipartFile

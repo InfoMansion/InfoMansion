@@ -25,5 +25,7 @@ public interface PostService {
     List<TempPostSaveResponseDto> findTempPosts();
     Slice<PostSimpleResponseDto> findPostInThePostbox(String username, Pageable pageable);
     Slice<PostGuestBookResponseDto> findPostInTheGuestbook(String username, Pageable pageable);
+    Long createGuestBookPost(String username, PostGuestBookRequestDto requestDto);
+    boolean modifyGuestBookPost(PostGuestBookModifyRequestDto requestDto);
 }
 
