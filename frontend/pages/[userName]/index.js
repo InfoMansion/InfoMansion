@@ -61,7 +61,7 @@ export default function RoomPage() {
   const userInfoAnimation = useSpring({
     from : { 
       position : 'absolute',
-      left : '15%',
+      left : '10%',
       top : 65,
       zIndex : '2',
       maxHeight : '170px' 

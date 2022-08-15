@@ -20,6 +20,7 @@ import Particles from './RoomPage/atoms/Particles'
 import ConfigStuffs from './jsonData/ConfigStuffs.json'
 import ConfigStuff from './RoomPage/atoms/ConfigStuff' 
 import PostItems from './RoomPage/PostItems';
+import GuestBookPage from './RoomPage/atoms/GuestBookPage'
 
 export default function Room({ StuffClick, setClickLoc, userName, pagePush, profileImage, setNowFollow }) {
   const [cookies] = useCookies(['cookie-name']);
@@ -36,6 +37,7 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
   const [loginUser] = useRecoilState(loginUserState);
   const setPageLoading = useSetRecoilState(pageLoading);
   const [isFollow, setIsFollow] = useRecoilState(followState);
+  const [guestBookOpen, setGuestBookOpen] = useState(false);
 
   // 마운트시 stuff 로드
   useEffect(() => {
@@ -84,7 +86,6 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
   }, [clicked])
   
   function popupPosts(e, type) {
-    try{
       if(type == 'postBox') {
         Click(e, {
           "id" : 999,
@@ -93,11 +94,8 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
         })
       }
       else if(type =='guestBook') {
-        console.log(e);
+        setGuestBookOpen(true);
       }
-    } catch(e) {
-      console.log(e);
-    }
   }
 
   const postFollow = async () => {
@@ -240,6 +238,13 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
           profileImage={profileImage}
         />
       </Canvas>
+
+      <GuestBookPage 
+        open={guestBookOpen}
+        setGuestBookOpen={setGuestBookOpen}
+        userName={userName}
+        cookies={cookies}
+      />
     </div>
   );
 }
