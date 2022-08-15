@@ -250,33 +250,7 @@ export default function UserInfo({
               {userInfo.username}
             </Typography>
 
-            {loginUser ? (
-              <>
-                <Link href={userInfo.username + '/dashboard'}>
-                  <SettingsIcon
-                    sx={{ mx: 2 }}
-                    style={{ ...textStyle, cursor: 'pointer' }}
-                  />
-                </Link>
-                <StarIcon
-                  onClick={showLikePostList}
-                  style={{ ...textStyle, cursor: 'pointer' }}
-                />
-                <Link href={'/post/TempPost'}>
-                  <SaveAsIcon
-                    sx={{ mx: 2 }}
-                    style={{ ...textStyle, cursor: 'pointer' }}
-                  />
-                </Link>
-              </>
-            ) : (
-              <></>
-              // <Follow
-              //   isFollow={userInfo.follow}
-              //   username={userInfo.username}
-              //   setNowFollow={setNowFollow}
-              // ></Follow>
-            )}
+            
           </Box>
 
           <Box
@@ -310,6 +284,29 @@ export default function UserInfo({
                 {nowFollow}
               </Typography>
             </Typography>
+
+            {loginUser ? (
+              <>
+                <Link href={'/post/TempPost'}>
+                  <SaveAsIcon
+                    sx={{ml : 2}}
+                    style={{ ...textStyle, cursor: 'pointer' }}
+                  />
+                </Link>
+                <StarIcon
+                  onClick={showLikePostList}
+                  sx={{ ml : 1 }}
+                  style={{ ...textStyle, cursor: 'pointer' }}
+                />
+                <Link href={userInfo.username + '/dashboard'}>
+                  <SettingsIcon
+                    sx={{ ml : 1}}
+                    style={{ ...textStyle, cursor: 'pointer' }}
+                  />
+                </Link>
+              </>
+            ) : <></>
+            }
           </Box>
         </Grid>
       </Grid>
