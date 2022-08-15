@@ -15,11 +15,11 @@ export default function PostItems({popupPosts, userName, profileImage}) {
         [0, 0.2, -5],
         [0.7, -0.9, -5]
     ])
-    function ClickPostbox() {
-        popupPosts(`postBox`);
+    function ClickPostbox(e) {
+        popupPosts(e, `postBox`);
     }
-    function ClickGuestBook() {
-        popupPosts(`guestBook`);
+    function ClickGuestBook(e) {
+        popupPosts(e, `guestBook`);
     }
 
     return (
@@ -27,7 +27,7 @@ export default function PostItems({popupPosts, userName, profileImage}) {
             <group>
                 {/* postbox */}
                 <ConfigStuff data={ConfigStuffs[4]} pos={positions[0]} iniscale={2} Click={ClickPostbox} 
-                    color="#FFF89D"
+                    color="#FFF89D" inicolor="#E0A912"
                     speed={0.001}
                 />
                 {/* guestbook */}
@@ -35,12 +35,10 @@ export default function PostItems({popupPosts, userName, profileImage}) {
                     speed={0}
                 />
 
-                {/* 글쓰기도 들어와야 함 */}
             </group>
             : <></>
             <ambientLight intensity={1}/>
             <OrthographicCamera makeDefault zoom={100}/>
-            {/* <OrbitControls /> */}
         </group>
     )    
 }

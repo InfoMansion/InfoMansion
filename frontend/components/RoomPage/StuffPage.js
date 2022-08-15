@@ -32,7 +32,9 @@ export default function StuffPage( {data} ) {
     const [post, setPost] = useState('');
     const [postDetail, setPostDetail] = useRecoilState(postDetailState);
     const [showModal, setShowModal] = useState(false);
-    const { auth } = useAuth();
+
+    const {auth} = useAuth();
+    const [userName] = useState(auth.username);
 
     const openModal = post => {
         setPost(post);
@@ -46,9 +48,6 @@ export default function StuffPage( {data} ) {
             .then(res => {
               console.log(res.data);
               setPostDetail(res.data.data);
-              if (postDetail.userName === auth.username) {
-                setLoginUser(true);
-              }
             })
             .then(setShowModal(true));
         } catch (e) {
@@ -62,15 +61,23 @@ export default function StuffPage( {data} ) {
 
     useEffect(() => {
         if(!data.id) return;
+
+        let url = `/api/v1/posts/${data.id}`;
+        if(data.category == 'POSTBOX')
+            url = `/api/v1/posts/postbox/${userName}?page=1&size=3`
+
         try {
-            axios.get(`/api/v1/posts/${data.id}`, {
+            axios.get( url , {
                 headers: {
                     Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
                 },
             })
             .then( res => {
-                // console.log(res.data.data.postsByUserStuff);
-                setPosts(res.data.data.postsByUserStuff.content);
+                if(data.category == "POSTBOX") {
+                    setPosts(res.data.data.content);
+                }
+                else
+                    setPosts(res.data.data.postsByUserStuff.content);
             })
         }catch(e) {
             console.log(e);
@@ -95,6 +102,7 @@ export default function StuffPage( {data} ) {
             ></PostViewModal>
 
             <CssBaseline />
+
             {/* 타이틀 영역 */}
             <Toolbar
                 sx={{

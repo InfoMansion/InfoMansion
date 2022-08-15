@@ -68,18 +68,13 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
   // stuff 클릭 이벤트.
   function Click(e, stuff) {
     if (stuff.category == 'NONE') return null;
-
     let midx = Number(window.innerWidth/2);
     let maxy = window.innerHeight - 620;
-
     
     let x = e.clientX < midx ? e.clientX : e.clientX - 400;
     let y = e.clientY > maxy ? maxy : e.clientY;
 
     setClickLoc([x, y])
-
-    console.log(stuff);
-    
     setClicked(clicked.id == stuff.id ? 0 : stuff);
     setClickedStuffCategory(stuff.category);
   }
@@ -87,13 +82,22 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
   useEffect(() => {
     StuffClick(clicked);
   }, [clicked])
-
-  function cancelClick() {
-    // setClicked(0);
-  }
   
-  function popupPosts(type) {
-    console.log(type);
+  function popupPosts(e, type) {
+    try{
+      if(type == 'postBox') {
+        Click(e, {
+          "id" : 999,
+          "category" : "POSTBOX",
+          "alias" : "보관함",
+        })
+      }
+      else if(type =='guestBook') {
+        console.log(e);
+      }
+    } catch(e) {
+      console.log(e);
+    }
   }
 
   const postFollow = async () => {
@@ -171,7 +175,7 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
       )}
 
       {/* 캔버스 영역 */}
-      <Canvas shadows onPointerLeave={cancelClick}>
+      <Canvas shadows>
         <RoomLight />
         <RoomCamera camloc={camloc} clicked={clicked} zoomscale={zoomscale} />
         <PostProcessing />

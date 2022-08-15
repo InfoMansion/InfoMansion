@@ -20,8 +20,6 @@ export default function ConfigAsset({data, pos, Click, iniscale, color, inicolor
         return () => (document.body.style.cursor = 'auto')
     }, [hovered])
 
-    function onClick() { Click(); }
-
     const {scale} = useSpring({
         scale : hovered ? 1.2 : 1,
         config : config.wobbly
@@ -37,7 +35,7 @@ export default function ConfigAsset({data, pos, Click, iniscale, color, inicolor
             ref={group} 
             onPointerEnter={() => setHovered(true)}
             onPointerLeave={() => setHovered(false)}
-            onClick={onClick}
+            onClick={e => Click(e)}
             position={pos}
             rotation={[0, -1.5, 0]}
             scale={scale}
@@ -47,7 +45,7 @@ export default function ConfigAsset({data, pos, Click, iniscale, color, inicolor
                     geometry={nodes[geo].geometry} material={materials[material[i]]} castShadow
                     scale={iniscale}
                 >
-                    {data.stuffName == "setting" || data.stuffName == "heart" ? 
+                    {data.stuffName == "setting" || data.stuffName == "heart" || data.stuffName == "postbox" ? 
                         <meshStandardMaterial
                             attach="material"
                             color={ isFollow ? '#FF3B78' : hovered ? color : inicolor}
