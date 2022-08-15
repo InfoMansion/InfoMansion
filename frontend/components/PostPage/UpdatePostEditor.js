@@ -255,6 +255,7 @@ export default function UpdatePostEditor({
               sx={{
                 width: 200,
                 height: 1,
+                backgroundColor: 'white',
                 '.MuiOutlinedInput-root': {
                   '&:hover fieldset, &.Mui-focused fieldset': {
                     borderColor: MAIN_COLOR,
@@ -287,6 +288,8 @@ export default function UpdatePostEditor({
               fontSize: '30px',
               width: '100%',
               margin: '16px 0 8px',
+              backgroundColor: 'white',
+              borderRadius: '6px',
             }}
           />
           <Editor
@@ -315,6 +318,9 @@ export default function UpdatePostEditor({
             // 기타
             // imageUrlList={imageUrlList}
             // setImageUrlList={setImageUrlList}
+            style={{
+              backgroundColor: 'white',
+            }}
           />
         </div>
         /* <IntroduceContent

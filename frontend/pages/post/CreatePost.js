@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import { useState, useEffect } from 'react';
 import PostEditor from '../../components/PostPage/PostEditor';
 import { MAIN_COLOR } from '../../constants';

@@ -104,3 +104,8 @@ a {
   background: transparent;
   margin-bottom: 10px;
 }
+
+.ql-editor {
+  background-color: white;
+  border-radius: 6px;
+}

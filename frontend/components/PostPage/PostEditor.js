@@ -171,6 +171,10 @@ const Editor = ({
       onChange={onChange}
       title={title}
       content={content}
+      style={{
+        backgroundColor: 'white',
+        borderRadius: '6px',
+      }}
     ></ReactQuill>
   );
 };
@@ -251,6 +255,7 @@ export default function PostEditor({
               sx={{
                 width: 200,
                 height: 1,
+                backgroundColor: 'white',
                 '.MuiOutlinedInput-root': {
                   '&:hover fieldset, &.Mui-focused fieldset': {
                     borderColor: MAIN_COLOR,
@@ -282,6 +287,8 @@ export default function PostEditor({
               fontSize: '30px',
               width: '100%',
               margin: '16px 0 8px',
+              backgroundColor: 'white',
+              borderRadius: '6px',
             }}
           />
           <Editor
@@ -308,6 +315,9 @@ export default function PostEditor({
             content={content}
             setContent={setContent}
             setTempId={setTempId}
+            style={{
+              backgroundColor: 'white',
+            }}
             // 기타
             // imageUrlList={imageUrlList}
             // setImageUrlList={setImageUrlList}
