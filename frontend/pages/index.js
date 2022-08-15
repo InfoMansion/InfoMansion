@@ -3,10 +3,12 @@ import styles from '../styles/Hex.module.css';
 import { useCallback, useEffect, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import LoginComponent from '../components/login';
-import Shop from './Shop_tmp';
 import { useCookies } from 'react-cookie';
 import axios from '../utils/axios';
 import { useRouter } from 'next/router';
+import { useInView } from 'react-intersection-observer';
+import { pageLoading } from '../state/pageLoading';
+import { useRecoilState } from 'recoil';
 
 const Item = styled('li')(({ backgroundImage }) => ({
   ':before': {
@@ -20,6 +22,9 @@ export default function Home() {
   const [cookies] = useCookies(['cookie-name']);
   const router = useRouter();
   const [roomImgs, setRoomImgs] = useState([{ useName: '', roomImg: '' }]);
+  const [ref, inView] = useInView();
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useRecoilState(pageLoading);
 
   const handleResize = useCallback(() => {
     setWindowSize({
@@ -39,7 +44,7 @@ export default function Home() {
     async token => {
       try {
         const { data } = await axios.get(
-          '/api/v2/rooms/recommend?page=0&size=10',
+          `/api/v2/rooms/recommend?page=${page}&size=27`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -49,12 +54,12 @@ export default function Home() {
         );
         console.log(data);
         console.log(data.data.roomResponseDtos);
-        setRoomImgs(data.data.roomResponseDtos.content);
+        setRoomImgs(prev => [...prev, ...data.data.roomResponseDtos.content]);
       } catch (e) {
         console.log(e);
       }
     },
-    [cookies],
+    [page],
   );
 
   useEffect(() => {
@@ -62,7 +67,14 @@ export default function Home() {
       return;
     }
     init(cookies.InfoMansionAccessToken);
-  }, [init, auth.isAuthorized, cookies]);
+  }, [page, init, auth.isAuthorized, cookies]);
+
+  useEffect(() => {
+    // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
+    if (inView) {
+      setPage(prev => prev + 1);
+    }
+  }, [inView]);
 
   return (
     <>
@@ -71,31 +83,33 @@ export default function Home() {
           <div
             style={{
               width: '100%',
-              height: '100%',
+              //              height: '100%',
               minHeight: 'calc(100vh - 70px)',
-              paddingBottom: '49px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              position: 'relative',
             }}
           >
             <div style={{ height: '100%', paddingTop: '1%' }}>
               <ul className={styles.container}>
                 {roomImgs.map(v => (
-                  <Item
-                    className={styles.item}
-                    backgroundImage={v.roomImg}
-                  >
+                  <Item className={styles.item} backgroundImage={v.roomImg}>
                     <Link href={`/${v.userName}`} style={{ zIndex: 2 }}></Link>
                   </Item>
                 ))}
               </ul>
             </div>
             <div
-              style={{ width: '1205px', height: '340px', marginTop: '65px' }}
-            >
-              <Shop />
-            </div>
+              ref={ref}
+              style={{
+                position: 'absolute',
+                zIndex: '1000',
+                height: '30px',
+                bottom: '300px',
+                width: '100%',
+              }}
+            ></div>
           </div>
         </Box>
       ) : (
