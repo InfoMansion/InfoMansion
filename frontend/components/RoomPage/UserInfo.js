@@ -10,6 +10,7 @@ import {
 import { useEffect, useState, useCallback } from 'react';
 import RecentPost from './RecentPosts';
 import SettingsIcon from '@mui/icons-material/Settings';
+import SaveAsIcon from '@mui/icons-material/SaveAs';
 import Link from 'next/link';
 import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
@@ -261,6 +262,12 @@ export default function UserInfo({
                   onClick={showLikePostList}
                   style={{ ...textStyle, cursor: 'pointer' }}
                 />
+                <Link href={'/post/TempPost'}>
+                  <SaveAsIcon
+                    sx={{ mx: 2 }}
+                    style={{ ...textStyle, cursor: 'pointer' }}
+                  />
+                </Link>
               </>
             ) : (
               <></>
