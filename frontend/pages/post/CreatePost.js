@@ -1,4 +1,4 @@
-import { Button, Container } from '@mui/material';
+import { Box, Button, Container } from '@mui/material';
 import { useState, useEffect } from 'react';
 import PostEditor from '../../components/PostPage/PostEditor';
 import { MAIN_COLOR } from '../../constants';
@@ -103,39 +103,46 @@ export default function createPost() {
   };
 
   return (
-    <div style={{ position: 'relative' }}>
-      <Button
-        type="submit"
-        variant="contained"
+    <Container 
+      style={{ 
+        position: 'relative',
+        backgroundColor : 'rgba(255,255,255,0.6)',
+        borderRadius : 5,
+        height : window.innerHeight - 80
+      }}
+      sx={{
+        b : 4,
+        p : 2,
+        mt : 2,
+      }}
+    >
+
+      <Box
         style={{
-          position: 'absolute',
-          right: 100,
-          top: 20,
-          backgroundColor: 'white',
-          display: 'block',
-          marginBottom: '0px',
-          color: 'black',
+          position : 'absolute',
+          right : 0,
+          display : 'flex'
         }}
-        onClick={handleTempSave}
       >
-        임시저장
-      </Button>
-      <Button
-        type="submit"
-        variant="contained"
-        style={{
-          position: 'absolute',
-          right: 20,
-          top: 20,
-          backgroundColor: 'white',
-          display: 'block',
-          marginBottom: '0px',
-          color: 'black',
-        }}
-        onClick={handleSave}
-      >
-        저장
-      </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          style={{ backgroundColor: MAIN_COLOR, }}
+          sx={{ my : 2, mr : 1 }}
+          onClick={handleTempSave}
+        >
+          임시저장
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          style={{ backgroundColor: MAIN_COLOR, }}
+          sx={{ my : 2, mr : 5 }}
+          onClick={handleSave}
+        >
+          저장
+        </Button>
+      </Box>
       <PostEditor
         title={title}
         onTitleChange={e => setTitle(e.target.value)}
@@ -149,6 +156,6 @@ export default function createPost() {
         // setImageUrlList={setImageUrlList}
         // imageUrlList={imageUrlList}
       />
-    </div>
+    </Container>
   );
 }

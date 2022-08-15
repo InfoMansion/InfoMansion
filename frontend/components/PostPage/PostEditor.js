@@ -8,7 +8,7 @@ import React, {
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
 import styles from '../../styles/Editor.module.css';
-import { Input, Autocomplete, TextField, styled } from '@mui/material';
+import { Input, Autocomplete, TextField, styled, Container, Box } from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
 import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
@@ -238,12 +238,14 @@ export default function PostEditor({
   return typeof window !== 'undefined' ? (
     <>
       {windowSize && (
-        <div
+        <Box
           style={{
             display: 'grid',
             gridTemplateRows: 'auto auto 1fr',
             height: windowSize.height * 0.8,
-            padding: '20px',
+          }}
+          sx={{
+            p : 2
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -266,6 +268,7 @@ export default function PostEditor({
                     color: 'black',
                   },
                 },
+                borderRadius : 2
               }}
               value={category}
               onChange={(_, v) => {
@@ -288,8 +291,9 @@ export default function PostEditor({
               width: '100%',
               margin: '16px 0 8px',
               backgroundColor: 'white',
-              borderRadius: '6px',
+              borderRadius: 5,
             }}
+            sx={{ px : 2 }}
           />
           <Editor
             wrapperClassName={styles.wrapper}
@@ -318,11 +322,16 @@ export default function PostEditor({
             style={{
               backgroundColor: 'white',
             }}
+            sx={{
+              borderRadius : 5,
+              height : windowSize.height * 0.75,
+              overflow : 'auto'
+            }}
             // 기타
             // imageUrlList={imageUrlList}
             // setImageUrlList={setImageUrlList}
           />
-        </div>
+        </Box>
         /* <IntroduceContent
               dangerouslySetInnerHTML={{ __html: editorToHtml }}
             /> */

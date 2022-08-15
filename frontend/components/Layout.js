@@ -58,7 +58,7 @@ export default function Layout({ children }) {
           Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
         },
       });
-      console.log('notific', data);
+      // console.log('notific', data);
       setNotification(data.data);
     } catch (e) {
       console.log(e);
@@ -70,7 +70,7 @@ export default function Layout({ children }) {
     init();
   }, [init, pathname, notificationState]);
 
-  console.log(auth);
+  // console.log(auth);
   return (
     <div>
       <div

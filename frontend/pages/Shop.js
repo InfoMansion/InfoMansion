@@ -36,11 +36,13 @@ export default function Shop() {
   const [nowStuff, setNowStuff] = useState({});
   const [open, setOpen] = useState(false);
 
-  const [nowStuffType, setNowStuffType] = useState("DAI");
+  const [credit, setCredit] = useState(0);
 
   useEffect(() => {
     try {
       setPageLoading(true);
+      
+      // 기본 정보 가져오기.
       axios
         .get(`/api/v1/stores?pageSize=10`, {
           headers: {
@@ -51,11 +53,25 @@ export default function Shop() {
           setStuffBundles(res.data.data);
           setPageLoading(false);
         });
+
+        // 크레딧 가져오기.
+        getCreditFromServer();
     } catch (e) {
       setPageLoading(false);
       console.log(e);
     }
   }, []);
+
+  function getCreditFromServer() {
+    axios.get(`/api/v1/users/credit`, {
+      headers: {
+        Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+      },
+    })
+    .then(res => {
+      setCredit(res.data.data.credit);
+    })
+  }
 
   function changeBundle(i) {
     setNowStuffBunele(stuffBundles[i]);
@@ -84,11 +100,15 @@ export default function Shop() {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
             withCredentials: true,
           },
-        });
-        alert('구매되었습니다!');
+        })
+        .then(res => {
+          alert('구매되었습니다!');
+          getCreditFromServer();
+        })
       } catch (e) {
         console.log(e);
-        alert(e.response.data.message);
+        alert("구매에 실패하였습니다");
+        // alert(e.response.data.message);
       }
     }
   };
@@ -180,7 +200,7 @@ export default function Shop() {
           }}
         >
         <RadioButtonCheckedIcon sx={{mx : 1}}/>
-            15354
+            {credit}
         </Grid>
       </Grid>
       
