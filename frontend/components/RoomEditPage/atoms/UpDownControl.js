@@ -1,4 +1,4 @@
-import { Box, Grid, Input, Slider } from '@mui/material';
+import { Box, Grid, Input, Slider, styled } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import { positionState, rotationState } from '../../../state/editRoomState';
 
@@ -31,6 +31,14 @@ export default function UpDownControl({part, tag, index, limit}) {
                 </Grid>
                 <Grid item xs>
                     <Slider
+                        style={{
+                            color : '#fc7a71',
+                            height : 8,
+                            '& .MuiSlider-track': {
+                                border: 'none',
+                            },
+                        }}
+
                         value={typeof data[index] === 'number' ? data[index] : 0}
                         onChange={handleSliderChange}
                         aria-labelledby="input-slider"
