@@ -58,26 +58,13 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/auth/**").permitAll()
                 .antMatchers("/api/v1/rooms/random").permitAll()
                 .antMatchers("/docs/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().hasAnyRole("ROLE_USER","ROLE_ADMIN")
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
 
         return http.build();
     }
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/api/**")
-//                        .allowedOrigins("http://localhost:8080", "http://localhost:3000")
-//                        .allowedMethods("*")
-//                        .allowedHeaders("*")
-//                        .allowCredentials(true);
-//            }
-//        };
-//    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
