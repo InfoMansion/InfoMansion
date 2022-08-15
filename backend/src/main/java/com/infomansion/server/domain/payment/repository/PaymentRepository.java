@@ -1,6 +1,7 @@
 package com.infomansion.server.domain.payment.repository;
 
 import com.infomansion.server.domain.payment.domain.Payment;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,4 +15,8 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     @Query("SELECT p FROM Payment p JOIN FETCH p.paymentLines WHERE p.userId = :userId")
     List<Payment> findAllPaymentByUser(@Param("userId") Long userId);
+
+    @Query(value = "SELECT p FROM Payment p JOIN FETCH p.paymentLines WHERE p.userId = :userId"
+            ,countQuery = "SELECT COUNT(p) FROM Payment p WHERE p.userId = :userId")
+    List<Payment> findAllPaymentByUserIdDesc(@Param("userId") Long userId, Pageable pageable);
 }

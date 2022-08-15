@@ -1163,3 +1163,20 @@ include::{snippets}/read-unread-notifications/http-response.adoc[]
 include::{snippets}/read-unread-notifications/response-fields.adoc[]
 
 ---
+
+[[Payment-List-By-Login-User]]
+== 로그인한 사용자의 최근 10건의 결제 내역 조회
+
+로그인한 사용자의 최근 10건의 결제 내역 조회 API
+
+=== Http Request
+include::{snippets}/payment-list/http-request.adoc[]
+
+=== Request Params
+include::{snippets}/payment-list/request-parameters.adoc[]
+
+=== Http Response
+include::{snippets}/payment-list/http-response.adoc[]
+
+=== Response fields
+include::{snippets}/payment-list/response-fields.adoc[]

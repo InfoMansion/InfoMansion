@@ -141,7 +141,7 @@ public class PostServiceImpl implements PostService {
     public boolean deletePost(Long postId) {
         Post post = postRepository.findPostWithUser(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-        if (!post.getUser().getId().equals(SecurityUtil.getCurrentUserId()) || !post.getUserStuff().getUser().getId().equals(SecurityUtil.getCurrentUserId()))
+        if (!post.getUser().getId().equals(SecurityUtil.getCurrentUserId()) && !post.getUserStuff().getUser().getId().equals(SecurityUtil.getCurrentUserId()))
             throw new CustomException(ErrorCode.USER_NO_PERMISSION);
 
         post.deletePost(s3Uploader);

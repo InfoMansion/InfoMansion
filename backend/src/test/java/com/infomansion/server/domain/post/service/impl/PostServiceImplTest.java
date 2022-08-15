@@ -20,6 +20,7 @@ import com.infomansion.server.domain.userstuff.repository.UserStuffRepository;
 import com.infomansion.server.domain.userstuff.service.UserStuffService;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
+import com.infomansion.server.global.util.security.SecurityUtil;
 import com.infomansion.server.global.util.security.WithCustomUserDetails;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -240,32 +241,22 @@ public class PostServiceImplTest {
     @Transactional
     @Test
     public void 사용자의_UserStuff에_작성된_어떠한_Post라도_삭제_성공() {
-        // user 생성
-        String email = "infomansion2@test.com";
-        String password = "testPassword1$";
-        String tel = "01012345678";
-        String username = "infomansion2";
-        String uCategories = "IT,COOK";
+        Optional<User> user = userRepository.findByUsername("infomansion");
 
-        user = userRepository.save(builder()
-                .email(email)
-                .password(password)
-                .tel(tel)
-                .username(username)
-                .categories(uCategories)
-                .build());
-
+        System.out.println(SecurityUtil.getCurrentUserId());
         // UserStuff 생성 및 배치
         UserStuff userStuff = UserStuff.builder()
-                .user(userRepository.findById(userId).get()).stuff(stuffRepository.findById(stuffId).get())
+                .user(user.get()).stuff(stuffRepository.findById(stuffId).get())
                 .selected(true).category(Category.IT).alias("Java 정리").build();
         userStuff = userStuffRepository.save(userStuff);
+        System.out.println(userStuff.getUser().getId());
 
         // Post 생성
         Post post = Post.builder()
-                .user(user).userStuff(userStuff)
+                .user(user.get()).userStuff(userStuff)
                 .title("EffectiveJava").content("자바개발자 필독서").build();
         Post savedPost = postRepository.save(post);
+        System.out.println(savedPost.getUser().getId());
 
         postService.deletePost(savedPost.getId());
         em.flush();
