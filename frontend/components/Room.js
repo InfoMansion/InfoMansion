@@ -148,6 +148,7 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
         <RoomLight />
         <RoomCamera camloc={camloc} clicked={clicked} zoomscale={zoomscale} />
         <PostProcessing />
+        <Particles />
 
         {/* 벽, 바닥 */}
         <MapStuffs stuffs={mapstuffs} Hover={Hover} Click={Click} />

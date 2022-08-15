@@ -265,7 +265,7 @@ export default function UserInfo({
               onClick={getFollowingInfo}
               style={{ ...textStyle, display: 'flex', cursor: 'pointer' }}
             >
-              팔로우
+              팔로워
               <Typography
                 style={{ ...textStyle, cursor: 'pointer' }}
                 sx={{ ml: 1, mr: 2 }}
@@ -279,7 +279,7 @@ export default function UserInfo({
               onClick={getFollowerInfo}
               style={{ ...textStyle, display: 'flex', cursor: 'pointer' }}
             >
-              팔로잉
+              팔로우
               <Typography style={textStyle} sx={{ ml: 1 }}>
                 {nowFollow}
               </Typography>

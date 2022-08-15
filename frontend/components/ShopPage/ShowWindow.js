@@ -3,13 +3,14 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Suspense, useEffect, useState } from 'react'
 import ShopStuff from './atoms/ShopStuff'
 
-export default function ShowWindow({stuffs, type, click}) {
-    let count = -12;
-    const [zoomscale] = useState(50);
-    // stuff 간 거리.
-    const [dist, setDist] = useState(4);
+export default function ShowWindow({stuffs, type, click, scale}) {
+    const offx = 5;
+    const offy = 5;
+    
+    console.log(scale);
 
-    const [pos, setPos] = useState([0, 0, 0]);
+    const offset = 2.5;
+    
     useEffect(() => {
         if(type=="floor") setPos([0,1,0]);
         else if(type=="wall") setPos([0, -0.5, 0]);
@@ -18,41 +19,18 @@ export default function ShowWindow({stuffs, type, click}) {
     function Click(e, stuff) {
         click(e, stuff);
     }
-
-    // return (
-    //     <ScrollControls
-    //         horizontal
-    //         damping={4}
-    //         pages={(2 - dist + 4 * dist)}
-    //     >
-    //         <Scroll>
-    //         {/* 임시 빛 */}
-    //         <group>
-    //             <ambientLight />
-    //             {stuffs.map( stuff => 
-    //                 <group key={stuff.id}>
-    //                     <ShopStuff
-    //                         Click={Click}
-    //                         data={stuff} 
-    //                         pos={pos}
-    //                         dist={count += dist}
-    //                     />
-    //                 </group>
-    //             )}
-    //         </group>
-    //         </Scroll>
-    //     </ScrollControls>
-    // )
     return (
         <group>
             <ambientLight />
-            {stuffs.map( stuff => 
-                <group key={stuff.id}>
+            {stuffs.map( (stuff, i) => 
+                <group key={stuff.id}
+                    position={[(i%3 -1) * offx, parseInt(i/3) * -1 * offy + offset, 0]}
+                >
                     <ShopStuff
                         Click={Click}
-                        data={stuff} 
-                        pos={pos}
-                        dist={count += dist}
+                        data={stuff}
+                        index={i}
+                        stuffscale={scale}
                     />
                 </group>
             )}

@@ -1,0 +1,104 @@
+{
+    "GUESTBOOK" : {
+        "scale" : 1
+    },
+    "WALL" : {
+        "scale" : 0.6
+    },
+    "FLOOR" : {
+        "scale" : 0.7
+    },
+    "DESK" : {
+        "scale" : 1.5
+    },
+    "TABLE" : {
+        "scale" : 1
+    },
+    "CHAIR" : {
+        "scale" : 2
+    },
+    "SOFA" : {
+        "scale" : 1.5
+    },
+    "PLANT" : {
+        "scale" : 2
+    },
+    "WORKOUT" : {
+        "scale" : 1.8
+    },
+    "CLOSET" : {
+        "scale" : 1.2
+    },
+    "HANGER" : {
+        "scale" : 1
+    },
+    "CONSOLE" : {
+        "scale" : 1.3
+    },
+    "DOCS" : {
+        "scale" : 5
+    },
+    "SHELF" : {
+        "scale" : 1.5
+    },
+    "DRAWER" : {
+        "scale" : 1.5
+    },
+    "INSTRUMENT" : {
+        "scale" : 2
+    },
+    "CARPET" : {
+        "scale" : 1.3
+    },
+    "TABLEWARE" : {
+        "scale" : 4
+    },
+    "MONITOR" : {
+        "scale" : 2.5
+    },
+    "BED" : {
+        "scale" : 1.5
+    },
+    "KITCHEN" : {
+        "scale" : 2
+    },
+    "BOOK" : {
+        "scale" : 1
+    },
+    "FRAME" : {
+        "scale" : 2
+    },
+    "LIGHT" : {
+        "scale" : 1.7
+    },
+    "OTHER" : {
+        "scale" : 2
+    },
+    "CAMERA" : {
+        "scale" : 2
+    },
+    "ELECTRONICS" : {
+        "scale" : 3
+    },
+    "FOOD" : {
+        "scale" : 5
+    },
+    "RESTROOM" : {
+        "scale" : 1.5
+    },
+    "TOY" : {
+        "scale" : 2
+    },
+    "DECO" : {
+        "scale" : 4
+    },
+    "PET" : {
+        "scale" : 1
+    },
+    "SHOES" : {
+        "scale" : 5
+    },
+    "POSTBOX" : {
+        "scale" : 1
+    }
+}

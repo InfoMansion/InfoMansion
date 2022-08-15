@@ -11,18 +11,22 @@ import {
   Container,
   Grid,
   MenuItem,
+  IconButton,
 } from '@mui/material';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useEffect, useState } from 'react';
 import ShowWindow from '../components/ShopPage/ShowWindow';
 
 import { Canvas } from '@react-three/fiber';
-import { Circle, OrbitControls, OrthographicCamera } from '@react-three/drei';
+import { OrthographicCamera } from '@react-three/drei';
 import { useCookies } from 'react-cookie';
 import axios from '../utils/axios';
 import { pageLoading } from '../state/pageLoading';
 import { useSetRecoilState } from 'recoil';
-import ShopStuff from '../components/ShopPage/atoms/ShopStuff';
+import BuyModal from '../components/ShopPage/atoms/BuyModal'
+import stuffTypes from '../components/jsonData/stuffTypes.json'
 
 export default function Shop() {
   const [cookies] = useCookies(['cookie-name']);
@@ -30,13 +34,18 @@ export default function Shop() {
   const setPageLoading = useSetRecoilState(pageLoading);
   const [stuffBundles, setStuffBundles] = useState([]);
 
-  const [nowStuffBundle, setNowStuffBunele] = useState();
+  const [nowStuffBundle, setNowStuffBundle] = useState();
   const [bundleIndex, setBundleIndex] = useState();
+  const [pages, setPages] = useState([1,1,1,1,1,1,1,1,1,1,
+                                      1,1,1,1,1,1,1,1,1,1,
+                                      1,1,1,1,1,1,1,1,1,1,
+                                    ])
 
+  const [viewStuffs, setViewStuffs] = useState([]);
   const [nowStuff, setNowStuff] = useState({});
-  const [open, setOpen] = useState(false);
 
   const [credit, setCredit] = useState(0);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -44,7 +53,7 @@ export default function Shop() {
       
       // 기본 정보 가져오기.
       axios
-        .get(`/api/v1/stores?pageSize=10`, {
+        .get(`/api/v1/stores?pageSize=6`, {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
           },
@@ -54,7 +63,7 @@ export default function Shop() {
           setPageLoading(false);
         });
 
-        // 크레딧 가져오기.
+        // 크레딧 가져오기. 
         getCreditFromServer();
     } catch (e) {
       setPageLoading(false);
@@ -74,110 +83,59 @@ export default function Shop() {
   }
 
   function changeBundle(i) {
-    setNowStuffBunele(stuffBundles[i]);
+    let st = (pages[i]-1)*6;
+
     setBundleIndex(i);
+    setNowStuffBundle(stuffBundles[i]);
+    setViewStuffs(stuffBundles[i].slice.content.slice(st, st + 6));
   }
 
   function click(e, stuff) {
     setNowStuff(stuff);
-    console.log(stuff);
     setOpen(true);
   }
-  function close() {
-    setOpen(false);
+
+  function handlePrev() {
+    if(pages[bundleIndex] == 1) return;
+    
+    let copypages = [...pages];
+    copypages[bundleIndex]--;
+    setPages(copypages);
+
+    let st = (copypages[bundleIndex]-1)*6;
+    setViewStuffs(stuffBundles[bundleIndex].slice.content.slice(st, st + 6));
+
   }
+  function handleNext() {
+    let copypages = [...pages];
+    copypages[bundleIndex]++;
+    setPages(copypages);
 
-  const BuyStuffSubmit = async event => {
-    event.preventDefault();
-    if (window.confirm('가구를 구매하시겠습니까?')) {
-      const buyStuff = {
-        stuffIds: [nowStuff.id],
-      };
-      try {
-        const { data } = await axios.post('/api/v2/user-stuff', buyStuff, {
-          headers: {
-            ContentType: 'application/json',
-            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-            withCredentials: true,
-          },
-        })
-        .then(res => {
-          alert('구매되었습니다!');
-          getCreditFromServer();
-        })
-      } catch (e) {
-        console.log(e);
-        alert("구매에 실패하였습니다");
-        // alert(e.response.data.message);
-      }
+    let st = (copypages[bundleIndex]-1)*6;
+    if(stuffBundles[bundleIndex].slice.content[st]){
+      setViewStuffs(stuffBundles[bundleIndex].slice.content.slice(st, st+6));
     }
-  };
-
-  function BuyModal() {
-    return (
-      <Modal
-        open={open}
-        onClose={close}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
-          boxShadow: 24,
-          p: 4,
-        }}
-      >
-        <Box sx={{ width: 400 }}>
-          <Canvas
-            style={{
-              height: '200px',
-              backgroundColor: '#eeeeee',
-            }}
-          >
-            <ShopStuff data={nowStuff} pos={[0, 0, 0]} dist={0} />
-            <ambientLight />
-          </Canvas>
-          <Card>
-            <CardHeader
-              title={nowStuff.stuffNameKor}
-              titleTypographyProps={{ align: 'center' }}
-              sx={{
-                backgroundColor: theme =>
-                  theme.palette.mode === 'light'
-                    ? theme.palette.grey[200]
-                    : theme.palette.grey[700],
-              }}
-            />
-            <CardContent>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'baseline',
-                  mb: 2,
-                }}
-              >
-                <Typography component="h2" variant="h3" color="text.primary">
-                  {nowStuff.price}
-                </Typography>
-                <Typography variant="h6" color="text.secondary">
-                  /Credit
-                </Typography>
-              </Box>
-            </CardContent>
-            <CardActions>
-              <Button fullWidth variant="outlined" onClick={BuyStuffSubmit}>
-                Buy Stuff
-              </Button>
-            </CardActions>
-          </Card>
-        </Box>
-      </Modal>
-    );
+    else{
+      axios.get(`/api/v1/stores/${nowStuffBundle.stuffType}`, {
+        params : {
+          page : copypages[bundleIndex],
+          size : 6
+        },
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+        },
+      })
+      .then( res => {
+        let copyStuffBundles = [...stuffBundles];
+        copyStuffBundles[bundleIndex].slice.content = copyStuffBundles[bundleIndex].slice.content.concat(res.data.data.content);
+        
+        setStuffBundles(copyStuffBundles);
+        setViewStuffs(res.data.data.content);
+      })
+      .catch(e => {
+        console.log(e)
+      })
+    }
   }
 
   return (
@@ -240,35 +198,61 @@ export default function Shop() {
         {/* 상점 페이지 */}
         <Grid item xs={9}>
           {nowStuffBundle ?
-            <Card
-            key={nowStuffBundle.stuffType}
-            sx={{ m: 2, }}
+            <Box
+              key={nowStuffBundle.stuffType}
+              sx={{ m: 2, }}
             >
               <Typography
                 variant="h5"
-                sx={{ m: 1, }}
+                sx={{ m: 1, color : 'white' }}
               >
                 {nowStuffBundle.stuffTypeName}
               </Typography>
 
-              <Canvas
+              <Divider color="white" />
+
+              <Box
                 style={{
-                  height: '200px',
-                  backgroundColor: '#eeeeee',
+                  backgroundColor : 'white'
                 }}
-                sx={{
-                  m: 1,
+                sx={{ 
+                  my : 2,
+                  borderRadius : 2
                 }}
+              >
+              <Canvas
+                style={{ height: '500px',}}
               >
                 <ShowWindow
                   ScrollTarget={scrollTarget}
-                  stuffs={nowStuffBundle.slice.content}
+                  stuffs={viewStuffs}
                   click={click}
+                  scale={stuffTypes[nowStuffBundle.stuffType].scale}
                 />
 
                 <OrthographicCamera makeDefault position={[0, 0, 4]} zoom={50} />
               </Canvas>
-            </Card>
+              </Box>
+              
+              <Box
+                sx={{
+                  display : 'flex',
+                  justifyContent : 'space-evenly',
+                  alignItems : 'center',
+                  color : 'white'
+                }}
+              >
+                <IconButton onClick={handlePrev}>
+                 <ArrowBackIosIcon sx={{color : 'white'}} />
+                </IconButton>
+                <Typography variant="h5" >
+                  {pages[bundleIndex]}
+                </Typography>
+                <IconButton onClick={handleNext}>
+                 <ArrowForwardIosIcon sx={{color : 'white'}} />
+                </IconButton>
+              </Box>
+            </Box>
             : <></> 
           }
         </Grid>
@@ -276,7 +260,11 @@ export default function Shop() {
 
       <Box>
       </Box>
-      <BuyModal />
+      <BuyModal 
+        open={open}
+        setOpen={setOpen}
+        nowStuff={nowStuff}
+      />
     </Container>
   );
 }

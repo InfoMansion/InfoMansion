@@ -46,11 +46,7 @@ export default function devView() {
                 position={[x, y, 0]}
                 scale={2}
             >
-                <DebugStuff
-                    data={stuff}
-                >
-                    
-                </DebugStuff>
+                <DebugStuff data={stuff} />
             </group>
         )
     }
