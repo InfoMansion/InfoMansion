@@ -21,7 +21,7 @@ export default function Home() {
   const { auth } = useAuth();
   const [cookies] = useCookies(['cookie-name']);
   const router = useRouter();
-  const [roomImgs, setRoomImgs] = useState([{ useName: '', roomImg: '' }]);
+  const [roomImgs, setRoomImgs] = useState([]);
   const [ref, inView] = useInView();
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useRecoilState(pageLoading);
@@ -94,7 +94,11 @@ export default function Home() {
             <div style={{ height: '100%', paddingTop: '1%' }}>
               <ul className={styles.container}>
                 {roomImgs.map(v => (
-                  <Item className={styles.item} backgroundImage={v.roomImg}>
+                  <Item
+                    key={v.userName}
+                    className={styles.item}
+                    backgroundImage={v.roomImg}
+                  >
                     <Link href={`/${v.userName}`} style={{ zIndex: 2 }}></Link>
                   </Item>
                 ))}

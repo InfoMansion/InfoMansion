@@ -78,14 +78,11 @@ export default function searchPost() {
 
   const getResult = useCallback(
     async (category, page = 0) => {
-      if (posts[category].page === page) {
-        return;
-      }
       try {
         const { data } = await axios.get(
           `/api/v1/${
             category === 'username' ? 'users' : 'posts'
-          }/search/${category}?searchWord=${query.keyword}&page=${page}&size=5`,
+          }/search/${category}?searchWord=${query.keyword}&page=${page}&size=9`,
           {
             headers: {
               Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
@@ -134,7 +131,14 @@ export default function searchPost() {
 
   const value = categories.indexOf(category);
   return (
-    <Box sx={{ width: '100%', maxWidth: '1280px', margin: '0 auto' }}>
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: '1280px',
+        margin: '0 auto',
+        paddingBottom: '48px',
+      }}
+    >
       <PostViewModal
         showModal={showModal}
         handleModalClose={handleModalClose}
@@ -167,11 +171,22 @@ export default function searchPost() {
       </Box>
       {categories.map((category, index) => (
         <TabPanel key={category} value={value} index={index}>
-          {posts[category].data.map(post => (
-            <div key={post.id}>
-              {category === 'username' ? (
+          {category === 'username' ? (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr',
+                borderRadius: 4,
+                gridGap: '20px 20px',
+              }}
+            >
+              {posts[category].data.map(post => (
                 <Profile user={post} />
-              ) : (
+              ))}
+            </div>
+          ) : (
+            <div>
+              {posts[category].data.map(post => (
                 <Post
                   post={post}
                   totheight={200}
@@ -179,14 +194,20 @@ export default function searchPost() {
                   maxcontent={150}
                   openModal={openModal}
                 />
-              )}
+              ))}
             </div>
-          ))}{' '}
+          )}
         </TabPanel>
       ))}
+
       <Button
         onClick={() => {
           getResult(category, posts[category].page + 1);
+        }}
+        style={{
+          color: 'white',
+          marginLeft: 'auto',
+          display: 'block',
         }}
       >
         more
