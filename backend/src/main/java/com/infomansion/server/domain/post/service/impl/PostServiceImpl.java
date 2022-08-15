@@ -46,6 +46,8 @@ public class PostServiceImpl implements PostService {
     private final FollowRepository followRepository;
     private final S3Uploader s3Uploader;
 
+    private final Long postPublishingCredit = 30L;
+
     @Transactional
     @Override
     public Long createPost(PostCreateRequestDto requestDto) {
@@ -139,7 +141,7 @@ public class PostServiceImpl implements PostService {
     public boolean deletePost(Long postId) {
         Post post = postRepository.findPostWithUser(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-        if (post.getUser().getId() != SecurityUtil.getCurrentUserId() && post.getUserStuff().getUser().getId() != SecurityUtil.getCurrentUserId())
+        if (!post.getUser().getId().equals(SecurityUtil.getCurrentUserId()) || !post.getUserStuff().getUser().getId().equals(SecurityUtil.getCurrentUserId()))
             throw new CustomException(ErrorCode.USER_NO_PERMISSION);
 
         post.deletePost(s3Uploader);
@@ -235,6 +237,7 @@ public class PostServiceImpl implements PostService {
 
         Post post = postRepository.save(Post.createPost(user, userStuff, requestDto.getTitle(), requestDto.getContent()));
         post.linkOriginalPost(post.getId());
+        user.earnCredit(postPublishingCredit);
 
         return PostSaveResponseDto.builder()
                 .userStuffId(requestDto.getUserStuffId())
@@ -349,6 +352,9 @@ public class PostServiceImpl implements PostService {
         UserStuff userStuff = userStuffRepository.findById(requestDto.getUserStuffId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
 
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
         // 1. Post 를 발행할 것이기 때문에 사본과 원본 상관없이 고아가 된 이미지 제거 & Post 의 제목과 내용 업데이트
         deleteImage(requestDto.getContent(), post);
         post.updatePost(requestDto.getTitle(), requestDto.getContent());
@@ -364,6 +370,7 @@ public class PostServiceImpl implements PostService {
 
             original.changeUserStuff(userStuff);
             postRepository.delete(post);
+            user.earnCredit(postPublishingCredit);
 
             return PostSaveResponseDto.builder()
                     .userStuffId(requestDto.getUserStuffId())
@@ -376,6 +383,7 @@ public class PostServiceImpl implements PostService {
         // 원본을 발행하는 경우, 발행
         post.changeUserStuff(userStuff);
         post.publish();
+        user.earnCredit(postPublishingCredit);
 
         return PostSaveResponseDto.builder()
                 .userStuffId(requestDto.getUserStuffId())

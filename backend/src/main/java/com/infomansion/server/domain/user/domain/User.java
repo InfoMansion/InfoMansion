@@ -139,4 +139,8 @@ public class User extends BaseTimeEntityAtSoftDelete {
         this.deleteFlag = true;
         this.setDeletedDate();
     }
+
+    public void earnCredit(Long amount) {
+        this.userCredit.earnCredit(amount);
+    }
 }
