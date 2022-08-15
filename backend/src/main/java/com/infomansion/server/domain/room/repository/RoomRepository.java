@@ -15,6 +15,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Query("select r from Room r join fetch r.user where r.user.id = :userId")
     Optional<Room> findRoomWithUser(@Param("userId") Long userId);
 
-    @Query(value = "SELECT * FROM Room ORDER BY rand() LIMIT 20", nativeQuery = true)
+    @Query(value = "SELECT * FROM room ORDER BY rand() LIMIT 20", nativeQuery = true)
     List<Room> findRandomRoom();
 }
