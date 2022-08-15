@@ -37,33 +37,39 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
 }));
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
+  border: 'none',
   backgroundColor: alpha('#9e9e9e', 0.15),
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
   width: '100%',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
     width: 'auto',
   },
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'gray',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
+  marginTop: '2px',
+  '.MuiInputBase-input': {
+    paddingLeft: '0',
+    width: '0px',
+    transition: 'width 1s',
+    visibility: 'hidden',
   },
-  '&: focus-within': {
-    color: 'black',
+  '#xIcon': {
+    visibility: 'hidden',
+  },
+  '&:focus-within': {
+    border: 'solid',
+    borderRadius: '4px',
+    borderColor: 'white',
+    '#xIcon': {
+      visibility: 'visible',
+    },
+    '.MuiInputBase-input': {
+      width: '150px',
+      visibility: 'visible',
+      paddingRight: '35px',
+    },
   },
 }));
 
@@ -81,6 +87,7 @@ export default function HeaderNav() {
   const [profile, setProfileState] = useRecoilState(profileState);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   const [notification, setNotification] = useRecoilState(notificationState);
+  const [isInput, setIsInput] = useState(false);
 
   //const [auth, setAuth] = useAuth();
 
@@ -247,58 +254,66 @@ export default function HeaderNav() {
                 </div>
               </div>
             </Link>
-            <Search
-              style={{
-                postiion: 'relative',
-                fontSize: '40px',
-                border: 'solid',
-                borderColor: 'white',
-                backgroundColor: 'transparent',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <SearchIconWrapper style={{ color: '#9e9e9e' }}>
-                <SearchIcon style={{ color: 'white', fontSize: '30px' }} />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="검색"
-                onChange={handleChange}
-                value={keyword}
-                onKeyPress={event => {
-                  event.key === 'Enter'
-                    ? push({
-                        pathname: '/post/SearchPost',
-                        query: { keyword },
-                      })
-                    : '';
-                }}
-                style={{
-                  paddingRight: '25px',
-                  color: 'white',
-                  paddingLeft: '7px',
-                }}
-              />
-              {keyword.length > 0 && (
-                <HighlightOffIcon
-                  style={{
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    right: '5',
-                    position: 'absolute',
-                    color: 'white',
-                    cursor: 'pointer',
-                    fontSize: '20px',
-                  }}
-                  onClick={() => {
-                    setKeyword('');
-                  }}
-                ></HighlightOffIcon>
-              )}
-            </Search>
+
             <div
               style={{ display: 'flex', height: '30px', alignItems: 'center' }}
             >
+              <Search
+                style={{
+                  postiion: 'relative',
+                  fontSize: '40px',
+                  backgroundColor: 'transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginLeft: 0,
+                }}
+              >
+                <IconButton style={{ padding: '1px 2px' }}>
+                  <SearchIcon
+                    style={{
+                      color: 'white',
+                      fontSize: '45px',
+                      margin: '0 4px',
+                    }}
+                  />
+                </IconButton>
+                <InputBase
+                  placeholder="검색"
+                  onChange={handleChange}
+                  value={keyword}
+                  onKeyPress={event => {
+                    event.key === 'Enter'
+                      ? push({
+                          pathname: '/post/SearchPost',
+                          query: { keyword },
+                        })
+                      : '';
+                  }}
+                  style={{
+                    color: 'white',
+                    fontSize: '20px',
+                  }}
+                />
+                {keyword.length > 0 && (
+                  <IconButton style={{ padding: '0' }}>
+                    <HighlightOffIcon
+                      id="xIcon"
+                      style={{
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        right: '5',
+                        position: 'absolute',
+                        color: 'white',
+                        cursor: 'pointer',
+                        fontSize: '30px',
+                      }}
+                      onClick={() => {
+                        setKeyword('');
+                      }}
+                    ></HighlightOffIcon>
+                  </IconButton>
+                )}
+              </Search>
               <Link href="/post/CreatePost">
                 <IconButton
                   baseClassName="fas"
