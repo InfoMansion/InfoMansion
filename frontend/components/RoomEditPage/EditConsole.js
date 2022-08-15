@@ -1,6 +1,8 @@
-import {Box, Button, Typography} from '@mui/material'
+import {Box, Button, Divider, Typography} from '@mui/material'
+import { useState } from 'react';
 import { useRecoilState } from 'recoil'
 import { categoryState, editingState, editStuffState, fromState, positionState, rotationState } from '../../state/editRoomState'
+import { ColorButton } from '../common/ColorButton';
 import UpDownControl from './atoms/UpDownControl';
 
 export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUnlocatedStuff}) {
@@ -11,6 +13,18 @@ export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUn
     const [editCategory, setEditCategory] = useRecoilState(categoryState);
     const [, setEditing] = useRecoilState(editingState);
     const [from] = useRecoilState(fromState);
+    const [tags] = useState([
+        {
+            "name" : "position",
+            "nameKor" : "위치", 
+            "limit" : 4
+        },
+        {
+            "name" : "rotation",
+            "nameKor" : "회전", 
+            "limit" : 6.28
+        },
+    ])
 
     function saveChange(e) {
         // from과 관계 없이 room에 넣기. 새로운 좌표, 새로운 카테고리로.
@@ -53,20 +67,22 @@ export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUn
     }
 
     return (
-        <Box>
-            <Typography variant="h6">
+        <Box
+            sx={{minWidth : 300}}
+        >
+            <Typography variant="h6" sx={{mt : 1}}>
                 카테고리 지정.
             </Typography>
             <Box
                 style={{
                     display : 'flex',
-                    flexFlow : 'wrap'
+                    flexFlow : 'wrap',
+                    maxWidth : 300
                 }}
             >
-                {/* 여기 나중에 카테고리로 수정, */}
                 {editStuff.categories.map(({category, categoryName}, index) => 
                     <Button 
-                        sx={{ p : 0, borderRadius : 5}}
+                        sx={{ borderRadius : 5}}
                         onClick={() => changeCategory(category)}
                         key={index}
                     >
@@ -77,8 +93,7 @@ export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUn
                                 color:  category == editCategory ? 'white' : '#fc7a71',
                             }}
                             sx={{
-                                px: 2,
-                                m : 1,
+                                px : 2,
                                 borderRadius: 4,
                             }} 
                         >
@@ -88,57 +103,62 @@ export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUn
                 )}
             </Box>
 
-            <Typography>
-                이동
-            </Typography>
+            <Divider />
             
-            <Box
-                style={{
-                    display : 'flex',
-                    justifyContent : 'space-evenly'
-                }}
-            >
-                {['x', 'y', 'z'].map((tag, index) => 
-                    <UpDownControl part={"position"} tag={tag} index={index} limit={4}/>
-                )}
-            </Box>
-            
-            <Typography>
-                회전
-            </Typography>
-            <Box
-                style={{
-                    display : 'flex',
-                    justifyContent : 'space-evenly' 
-                }}
-            >
-                {['x', 'y', 'z'].map((tag, index) => 
-                    <UpDownControl part={"rotation"} tag={tag} index={index} limit={6.28} />
-                )}
-            </Box>
-            <Box style={{display : 'flex'}}>
+            {tags.map( tag => (
+                <Box
+                    sx={{ my : 2 }}
+                >
+                    <Typography>
+                        {tag.nameKor}
+                    </Typography>
+                    <Divider />
+                    <Box
+                        style={{
+                            display : 'flex',
+                            flexDirection : 'column',
+                            justifyContent : 'space-evenly'
+                        }}
+                        sx={{ px : 2}}
+                    >
+                        {['x', 'y', 'z'].map((tagname, index) => 
+                            <UpDownControl part={tag.name} tag={tagname} index={index} limit={tag.limit}/>
+                        )}
+                    </Box>
+                </Box>
+            ))}
+
+            <Box style={{display : 'flex', justifyContent : 'space-between'}}>
                 { from == 'located' ?
                     <Button 
                         variant="outlined"
                         onClick={(e) => putin(e)}
+                        size="small"
+                        color="error"
                     >
                         집어넣기.
                     </Button>
-                    : <></>
+                    : <Box sx={{width : 10, height : 10}} />
                 }
 
-                <Button 
-                    variant="outlined"
-                    onClick={(e) => cancelChange(e)}
-                >
-                    취소
-                </Button>
-                <Button 
-                    variant="contained"
-                    onClick={(e) => saveChange(e)}
-                >
-                    결정.
-                </Button>
+                <Box>
+                    <Button 
+                        variant="outlined"
+                        onClick={(e) => cancelChange(e)}
+                        size="small"
+                        color="error"
+                        sx={{ mx : 2}}
+                    >
+                        취소
+                    </Button>
+                    <ColorButton 
+                        variant="contained"
+                        onClick={(e) => saveChange(e)}
+                        size="small"
+                    >
+                        결정.
+                    </ColorButton>
+                </Box>
             </Box>
         </Box>
     )

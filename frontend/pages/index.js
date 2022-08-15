@@ -84,7 +84,7 @@ export default function Home() {
                 {roomImgs.map(v => (
                   <Item
                     className={styles.item}
-                    backgroundImage={`url(${v.roomImg})`}
+                    backgroundImage={v.roomImg}
                   >
                     <Link href={`/${v.userName}`} style={{ zIndex: 2 }}></Link>
                   </Item>

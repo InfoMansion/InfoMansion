@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, Card, Container, Grid, Typography } from '@mui/material'
+import { Box, Button, Card, Container, Divider, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import Link from "next/link";
 import axios from "../../utils/axios";
@@ -12,6 +12,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { categoryState, editingState, editStuffState, fromState, positionState, rotationState } from "../../state/editRoomState";
 import useAuth from "../../hooks/useAuth";
 import { pageLoading } from '../../state/pageLoading';
+import { ColorButton } from '../../components/common/ColorButton'
 
 export default function RoomEdit() {
     const [cookies] = useCookies(['cookie-name']);
@@ -20,10 +21,6 @@ export default function RoomEdit() {
 
     const {auth} = useAuth();
     const [userName] = useState(auth.username);
-
-    useEffect(() => {
-        console.log(userName);
-    }, [userName]);
 
     const [stuffs, setStuffs] = useState([]);    
     const [wallStuffs, setWallStuffs] = useState([]);
@@ -59,6 +56,7 @@ export default function RoomEdit() {
                 setPageLoading(false);
             })
         }catch(e) {
+            setPageLoading(false);
             console.log(e);
         }
     }, []);
@@ -77,7 +75,6 @@ export default function RoomEdit() {
 
     function StuffClick(e, stuff) {        
         if(editing) return;
-        console.log(stuff);
         
         setEditing(true);
         setFrom('located');
@@ -88,8 +85,6 @@ export default function RoomEdit() {
         setEditCategory(stuff.selectedCategory);
 
         let copylocateddata = locatedStuffs.filter(data => data.userStuffId != stuff.userStuffId);
-        console.log(copylocateddata);
-        console.log(copylocateddata);
         setLocatedStuffs(copylocateddata);
     }
 
@@ -110,6 +105,7 @@ export default function RoomEdit() {
     function EndEdit() {
         let senddata = [{...wallStuff}, {...floorStuff}, ...locatedStuffs];
         setPageLoading(true);
+
         axios.put('/api/v1/userstuffs/edit', senddata, {
             headers : {
                 Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
@@ -121,21 +117,22 @@ export default function RoomEdit() {
                 router.push(`/${userName}`);
             }, 2000)
         })
+        .catch(e => {
+            setPageLoading(false);
+            alert(e.response.data.message);
+            console.log(e);
+        })
     }
     
     function addLocateStuff(e, stuff) {
-        console.log(stuff);
         setLocatedStuffs([...locatedStuffs, stuff]);
     }
     function addUnlocatedStuff(e, stuff) {
-        console.log(stuff);
         setUnlocatedStuffs([...unlocatedStuffs, stuff]);
     }
     function deleteUnlocatedStuff(e, stuff) {
         let unlocateddata = unlocatedStuffs.filter( data => data.userStuffId != stuff.userStuffId);
         setUnlocatedStuffs(unlocateddata);
-        console.log(stuff);
-        console.log(unlocateddata);
     }
 
     return (
@@ -153,61 +150,59 @@ export default function RoomEdit() {
                 }}
                 >
                 <Grid item lg={4}
-                    style={{
-                    }}
-                    sx={{
-                        p : 1,
-                        position : 'relative'
-                    }}
+                    sx={{ p : 1 }}
                 >
-                    <Card>
-                        <Box
-                            sx={{
-                                m : 2,
-                                position : 'relative'
-                            }}
-                        >
-                            <Typography variant='h6'>
-                                {editing ? editStuff.alias : "편집할 에셋을 클릭하세요" }
-                            </Typography>
-                            {editing ?
-                                <EditConsole 
-                                    addLocateStuff={addLocateStuff}
-                                    addUnlocatedStuff={addUnlocatedStuff}
-                                    deleteUnlocatedStuff={deleteUnlocatedStuff}
-                                />
-                                :
-                                <Box>
-                                    <MyStuffList
-                                        MapClick={MapClick}
-                                        stuffs={unlocatedStuffs}
-                                        wallStuffs={wallStuffs}
-                                        floorStuffs={floorStuffs}
-                                    />
-                                    <Box
-                                        sx={{
-                                            position : 'absolute',
-                                            right : 10,
-                                            bottom : 10
-                                        }}                      
-                                    >
+                    <Card
+                        sx={{
+                            p : 2,
+                            position : 'relative'
+                        }}
+                    >
+                        <Typography variant='h6'>
+                            {editing ? editStuff.alias : "편집할 에셋을 클릭하세요" }
+                        </Typography>
+                        <Divider />
 
-                                        <Button variant="outlined" >
-                                            <Link href={`/${userName}`}>
-                                                취소
-                                            </Link>
-                                        </Button>
-                                        <Button
-                                            variant="contained"
-                                            onClick={EndEdit}
-                                        >
-                                            {/* 추후에 변경된 사항 저장할지 묻는 기능 필요. */}
-                                            편집 완료
-                                        </Button>
-                                    </Box>
+                        {editing ?
+                            <EditConsole 
+                                addLocateStuff={addLocateStuff}
+                                addUnlocatedStuff={addUnlocatedStuff}
+                                deleteUnlocatedStuff={deleteUnlocatedStuff}
+                            />
+                            :
+                            <Box>
+                                <MyStuffList
+                                    MapClick={MapClick}
+                                    stuffs={unlocatedStuffs}
+                                    wallStuffs={wallStuffs}
+                                    floorStuffs={floorStuffs}
+                                />
+                                <Box
+                                    sx={{
+                                        position : 'absolute',
+                                        right : 10,
+                                        bottom : 10
+                                    }}                      
+                                >
+
+                                    <Button color="error" variant="outlined" size="small">
+                                        <Link href={`/${userName}`}>
+                                            취소
+                                        </Link>
+                                    </Button>
+
+                                    <ColorButton
+                                        variant="contained"
+                                        onClick={EndEdit}
+                                        size="small"
+                                        sx={{ml : 2, backgroundColor : "#fc7a71"}}
+                                    >
+                                        {/* 추후에 변경된 사항 저장할지 묻는 기능 필요. */}
+                                        편집 완료
+                                    </ColorButton>
                                 </Box>
-                            }
-                        </Box>
+                            </Box>
+                        }
                     </Card>
                 </Grid>
 

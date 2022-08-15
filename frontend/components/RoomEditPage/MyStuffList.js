@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import MapStuffList from './MapStuffList'
 import StuffList from "./StuffList";
 
@@ -12,7 +12,7 @@ export default function MyStuffList({stuffs, wallStuffs, floorStuffs, MapClick, 
                 stuffs={wallStuffs} tag={0} posy={-0.25}
                 click={MapClick}
             />
-
+            <Divider />
             <Typography>
                 바닥
             </Typography>
@@ -20,6 +20,7 @@ export default function MyStuffList({stuffs, wallStuffs, floorStuffs, MapClick, 
                 stuffs={floorStuffs} posy={0.6} tag={1}
                 click={MapClick}
             />
+            <Divider />
             <Typography>
                 가구
             </Typography>
