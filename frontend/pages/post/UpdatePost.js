@@ -19,6 +19,8 @@ export default function updatePost() {
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   const [tempId, setTempId] = useState('');
   const router = useRouter();
+  const postFinish = !!content && !!stuffId && !!title;
+  const tempFinish = !!content && !!title;
 
   const handleSave = async () => {
     if (tempId) {
@@ -139,6 +141,7 @@ export default function updatePost() {
           }}
           sx={{ my: 2, mr: 1 }}
           onClick={handleTempSave}
+          disabled={!tempFinish}
         >
           임시저장
         </Button>
@@ -148,6 +151,7 @@ export default function updatePost() {
           style={{ backgroundColor: MAIN_COLOR }}
           sx={{ my: 2, mr: 5 }}
           onClick={handleSave}
+          disabled={!postFinish}
         >
           저장
         </Button>
