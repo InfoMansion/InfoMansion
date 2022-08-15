@@ -103,32 +103,31 @@ export default function createPost() {
   };
 
   return (
-    <Container 
-      style={{ 
+    <Container
+      style={{
         position: 'relative',
-        backgroundColor : 'rgba(255,255,255,0.6)',
-        borderRadius : 5,
-        height : window.innerHeight - 80
+        backgroundColor: 'rgba(255,255,255,0.6)',
+        borderRadius: 5,
+        height: window.innerHeight - 80,
       }}
       sx={{
-        b : 4,
-        p : 2,
-        mt : 2,
+        b: 4,
+        p: 2,
+        mt: 2,
       }}
     >
-
       <Box
         style={{
-          position : 'absolute',
-          right : 0,
-          display : 'flex'
+          position: 'absolute',
+          right: 0,
+          display: 'flex',
         }}
       >
         <Button
           type="submit"
           variant="contained"
-          style={{ backgroundColor: MAIN_COLOR, }}
-          sx={{ my : 2, mr : 1 }}
+          style={{ backgroundColor: MAIN_COLOR }}
+          sx={{ my: 2, mr: 1 }}
           onClick={handleTempSave}
         >
           임시저장
@@ -136,8 +135,8 @@ export default function createPost() {
         <Button
           type="submit"
           variant="contained"
-          style={{ backgroundColor: MAIN_COLOR, }}
-          sx={{ my : 2, mr : 5 }}
+          style={{ backgroundColor: MAIN_COLOR }}
+          sx={{ my: 2, mr: 5 }}
           onClick={handleSave}
         >
           저장

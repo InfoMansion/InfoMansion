@@ -17,50 +17,92 @@ export default function updatePost() {
   const [cookies] = useCookies(['cookie-name']);
   const [imageUrlList, setImageUrlList] = useState([]);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+  const [tempId, setTempId] = useState('');
   const router = useRouter();
 
   const handleSave = async () => {
-    try {
-      const userPost = {
-        userStuffId: stuffId,
-        title: title,
-        content: content,
-      };
-      const { data } = await axios.post(
-        `/api/v2/posts/${postDetail.id}`,
-        userPost,
-        {
+    if (tempId) {
+      try {
+        const userPost = {
+          userStuffId: stuffId,
+          title: title,
+          content: content,
+        };
+        const { data } = await axios.post(`/api/v2/posts/${tempId}`, userPost, {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
             withCredentials: true,
           },
-        },
-      );
-      router.back();
-    } catch (e) {
-      console.log(e);
+        });
+        router.back();
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      try {
+        const userPost = {
+          userStuffId: stuffId,
+          title: title,
+          content: content,
+        };
+        const { data } = await axios.post(
+          `/api/v2/posts/${postDetail.id}`,
+          userPost,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+              withCredentials: true,
+            },
+          },
+        );
+        router.back();
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
   const handleTempSave = async () => {
-    try {
-      const userPost = {
-        title: title,
-        content: content,
-      };
-      const { data } = await axios.post(
-        `/api/v2/posts/temp/${postDetail.id}`,
-        userPost,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-            withCredentials: true,
+    if (tempId) {
+      try {
+        const userPost = {
+          title: title,
+          content: content,
+        };
+        const { data } = await axios.post(
+          `/api/v2/posts/temp/${tempId}`,
+          userPost,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+              withCredentials: true,
+            },
           },
-        },
-      );
-      router.back();
-    } catch (e) {
-      console.log(e);
+        );
+        router.back();
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      try {
+        const userPost = {
+          title: title,
+          content: content,
+        };
+        const { data } = await axios.post(
+          `/api/v2/posts/temp/${postDetail.id}`,
+          userPost,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+              withCredentials: true,
+            },
+          },
+        );
+        router.back();
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
@@ -72,7 +114,6 @@ export default function updatePost() {
   return (
     <div style={{ position: 'relative' }}>
       <Button
-        type="submit"
         variant="contained"
         style={{
           position: 'absolute',
@@ -113,6 +154,7 @@ export default function updatePost() {
         setStuffId={setStuffId}
         setImageUrlList={setImageUrlList}
         imageUrlList={imageUrlList}
+        setTempId={setTempId}
       />
     </div>
   );

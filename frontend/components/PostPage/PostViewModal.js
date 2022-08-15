@@ -47,15 +47,19 @@ export default function PostViewModal({ showModal, handleModalClose }) {
 
   const postDelete = async () => {
     const postInfo = {
-      postId: post.id,
+      postId: postDetail.id,
     };
     try {
-      const { data } = await axios.patch(`/api/v1/posts/${post.id}`, postInfo, {
-        headers: {
-          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-          withCredentials: true,
+      const { data } = await axios.patch(
+        `/api/v1/posts/${postDetail.id}`,
+        postInfo,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            withCredentials: true,
+          },
         },
-      });
+      );
       console.log(data);
     } catch (e) {
       console.log(e);

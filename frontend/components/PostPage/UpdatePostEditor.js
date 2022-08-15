@@ -58,6 +58,7 @@ const Editor = ({
   title,
   content,
   setContent,
+  setTempId,
   setImageUrlList,
   imageUrlList,
   ...rest
@@ -119,6 +120,8 @@ const Editor = ({
             },
           );
           let imageUrl = data.data.imgUrl;
+          let tempPostId = data.data.postId;
+          setTempId(tempPostId);
 
           const range = QuillRef.current.getEditor().getSelection().index;
           if (range !== null && range !== undefined) {
@@ -182,8 +185,7 @@ export default function UpdatePostEditor({
   category,
   onCategoryChange,
   setStuffId,
-  setImageUrlList,
-  imageUrlList,
+  setTempId,
 }) {
   const [windowSize, setWindowSize] = useState();
   const [categoryList, setCategoryList] = useState([]);
@@ -315,6 +317,7 @@ export default function UpdatePostEditor({
             title={title}
             content={content}
             setContent={setContent}
+            setTempId={setTempId}
             // 기타
             // imageUrlList={imageUrlList}
             // setImageUrlList={setImageUrlList}
