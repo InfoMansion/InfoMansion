@@ -1,90 +1,14 @@
 version: "3"
 
-networks:
-  front-networks:
-    driver: bridge
-  back-networks:
-    driver: bridge
-
 services:
-  spring-1:
-    container_name: spring-infomansion-1
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.prod
-    restart: always
-    ports:
-      - "8081:8080"
-    volumes:
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/backend/build/libs:/deploy
-    networks:
-      - back-networks
-      - front-networks
-    depends_on:
-      - redis
-
-  spring-2:
-    container_name: spring-infomansion-2
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.prod
-    restart: always
-    ports:
-      - "8082:8080"
-    volumes:
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/backend/build/libs:/deploy
-    networks:
-      - back-networks
-      - front-networks
-    depends_on:
-      - redis
-
   redis:
     image: redis
     container_name: redis-infomansion
     volumes:
       - redis-volumes:/data
     restart: always
-    expose:
-      - "6379"
-    networks:
-      - back-networks
-
-  react-1:
-    container_name: react-infomansion-1
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
-    restart: always
     ports:
-      - "3001:3000"
-    volumes:
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/node_modules:/app/node_modules
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/.next:/app/.next
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/public:/app/public
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/next.config.js:/app/next.config.js
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/package.json:/app/package.json
-    networks:
-      - front-networks
-      - back-networks
-
-  react-2:
-    container_name: react-infomansion-2
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
-    restart: always
-    ports:
-      - "3002:3000"
-    volumes:
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/node_modules:/app/node_modules
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/.next:/app/.next
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/public:/app/public
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/next.config.js:/app/next.config.js
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/package.json:/app/package.json
-    networks:
-      - front-networks
-      - back-networks
+      - "6379:6379"
 
 volumes:
   redis-volumes:

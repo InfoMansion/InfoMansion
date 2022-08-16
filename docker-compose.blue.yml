@@ -20,8 +20,6 @@ services:
     networks:
       - blue-back-networks
       - blue-front-networks
-    depends_on:
-      - redis-blue
 
   spring-blue-2:
     container_name: spring-infomansion-blue-2
@@ -36,19 +34,6 @@ services:
     networks:
       - blue-back-networks
       - blue-front-networks
-    depends_on:
-      - redis-blue
-
-  redis-blue:
-    image: redis
-    container_name: redis-infomansion-blue
-    volumes:
-      - redis-volumes:/data
-    restart: always
-    expose:
-      - "6379"
-    networks:
-      - blue-back-networks
 
   react-blue-1:
     container_name: react-infomansion-blue-1
@@ -85,6 +70,3 @@ services:
     networks:
       - blue-front-networks
       - blue-back-networks
-
-volumes:
-  redis-volumes:

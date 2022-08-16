@@ -15,7 +15,7 @@ spring:
     database-platform: org.hibernate.dialect.MariaDB106Dialect
 
   redis:
-    host: redis
+    host: http://127.0.0.1/
     port: 6379
 
   mail:

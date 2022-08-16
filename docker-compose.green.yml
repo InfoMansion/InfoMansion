@@ -20,8 +20,6 @@ services:
     networks:
       - green-back-networks
       - green-front-networks
-    depends_on:
-      - redis-green
 
   spring-green-2:
     container_name: spring-infomansion-green-2
@@ -36,19 +34,6 @@ services:
     networks:
       - green-back-networks
       - green-front-networks
-    depends_on:
-      - redis-green
-
-  redis-green:
-    image: redis
-    container_name: redis-infomansion-green
-    volumes:
-      - redis-volumes:/data
-    restart: always
-    expose:
-      - "6379"
-    networks:
-      - green-back-networks
 
   react-green-1:
     container_name: react-infomansion-green-1
@@ -85,6 +70,3 @@ services:
     networks:
       - green-front-networks
       - green-back-networks
-
-volumes:
-  redis-volumes:
