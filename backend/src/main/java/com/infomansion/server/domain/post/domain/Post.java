@@ -95,6 +95,7 @@ public class Post extends BaseTimeEntityAtSoftDelete {
     public void updatePost(String title, String content){
         this.title = title;
         this.content = content;
+        replaceDefaultPostThumbnail(content);
     }
 
     public void updatePostWithUserStuff(UserStuff userStuff, String title, String content) {
@@ -209,5 +210,6 @@ public class Post extends BaseTimeEntityAtSoftDelete {
 
     public void changeUserStuff(UserStuff userStuff) {
         this.userStuff = userStuff;
+        this.category = userStuff.getCategory();
     }
 }
