@@ -56,7 +56,6 @@ export default function UserInfo({
           },
         },
       );
-      console.log(data.data);
       setPosts(data.data);
     } catch (e) {
       console.log('recent error ', e);
@@ -97,7 +96,6 @@ export default function UserInfo({
           },
         },
       );
-      console.log(data);
       setModalInfo({ title: '팔로워', data: data.data });
     } catch (e) {
       console.log(e);
@@ -111,7 +109,6 @@ export default function UserInfo({
           Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
         },
       });
-      console.log(data);
       setLikePosts(data.data.slice(0, 10));
       setOpenLikePostModal(true);
     } catch (e) {
@@ -132,7 +129,6 @@ export default function UserInfo({
           },
         })
         .then(res => {
-          console.log(res.data);
           setPostDetail(res.data.data);
           if (postDetail.userName === auth.username) {
             setLoginUser(true);

@@ -29,7 +29,7 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
 
   const [mapstuffs, setMapstuffs] = useState([]);
   const [stuffs, setStuffs] = useState([]);
-  const [hovered, setHovered] = useState(0);
+  const [, setHovered] = useState(0);
   const [clicked, setClicked] = useState(0);
 
   const [tagon, setTagon] = useState(false);
@@ -39,6 +39,8 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
   const setPageLoading = useSetRecoilState(pageLoading);
   const [isFollow, setIsFollow] = useRecoilState(followState);
   const [guestBookOpen, setGuestBookOpen] = useState(false);
+
+  const [lighton, setLighton] = useState(true);
 
   // 마운트시 stuff 로드
   useEffect(() => {
@@ -70,7 +72,10 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
   }
   // stuff 클릭 이벤트.
   function Click(e, stuff) {
-    if (stuff.category == 'NONE') return null;
+    if (stuff.category.category == 'NONE') {
+      if(stuff.alias == "조명") { setLighton(!lighton); }
+      return;
+    }
     let midx = Number(window.innerWidth/2);
     let maxy = window.innerHeight - 620;
     
@@ -143,7 +148,7 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
     >
       {/* 캔버스 영역 */}
       <Canvas shadows>
-        <RoomLight />
+        <RoomLight on={lighton}/>
         <RoomCamera camloc={camloc} clicked={clicked} zoomscale={zoomscale} />
         <PostProcessing />
         <Particles />

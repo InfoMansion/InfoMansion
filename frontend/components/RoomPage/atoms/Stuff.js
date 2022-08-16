@@ -82,6 +82,7 @@ export default function Model({ tagon, Hover, Click, data, ...props }) {
         </animated.group>
       :
       <group
+        onPointerDown={(e) => onClick(e)}
         rotation={[data.rotX, data.rotY, data.rotZ]}
       >
           {geometry.map((geo, i) => ( 
