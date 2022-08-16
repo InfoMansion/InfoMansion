@@ -15,7 +15,7 @@ const style = {
     p: 4,
 };
 
-export default function BuyModal({ open, setOpen, nowStuff}) {
+export default function BuyModal({ open, setOpen, nowStuff, cookies }) {
     const BuyStuffSubmit = async event => {
         event.preventDefault();
         if (window.confirm('가구를 구매하시겠습니까?')) {
@@ -25,9 +25,7 @@ export default function BuyModal({ open, setOpen, nowStuff}) {
           try {
             const { data } = await axios.post('/api/v2/user-stuff', buyStuff, {
               headers: {
-                ContentType: 'application/json',
                 Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-                withCredentials: true,
               },
             })
             .then(res => {
