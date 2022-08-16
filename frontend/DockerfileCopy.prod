@@ -1,0 +1,22 @@
+FROM node:16.16.0-alpine AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV production
+
+ARG REACT_APP_SERVER_URL
+ENV REACT_APP_SERVER_URL=$REACT_APP_SERVER_URL
+
+# os 사용자 추가 # 추후 수정
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+# 추후 수정
+USER nextjs
+
+# 외부 포트 사용한다는 알림 없어도 상관없음
+EXPOSE 3000
+
+ENV PORT 3000
+
+CMD ["node_modules/.bin/next", "start"]​
