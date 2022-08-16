@@ -13,6 +13,7 @@ export default function MyStuffList({stuffs, wallStuffs, floorStuffs, MapClick, 
                 click={MapClick}
             />
             <Divider />
+
             <Typography>
                 바닥
             </Typography>
@@ -21,6 +22,7 @@ export default function MyStuffList({stuffs, wallStuffs, floorStuffs, MapClick, 
                 click={MapClick}
             />
             <Divider />
+            
             <Typography>
                 가구
             </Typography>

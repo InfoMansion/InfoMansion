@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, Card, Container, Divider, Grid, Typography } from '@mui/material'
+import { Box, Button, Card, Container, css, Divider, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import Link from "next/link";
 import axios from "../../utils/axios";
@@ -10,7 +10,6 @@ import MyStuffList from "../../components/RoomEditPage/MyStuffList";
 import EditConsole from "../../components/RoomEditPage/EditConsole";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { categoryState, editingState, editStuffState, fromState, positionState, rotationState } from "../../state/editRoomState";
-import useAuth from "../../hooks/useAuth";
 import { pageLoading } from '../../state/pageLoading';
 import { ColorButton } from '../../components/common/ColorButton'
 
@@ -18,9 +17,7 @@ export default function RoomEdit() {
     const [cookies] = useCookies(['cookie-name']);
     const editRoomRef = useRef();
     const router = useRouter();
-
-    const {auth} = useAuth();
-    const [userName] = useState(auth.username);
+    const [userName, setUserName] = useState();
 
     const [stuffs, setStuffs] = useState([]);    
     const [wallStuffs, setWallStuffs] = useState([]);
@@ -72,6 +69,12 @@ export default function RoomEdit() {
         setLocatedStuffs(stuffs.filter(stuff => stuff.selected));
         setUnlocatedStuffs(stuffs.filter(stuff => !stuff.selected));
     }, [stuffs])
+
+    useEffect(() => {
+        if(!router.isReady) return;
+
+        setUserName(router.query.userName);
+    }, [router.isReady])
 
     function StuffClick(e, stuff) {        
         if(editing) return;
@@ -149,16 +152,18 @@ export default function RoomEdit() {
                     justifyContent : 'center'
                 }}
                 >
-                <Grid item lg={4}
+                <Grid item lg={5}
                     sx={{ p : 1 }}
                 >
-                    <Card
+                    <Box
                         sx={{
                             p : 2,
-                            position : 'relative'
+                            position : 'relative',
+                            backgroundColor : 'rgba(255,255,255,0.8)',
+                            borderRadius : 2
                         }}
                     >
-                        <Typography variant='h6'>
+                        <Typography variant='h6' sx={{mb : 1}}>
                             {editing ? editStuff.alias : "편집할 에셋을 클릭하세요" }
                         </Typography>
                         <Divider />
@@ -180,8 +185,8 @@ export default function RoomEdit() {
                                 <Box
                                     sx={{
                                         position : 'absolute',
-                                        right : 10,
-                                        bottom : 10
+                                        right : 15,
+                                        top : 15
                                     }}                      
                                 >
 
@@ -195,7 +200,7 @@ export default function RoomEdit() {
                                         variant="contained"
                                         onClick={EndEdit}
                                         size="small"
-                                        sx={{ml : 2, backgroundColor : "#fc7a71"}}
+                                        sx={{ml : 1, backgroundColor : "#fc7a71"}}
                                     >
                                         {/* 추후에 변경된 사항 저장할지 묻는 기능 필요. */}
                                         편집 완료
@@ -203,7 +208,7 @@ export default function RoomEdit() {
                                 </Box>
                             </Box>
                         }
-                    </Card>
+                    </Box>
                 </Grid>
 
                 <Grid item lg={7}>

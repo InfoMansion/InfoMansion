@@ -1,11 +1,9 @@
 import { OrthographicCamera } from '@react-three/drei'
 import {Canvas} from '@react-three/fiber'
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 
 import MapStuffs from './RoomPage/MapStuffs'
 import Stuffs from './RoomPage/Stuffs'
-// 이 파일은 나중에 db에 데이터 넣을 때 쓸거라 안지우고 유지하겠습니다.
-// import walltest from './walltest.json'
 import EditRoomCamera from './RoomPage/atoms/RoomEditCamera'
 import ScreenshotButton from './RoomPage/atoms/ScreenShotButton'
 import RoomLight from './RoomPage/atoms/RoomLight'
@@ -46,6 +44,7 @@ const EditRoom = forwardRef(( {mapStuffs, stuffs, StuffClick}, ref ) => {
             shadows
         >
             <RoomLight />
+            <pointLight position={[10, 20, 4]} intensity={1}/>
 
             <ScreenshotButton ref={ScreenShotButtonRef} />
             <EditRoomCamera camloc={[0, 0, 0]}/>
