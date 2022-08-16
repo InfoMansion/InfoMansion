@@ -23,7 +23,13 @@ import { useRecoilState } from 'recoil';
 import useAuth from '../../hooks/useAuth';
 import FollowList from '../RoomPage/atoms/FollowList';
 
-export default function PostViewModal({ showModal, handleModalClose }) {
+export default function PostViewModal({
+  showModal,
+  handleModalClose,
+  setShowModal,
+  setIsDeleted,
+  isDelted,
+}) {
   const [cookies] = useCookies(['cookie-name']);
   const [star, setStar] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -60,6 +66,8 @@ export default function PostViewModal({ showModal, handleModalClose }) {
         },
       );
       console.log(data);
+      setIsDeleted(!isDelted);
+      handleModalClose();
     } catch (e) {
       console.log(e);
     }
@@ -180,15 +188,12 @@ export default function PostViewModal({ showModal, handleModalClose }) {
     </Menu>
   );
 
-        console.log( document.getElementById("imageBox"));
+  console.log(document.getElementById('imageBox'));
 
   return (
     <>
       {modalInfo !== undefined && (
-        <FollowList
-          modalInfo={modalInfo}
-          handleModalClose={handleListClose}
-        />
+        <FollowList modalInfo={modalInfo} handleModalClose={handleListClose} />
       )}
       <Dialog
         open={showModal}
@@ -261,33 +266,39 @@ export default function PostViewModal({ showModal, handleModalClose }) {
           </div>
         </div>
 
-        <Grid container
+        <Grid
+          container
           style={{
             minHeight: '0',
             gridTemplateColumns: '2fr 3fr',
           }}
         >
-          <Grid item xs={5}
+          <Grid
+            item
+            xs={5}
             sx={{
-              display : 'flex',
-              alignItems : 'center',
+              display: 'flex',
+              alignItems: 'center',
             }}
             id="imageBox"
           >
             <Box
               style={{
-                backgroundImage : `url(${postDetail.defaultPostThumbnail})`,
-                
-                width : document.getElementById("imageBox") ? document.getElementById("imageBox").clientWidth : 0,
-                height : document.getElementById("imageBox") ? document.getElementById("imageBox").clientHeight : 0,
-                backgroundSize : '250%',
+                backgroundImage: `url(${postDetail.defaultPostThumbnail})`,
 
-                filter : "blur(6px)",
-                position : 'absolute',
-                zIndex : 0,
+                width: document.getElementById('imageBox')
+                  ? document.getElementById('imageBox').clientWidth
+                  : 0,
+                height: document.getElementById('imageBox')
+                  ? document.getElementById('imageBox').clientHeight
+                  : 0,
+                backgroundSize: '250%',
+
+                filter: 'blur(6px)',
+                position: 'absolute',
+                zIndex: 0,
               }}
-            >
-            </Box>
+            ></Box>
             <img
               src={`${postDetail.defaultPostThumbnail}`}
               style={{
@@ -296,19 +307,20 @@ export default function PostViewModal({ showModal, handleModalClose }) {
                 width: '100%',
                 minHeight: '0',
                 objectFit: 'contain',
-                zIndex : 1
+                zIndex: 1,
               }}
             />
-
           </Grid>
-          
-          <Grid item xs={7}
+
+          <Grid
+            item
+            xs={7}
             style={{
               gridTemplateRows: '0.5fr 4fr 50px',
 
               minHeight: '0',
               height: '100%',
-              overflow : 'scroll'
+              overflow: 'scroll',
             }}
           >
             <DialogTitle
@@ -372,7 +384,6 @@ export default function PostViewModal({ showModal, handleModalClose }) {
               )}
             </div>
           </Grid>
-
         </Grid>
         {renderMenu}
       </Dialog>

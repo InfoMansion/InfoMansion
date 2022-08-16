@@ -23,7 +23,12 @@ import { useRecoilState } from 'recoil';
 import useAuth from '../../hooks/useAuth';
 import FollowList from '../RoomPage/atoms/FollowList';
 
-export default function TempPostViewModal({ showModal, handleModalClose }) {
+export default function TempPostViewModal({
+  showModal,
+  handleModalClose,
+  isDeleted,
+  setIsDeleted,
+}) {
   const [cookies] = useCookies(['cookie-name']);
   const [star, setStar] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -47,16 +52,22 @@ export default function TempPostViewModal({ showModal, handleModalClose }) {
 
   const postDelete = async () => {
     const postInfo = {
-      postId: post.id,
+      postId: postDetail.id,
     };
     try {
-      const { data } = await axios.patch(`/api/v1/posts/${post.id}`, postInfo, {
-        headers: {
-          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-          withCredentials: true,
+      const { data } = await axios.patch(
+        `/api/v1/posts/${postDetail.id}`,
+        postInfo,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            withCredentials: true,
+          },
         },
-      });
+      );
       console.log(data);
+      setIsDeleted(!isDeleted);
+      handleModalClose();
     } catch (e) {
       console.log(e);
     }

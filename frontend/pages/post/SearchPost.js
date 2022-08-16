@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import { Tabs, Tab, Box, Divider, Typography, Button, Container } from '@mui/material';
+import {
+  Tabs,
+  Tab,
+  Box,
+  Divider,
+  Typography,
+  Button,
+  Container,
+} from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
 import TabPanel from '../../components/PostPage/TabPanel';
 import Post from '../../components/RoomPage/atoms/Post';
@@ -48,6 +56,7 @@ export default function searchPost() {
   const { auth } = useAuth();
   const [cookies] = useCookies(['cookie-name']);
   const [loginUser, setLoginUser] = useRecoilState(loginUserState);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const styles = theme => ({
     indicator: {
@@ -122,7 +131,7 @@ export default function searchPost() {
     getResult('title');
     getResult('content');
     getResult('username');
-  }, [query.keyword]);
+  }, [query.keyword, isDeleted]);
   console.log(posts[category]);
 
   const handleModalClose = () => {
@@ -142,7 +151,10 @@ export default function searchPost() {
     >
       <PostViewModal
         showModal={showModal}
+        setShowModal={setShowModal}
         handleModalClose={handleModalClose}
+        setIsDeleted={setIsDeleted}
+        isDeleted={isDeleted}
       ></PostViewModal>
       <Box sx={{ borderBottom: 1, borderColor: 'rgba(255, 255, 255, 0.3)' }}>
         <Tabs
@@ -172,10 +184,13 @@ export default function searchPost() {
       </Box>
 
       {categories.map((category, index) => (
-        <TabPanel key={category} value={value} index={index}
-          style={{ 
-            maxWidth : 1000,
-            margin : 'auto'
+        <TabPanel
+          key={category}
+          value={value}
+          index={index}
+          style={{
+            maxWidth: 1000,
+            margin: 'auto',
           }}
         >
           {category === 'username' ? (

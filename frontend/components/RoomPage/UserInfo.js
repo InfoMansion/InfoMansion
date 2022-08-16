@@ -41,6 +41,7 @@ export default function UserInfo({
   const [openLikePostModal, setOpenLikePostModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+  const [isDeleted, setIsDeleted] = useState(false);
   const { auth } = useAuth();
 
   const textStyle = {
@@ -48,10 +49,10 @@ export default function UserInfo({
   };
 
   const tagStyle = {
-    color : focused ? 'white' : 'white',
-    backgroundColor : focused ? '#fc7a71' : 'transparent',
-    height : 22
-  }
+    color: focused ? 'white' : 'white',
+    backgroundColor: focused ? '#fc7a71' : 'transparent',
+    height: 22,
+  };
 
   const getRecentPost = useCallback(async () => {
     try {
@@ -71,7 +72,7 @@ export default function UserInfo({
 
   useEffect(() => {
     getRecentPost();
-  }, [getRecentPost]);
+  }, [getRecentPost, isDeleted]);
 
   const handleModalClose = () => {
     setModalInfo(undefined);
@@ -252,8 +253,6 @@ export default function UserInfo({
             <Typography variant="h4" style={textStyle}>
               {userInfo.username}
             </Typography>
-
-            
           </Box>
 
           <Box
@@ -261,7 +260,7 @@ export default function UserInfo({
               display: 'flex',
               flexDirection: 'row',
               color: '#aaaaaa',
-              alignItems : 'center'
+              alignItems: 'center',
             }}
           >
             <Typography
@@ -281,7 +280,7 @@ export default function UserInfo({
             <Typography
               variant="body2"
               onClick={getFollowerInfo}
-              style={{ ...textStyle,cursor: 'pointer' }}
+              style={{ ...textStyle, cursor: 'pointer' }}
             >
               팔로우
             </Typography>
@@ -293,24 +292,25 @@ export default function UserInfo({
               <>
                 <Link href={'/post/TempPost'}>
                   <SaveAsIcon
-                    sx={{ml : 2}}
+                    sx={{ ml: 2 }}
                     style={{ ...textStyle, cursor: 'pointer' }}
                   />
                 </Link>
                 <StarIcon
                   onClick={showLikePostList}
-                  sx={{ ml : 1 }}
+                  sx={{ ml: 1 }}
                   style={{ ...textStyle, cursor: 'pointer' }}
                 />
                 <Link href={userInfo.username + '/dashboard'}>
                   <SettingsIcon
-                    sx={{ ml : 1}}
+                    sx={{ ml: 1 }}
                     style={{ ...textStyle, cursor: 'pointer' }}
                   />
                 </Link>
               </>
-            ) : <></>
-            }
+            ) : (
+              <></>
+            )}
           </Box>
         </Grid>
       </Grid>
@@ -325,9 +325,9 @@ export default function UserInfo({
           m: 2,
         }}
       >
-        {userInfo.categories.map((category) => (
+        {userInfo.categories.map(category => (
           <Typography
-            key={category}  
+            key={category}
             variant="body2"
             style={tagStyle}
             sx={{
@@ -335,8 +335,8 @@ export default function UserInfo({
               mr: 1,
               mb: 1,
               borderRadius: 4,
-              borderColor : 'white',
-              border : 1 ,
+              borderColor: 'white',
+              border: 1,
             }}
           >
             {category}
@@ -347,7 +347,11 @@ export default function UserInfo({
       <Divider color={'white'} />
       <Typography sx={{ m: 2 }}>{userInfo.introduce}</Typography>
 
-      <RecentPost posts={posts} />
+      <RecentPost
+        posts={posts}
+        isDeleted={isDeleted}
+        setIsDeleted={setIsDeleted}
+      />
     </Box>
   );
 }

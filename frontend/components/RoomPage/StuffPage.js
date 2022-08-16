@@ -15,7 +15,10 @@ import { Container } from '@mui/system';
 import Post from './atoms/Post';
 
 import { useRecoilState } from 'recoil';
-import { clickedStuffCategoryState, loginUserState } from '../../state/roomState';
+import {
+  clickedStuffCategoryState,
+  loginUserState,
+} from '../../state/roomState';
 import CreateIcon from '@mui/icons-material/Create';
 import axios from '../../utils/axios';
 import PostViewModal from '../PostPage/PostViewModal';
@@ -42,6 +45,7 @@ export default function StuffPage({ data, cookies }) {
   const [post, setPost] = useState('');
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   const [showModal, setShowModal] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const { auth } = useAuth();
   const [userName] = useState(auth.username);
@@ -76,7 +80,7 @@ export default function StuffPage({ data, cookies }) {
   useEffect(() => {
     if (!data.id) return;
     setAlias(data.alias);
-    
+
     let url = `/api/v1/posts/${data.id}`;
     if (data.category == 'POSTBOX')
       url = `/api/v1/posts/postbox/${userName}?page=1&size=3`;
@@ -96,30 +100,34 @@ export default function StuffPage({ data, cookies }) {
     } catch (e) {
       console.log(e);
     }
-  }, [data]);
+  }, [data, isDeleted]);
 
   function changeAlias() {
-    if(!editAlias) {
+    if (!editAlias) {
       setEditAlias(true);
-    }
-    else{
+    } else {
       // 요청 보내기.
       console.log(data.category.category);
 
-      axios.put(`/api/v1/userstuffs/option`, {
-        id : data.id,
-        alias : alias,
-      }, {
-        headers: {
-          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-        }
-      })
-      .then( res => {
-        console.log(res);
-      })
-      .catch( e => {
-        console.log(e)
-      })
+      axios
+        .put(
+          `/api/v1/userstuffs/option`,
+          {
+            id: data.id,
+            alias: alias,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            },
+          },
+        )
+        .then(res => {
+          console.log(res);
+        })
+        .catch(e => {
+          console.log(e);
+        });
 
       setEditAlias(false);
     }
@@ -127,7 +135,7 @@ export default function StuffPage({ data, cookies }) {
   function handleChange(e) {
     setAlias(e.target.value);
   }
-  
+
   return (
     <Paper
       elevation={1}
@@ -143,6 +151,8 @@ export default function StuffPage({ data, cookies }) {
       <PostViewModal
         showModal={showModal}
         handleModalClose={handleModalClose}
+        isDeleted={isDeleted}
+        setIsDeleted={setIsDeleted}
       ></PostViewModal>
 
       <CssBaseline />
@@ -155,30 +165,26 @@ export default function StuffPage({ data, cookies }) {
           backgroundColor: '#ffffff',
         }}
       >
-        {editAlias ? 
+        {editAlias ? (
           <TextField
             id="standard-error-helper-text"
             label="별칭 지정"
             defaultValue={alias}
-            onChange={(e) => handleChange(e)}
+            onChange={e => handleChange(e)}
             variant="standard"
           />
-          :
-          <Typography
-            variant="h4"
-            sx={{ }}
-          >
+        ) : (
+          <Typography variant="h4" sx={{}}>
             {alias}
           </Typography>
-        }
-        {loginUser ?
-          <IconButton
-            onClick={changeAlias}
-          >
+        )}
+        {loginUser ? (
+          <IconButton onClick={changeAlias}>
             <CreateIcon />
           </IconButton>
-          : <></>
-        }
+        ) : (
+          <></>
+        )}
 
         <Typography
           sx={{
@@ -186,7 +192,7 @@ export default function StuffPage({ data, cookies }) {
             backgroundColor: '#ffa0a0',
             minWidth: 60,
             color: '#ffffff',
-            px : 1,
+            px: 1,
           }}
         >
           {clickedStuffCategory.category}

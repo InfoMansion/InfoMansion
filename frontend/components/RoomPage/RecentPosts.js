@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 import { postDetailState } from '../../state/postDetailState';
 import axios from '../../utils/axios';
 
-export default function RecentPost({ posts }) {
+export default function RecentPost({ posts, isDeleted, setIsDeleted }) {
   const [cookies] = useCookies(['cookie-name']);
   const [post, setPost] = useState('');
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
@@ -47,6 +47,8 @@ export default function RecentPost({ posts }) {
       <PostViewModal
         showModal={showModal}
         handleModalClose={handleModalClose}
+        isDeleted={isDeleted}
+        setIsDeleted={setIsDeleted}
       ></PostViewModal>
 
       <Typography variant="h6">Recent post</Typography>

@@ -30,6 +30,7 @@ export default function tempPost() {
   const { auth } = useAuth();
   const [cookies] = useCookies(['cookie-name']);
   const [loginUser, setLoginUser] = useRecoilState(loginUserState);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const styles = theme => ({
     indicator: {
@@ -75,7 +76,7 @@ export default function tempPost() {
 
   useEffect(() => {
     getResult();
-  }, []);
+  }, [isDeleted]);
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -103,6 +104,8 @@ export default function tempPost() {
           <TempPostViewModal
             showModal={showModal}
             handleModalClose={handleModalClose}
+            isDeleted={isDeleted}
+            setIsDeleted={setIsDeleted}
           ></TempPostViewModal>
           {posts.map((post, index) => (
             <Temp
