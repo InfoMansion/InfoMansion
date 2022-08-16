@@ -261,31 +261,32 @@ export default function UserInfo({
               display: 'flex',
               flexDirection: 'row',
               color: '#aaaaaa',
+              alignItems : 'center'
             }}
           >
             <Typography
               variant="body2"
               onClick={getFollowingInfo}
-              style={{ ...textStyle, display: 'flex', cursor: 'pointer' }}
+              style={{ ...textStyle, cursor: 'pointer' }}
             >
               팔로워
-              <Typography
-                style={{ ...textStyle, cursor: 'pointer' }}
-                sx={{ ml: 1, mr: 2 }}
-              >
-                {nowFollow}
-              </Typography>
+            </Typography>
+            <Typography
+              style={{ ...textStyle, cursor: 'pointer' }}
+              sx={{ ml: 1, mr: 2 }}
+            >
+              {nowFollow}
             </Typography>
 
             <Typography
               variant="body2"
               onClick={getFollowerInfo}
-              style={{ ...textStyle, display: 'flex', cursor: 'pointer' }}
+              style={{ ...textStyle,cursor: 'pointer' }}
             >
               팔로우
-              <Typography style={textStyle} sx={{ ml: 1 }}>
-                {userInfo.following}
-              </Typography>
+            </Typography>
+            <Typography style={textStyle} sx={{ ml: 1 }}>
+              {userInfo.following}
             </Typography>
 
             {loginUser ? (

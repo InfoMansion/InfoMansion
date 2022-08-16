@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Box,
   Dialog,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
   IconButton,
   Menu,
   MenuItem,
@@ -11,14 +13,12 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
-import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Follow from '../Follow';
 import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
 import Router from 'next/router';
 import { postDetailState } from '../../state/postDetailState';
-import { loginUserState } from '../../state/roomState';
 import { useRecoilState } from 'recoil';
 import useAuth from '../../hooks/useAuth';
 import FollowList from '../RoomPage/atoms/FollowList';
@@ -180,13 +180,15 @@ export default function PostViewModal({ showModal, handleModalClose }) {
     </Menu>
   );
 
+        console.log( document.getElementById("imageBox"));
+
   return (
     <>
       {modalInfo !== undefined && (
         <FollowList
           modalInfo={modalInfo}
           handleModalClose={handleListClose}
-        ></FollowList>
+        />
       )}
       <Dialog
         open={showModal}
@@ -233,7 +235,7 @@ export default function PostViewModal({ showModal, handleModalClose }) {
               <img
                 src={postUserInfo.profileImage}
                 style={{ minHeight: '0', height: '100%', marginRight: '8px' }}
-              ></img>
+              />
               <div
                 style={{
                   fontSize: '20px',
@@ -259,33 +261,54 @@ export default function PostViewModal({ showModal, handleModalClose }) {
           </div>
         </div>
 
-        <div
+        <Grid container
           style={{
-            display: 'grid',
             minHeight: '0',
-            height: '100%',
             gridTemplateColumns: '2fr 3fr',
           }}
         >
-          <img
-            src={`${postDetail.defaultPostThumbnail}`}
-            style={{
-              display: 'block',
-              minWidth: '0',
-              width: '100%',
-              minHeight: '0',
-              height: '100%',
-              objectFit: 'contain',
-              background: 'black',
+          <Grid item xs={5}
+            sx={{
+              display : 'flex',
+              alignItems : 'center',
             }}
-          ></img>
-          <div
+            id="imageBox"
+          >
+            <Box
+              style={{
+                backgroundImage : `url(${postDetail.defaultPostThumbnail})`,
+                
+                width : document.getElementById("imageBox") ? document.getElementById("imageBox").clientWidth : 0,
+                height : document.getElementById("imageBox") ? document.getElementById("imageBox").clientHeight : 0,
+                backgroundSize : '250%',
+
+                filter : "blur(6px)",
+                position : 'absolute',
+                zIndex : 0,
+              }}
+            >
+            </Box>
+            <img
+              src={`${postDetail.defaultPostThumbnail}`}
+              style={{
+                display: 'block',
+                minWidth: '0',
+                width: '100%',
+                minHeight: '0',
+                objectFit: 'contain',
+                zIndex : 1
+              }}
+            />
+
+          </Grid>
+          
+          <Grid item xs={7}
             style={{
-              display: 'grid',
               gridTemplateRows: '0.5fr 4fr 50px',
 
               minHeight: '0',
               height: '100%',
+              overflow : 'scroll'
             }}
           >
             <DialogTitle
@@ -348,8 +371,9 @@ export default function PostViewModal({ showModal, handleModalClose }) {
                 <div></div>
               )}
             </div>
-          </div>
-        </div>
+          </Grid>
+
+        </Grid>
         {renderMenu}
       </Dialog>
     </>

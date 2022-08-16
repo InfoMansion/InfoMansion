@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import { Tabs, Tab, Box, Divider, Typography, Button } from '@mui/material';
+import { Tabs, Tab, Box, Divider, Typography, Button, Container } from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
 import TabPanel from '../../components/PostPage/TabPanel';
 import Post from '../../components/RoomPage/atoms/Post';
@@ -90,7 +90,8 @@ export default function searchPost() {
             },
           },
         );
-        console.log(data);
+        // console.log(data);
+
         setTimeout(() => {
           setPosts(prev => ({
             ...prev,
@@ -131,7 +132,7 @@ export default function searchPost() {
 
   const value = categories.indexOf(category);
   return (
-    <Box
+    <Container
       sx={{
         width: '100%',
         maxWidth: '1280px',
@@ -169,8 +170,14 @@ export default function searchPost() {
           <Tab label="닉네임" {...a11yProps(2)} />
         </Tabs>
       </Box>
+
       {categories.map((category, index) => (
-        <TabPanel key={category} value={value} index={index}>
+        <TabPanel key={category} value={value} index={index}
+          style={{ 
+            maxWidth : 1000,
+            margin : 'auto'
+          }}
+        >
           {category === 'username' ? (
             <div
               style={{
@@ -190,9 +197,11 @@ export default function searchPost() {
                 <Post
                   post={post}
                   totheight={200}
-                  picwidth={150}
+                  picwidth={180}
                   maxcontent={150}
                   openModal={openModal}
+                  pad={2}
+                  my={2}
                 />
               ))}
             </div>
@@ -212,6 +221,6 @@ export default function searchPost() {
       >
         more
       </Button>
-    </Box>
+    </Container>
   );
 }

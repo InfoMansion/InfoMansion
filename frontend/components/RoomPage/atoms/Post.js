@@ -9,14 +9,13 @@ import {
   Typography,
 } from '@mui/material';
 
-export default function Post({ post, totheight, picwidth, openModal }) {
+export default function Post({ post, totheight, picwidth, openModal, pad = 1, my = 1 }) {
   return (
     <Box
       key={post.title}
       sx={{
         backgroundColor: 'rgba(255,255,255,0.8)',
-        p: 3,
-        my: 2,
+        my : my,
         borderRadius: 2,
         height: totheight,
         overflow: 'hidden',
@@ -27,28 +26,35 @@ export default function Post({ post, totheight, picwidth, openModal }) {
         style={{
           display: 'flex',
           cursor: 'pointer',
+          backgroundColor : 'white'
         }}
         onClick={() => openModal(post)}
       >
         <Box
           sx={{
-            minWidth: picwidth,
+            minWidth : picwidth,
+            width : picwidth,
             height: '100%',
-            mr: 2,
+
+            display : 'flex',
+            justifyContent : 'center'
           }}
         >
           <img
             src={`${post.defaultPostThumbnail}`}
             alt="no img"
-            style={{ width: picwidth, height: picwidth }}
+            style={{ height : totheight }}
           />
         </Box>
-        <CardContent
+
+        <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
             width: '100%',
-            p: 0,
+            height : totheight,
+            p : pad,
+            backgroundColor : 'rgba(255, 255, 255,1)'
           }}
         >
           <Box
@@ -60,7 +66,7 @@ export default function Post({ post, totheight, picwidth, openModal }) {
           >
             <Typography
               variant="h6"
-              sx={{ mr: 2 }}
+              sx={{ mr : 2 }}
               color="text.primary"
               style={{
                 width: '100%',
@@ -71,6 +77,7 @@ export default function Post({ post, totheight, picwidth, openModal }) {
             >
               {post.title}
             </Typography>
+
             <Typography
               variant="body4"
               color="text.secondary"
@@ -78,12 +85,16 @@ export default function Post({ post, totheight, picwidth, openModal }) {
             >
               {post.modifiedDate.substring(0, 10)}
             </Typography>
+
           </Box>
           <Divider style={{ width: '100%' }} />
-          <Typography variant="body2" color="text.secondary">
-            <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+          <Typography sx={{ overflow : 'hidden',}}
+            variant="body2"
+            color="text.secondary" 
+          >
+            <div dangerouslySetInnerHTML={{ __html: post.content }} />
           </Typography>
-        </CardContent>
+        </Box>
       </div>
     </Box>
   );
