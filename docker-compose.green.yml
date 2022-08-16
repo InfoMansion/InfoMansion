@@ -39,9 +39,9 @@ services:
     depends_on:
       - redis
 
-  redis:
+  redis-green:
     image: redis
-    container_name: redis-infomansion
+    container_name: redis-infomansion-green
     volumes:
       - redis-volumes:/data
     restart: always
