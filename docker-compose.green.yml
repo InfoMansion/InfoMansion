@@ -21,7 +21,7 @@ services:
       - green-back-networks
       - green-front-networks
     depends_on:
-      - redis
+      - redis-green
 
   spring-green-2:
     container_name: spring-infomansion-green-2
@@ -37,7 +37,7 @@ services:
       - green-back-networks
       - green-front-networks
     depends_on:
-      - redis
+      - redis-green
 
   redis-green:
     image: redis

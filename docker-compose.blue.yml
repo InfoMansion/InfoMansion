@@ -21,7 +21,7 @@ services:
       - blue-back-networks
       - blue-front-networks
     depends_on:
-      - redis
+      - redis-blue
 
   spring-blue-2:
     container_name: spring-infomansion-blue-2
@@ -37,7 +37,7 @@ services:
       - blue-back-networks
       - blue-front-networks
     depends_on:
-      - redis
+      - redis-blue
 
   redis-blue:
     image: redis
