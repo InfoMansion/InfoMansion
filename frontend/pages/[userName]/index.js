@@ -8,7 +8,7 @@ import styles from '../../styles/Room.module.css';
 import { useSpring, animated } from 'react-spring';
 import { followState, loginUserState } from '../../state/roomState';
 import { useRecoilState } from 'recoil';
-import axiosApiInstance from '../../utils/axios';
+import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
 
 export default function RoomPage() {
@@ -41,7 +41,7 @@ export default function RoomPage() {
   useEffect(() => {
     if(!userName) return;
     try {
-      axiosApiInstance
+      axios
         .get(`/api/v1/users/${userName}`, {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
@@ -49,7 +49,7 @@ export default function RoomPage() {
         })
         .then(res => {
           setLoginUser(res.data.data.loginUser);
-          setFollow(res.data.follow);
+          setFollow(res.data.data.follow);
           setUserInfo(res.data.data);
           setNowFollow(res.data.data.follower);
         });

@@ -6,8 +6,6 @@ import ShopStuff from './atoms/ShopStuff'
 export default function ShowWindow({stuffs, type, click, scale}) {
     const offx = 5;
     const offy = 5;
-    
-    console.log(scale);
 
     const offset = 2.5;
     

@@ -35,7 +35,6 @@ export default function PostViewModal({ showModal, handleModalClose }) {
   const [isLike, setIsLike] = useState(false);
   const [modalInfo, setModalInfo] = useState(undefined);
 
-  console.log(postDetail);
   const handleMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };

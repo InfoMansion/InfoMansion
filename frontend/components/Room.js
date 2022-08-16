@@ -115,7 +115,6 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
       );
       setIsFollow(prev => !prev);
       setNowFollow(prev => prev + 1);
-      alert('팔로우');
     } catch (e) {
       console.log('error', e);
     }
@@ -130,7 +129,6 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
       });
       setIsFollow(prev => !prev);
       setNowFollow(prev => prev - 1);
-      alert('팔로우 취소');
     } catch (e) {
       console.log(e);
     }
@@ -187,7 +185,6 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
         />
 
         <Particles />
-        {/* <Stuff_s3test /> */}
       </Canvas>
 
       <Container
