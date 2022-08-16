@@ -1,0 +1,90 @@
+version: "3"
+
+networks:
+  green-front-networks:
+    driver: bridge
+  green-back-networks:
+    driver: bridge
+
+services:
+  spring-green-1:
+    container_name: spring-infomansion-green-1
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    restart: always
+    ports:
+      - "8001:8080"
+    volumes:
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/backend/build/libs:/deploy
+    networks:
+      - green-back-networks
+      - green-front-networks
+    depends_on:
+      - redis
+
+  spring-green-2:
+    container_name: spring-infomansion-green-2
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    restart: always
+    ports:
+      - "8002:8080"
+    volumes:
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/backend/build/libs:/deploy
+    networks:
+      - green-back-networks
+      - green-front-networks
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+    container_name: redis-infomansion
+    volumes:
+      - redis-volumes:/data
+    restart: always
+    expose:
+      - "6379"
+    networks:
+      - green-back-networks
+
+  react-green-1:
+    container_name: react-infomansion-green-1
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    restart: always
+    ports:
+      - "3031:3000"
+    volumes:
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/node_modules:/app/node_modules
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/.next:/app/.next
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/public:/app/public
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/next.config.js:/app/next.config.js
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/package.json:/app/package.json
+    networks:
+      - green-front-networks
+      - green-back-networks
+
+  react-green-2:
+    container_name: react-infomansion-green-2
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    restart: always
+    ports:
+      - "3032:3000"
+    volumes:
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/node_modules:/app/node_modules
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/.next:/app/.next
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/public:/app/public
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/next.config.js:/app/next.config.js
+      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/package.json:/app/package.json
+    networks:
+      - green-front-networks
+      - green-back-networks
+
+volumes:
+  redis-volumes:
