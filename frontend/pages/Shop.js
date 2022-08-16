@@ -109,8 +109,7 @@ export default function Shop() {
   function handleNext() {
     let copypages = [...pages];
     copypages[bundleIndex]++;
-    setPages(copypages);
-
+    
     let st = (copypages[bundleIndex]-1)*6;
     if(stuffBundles[bundleIndex].slice.content[st]){
       setViewStuffs(stuffBundles[bundleIndex].slice.content.slice(st, st+6));
@@ -126,11 +125,14 @@ export default function Shop() {
         },
       })
       .then( res => {
+        if(res.data.data.content.length == 0) return;
+        
         let copyStuffBundles = [...stuffBundles];
         copyStuffBundles[bundleIndex].slice.content = copyStuffBundles[bundleIndex].slice.content.concat(res.data.data.content);
         
         setStuffBundles(copyStuffBundles);
         setViewStuffs(res.data.data.content);
+        setPages(copypages);
       })
       .catch(e => {
         console.log(e)
