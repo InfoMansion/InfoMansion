@@ -215,7 +215,7 @@ export default function Shop() {
 
               <Box
                 style={{
-                  backgroundColor : 'white'
+                  backgroundColor : 'rgba(255,255,255,0.8)'
                 }}
                 sx={{ 
                   my : 2,

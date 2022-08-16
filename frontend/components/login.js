@@ -65,6 +65,7 @@ export default function LogIn({ onSignIn }) {
     window.addEventListener('resize', handleBoxSize);
     axios.get(`/api/v1/rooms/random`)
     .then(res => {
+      // console.log(res.data.data);
       setImages(res.data.data);
     })
   }, []);

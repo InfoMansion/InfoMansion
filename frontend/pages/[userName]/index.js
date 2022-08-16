@@ -27,8 +27,6 @@ export default function RoomPage() {
 
   const [hovered, setHovered] = useState(false); 
   function StuffClick(stuff) {
-    console.log(stuff);
-
     setStuffon(stuff);
     setStuff(stuff);
   }
@@ -113,7 +111,7 @@ export default function RoomPage() {
         />
       </animated.div>
       <animated.div className={styles.stuffPage} style={StuffAnimation}>
-        {stuff ? <StuffPage data={stuff} /> : <></> }
+        {stuff ? <StuffPage cookies={cookies} data={stuff} /> : <></> }
       </animated.div>
 
       <Room

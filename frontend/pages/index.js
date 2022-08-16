@@ -52,8 +52,8 @@ export default function Home() {
             },
           },
         );
-        console.log(data);
-        console.log(data.data.roomResponseDtos);
+        // console.log(data);
+        // console.log(data.data.roomResponseDtos);
         setRoomImgs(prev => [...prev, ...data.data.roomResponseDtos.content]);
       } catch (e) {
         console.log(e);
