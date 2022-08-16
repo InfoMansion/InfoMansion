@@ -48,7 +48,12 @@ export default function tempPost() {
           },
         })
         .then(res => {
-          setPostDetail(res.data.data);
+          const tempPostDetail = res.data.data;
+          tempPostDetail.modifiedDate =
+            tempPostDetail.modifiedDate.substring(0, 10) +
+            ' ' +
+            tempPostDetail.modifiedDate.substring(11, 16);
+          setPostDetail(tempPostDetail);
           if (postDetail.userName === auth.username) {
             setLoginUser(true);
           }

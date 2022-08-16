@@ -8,6 +8,7 @@ import { forwardRef, useEffect, useState } from 'react';
 import axios from '../../../utils/axios';
 import { Button, Card, Divider, Grid, TextField } from '@mui/material';
 import CreateIcon from '@mui/icons-material/Create';
+import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import useAuth from '../../../hooks/useAuth';
 
 const Fade = forwardRef(function Fade(props, ref) {
@@ -186,6 +187,33 @@ export default function GuestBookPage({
     }
   };
 
+  const deleteGuestBook = async (id, event) => {
+    const postInfo = {
+      postId: id,
+    };
+    try {
+      const { data } = await axios.patch(`/api/v1/posts/${id}`, postInfo, {
+        headers: {
+          Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          withCredentials: true,
+        },
+      });
+      console.log(data);
+      axios
+        .get(`/api/v1/posts/guestbook/${userName}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        })
+        .then(res => {
+          // console.log(res.data.data.content);
+          setBooks(res.data.data.content);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const [colorDeck] = useState([
     '#DCD3FF',
     '#ECD4FF',
@@ -295,6 +323,10 @@ export default function GuestBookPage({
                   key={book.id}
                 >
                   <Typography variant="h6">{book.username}</Typography>
+                  <AutoDeleteIcon
+                    style={{ float: 'right', cursor: 'pointer' }}
+                    onClick={e => deleteGuestBook(book.id, e)}
+                  ></AutoDeleteIcon>
                   <Typography variant="body2" style={{ color: 'grey' }}>
                     {book.modifiedDate.substr(0, 10)}
                   </Typography>

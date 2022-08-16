@@ -7,6 +7,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
@@ -40,7 +41,6 @@ export default function TempPostViewModal({
   const [isLike, setIsLike] = useState(false);
   const [modalInfo, setModalInfo] = useState(undefined);
 
-  console.log(postDetail);
   const handleMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -166,10 +166,10 @@ export default function TempPostViewModal({
               height: '100%',
               alignItems: 'center',
               justifyContent: 'space-between',
-              float: 'right',
             }}
           >
-            <IconButton onClick={handleModalClose}>
+            <Typography>{postDetail.modifiedDate}</Typography>
+            <IconButton onClick={handleModalClose} style={{ float: 'right' }}>
               <CloseIcon />
             </IconButton>
           </div>
