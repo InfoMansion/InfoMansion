@@ -6,8 +6,9 @@ import Typography from '@mui/material/Typography';
 import { useSpring, animated } from 'react-spring';
 import { forwardRef, useEffect, useState } from 'react';
 import axios from '../../../utils/axios';
-import { Card, Divider, Grid } from '@mui/material';
+import { Button, Card, Divider, Grid, TextField } from '@mui/material';
 import CreateIcon from '@mui/icons-material/Create';
+import useAuth from '../../../hooks/useAuth';
 
 const Fade = forwardRef(function Fade(props, ref) {
   const { in: open, children, onEnter, onExited, ...other } = props;
@@ -48,6 +49,20 @@ const style = {
   width: 800,
   height: 800,
   backgroundColor: 'rgba(255, 255, 255, 0.6)',
+  b: 2,
+  borderRadius: 2,
+  boxShadow: 24,
+  p: 4,
+};
+
+const postStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 400,
+  backgroundColor: 'white',
   b: 2,
   borderRadius: 2,
   boxShadow: 24,
@@ -135,6 +150,42 @@ export default function GuestBookPage({
       likes: 2,
     },
   ]);
+  // 방명록 작성
+  const submitGuestBook = async event => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const gontent = data.get('content');
+    const guestContent = {
+      content: gontent,
+    };
+    try {
+      const { data } = await axios.post(
+        `/api/v1/posts/guestbook/${userName}`,
+        guestContent,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            withCredentials: true,
+          },
+        },
+      );
+      console.log(data);
+      axios
+        .get(`/api/v1/posts/guestbook/${userName}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+          },
+        })
+        .then(res => {
+          // console.log(res.data.data.content);
+          setBooks(res.data.data.content);
+        });
+      setPostOpen(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const [colorDeck] = useState([
     '#DCD3FF',
     '#ECD4FF',
@@ -143,6 +194,11 @@ export default function GuestBookPage({
     '#FFC9DE',
     '#AFCBFF',
   ]);
+
+  const [postOpen, setPostOpen] = useState(false);
+  const handlePostOpen = () => setPostOpen(true);
+  const handlePostClose = () => setPostOpen(false);
+  const { auth, setAuth } = useAuth();
 
   useEffect(() => {
     if (!userName) return;
@@ -178,7 +234,42 @@ export default function GuestBookPage({
             }}
           >
             <Typography variant="h5">방명록</Typography>
-            <CreateIcon />
+            <CreateIcon onClick={handlePostOpen} sx={{ cursor: 'pointer' }} />
+            <Modal
+              open={postOpen}
+              onClose={handlePostClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={postStyle} component="form" onSubmit={submitGuestBook}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    방명록 작성하기
+                  </Typography>
+                  <Button type="submit">
+                    <CreateIcon sx={{ float: 'right' }} />
+                  </Button>
+                </div>
+                <TextField
+                  id="modal-modal-description"
+                  name="content"
+                  sx={{ mt: 2 }}
+                  fullWidth
+                  multiline
+                  rows={10}
+                  label={auth.username}
+                />
+              </Box>
+            </Modal>
           </Box>
 
           <Divider sx={{ m: 1 }} />
