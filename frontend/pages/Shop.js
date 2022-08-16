@@ -265,6 +265,7 @@ export default function Shop() {
         setOpen={setOpen}
         nowStuff={nowStuff}
         cookies={cookies}
+        getCreditFromServer={getCreditFromServer}
       />
     </Container>
   );

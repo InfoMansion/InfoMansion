@@ -1,6 +1,7 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Modal, Typography } from "@mui/material";
 import { OrthographicCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
+import axios from "../../../utils/axios";
 import ShopStuff from "./ShopStuff";
 
 const style = {
@@ -15,7 +16,7 @@ const style = {
     p: 4,
 };
 
-export default function BuyModal({ open, setOpen, nowStuff, cookies }) {
+export default function BuyModal({ open, setOpen, nowStuff, cookies, getCreditFromServer }) {
     const BuyStuffSubmit = async event => {
         event.preventDefault();
         if (window.confirm('가구를 구매하시겠습니까?')) {
@@ -23,7 +24,7 @@ export default function BuyModal({ open, setOpen, nowStuff, cookies }) {
             stuffIds: [nowStuff.id],
           };
           try {
-            const { data } = await axios.post('/api/v2/user-stuff', buyStuff, {
+            axios.post('/api/v2/user-stuff', buyStuff, {
               headers: {
                 Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
               },
