@@ -24,6 +24,7 @@ import { postDetailState } from '../../state/postDetailState';
 import PostViewModal from '../PostPage/PostViewModal';
 import useAuth from '../../hooks/useAuth';
 import CloseIcon from '@mui/icons-material/Close';
+import { rgba } from '@react-spring/shared';
 
 export default function UserInfo({
   loginUser,
@@ -45,6 +46,12 @@ export default function UserInfo({
   const textStyle = {
     color: focused ? 'black' : 'white',
   };
+
+  const tagStyle = {
+    color : focused ? 'white' : 'white',
+    backgroundColor : focused ? '#fc7a71' : 'transparent',
+    height : 22
+  }
 
   const getRecentPost = useCallback(async () => {
     try {
@@ -317,19 +324,18 @@ export default function UserInfo({
           m: 2,
         }}
       >
-        {userInfo.categories.map((category, index) => (
+        {userInfo.categories.map((category) => (
           <Typography
+            key={category}  
             variant="body2"
-            style={{
-              backgroundColor: '#fc7a71',
-              color: 'white',
-              height: '20px',
-            }}
+            style={tagStyle}
             sx={{
               px: 2,
               mr: 1,
               mb: 1,
               borderRadius: 4,
+              borderColor : 'white',
+              border : 1 ,
             }}
           >
             {category}
