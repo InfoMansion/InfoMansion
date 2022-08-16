@@ -97,7 +97,7 @@ export default function Home() {
                   <Item
                     key={v.userName}
                     className={styles.item}
-                    backgroundImage={v.roomImg}
+                    backgroundImage={`url(${v.roomImg})`}
                   >
                     <Link href={`/${v.userName}`} style={{ zIndex: 2 }}></Link>
                   </Item>
