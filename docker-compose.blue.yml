@@ -9,64 +9,40 @@ networks:
 services:
   spring-blue-1:
     container_name: spring-infomansion-blue-1
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.prod
+    image: chiyongs/infomansion:spring
     restart: always
     ports:
       - "8081:8080"
-    volumes:
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/backend/build/libs:/deploy
     networks:
       - blue-back-networks
       - blue-front-networks
 
   spring-blue-2:
     container_name: spring-infomansion-blue-2
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.prod
+    image: chiyongs/infomansion:spring
     restart: always
     ports:
       - "8082:8080"
-    volumes:
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/backend/build/libs:/deploy
     networks:
       - blue-back-networks
       - blue-front-networks
 
   react-blue-1:
     container_name: react-infomansion-blue-1
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
+    image: chiyongs/infomansion:react
     restart: always
     ports:
       - "3001:3000"
-    volumes:
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/node_modules:/app/node_modules
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/.next:/app/.next
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/public:/app/public
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/next.config.js:/app/next.config.js
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/package.json:/app/package.json
     networks:
       - blue-front-networks
       - blue-back-networks
 
   react-blue-2:
     container_name: react-infomansion-blue-2
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
+    image: chiyongs/infomansion:react
     restart: always
     ports:
       - "3002:3000"
-    volumes:
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/node_modules:/app/node_modules
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/.next:/app/.next
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/public:/app/public
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/next.config.js:/app/next.config.js
-      - /home/ubuntu/compose/jenkins/workspace/infomansion-jenkins/frontend/package.json:/app/package.json
     networks:
       - blue-front-networks
       - blue-back-networks

@@ -1,5 +1,4 @@
 #!/bin/bash
- 
 # Blue 를 기준으로 현재 떠있는 컨테이너를 체크한다.
 EXIST_BLUE=$(docker-compose -f docker-compose.blue.yml ps | grep blue)
  
