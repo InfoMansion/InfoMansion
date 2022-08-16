@@ -167,7 +167,7 @@ export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUn
                         size="small"
                         color="error"
                     >
-                        집어넣기.
+                        보관하기
                     </Button>
                     : <Box sx={{width : 10, height : 10}} />
                 }
@@ -187,7 +187,7 @@ export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUn
                         onClick={(e) => saveChange(e)}
                         size="small"
                     >
-                        결정.
+                        결정
                     </ColorButton>
                 </Box>
             </Box>

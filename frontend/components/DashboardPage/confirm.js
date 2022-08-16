@@ -18,6 +18,12 @@ const theme = createTheme({
       main: '#fc7a71',
       dark: '#fc0000',
     },
+    textfield: {
+      light: '#ff7961',
+      main: '#ffffff',
+      dark: '#fc7a71',
+      contrastText: 'white',
+    },
   },
 });
 
@@ -92,21 +98,22 @@ export default function Confirm(props) {
             label="Password"
             type="password"
             autoComplete="current-password"
-            color="primary"
             variant="outlined"
+            color="textfield"
             onChange={handleInput}
             sx={{
               m : 1,
               width : '70%'
             }}
+            focused
           />
           <Button
             type="submit"
             variant="contained"
             sx={{ 
               mt : 1, 
-              color: 'white', 
               width : '65%',
+              color : 'white'
             }}
             disabled={inputUnFinish}
           >
