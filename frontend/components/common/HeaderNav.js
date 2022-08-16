@@ -13,7 +13,6 @@ import {
 import Image from 'next/image';
 import SearchIcon from '@mui/icons-material/Search';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import Link from 'next/link';
 import { useCookies } from 'react-cookie';
 import AddIcon from '@mui/icons-material/Add';
@@ -25,18 +24,7 @@ import { useRecoilState } from 'recoil';
 import { profileState } from '../../state/profileState';
 import { postDetailState } from '../../state/postDetailState';
 import { notificationState } from '../../state/notificationState';
-import Nofication from '../Notification';
 import Notification from '../Notification';
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -89,10 +77,7 @@ export default function HeaderNav() {
   const [notification, setNotification] = useRecoilState(notificationState);
   const [isInput, setIsInput] = useState(false);
 
-  //const [auth, setAuth] = useAuth();
-
   const handleProfileMenuOpen = event => {
-    console.log(event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
 
@@ -247,11 +232,14 @@ export default function HeaderNav() {
                 }}
               >
                 <Image src="/vectorLogo.svg" alt="" width={40} height={40} />
-                <div
-                  style={{ color: 'white', fontSize: '30px', padding: '10px' }}
-                >
-                  InfoMansion
-                </div>
+                {pathname != '/[userName]' ?
+                  <div
+                    style={{ color: 'white', fontSize: '30px', padding: '10px' }}
+                  >
+                    InfoMansion
+                  </div>
+                  : <></>
+                }
               </div>
             </Link>
 
