@@ -209,7 +209,7 @@ export default function StuffPage({ data, cookies }) {
             <Post
               post={post}
               totheight={120}
-              picwidth={70}
+              picwidth={100}
               maxcontent={150}
               openModal={openModal}
             />

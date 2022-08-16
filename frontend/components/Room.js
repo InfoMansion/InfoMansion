@@ -79,7 +79,7 @@ export default function Room({ StuffClick, setClickLoc, userName, pagePush, prof
     let midx = Number(window.innerWidth/2);
     let maxy = window.innerHeight - 620;
     
-    let x = e.clientX < midx ? e.clientX : e.clientX - 400;
+    let x = e.clientX < midx ? e.clientX : e.clientX - 500;
     let y = e.clientY > maxy ? maxy : e.clientY;
 
     setClickLoc([x, y])

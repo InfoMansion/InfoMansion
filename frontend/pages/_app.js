@@ -4,8 +4,15 @@ import '../styles/globals.css';
 import { RecoilRoot } from 'recoil';
 import { CookiesProvider } from 'react-cookie';
 import { AuthProvider } from '../context/AuthProvider';
+import { createTheme, ThemeProvider } from '@mui/material';
 
 function MyApp({ Component, pageProps }) {
+  let theme = createTheme({
+    typography: {
+      fontFamily: `"NanumSquare", sans-serif`,
+    },
+  })
+
   return (
     <>
       <Head>
@@ -15,9 +22,11 @@ function MyApp({ Component, pageProps }) {
       <RecoilRoot>
         <AuthProvider>
           <CookiesProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <ThemeProvider theme={theme}>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </ThemeProvider>
           </CookiesProvider>
         </AuthProvider>
       </RecoilRoot>
