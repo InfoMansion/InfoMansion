@@ -270,7 +270,7 @@ export default function UserInfo({
                 style={{ ...textStyle, cursor: 'pointer' }}
                 sx={{ ml: 1, mr: 2 }}
               >
-                {userInfo.following}
+                {nowFollow}
               </Typography>
             </Typography>
 
@@ -281,7 +281,7 @@ export default function UserInfo({
             >
               팔로우
               <Typography style={textStyle} sx={{ ml: 1 }}>
-                {nowFollow}
+                {userInfo.following}
               </Typography>
             </Typography>
 
