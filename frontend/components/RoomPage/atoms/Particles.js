@@ -4,12 +4,12 @@ import React from 'react'
 
 const particleColors = ['#673ab7', '#f4b677', 'orange', 'blue', '#8bc34a', 'purple']
 
-export default function Particles({ size = 5000 }) {
+export default function Particles({ size = 5000, scale = 1 }) {
   const { width, height } = useThree((state) => state.viewport)
 
   return (
     <Points limit={size}>
-      <pointsMaterial size={1} vertexColors />
+      <pointsMaterial size={scale} vertexColors/>
       {Array.from({ length: size }).map((_, i) => (
         <Point
           key={i}

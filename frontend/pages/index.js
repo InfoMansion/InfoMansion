@@ -1,45 +1,107 @@
 import { Box, Card, Link, styled } from '@mui/material';
-import styles from '../styles/Hex.module.css';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import LoginComponent from '../components/login';
 import { useCookies } from 'react-cookie';
 import axios from '../utils/axios';
 import { useRouter } from 'next/router';
 import { useInView } from 'react-intersection-observer';
-import { pageLoading } from '../state/pageLoading';
-import { useRecoilState } from 'recoil';
+import { Canvas, useFrame } from '@react-three/fiber';
+import Particles from '../components/RoomPage/atoms/Particles';
+import PostProcessing from '../components/RoomPage/atoms/PostProcessing';
+import { Plane, Scroll, ScrollControls, useScroll } from '@react-three/drei';
+import { Color, MathUtils, TextureLoader } from 'three';
 
-const Item = styled('li')(({ backgroundImage }) => ({
-  ':before': {
-    backgroundImage,
-  },
-}));
+const damp = MathUtils.damp;
 
 export default function Home() {
-  const [windowSize, setWindowSize] = useState();
+  const [roomImgs, setRoomImgs] = useState([]);
+  const [windowSize, setWindowSize] = useState({width : 0, height : 0});
   const { auth } = useAuth();
   const [cookies] = useCookies(['cookie-name']);
   const router = useRouter();
-  const [roomImgs, setRoomImgs] = useState([]);
   const [ref, inView] = useInView();
   const [page, setPage] = useState(0);
-  const [loading, setLoading] = useRecoilState(pageLoading);
+  const [nextPage, setNextPage] = useState(false);
+  const [prevPage, setPrevPage] = useState(false);
+
+  const distConst = 1.05;
+  function Item({ src, index, position, scale, length, link, c = new Color() }) {
+    const ref = useRef()
+    let scroll = useScroll()
+    const [hovered, hover] = useState(false)
+    const over = () => hover(true)
+    const out = () => hover(false)
+
+    const loader = new TextureLoader();
+    // const texture =  loader.load('/test.png');
+    const texture =  loader.load(src + "?not-from-cache-please");
+    const dist = distConst*roomImgs.length;
+    
+    useEffect(() => {
+      if (hovered) document.body.style.cursor = 'pointer'
+      return () => (document.body.style.cursor = 'auto')
+    }, [hovered])
+
+    useFrame((state, delta) => {
+      const y = scroll.curve(index / length - 1.5 / length, 3 / length)
+      const offset = position[0] - dist*scroll.offset;
+      let judgeX = (state.viewport.width/2 - Math.abs(offset)) * (offset < 0 ? -1 : 1);
+
+      let posXTo = judgeX;
+      if(Math.abs(offset) < 0.5) {
+        y *= Math.abs(posXTo)/2.4;
+        posXTo = 0;
+      }
+      const scaleTo = (hovered ? 1.5 : 1 ) + y*2;
+      ref.current.scale.x = damp(ref.current.scale.x, scaleTo, 6, delta)
+      ref.current.scale.y = damp(ref.current.scale.y, scaleTo, 6, delta)
+    
+      ref.current.position.x = damp(ref.current.position.x, position[0] + posXTo/1.5, 6, delta);
+      ref.current.position.y = damp(ref.current.position.y, position[1] + Math.abs(judgeX)/5 - 1, 6, delta);
+      ref.current.position.z = damp(ref.current.position.z, position[2] + Math.abs(judgeX)/5 - 1, 6, delta);
+
+      ref.current.material.color.lerp(c.set(Math.abs(offset) < 0.5 ? 'white' : '#888'), hovered ? 0.3 : 0.1)
+
+    })
+
+    useEffect(() => {
+      if(!nextPage && !prevPage) return;
+
+      init(cookies.InfoMansionAccessToken)
+    }, [nextPage, prevPage])
+
+    useEffect(() => {
+      setNextPage(false);
+      setPrevPage(false);
+    }, [roomImgs])
+
+    
+    return (
+      <mesh ref={ref} castShadow receiveShadow
+        onPointerOver={over} onPointerOut={out}
+        position={position}
+        onClick={() => router.push(`/` + link)}
+      >
+        <circleGeometry args={[0.5, 6, 0.525]}/>
+        <meshBasicMaterial map={texture}/>
+      </mesh>
+    )
+  }
 
   const handleResize = useCallback(() => {
     setWindowSize({
-      width: window.innerWidth,
+      width : window.innerWidth,
+      height : window.innerHeight
     });
   }, []);
 
   useEffect(() => {
     handleResize();
     window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => { window.removeEventListener('resize', handleResize); };
   }, [handleResize]);
-
+  
   const init = useCallback(
     async token => {
       try {
@@ -53,14 +115,12 @@ export default function Home() {
           },
         );
         // console.log(data);
-        // console.log(data.data.roomResponseDtos);
-        setRoomImgs(prev => [...prev, ...data.data.roomResponseDtos.content]);
+        console.log(data.data.roomResponseDtos);
+        setRoomImgs( prev => [ ...prev, ...data.data.roomResponseDtos.content] );
       } catch (e) {
         console.log(e);
       }
-    },
-    [page],
-  );
+  },[page]);
 
   useEffect(() => {
     if (!auth.isAuthorized || !cookies.InfoMansionAccessToken) {
@@ -71,50 +131,51 @@ export default function Home() {
 
   useEffect(() => {
     // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
-    if (inView) {
-      setPage(prev => prev + 1);
-    }
+    if (inView) { setPage(prev => prev + 1); }
   }, [inView]);
+
+  const w = 0.87
+  const gap = 0.2
+  const xW = w + gap
+  const pixelConst = 126.1
 
   return (
     <>
       {auth.isAuthorized ? (
         <Box>
-          <div
+          <Canvas shadows
             style={{
-              width: '100%',
-              //              height: '100%',
-              minHeight: 'calc(100vh - 70px)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              position: 'relative',
+              position : 'fixed',
+              width : windowSize.width,
+              height : windowSize.height,
+              top : 0
             }}
+
           >
-            <div style={{ height: '100%', paddingTop: '1%' }}>
-              <ul className={styles.container}>
-                {roomImgs.map(v => (
-                  <Item
-                    key={v.userName}
-                    className={styles.item}
-                    backgroundImage={`url(${v.roomImg})`}
-                  >
-                    <Link href={`/${v.userName}`} style={{ zIndex: 2 }}></Link>
-                  </Item>
+            <Particles size={5000} scale={0}/>
+            <PostProcessing 
+              luminanceSmoothing={30}
+              intensity={100}
+            />
+
+            <ScrollControls horizontal damping={16} pages={(windowSize.width - xW*pixelConst + roomImgs.length * xW * pixelConst) / windowSize.width}>
+              <Scroll>
+                {roomImgs.map((v, i) => (
+                  <Item key={i} 
+                    src={v.roomImg} 
+                    index={i} 
+                    position={[i * xW, 0, 0]} 
+                    scale={[w, 4, 1]}
+                    length={roomImgs.length}
+                    link={v.userName}
+                  />
                 ))}
-              </ul>
-            </div>
-            <div
-              ref={ref}
-              style={{
-                position: 'absolute',
-                zIndex: '1000',
-                height: '30px',
-                bottom: '300px',
-                width: '100%',
-              }}
-            ></div>
-          </div>
+              </Scroll>
+            </ScrollControls>
+            
+            {/* <pointLight position={[0, 5, 5]} castShadow shadow-mapSize={[2048, 2048]}/>
+            <Plane castShadow receiveShadow args={[10, 10]} position={[0, -4, 0]} rotation={[-Math.PI / 2, 0, 0]}/> */}
+          </Canvas>
         </Box>
       ) : (
         <LoginComponent onSignIn={token => init(token)} />

@@ -13,7 +13,7 @@ import {
   MenuItem,
   IconButton,
 } from '@mui/material';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import CopyrightIcon from '@mui/icons-material/Copyright';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useEffect, useState } from 'react';
@@ -159,7 +159,7 @@ export default function Shop() {
             color : 'white'
           }}
         >
-        <RadioButtonCheckedIcon sx={{mx : 1}}/>
+        <CopyrightIcon sx={{mx : 1}}/>
             {credit}
         </Grid>
       </Grid>
