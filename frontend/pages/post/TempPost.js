@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Button, Container } from '@mui/material';
+import { Box, Button, Container, Divider, Typography } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Temp from '../../components/RoomPage/atoms/Temp';
 import TempPostViewModal from '../../components/PostPage/TempPostViewModal';
 import { useCookies } from 'react-cookie';
@@ -8,6 +9,16 @@ import { postDetailState } from '../../state/postDetailState';
 import { loginUserState } from '../../state/roomState';
 import { useRecoilState } from 'recoil';
 import useAuth from '../../hooks/useAuth';
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#ffffff',
+      main: '#fc7a71',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
+  },
+});
 
 const defaultPosts = [];
 
@@ -72,29 +83,45 @@ export default function tempPost() {
   };
 
   return (
-    <Container>
-      <Box sx={{ width: '100%' }}>
-        <TempPostViewModal
-          showModal={showModal}
-          handleModalClose={handleModalClose}
-        ></TempPostViewModal>
-        {posts.map((post, index) => (
-          <Temp
-            post={post}
-            totheight={150}
-            picwidth={150}
-            maxcontent={150}
-            openModal={openModal}
-          />
-        ))}
-        {/* <Button
+    <ThemeProvider theme={theme}>
+      <Container>
+        <Box sx={{ width: '100%' }}>
+          <Divider
+            style={{
+              bold: true,
+              color: 'white',
+              fontSize: 'x-large',
+            }}
+            sx={{
+              '&::before, &::after': {
+                borderColor: 'primary.light',
+              },
+            }}
+          >
+            나의 임시저장 글
+          </Divider>
+          <TempPostViewModal
+            showModal={showModal}
+            handleModalClose={handleModalClose}
+          ></TempPostViewModal>
+          {posts.map((post, index) => (
+            <Temp
+              post={post}
+              totheight={150}
+              picwidth={150}
+              maxcontent={150}
+              openModal={openModal}
+            />
+          ))}
+          {/* <Button
         onClick={() => {
           getResult(category, posts[category].page + 1);
         }}
         >
         more
       </Button> */}
-      </Box>
-    </Container>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 }
