@@ -34,11 +34,10 @@ export default function ConfigItems({pagePush, userName, profileImage}) {
                 <ConfigStuff data={ConfigStuffs[2]} pos={positions[0]} iniscale={3} Click={ClickShop} 
                     speed={-0.001}
                 />
-
-                {/* 글쓰기도 들어와야 함 */}
             </group>
             : <></>
             <ambientLight />
+            <pointLight position={[2,2,2]} />
             <OrthographicCamera makeDefault  zoom={100}/>
             {/* <OrbitControls /> */}
         </group>

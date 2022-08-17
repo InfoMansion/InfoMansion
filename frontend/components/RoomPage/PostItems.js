@@ -24,7 +24,7 @@ export default function PostItems({popupPosts, userName, profileImage}) {
 
     return (
         <group ref={locref}>
-            <group>
+            <group receiveShadow>
                 {/* postbox */}
                 <ConfigStuff data={ConfigStuffs[4]} pos={positions[0]} iniscale={2} Click={ClickPostbox} 
                     color="#FFF89D" inicolor="#E0A912"
@@ -34,10 +34,9 @@ export default function PostItems({popupPosts, userName, profileImage}) {
                 <ConfigStuff data={ConfigStuffs[5]} pos={positions[1]} iniscale={100} Click={ClickGuestBook} 
                     speed={0}
                 />
-
             </group>
-            : <></>
             <ambientLight intensity={1}/>
+            <pointLight position={[2,2,2]}/>
             <OrthographicCamera makeDefault zoom={100}/>
         </group>
     )    

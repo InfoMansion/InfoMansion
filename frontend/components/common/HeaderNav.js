@@ -227,7 +227,7 @@ export default function HeaderNav() {
               margin: '0 auto',
             }}
           >
-            <Link href="/">
+            <Link style={{position : 'absolute', zIndex : 10}} href="/">
               <div
                 style={{
                   display: 'flex',

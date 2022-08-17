@@ -9,7 +9,7 @@ import { useInView } from 'react-intersection-observer';
 import { Canvas, useFrame } from '@react-three/fiber';
 import Particles from '../components/RoomPage/atoms/Particles';
 import PostProcessing from '../components/RoomPage/atoms/PostProcessing';
-import { Plane, Scroll, ScrollControls, useScroll } from '@react-three/drei';
+import { OrthographicCamera, Plane, Scroll, ScrollControls, useScroll } from '@react-three/drei';
 import { Color, MathUtils, TextureLoader } from 'three';
 
 const damp = MathUtils.damp;
@@ -25,7 +25,7 @@ export default function Home() {
   const [nextPage, setNextPage] = useState(false);
   const [prevPage, setPrevPage] = useState(false);
 
-  const distConst = 1.05;
+  const distConst = 1.4;
   function Item({ src, index, position, scale, length, link, c = new Color() }) {
     const ref = useRef()
     let scroll = useScroll()
@@ -34,9 +34,9 @@ export default function Home() {
     const out = () => hover(false)
 
     const loader = new TextureLoader();
-    // const texture =  loader.load('/test.png');
-    const texture =  loader.load(src + "?not-from-cache-please");
-    const dist = distConst*roomImgs.length;
+    const texture =  loader.load('/test.png');
+    // const texture =  loader.load(src + "?not-from-cache-please");
+    const dist = distConst * roomImgs.length;
     
     useEffect(() => {
       if (hovered) document.body.style.cursor = 'pointer'
@@ -44,23 +44,27 @@ export default function Home() {
     }, [hovered])
 
     useFrame((state, delta) => {
-      const y = scroll.curve(index / length - 1.5 / length, 3 / length)
+      const y1 = scroll.curve(index/length - 1.5/length, 3 / length);
       const offset = position[0] - dist*scroll.offset;
       let judgeX = (state.viewport.width/2 - Math.abs(offset)) * (offset < 0 ? -1 : 1);
 
       let posXTo = judgeX;
       if(Math.abs(offset) < 0.5) {
-        y *= Math.abs(posXTo)/2.4;
+        y1 *= Math.abs(posXTo)/2.4;
         posXTo = 0;
       }
-      const scaleTo = (hovered ? 1.5 : 1 ) + y*2;
+      let posYTO = 1;
+      if( state.viewport.width/2 < Math.abs(offset) ) posYTO = -1;
+
+      const scaleTo = (hovered ? 1.5 : 1 ) + y1;
       ref.current.scale.x = damp(ref.current.scale.x, scaleTo, 6, delta)
       ref.current.scale.y = damp(ref.current.scale.y, scaleTo, 6, delta)
     
       ref.current.position.x = damp(ref.current.position.x, position[0] + posXTo/1.5, 6, delta);
-      ref.current.position.y = damp(ref.current.position.y, position[1] + Math.abs(judgeX)/5 - 1, 6, delta);
-      ref.current.position.z = damp(ref.current.position.z, position[2] + Math.abs(judgeX)/5 - 1, 6, delta);
+      ref.current.position.y = damp(ref.current.position.y, position[1] + posYTO * Math.sqrt(Math.abs(judgeX))/5 - 0.5, 6, delta);
+      ref.current.position.z = damp(ref.current.position.z, position[2] +  Math.abs(judgeX)/5 - 1, 6, delta);
 
+      // ref.current.rotation.y = damp(ref.current.rotation.y, posYTO * posXTo/12, 6, delta);
       ref.current.material.color.lerp(c.set(Math.abs(offset) < 0.5 ? 'white' : '#888'), hovered ? 0.3 : 0.1)
 
     })
@@ -86,6 +90,14 @@ export default function Home() {
         <circleGeometry args={[0.5, 6, 0.525]}/>
         <meshBasicMaterial map={texture}/>
       </mesh>
+    )
+  }
+
+  function EventHandler() {
+    const scroll = useScroll();
+    console.log(scroll);
+    return(
+      <></>
     )
   }
 
@@ -134,10 +146,10 @@ export default function Home() {
     if (inView) { setPage(prev => prev + 1); }
   }, [inView]);
 
-  const w = 0.87
-  const gap = 0.2
+  const w = 0.8
+  const gap = 0.6
   const xW = w + gap
-  const pixelConst = 126.1
+  const pixelConst = 130.5
 
   return (
     <>
@@ -145,10 +157,11 @@ export default function Home() {
         <Box>
           <Canvas shadows
             style={{
-              position : 'fixed',
+              position : 'absolute',
               width : windowSize.width,
-              height : windowSize.height,
-              top : 0
+              height : 1000,
+              bottom : 0,
+              zIndex : -1
             }}
 
           >
@@ -164,17 +177,19 @@ export default function Home() {
                   <Item key={i} 
                     src={v.roomImg} 
                     index={i} 
-                    position={[i * xW, 0, 0]} 
+                    position={[i * xW, - windowSize.height/1000, 0]} 
                     scale={[w, 4, 1]}
                     length={roomImgs.length}
                     link={v.userName}
                   />
                 ))}
+                <EventHandler />
               </Scroll>
             </ScrollControls>
             
             {/* <pointLight position={[0, 5, 5]} castShadow shadow-mapSize={[2048, 2048]}/>
             <Plane castShadow receiveShadow args={[10, 10]} position={[0, -4, 0]} rotation={[-Math.PI / 2, 0, 0]}/> */}
+            <OrthographicCamera makedefault position={[0, 10, 10]}/>
           </Canvas>
         </Box>
       ) : (

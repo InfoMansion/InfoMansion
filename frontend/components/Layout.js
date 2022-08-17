@@ -63,7 +63,7 @@ export default function Layout({ children }) {
       console.log('initError : ', e);
     }
   }, [pathname]);
-
+  
   useEffect(() => {
     if (!auth.isAuthorized) return;
     init();
@@ -74,7 +74,10 @@ export default function Layout({ children }) {
       <div
         style={{
           minHeight: '100vh',
+          width : '100vw',
           background: backgroundColor[colorIdx],
+          position : 'absolute',
+          zIndex : -5,
         }}
       >
         {auth.isAuthorized && <HeaderNav />}
