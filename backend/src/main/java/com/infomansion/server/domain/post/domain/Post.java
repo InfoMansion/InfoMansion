@@ -167,7 +167,7 @@ public class Post extends BaseTimeEntityAtSoftDelete {
     }
 
     public void publish() {
-        this.isPublished = false;
+        this.isPublished = true;
     }
 
     public void linkOriginalPost(Long id) {
