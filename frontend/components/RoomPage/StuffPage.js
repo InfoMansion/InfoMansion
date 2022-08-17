@@ -20,6 +20,7 @@ import {
   loginUserState,
 } from '../../state/roomState';
 import CreateIcon from '@mui/icons-material/Create';
+import CloseIcon from '@mui/icons-material/Close';
 import axios from '../../utils/axios';
 import PostViewModal from '../PostPage/PostViewModal';
 import { postDetailState } from '../../state/postDetailState';
@@ -38,7 +39,7 @@ function ElevationScroll(props) {
   });
 }
 
-export default function StuffPage({ data, cookies }) {
+export default function StuffPage({ data, cookies, clicked, setClicked }) {
   const [clickedStuffCategory] = useRecoilState(clickedStuffCategoryState);
   const [posts, setPosts] = useState([]);
 
@@ -197,8 +198,13 @@ export default function StuffPage({ data, cookies }) {
         >
           {clickedStuffCategory.category}
         </Typography>
+        <CloseIcon
+          style={{ position: 'absolute', right: 20, cursor: 'pointer' }}
+          onClick={() => {
+            setClicked(0);
+          }}
+        ></CloseIcon>
       </Toolbar>
-
       <Divider />
       <Container
         sx={{
