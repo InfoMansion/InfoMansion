@@ -17,7 +17,7 @@ import Link from 'next/link';
 import { useCookies } from 'react-cookie';
 import AddIcon from '@mui/icons-material/Add';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { useRouter } from 'next/router';
+import { router, useRouter } from 'next/router';
 import useAuth from '../../hooks/useAuth';
 import axios from '../../utils/axios';
 import { useRecoilState } from 'recoil';
@@ -176,9 +176,14 @@ export default function HeaderNav() {
     >
       {anchorEl?.id === 'profile' && (
         <>
-          <Link href={`/${simpleUser.username}`}>
-            <MenuItem onClick={handleMenuClose}>마이룸</MenuItem>
-          </Link>
+          <MenuItem
+            onClick={() => {
+              handleMenuClose();
+              window.location.replace(`/${simpleUser.username}`);
+            }}
+          >
+            마이룸
+          </MenuItem>
           <MenuItem
             onClick={() => {
               handleMenuClose();
@@ -232,14 +237,19 @@ export default function HeaderNav() {
                 }}
               >
                 <Image src="/vectorLogo.svg" alt="" width={40} height={40} />
-                {pathname != '/[userName]' ?
+                {pathname != '/[userName]' ? (
                   <div
-                    style={{ color: 'white', fontSize: '30px', padding: '10px' }}
+                    style={{
+                      color: 'white',
+                      fontSize: '30px',
+                      padding: '10px',
+                    }}
                   >
                     InfoMansion
                   </div>
-                  : <></>
-                }
+                ) : (
+                  <></>
+                )}
               </div>
             </Link>
 

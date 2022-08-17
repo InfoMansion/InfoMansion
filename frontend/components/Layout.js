@@ -58,19 +58,17 @@ export default function Layout({ children }) {
           Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
         },
       });
-      // console.log('notific', data);
       setNotification(data.data);
     } catch (e) {
-      console.log(e);
+      console.log('initError : ', e);
     }
   }, [pathname]);
 
   useEffect(() => {
-    if (!auth.Authorization) return;
+    if (!auth.isAuthorized) return;
     init();
-  }, [init, pathname, notificationState]);
+  }, [pathname, notificationState]);
 
-  // console.log(auth);
   return (
     <div>
       <div
