@@ -233,10 +233,10 @@ export default function Category() {
           <Avatar src="/logo.png">
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h4">
+          <Typography component="h1" variant="h4" style={{ color: 'white' }}>
             Select Your Interest
           </Typography>
-          <Typography component="h3" variant="h5">
+          <Typography component="h3" variant="h5" style={{ color: 'white' }}>
             1개 이상 5개 이하를 선택해주세요!
           </Typography>
           <Box

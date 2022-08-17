@@ -109,7 +109,7 @@ export default function SignUp() {
           <Avatar src="/logo.png">
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" style={{ color: 'white' }}>
             Sign up
           </Typography>
           <Box

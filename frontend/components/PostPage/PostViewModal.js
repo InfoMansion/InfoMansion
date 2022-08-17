@@ -351,6 +351,7 @@ export default function PostViewModal({
               style={{
                 marginLeft: 'auto',
                 marginRight: '6px',
+                float: 'right',
               }}
             >
               <IconButton
