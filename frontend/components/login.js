@@ -52,6 +52,29 @@ export default function LogIn({ onSignIn }) {
   const confirmId = /^[\w+_]\w+@\w+\.\w+/.test(inputId);
   const confirmPw = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(inputPw);
 
+  function enterLogin(e) {
+    if (e.key === 'Enter') {
+      const credentials = {
+        email: inputId,
+        password: inputPw,
+      };
+      axios
+        .post('/api/v1/auth/login', credentials, {
+          withCredentials: true,
+        })
+        .then(res => {
+          const data = res.data;
+          setAuth({ isAuthorized: true, accessToken: data.data.accessToken });
+          localStorage.setItem('expiresAt', data.data.expiresAt);
+          onSignIn(data.data.accessToken);
+          console.log('data : ', data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
+  }
+
   function handleBoxSize() {
     setBoxWidth(0.4 * window.innerWidth);
     if (window.innerWidth < 1000) {
@@ -63,11 +86,10 @@ export default function LogIn({ onSignIn }) {
 
   useEffect(() => {
     window.addEventListener('resize', handleBoxSize);
-    axios.get(`/api/v1/rooms/random`)
-    .then(res => {
+    axios.get(`/api/v1/rooms/random`).then(res => {
       // console.log(res.data.data);
       setImages(res.data.data);
-    })
+    });
   }, []);
 
   function goSignUp(event) {
@@ -93,7 +115,7 @@ export default function LogIn({ onSignIn }) {
     };
 
     try {
-      // console.log(credentials); 
+      // console.log(credentials);
       const { data } = await axios.post('/api/v1/auth/login', credentials, {
         withCredentials: true,
       });
@@ -123,33 +145,35 @@ export default function LogIn({ onSignIn }) {
             height: boxHeight,
           }}
         >
-          {bundle.data.map(({ id, left, right, top, bottom, size, opacity }) => (
-            <div
-              style={{
-                position: 'absolute',
-                left: left + '%',
-                right: right + '%',
-                top: top + '%',
-                bottom: bottom + '%',
-                width: boxHeight * size * 0.01,
-              }}
-            >
-              <img
-                src={images[id]}
-                className={styles.itemlogin}
-                style={{ width: '100%' }}
-              />
-              <img
-                src="/image/whiteBox.png"
-                className={styles.itemlogin}
+          {bundle.data.map(
+            ({ id, left, right, top, bottom, size, opacity }) => (
+              <div
                 style={{
-                  width: '100%',
                   position: 'absolute',
-                  opacity: opacity * 0.01,
+                  left: left + '%',
+                  right: right + '%',
+                  top: top + '%',
+                  bottom: bottom + '%',
+                  width: boxHeight * size * 0.01,
                 }}
-              />
-            </div>
-          ))}
+              >
+                <img
+                  src={images[id]}
+                  className={styles.itemlogin}
+                  style={{ width: '100%' }}
+                />
+                <img
+                  src="/image/whiteBox.png"
+                  className={styles.itemlogin}
+                  style={{
+                    width: '100%',
+                    position: 'absolute',
+                    opacity: opacity * 0.01,
+                  }}
+                />
+              </div>
+            ),
+          )}
         </div>
       ))}
 
@@ -182,6 +206,7 @@ export default function LogIn({ onSignIn }) {
               sx={{
                 mt: 1,
               }}
+              onKeyPress={enterLogin}
             >
               <div
                 style={{
