@@ -136,8 +136,13 @@ export default function Home() {
   function EventHandler() {
     const scroll = useScroll();
     console.log(scroll);
+
+    useEffect(() => {
+
+    }, [scroll.offset])
+
     return(
-      <></>
+      <group></group>
     )
   }
 
