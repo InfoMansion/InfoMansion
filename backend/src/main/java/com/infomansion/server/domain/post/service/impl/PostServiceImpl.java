@@ -367,8 +367,8 @@ public class PostServiceImpl implements PostService {
 
             original.updateOriginalByCopy(post);
             original.publish();
-
-            original.changeUserStuff(userStuff);
+            original.setUserAndUserStuff(user, userStuff);
+        
             postRepository.delete(post);
             user.earnCredit(postPublishingCredit);
 
@@ -381,7 +381,7 @@ public class PostServiceImpl implements PostService {
         }
 
         // 원본을 발행하는 경우, 발행
-        post.changeUserStuff(userStuff);
+        post.setUserAndUserStuff(user, userStuff);
         post.publish();
         user.earnCredit(postPublishingCredit);
 
