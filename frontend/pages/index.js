@@ -34,8 +34,8 @@ export default function Home() {
     const out = () => hover(false)
 
     const loader = new TextureLoader();
-    const texture =  loader.load('/test.png');
-    // const texture =  loader.load(src + "?not-from-cache-please");
+    // const texture =  loader.load('/test.png');
+    const texture =  loader.load(src + "?not-from-cache-please");
     const dist = distConst * roomImgs.length;
     
     useEffect(() => {
@@ -186,10 +186,6 @@ export default function Home() {
                 <EventHandler />
               </Scroll>
             </ScrollControls>
-            
-            {/* <pointLight position={[0, 5, 5]} castShadow shadow-mapSize={[2048, 2048]}/>
-            <Plane castShadow receiveShadow args={[10, 10]} position={[0, -4, 0]} rotation={[-Math.PI / 2, 0, 0]}/> */}
-            <OrthographicCamera makedefault position={[0, 10, 10]}/>
           </Canvas>
         </Box>
       ) : (

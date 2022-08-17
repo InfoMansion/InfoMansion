@@ -30,15 +30,15 @@ import stuffTypes from '../components/jsonData/stuffTypes.json'
 
 export default function Shop() {
   const [cookies] = useCookies(['cookie-name']);
-  const [scrollTarget] = useState(0);
   const setPageLoading = useSetRecoilState(pageLoading);
   const [stuffBundles, setStuffBundles] = useState([]);
 
   const [nowStuffBundle, setNowStuffBundle] = useState();
-  const [bundleIndex, setBundleIndex] = useState();
-  const [pages, setPages] = useState([1,1,1,1,1,1,1,1,1,1,
-                                      1,1,1,1,1,1,1,1,1,1,
-                                      1,1,1,1,1,1,1,1,1,1,
+  const [bundleIndex, setBundleIndex] = useState(28);
+  const [pages, setPages] = useState([0,0,0,0,0,0,0,0,0,0,
+                                      0,0,0,0,0,0,0,0,0,0,
+                                      0,0,0,0,0,0,0,0,0,0,
+                                      0,0
                                     ])
 
   const [viewStuffs, setViewStuffs] = useState([]);
@@ -61,6 +61,9 @@ export default function Shop() {
         .then(res => {
           setStuffBundles(res.data.data);
           setPageLoading(false);
+
+          setNowStuffBundle(res.data.data[bundleIndex]);
+          setViewStuffs(res.data.data[bundleIndex].slice.content.slice(0, 6))
         });
 
         // 크레딧 가져오기. 
@@ -83,7 +86,7 @@ export default function Shop() {
   }
 
   function changeBundle(i) {
-    let st = (pages[i]-1)*6;
+    let st = (pages[i])*6;
 
     setBundleIndex(i);
     setNowStuffBundle(stuffBundles[i]);
@@ -96,21 +99,20 @@ export default function Shop() {
   }
 
   function handlePrev() {
-    if(pages[bundleIndex] == 1) return;
+    if(pages[bundleIndex] == 0) return;
     
     let copypages = [...pages];
-    copypages[bundleIndex]--;
-    setPages(copypages);
-
-    let st = (copypages[bundleIndex]-1)*6;
+    copypages[bundleIndex] -= 1;
+    
+    let st = (copypages[bundleIndex])*6;
     setViewStuffs(stuffBundles[bundleIndex].slice.content.slice(st, st + 6));
-
+    setPages(copypages);
   }
   function handleNext() {
     let copypages = [...pages];
-    copypages[bundleIndex]++;
+    copypages[bundleIndex] += 1;
     
-    let st = (copypages[bundleIndex]-1)*6;
+    let st = (copypages[bundleIndex])*6;
     if(stuffBundles[bundleIndex].slice.content[st]){
       setViewStuffs(stuffBundles[bundleIndex].slice.content.slice(st, st+6));
     }
@@ -132,12 +134,12 @@ export default function Shop() {
         
         setStuffBundles(copyStuffBundles);
         setViewStuffs(res.data.data.content);
-        setPages(copypages);
       })
       .catch(e => {
         console.log(e)
       })
     }
+    setPages(copypages);
   }
 
   return (
@@ -165,7 +167,7 @@ export default function Shop() {
       </Grid>
       
       <Divider 
-        style={{backgroundColor : 'white'}} 
+        style={{backgroundColor : 'rgba(255,255,255,0.8)'}} 
         color={'white'}
       />
       <Grid container spacing={0}>
@@ -226,7 +228,6 @@ export default function Shop() {
                 style={{ height: '500px',}}
               >
                 <ShowWindow
-                  ScrollTarget={scrollTarget}
                   stuffs={viewStuffs}
                   click={click}
                   scale={stuffTypes[nowStuffBundle.stuffType].scale}
@@ -248,7 +249,7 @@ export default function Shop() {
                  <ArrowBackIosIcon sx={{color : 'white'}} />
                 </IconButton>
                 <Typography variant="h5" >
-                  {pages[bundleIndex]}
+                  {pages[bundleIndex] + 1}
                 </Typography>
                 <IconButton onClick={handleNext}>
                  <ArrowForwardIosIcon sx={{color : 'white'}} />
