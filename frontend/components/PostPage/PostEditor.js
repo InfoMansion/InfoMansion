@@ -8,12 +8,20 @@ import React, {
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
 import styles from '../../styles/Editor.module.css';
-import { Input, Autocomplete, TextField, styled, Container, Box } from '@mui/material';
+import {
+  Input,
+  Autocomplete,
+  TextField,
+  styled,
+  Container,
+  Box,
+} from '@mui/material';
 import { MAIN_COLOR } from '../../constants';
 import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
 import { postDetailState } from '../../state/postDetailState';
 import { useRecoilState } from 'recoil';
+import CustomAlert from '../CustomAlert';
 import Router from 'next/router';
 
 Router.events.on('routeChangeStart', () => {
@@ -62,6 +70,8 @@ const Editor = ({
   imageUrlList,
   setTempId,
   tempId,
+  open,
+  setOpen,
   ...rest
 }) => {
   const [cookies] = useCookies(['cookie-name']);
@@ -85,8 +95,8 @@ const Editor = ({
     imageInput.setAttribute('type', 'file');
     imageInput.setAttribute('accept', 'image/jpg,image/png,image/jpeg');
     imageInput.click();
-    const tempTitle = localStorage.getItem('title') ?? '임시 제목';
-    const tempContent = localStorage.getItem('content') ?? "<p>' '</p>";
+    const tempTitle = localStorage.getItem('title') || '임시 제목';
+    const tempContent = localStorage.getItem('content') || "<p>' '</p>";
     imageInput.onchange = async event => {
       const files = event.target.files;
       if (files[0]) {
@@ -127,7 +137,8 @@ const Editor = ({
               range,
               `<img src=${imageUrl} alt="이미지 태그가 삽입" />`,
             );
-            alert('이미지 업로드 전 까지의 내용이 임시저장 되었습니다.');
+            setOpen(true);
+            // alert('이미지 업로드 전 까지의 내용이 임시저장 되었습니다.');
             localStorage.removeItem('title');
             localStorage.removeItem('content');
           }
@@ -194,6 +205,7 @@ export default function PostEditor({
   const [windowSize, setWindowSize] = useState();
   const [categoryList, setCategoryList] = useState([]);
   const [cookies] = useCookies(['cookie-name']);
+  const [open, setOpen] = useState('');
 
   const handleResize = useCallback(() => {
     setWindowSize({
@@ -245,7 +257,7 @@ export default function PostEditor({
             height: windowSize.height * 0.8,
           }}
           sx={{
-            p : 2
+            p: 2,
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -268,7 +280,7 @@ export default function PostEditor({
                     color: 'black',
                   },
                 },
-                borderRadius : 2
+                borderRadius: 2,
               }}
               value={category}
               onChange={(_, v) => {
@@ -281,6 +293,12 @@ export default function PostEditor({
               )}
             />
           </div>
+          <CustomAlert
+            open={open}
+            setOpen={setOpen}
+            severity="info"
+            message="이미지 업로드 전 까지의 내용이 임시저장 되었습니다."
+          ></CustomAlert>
           <Input
             placeholder="제목을 입력하세요"
             inputProps={title}
@@ -293,7 +311,7 @@ export default function PostEditor({
               backgroundColor: 'white',
               borderRadius: 5,
             }}
-            sx={{ px : 2 }}
+            sx={{ px: 2 }}
           />
           <Editor
             wrapperClassName={styles.wrapper}
@@ -323,11 +341,13 @@ export default function PostEditor({
               backgroundColor: 'white',
             }}
             sx={{
-              borderRadius : 5,
-              height : windowSize.height * 0.75,
-              overflow : 'auto'
+              borderRadius: 5,
+              height: windowSize.height * 0.75,
+              overflow: 'auto',
             }}
             // 기타
+            open={open}
+            setOpen={setOpen}
             // imageUrlList={imageUrlList}
             // setImageUrlList={setImageUrlList}
           />

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -12,6 +12,7 @@ import { useRecoilState } from 'recoil';
 import { likeCateState } from '../../state/likeCate';
 import { Button, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
+import CustomAlert from '../../components/CustomAlert';
 
 const images = [
   {
@@ -190,6 +191,7 @@ const ImageMarked = styled('span')(({ theme }) => ({
 export default function Category() {
   const router = useRouter();
   const [likeCate, setlikeCate] = useRecoilState(likeCateState);
+  const [open, setOpen] = useState(false);
 
   const clickCategory = event => {
     const selected = event.target.getAttribute('value') + ',';
@@ -204,7 +206,8 @@ export default function Category() {
       opacityTarget.style.removeProperty('opacity');
     } else {
       if (count >= 5) {
-        alert('5개 까지만 선택이 가능 합니다');
+        setOpen(true);
+        // alert('5개 까지만 선택이 가능 합니다');
       } else {
         const updateCateState = likeCate + selected;
         setlikeCate(updateCateState);
@@ -230,9 +233,16 @@ export default function Category() {
           }}
           className="page"
         >
+          <CustomAlert
+            open={open}
+            setOpen={setOpen}
+            severity="error"
+            message="5개 까지만 선택이 가능 합니다."
+          ></CustomAlert>
           <Avatar src="/logo.png">
             <LockOutlinedIcon />
           </Avatar>
+
           <Typography component="h1" variant="h4" style={{ color: 'white' }}>
             Select Your Interest
           </Typography>
