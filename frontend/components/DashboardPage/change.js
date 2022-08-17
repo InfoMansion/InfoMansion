@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from '../../utils/axios';
+import CustomAlert from '../CustomAlert';
 import { useCookies } from 'react-cookie';
 
 const theme = createTheme({
@@ -23,6 +24,7 @@ const theme = createTheme({
 
 export default function Change() {
   const [cookies] = useCookies(['cookie-name']);
+  const [open, setOpen] = useState(false);
   const [inputPassword, setInputPassword] = useState('');
   const [inputPassword2, setInputPassword2] = useState('');
   const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
@@ -59,7 +61,8 @@ export default function Change() {
           },
         },
       );
-      alert('비밀번호 변경이 완료되었습니다.');
+      // alert('비밀번호 변경이 완료되었습니다.');
+      setOpen(true);
       setInputPassword('');
       setInputPassword2('');
     } catch (e) {
@@ -70,26 +73,30 @@ export default function Change() {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main">
+        <CustomAlert
+          open={open}
+          setOpen={setOpen}
+          severity="success"
+          message="비밀번호 변경이 완료되었습니다."
+        ></CustomAlert>
         <Card
           sx={{
             marginTop: 2,
-            p : 2,
-            display : 'flex',
-            flexDirection : 'column',
-            justifyContent : 'center',
-            alignItems : 'center',
-            backgroundColor : 'white',
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'white',
           }}
           component="form"
           onSubmit={handleSubmit}
         >
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
+            <LockOutlinedIcon />
+          </Avatar>
 
-            <Typography variant="h5">
-              Change Password
-            </Typography>
+          <Typography variant="h5">Change Password</Typography>
 
           <TextField
             required
@@ -101,7 +108,7 @@ export default function Change() {
             value={inputPassword}
             onChange={handleInput}
             color="primary"
-            sx={{m : 1}}
+            sx={{ m: 1 }}
           />
           <TextField
             required
@@ -113,13 +120,13 @@ export default function Change() {
             value={inputPassword2}
             onChange={handleInput}
             color="primary"
-            sx={{m : 1}}
+            sx={{ m: 1 }}
           />
 
           <Button
             type="submit"
             variant="contained"
-            sx={{ m : 1, color: 'white' }}
+            sx={{ m: 1, color: 'white' }}
             disabled={inputUnFinish}
             color="primary"
           >
