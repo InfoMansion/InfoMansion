@@ -31,6 +31,7 @@ export default function Home() {
     const ref = useRef()
     let scroll = useScroll()
     const [hovered, hover] = useState(false)
+    const [tag, setTag] = useState(false);
     const over = () => hover(true)
     const out = () => hover(false)
 
@@ -84,10 +85,14 @@ export default function Home() {
         posXTo /= 100;
         y1 *= 2;
         z = 0;
+        setTag(true);
       }
-      else if(offset < 1.5) {
-        posXTo /= 1.2;
-        z = -0.01
+      else {
+        setTag(false);
+        if(offset < 1.5) {
+          posXTo /= 1.2;
+          z = -0.01
+        }
       }
       const scaleTo = ((hovered ? 1.5 : 1 ) + y1*2)*(15-offset)/15 ;
       ref.current.scale.x = damp(ref.current.scale.x, scaleTo, 6, delta)
@@ -120,6 +125,7 @@ export default function Home() {
         >
           <circleGeometry args={[0.5, 6, 0.525]}/>
           <meshBasicMaterial map={texture}/>
+          {tag ?
             <TagButton
               pos={[0.3,0.36,-0.02]}
               rot={[0,0.68,-0.35]}
@@ -127,6 +133,7 @@ export default function Home() {
               text={link}
             />
             : <></>
+          }
 
         </mesh>
       </group>
