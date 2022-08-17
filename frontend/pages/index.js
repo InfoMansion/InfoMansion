@@ -204,13 +204,13 @@ export default function Home() {
   return (
     <>
       {auth.isAuthorized ? (
-        <Box>
+        <Box >
           <Canvas shadows
             style={{
               position : 'absolute',
               width : windowSize.width,
               height : 1000,
-              bottom : 0,
+              bottom : windowSize.height > 1000 ? windowSize.height - 1000 : 0,
               zIndex : -1
             }}
 
