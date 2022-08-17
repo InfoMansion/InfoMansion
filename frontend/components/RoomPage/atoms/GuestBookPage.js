@@ -323,10 +323,16 @@ export default function GuestBookPage({
                   key={book.id}
                 >
                   <Typography variant="h6">{book.username}</Typography>
-                  <AutoDeleteIcon
-                    style={{ float: 'right', cursor: 'pointer' }}
-                    onClick={e => deleteGuestBook(book.id, e)}
-                  ></AutoDeleteIcon>
+                  {book.username === auth.username ||
+                  userName === auth.userName ? (
+                    <AutoDeleteIcon
+                      style={{ float: 'right', cursor: 'pointer' }}
+                      onClick={e => deleteGuestBook(book.id, e)}
+                    ></AutoDeleteIcon>
+                  ) : (
+                    <div></div>
+                  )}
+
                   <Typography variant="body2" style={{ color: 'grey' }}>
                     {book.modifiedDate.substr(0, 10)}
                   </Typography>
