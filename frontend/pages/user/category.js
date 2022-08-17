@@ -301,6 +301,17 @@ export default function Category() {
           >
             NEXT
           </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2, color: 'white' }}
+            onClick={() => {
+              router.push('/');
+            }}
+            color="primary"
+          >
+            HOME
+          </Button>
         </Box>
       </Grid>
     </ThemeProvider>

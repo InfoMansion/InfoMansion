@@ -195,6 +195,18 @@ export default function SignUp() {
             >
               PREV
             </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, color: 'white' }}
+              onClick={() => {
+                setlikeCate('');
+                router.push('/error', '/');
+              }}
+              color="primary"
+            >
+              HOME
+            </Button>
           </Box>
         </Box>
       </Container>
