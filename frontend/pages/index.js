@@ -9,8 +9,9 @@ import { useInView } from 'react-intersection-observer';
 import { Canvas, useFrame } from '@react-three/fiber';
 import Particles from '../components/RoomPage/atoms/Particles';
 import PostProcessing from '../components/RoomPage/atoms/PostProcessing';
-import { OrthographicCamera, Plane, Scroll, ScrollControls, useScroll } from '@react-three/drei';
+import { OrthographicCamera, Plane, Scroll, ScrollControls, Text, useScroll } from '@react-three/drei';
 import { Color, MathUtils, TextureLoader } from 'three';
+import TagButton from '../components/RoomPage/atoms/TagButton';
 
 const damp = MathUtils.damp;
 
@@ -25,7 +26,7 @@ export default function Home() {
   const [nextPage, setNextPage] = useState(false);
   const [prevPage, setPrevPage] = useState(false);
 
-  const distConst = 1.4;
+  const distConst = 1.0;
   function Item({ src, index, position, scale, length, link, c = new Color() }) {
     const ref = useRef()
     let scroll = useScroll()
@@ -43,30 +44,59 @@ export default function Home() {
       return () => (document.body.style.cursor = 'auto')
     }, [hovered])
 
+    // v1
+    // useFrame((state, delta) => {
+    //   const y1 = scroll.curve(index/length - 1.5/length, 3 / length);
+    //   const offset = position[0] - dist*scroll.offset;
+    //   // let judgeX = (state.viewport.width/2 - Math.abs(offset)) * (offset < 0 ? -1 : 1);
+    //   let judgeX = offset < 0 ? -1 : 1;
+
+    //   let posXTo = judgeX;
+    //   if(Math.abs(offset) < 0.5) {
+    //     y1 *= Math.abs(posXTo)/2.4;
+    //     posXTo = 0;
+    //   }
+    //   let posYTO = 1;
+    //   if( state.viewport.width/2 < Math.abs(offset) ) posYTO = -1;
+
+    //   const scaleTo = (hovered ? 1.5 : 1 ) + y1;
+    //   ref.current.scale.x = damp(ref.current.scale.x, scaleTo, 6, delta)
+    //   ref.current.scale.y = damp(ref.current.scale.y, scaleTo, 6, delta)
+    
+    //   ref.current.position.x = damp(ref.current.position.x, position[0] + posXTo/1.5, 6, delta);
+    //   ref.current.position.y = damp(ref.current.position.y, position[1] + posYTO * Math.sqrt(Math.abs(judgeX))/5 - 0.5, 6, delta);
+    //   ref.current.position.z = damp(ref.current.position.z, position[2] +  Math.abs(judgeX)/5 - 1, 6, delta);
+
+    //   ref.current.rotation.y = damp(ref.current.rotation.y, posYTO * posXTo/12, 6, delta);
+    //   ref.current.material.color.lerp(c.set(Math.abs(offset) < 0.5 ? 'white' : '#888'), hovered ? 0.3 : 0.1)
+    // })
+
+    //v2
     useFrame((state, delta) => {
       const y1 = scroll.curve(index/length - 1.5/length, 3 / length);
-      const offset = position[0] - dist*scroll.offset;
-      let judgeX = (state.viewport.width/2 - Math.abs(offset)) * (offset < 0 ? -1 : 1);
+      let offset = position[0] - dist*scroll.offset;
+      let posXTo = offset < 0 ? -1 : 1;
+      offset = Math.abs(offset);
+      let z = -0.02;
+      let col = 888;
 
-      let posXTo = judgeX;
-      if(Math.abs(offset) < 0.5) {
-        y1 *= Math.abs(posXTo)/2.4;
-        posXTo = 0;
+      if( offset < 0.4) {
+        posXTo /= 100;
+        y1 *= 2;
+        z = 0;
       }
-      let posYTO = 1;
-      if( state.viewport.width/2 < Math.abs(offset) ) posYTO = -1;
-
-      const scaleTo = (hovered ? 1.5 : 1 ) + y1;
+      else if(offset < 1.5) {
+        posXTo /= 1.2;
+        z = -0.01
+      }
+      const scaleTo = ((hovered ? 1.5 : 1 ) + y1*2)*(15-offset)/15 ;
       ref.current.scale.x = damp(ref.current.scale.x, scaleTo, 6, delta)
       ref.current.scale.y = damp(ref.current.scale.y, scaleTo, 6, delta)
     
-      ref.current.position.x = damp(ref.current.position.x, position[0] + posXTo/1.5, 6, delta);
-      ref.current.position.y = damp(ref.current.position.y, position[1] + posYTO * Math.sqrt(Math.abs(judgeX))/5 - 0.5, 6, delta);
-      ref.current.position.z = damp(ref.current.position.z, position[2] +  Math.abs(judgeX)/5 - 1, 6, delta);
-
-      // ref.current.rotation.y = damp(ref.current.rotation.y, posYTO * posXTo/12, 6, delta);
-      ref.current.material.color.lerp(c.set(Math.abs(offset) < 0.5 ? 'white' : '#888'), hovered ? 0.3 : 0.1)
-
+      ref.current.position.x = damp(ref.current.position.x, position[0] + posXTo*(1.8 + 1.5*(15-offset)/15 - offset/10), 6, delta);
+      ref.current.position.z = damp(ref.current.position.z, z, 6, delta);
+      
+      ref.current.material.color.lerp(c.set(offset < 0.5 ? 'white' : offset < 3 ? '#888' : '#666' ), hovered ? 0.3 : 0.1)
     })
 
     useEffect(() => {
@@ -82,14 +112,24 @@ export default function Home() {
 
     
     return (
-      <mesh ref={ref} castShadow receiveShadow
-        onPointerOver={over} onPointerOut={out}
-        position={position}
-        onClick={() => router.push(`/` + link)}
-      >
-        <circleGeometry args={[0.5, 6, 0.525]}/>
-        <meshBasicMaterial map={texture}/>
-      </mesh>
+      <group>
+        <mesh ref={ref} castShadow receiveShadow
+          onPointerOver={over} onPointerOut={out}
+          position={position}
+          onClick={() => router.push(`/` + link)}
+        >
+          <circleGeometry args={[0.5, 6, 0.525]}/>
+          <meshBasicMaterial map={texture}/>
+            <TagButton
+              pos={[0.3,0.36,-0.02]}
+              rot={[0,0.68,-0.35]}
+              fontSize={0.05}
+              text={link}
+            />
+            : <></>
+
+        </mesh>
+      </group>
     )
   }
 
@@ -145,12 +185,17 @@ export default function Home() {
     // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
     if (inView) { setPage(prev => prev + 1); }
   }, [inView]);
+  // v1
+  // const w = 0.8
+  // const gap = 0.6
+  // const xW = w + gap
+  // const pixelConst = 130.5
 
+  // v2
   const w = 0.8
-  const gap = 0.6
+  const gap = 0.2
   const xW = w + gap
   const pixelConst = 130.5
-
   return (
     <>
       {auth.isAuthorized ? (
