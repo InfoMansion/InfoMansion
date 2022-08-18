@@ -19,7 +19,7 @@ public enum DefaultStuff {
     FLOOR(202L, "", Category.NONE, true, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO),
     TABLE(469L, "나의 하루", Category.DAILY, true, BigDecimal.valueOf(3), BigDecimal.ZERO, BigDecimal.valueOf(2.7), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.valueOf(5.78)),
     CHAIR(45L, "나의 휴식처", Category.NONE, true,  BigDecimal.valueOf(2), BigDecimal.ZERO, BigDecimal.valueOf(2), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.valueOf(6.08)),
-    GUESTBOOK(265L, "방명록", Category.NONE, true,  BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO),
+    GUESTBOOK(265L, "방명록", Category.GUESTBOOK, true,  BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO),
     POSTBOX(542L, "정리함", Category.POSTBOX, true,  BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
 
 
