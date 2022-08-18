@@ -40,7 +40,8 @@ public class RoomApiController {
 
     @GetMapping("/api/v2/rooms/recommend")
     private ResponseEntity<CommonResponse<RoomUserRecommendResponseDto>> findRecommendRoomByUserLikePost(Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(new CommonResponse<>(roomService.findRecommendRoomByUserLikePost(pageable)));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CommonResponse<>(roomService.findRecommendRoomByUserLikePost(pageable)));
     }
 
     @PutMapping(value = "/api/v1/rooms/edit", consumes = {"multipart/form-data"})

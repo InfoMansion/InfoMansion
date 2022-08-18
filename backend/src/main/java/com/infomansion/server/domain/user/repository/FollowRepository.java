@@ -2,7 +2,6 @@ package com.infomansion.server.domain.user.repository;
 
 import com.infomansion.server.domain.user.domain.Follow;
 import com.infomansion.server.domain.user.domain.User;
-import com.infomansion.server.domain.user.dto.UserFollowInfoResponseDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;

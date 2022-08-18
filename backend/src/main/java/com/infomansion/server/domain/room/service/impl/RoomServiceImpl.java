@@ -38,8 +38,6 @@ public class RoomServiceImpl implements RoomService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final FollowRepository followRepository;
-    private final PostService postService;
-
     private final S3Uploader s3Uploader;
 
     @Override
@@ -106,7 +104,6 @@ public class RoomServiceImpl implements RoomService {
     public RoomResponseDto findRoombyId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
 
         return new RoomResponseDto(roomRepository.findByUser(user).get());
 

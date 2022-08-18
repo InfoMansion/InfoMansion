@@ -1,7 +1,6 @@
 package com.infomansion.server.domain.category.util;
 
 import com.infomansion.server.domain.category.domain.Category;
-import com.infomansion.server.domain.category.domain.CategoryMapperValue;
 import com.infomansion.server.global.util.exception.CustomException;
 import com.infomansion.server.global.util.exception.ErrorCode;
 
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 public class CategoryUtil {
 
     public static void validateCategories(String categories) {
-        splitCategories(categories).forEach(category->validateOneCategory(category));
+        splitCategories(categories).forEach(CategoryUtil::validateOneCategory);
     }
 
     private static List<String> splitCategories(String categories) {

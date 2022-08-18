@@ -7,11 +7,9 @@ import com.infomansion.server.domain.upload.service.S3Uploader;
 import com.infomansion.server.global.apispec.BasicResponse;
 import com.infomansion.server.global.apispec.CommonResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -119,8 +117,6 @@ public class PostApiController {
 
     @PostMapping("/api/v1/posts/guestbook/{username}")
     public ResponseEntity<? extends BasicResponse> createGuestBookPost(@PathVariable String username, @Valid @RequestBody PostGuestBookRequestDto requestDto) {
-        System.out.println("username = " + username);
-        System.out.println("requestDto = " + requestDto.getContent());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CommonResponse<>(postService.createGuestBookPost(username, requestDto)));
     }

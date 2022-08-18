@@ -1,6 +1,5 @@
 package com.infomansion.server.domain.payment.service.impl;
 
-import com.infomansion.server.domain.payment.domain.PaymentLine;
 import com.infomansion.server.domain.payment.dto.PaymentResponseDto;
 import com.infomansion.server.domain.payment.repository.PaymentRepository;
 import com.infomansion.server.domain.payment.service.PaymentService;

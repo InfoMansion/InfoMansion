@@ -14,7 +14,7 @@ public class UserModifyProfileResponseDto {
 
     private String email;
     private String username;
-    private List<String> categories = new ArrayList<>();
+    private List<String> categories;
     private String introduce;
     private String profileImageUrl;
 

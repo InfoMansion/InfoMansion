@@ -11,8 +11,6 @@ import java.util.List;
 public interface StoreService {
 
     List<StoreGroupResponseDto> findAllStuffInStore(Integer pageSize);
-
     Slice<StoreResponseDto> findStuffWithStuffTypeInStore(StuffType stuffType, Pageable pageable);
-
     List<StoreResponseDto> findTheLatestStuff();
 }

@@ -1,7 +1,6 @@
 package com.infomansion.server.domain.base;
 
 import lombok.Getter;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

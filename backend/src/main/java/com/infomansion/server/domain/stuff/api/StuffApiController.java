@@ -1,9 +1,7 @@
 package com.infomansion.server.domain.stuff.api;
 
-import com.infomansion.server.domain.stuff.domain.Stuff;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
-import com.infomansion.server.domain.stuff.dto.StuffUpdateRequestDto;
 import com.infomansion.server.domain.stuff.service.StuffService;
 import com.infomansion.server.global.apispec.CommonResponse;
 import lombok.RequiredArgsConstructor;
