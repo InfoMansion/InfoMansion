@@ -19,7 +19,8 @@ spring:
     port: 6379
 
   mail:
-    redirectURI: http://i7a607.p.ssafy.io/
+    redirectURI: https://i7a607.p.ssafy.io/
+    verificationLink: https://i7a607.p.ssafy.io/api/v1/auth/verification?key=
 
 infomansion:
   cookie:

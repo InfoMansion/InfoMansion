@@ -6,6 +6,7 @@ import com.infomansion.server.global.util.exception.ErrorCode;
 import com.infomansion.server.global.util.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -19,7 +20,8 @@ import java.util.UUID;
 @Service
 public class VerifyEmailServiceImpl implements VerifyEmailService {
 
-    private final String VERIFICATION_LINK = "http://localhost:8080/api/v1/auth/verification?key=";
+    @Value("${spring.mail.verificationLink}")
+    private String VERIFICATION_LINK;
     private final Long EXPIRATION_TIME = 60 * 30L;
 
 
