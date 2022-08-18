@@ -9,6 +9,7 @@ import com.infomansion.server.global.apispec.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ public class StuffApiController {
                 .body(new CommonResponse<>(stuffService.createStuff(requestDto)));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/api/v1/stuffs")
     public ResponseEntity<CommonResponse<List<StuffResponseDto>>> findAllStuff() {
         return ResponseEntity.status(HttpStatus.OK)
