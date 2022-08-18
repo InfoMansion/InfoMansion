@@ -115,7 +115,9 @@ export default function Shop() {
     let st = (copypages[bundleIndex])*6;
     if(stuffBundles[bundleIndex].slice.content[st]){
       setViewStuffs(stuffBundles[bundleIndex].slice.content.slice(st, st+6));
+      setPages(copypages);
     }
+    
     else{
       axios.get(`/api/v1/stores/${nowStuffBundle.stuffType}`, {
         params : {
@@ -131,7 +133,8 @@ export default function Shop() {
         
         let copyStuffBundles = [...stuffBundles];
         copyStuffBundles[bundleIndex].slice.content = copyStuffBundles[bundleIndex].slice.content.concat(res.data.data.content);
-        
+      
+        setPages(copypages);
         setStuffBundles(copyStuffBundles);
         setViewStuffs(res.data.data.content);
       })
@@ -139,7 +142,6 @@ export default function Shop() {
         console.log(e)
       })
     }
-    setPages(copypages);
   }
 
   return (

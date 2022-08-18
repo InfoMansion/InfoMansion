@@ -22,10 +22,8 @@ function comp1() {
   return (
     <ConfigStuff
       data={ConfigStuffs[0]}
-      pos={[0, 0, 0]}
-      iniscale={50}
-      color="#fa7070"
-      inicolor="#fa7070"
+      pos={[0, 0, 0]} iniscale={50}
+      color="#fa7070" inicolor="#fa7070"
       speed={0.02}
     />
   );
@@ -37,9 +35,7 @@ function comp2() {
       data={ConfigStuffs[5]}
       pos={[0, -2, 0]}
       iniscale={500}
-      Click={() => {}}
-      color="#fa7070"
-      inicolor="#fa7070"
+      color="#fa7070" inicolor="#fa7070"
       speed={0}
     />
   );

@@ -35,3 +35,5 @@ yarn-error.log*
 # /public/stuff-assets/*.glb
 # !/public/stuff-assets/IM.glb
 # /public/stuffAssets/*.glb
+
+/public/emptyPage.js

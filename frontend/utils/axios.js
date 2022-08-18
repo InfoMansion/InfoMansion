@@ -14,6 +14,7 @@ axiosApiInstance.interceptors.request.use(async config => {
 
   const expireAt = new Date(localStorage.getItem('expiresAt'));
   const diffTime = moment().diff(expireAt, 'minutes');
+  const errorcodes = [40020, 40021, 40101, 40102]
 
   if (diffTime >= -5) {
     try {
@@ -26,7 +27,7 @@ axiosApiInstance.interceptors.request.use(async config => {
       );
       localStorage.setItem('expiresAt', response.data.data.expiresAt);
     } catch (e) {
-      if (e.response?.data.code === 40020) {
+      if (errorcodes.indexOf(e.response?.data.code) >= 0) {
         window.location.replace('/');
       }
     }
