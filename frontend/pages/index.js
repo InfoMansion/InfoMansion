@@ -1,4 +1,4 @@
-import { Box, Card, Link, styled } from '@mui/material';
+import { Box, formControlClasses, } from '@mui/material';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import LoginComponent from '../components/login';
@@ -9,7 +9,7 @@ import { useInView } from 'react-intersection-observer';
 import { Canvas, useFrame } from '@react-three/fiber';
 import Particles from '../components/RoomPage/atoms/Particles';
 import PostProcessing from '../components/RoomPage/atoms/PostProcessing';
-import { OrthographicCamera, Plane, Scroll, ScrollControls, Text, useScroll } from '@react-three/drei';
+import { Scroll, ScrollControls, Text, useScroll } from '@react-three/drei';
 import { Color, MathUtils, TextureLoader } from 'three';
 import TagButton from '../components/RoomPage/atoms/TagButton';
 
@@ -22,21 +22,26 @@ export default function Home() {
   const [cookies] = useCookies(['cookie-name']);
   const router = useRouter();
   const [ref, inView] = useInView();
-  const [page, setPage] = useState(0);
-  const [nextPage, setNextPage] = useState(false);
-  const [prevPage, setPrevPage] = useState(false);
 
+    // v1
+  // const gap = 0.6
+  // v2
+  const w = 0.8
+  const gap = 0.2
+  const xW = w + gap
+  const pixelConst = 130.5
   const distConst = 1.0;
   function Item({ src, index, position, scale, length, link, c = new Color() }) {
     const ref = useRef()
     let scroll = useScroll()
     const [hovered, hover] = useState(false)
+    const [tag, setTag] = useState(false);
     const over = () => hover(true)
     const out = () => hover(false)
 
     const loader = new TextureLoader();
-    // const texture =  loader.load('/test.png');
-    const texture =  loader.load(src + "?not-from-cache-please");
+    const texture =  loader.load('/test.png');
+    // const texture =  loader.load(src + "?not-from-cache-please");
     const dist = distConst * roomImgs.length;
     
     useEffect(() => {
@@ -84,10 +89,14 @@ export default function Home() {
         posXTo /= 100;
         y1 *= 2;
         z = 0;
+        setTag(true);
       }
-      else if(offset < 1.5) {
-        posXTo /= 1.2;
-        z = -0.01
+      else {
+        setTag(false);
+        if(offset < 1.5) {
+          posXTo /= 1.2;
+          z = -0.01
+        }
       }
       const scaleTo = ((hovered ? 1.5 : 1 ) + y1*2)*(15-offset)/15 ;
       ref.current.scale.x = damp(ref.current.scale.x, scaleTo, 6, delta)
@@ -98,19 +107,6 @@ export default function Home() {
       
       ref.current.material.color.lerp(c.set(offset < 0.5 ? 'white' : offset < 3 ? '#888' : '#666' ), hovered ? 0.3 : 0.1)
     })
-
-    useEffect(() => {
-      if(!nextPage && !prevPage) return;
-
-      init(cookies.InfoMansionAccessToken)
-    }, [nextPage, prevPage])
-
-    useEffect(() => {
-      setNextPage(false);
-      setPrevPage(false);
-    }, [roomImgs])
-
-    
     return (
       <group>
         <mesh ref={ref} castShadow receiveShadow
@@ -120,6 +116,7 @@ export default function Home() {
         >
           <circleGeometry args={[0.5, 6, 0.525]}/>
           <meshBasicMaterial map={texture}/>
+          {tag ?
             <TagButton
               pos={[0.3,0.36,-0.02]}
               rot={[0,0.68,-0.35]}
@@ -127,19 +124,42 @@ export default function Home() {
               text={link}
             />
             : <></>
+          }
 
         </mesh>
       </group>
     )
   }
 
+  // 페이징 이벤트 처리.
+  const [page, setPage] = useState(0);
+  const [nextPage, setNextPage] = useState(false);
+
   function EventHandler() {
     const scroll = useScroll();
-    console.log(scroll);
+
+    useFrame(() => {
+      if (scroll.offset > 0.99) {
+        console.log(scroll);
+        setNextPage(true);
+      } 
+    }, [])
+
+    useEffect(() => {
+      let loc = (roomImgs.length - 30) / roomImgs.length;
+      if (loc < 0) loc = 0;
+      scroll.scroll.current = loc;
+    }, [roomImgs])
+    
     return(
-      <></>
+      <group></group>
     )
   }
+  useEffect(() => {
+    if(!nextPage) return;
+    setPage(page+1);
+    setNextPage(false);
+  }, [nextPage]);
 
   const handleResize = useCallback(() => {
     setWindowSize({
@@ -158,7 +178,7 @@ export default function Home() {
     async token => {
       try {
         const { data } = await axios.get(
-          `/api/v2/rooms/recommend?page=${page}&size=27`,
+          `/api/v2/rooms/recommend?page=${page}&size=30`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -167,45 +187,33 @@ export default function Home() {
           },
         );
         // console.log(data);
-        console.log(data.data.roomResponseDtos);
-        setRoomImgs( prev => [ ...prev, ...data.data.roomResponseDtos.content] );
+        // console.log(data.data.roomResponseDtos);
+        if(data.data.roomResponseDtos.content.length) {
+          setRoomImgs( prev => [...prev, ...data.data.roomResponseDtos.content] );
+        }
       } catch (e) {
         console.log(e);
       }
   },[page]);
 
   useEffect(() => {
+    console.log(page)
     if (!auth.isAuthorized || !cookies.InfoMansionAccessToken) {
       return;
     }
     init(cookies.InfoMansionAccessToken);
   }, [page, init, auth.isAuthorized, cookies]);
 
-  useEffect(() => {
-    // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
-    if (inView) { setPage(prev => prev + 1); }
-  }, [inView]);
-  // v1
-  // const w = 0.8
-  // const gap = 0.6
-  // const xW = w + gap
-  // const pixelConst = 130.5
-
-  // v2
-  const w = 0.8
-  const gap = 0.2
-  const xW = w + gap
-  const pixelConst = 130.5
   return (
     <>
       {auth.isAuthorized ? (
-        <Box>
+        <Box >
           <Canvas shadows
             style={{
               position : 'absolute',
               width : windowSize.width,
               height : 1000,
-              bottom : 0,
+              bottom : windowSize.height > 1000 ? windowSize.height - 1000 : 0,
               zIndex : -1
             }}
 
