@@ -9,7 +9,6 @@ services:
     volumes:
       - redis-volumes:/data
       - ./redis/conf/redis.conf:/etc/redis/redis.conf
-    command: redis-server /usr/local/conf/redis.conf
     restart: always
     ports:
       - "6379:6379"
