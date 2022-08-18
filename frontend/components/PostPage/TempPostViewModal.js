@@ -67,6 +67,7 @@ export default function TempPostViewModal({
       );
       // console.log(data);
       setIsDeleted(!isDeleted);
+      handleMenuClose();
       handleModalClose();
     } catch (e) {
       console.log(e);
@@ -168,22 +169,54 @@ export default function TempPostViewModal({
               justifyContent: 'space-between',
             }}
           >
-            <Typography>{postDetail.modifiedDate}</Typography>
-            <IconButton onClick={handleModalClose} style={{ float: 'right' }}>
-              <CloseIcon />
-            </IconButton>
+            <DialogTitle
+              sx={{
+                '&.MuiDialogTitle-root.MuiTypography-root': {
+                  fontSize: 40,
+                  fontWeight: 'bold',
+                },
+              }}
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'baseline',
+              }}
+            >
+              {postDetail.title}
+              <Typography>
+                {' '}
+                &nbsp; 작성일 : {postDetail.modifiedDate}
+              </Typography>
+            </DialogTitle>
+            <div style={{ float: 'right' }}>
+              {isUser ? (
+                <IconButton
+                  aria-controls={menuId}
+                  aria-haspopup="false"
+                  onClick={handleMenuOpen}
+                  // style={{ float: 'right' }}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              ) : (
+                <div></div>
+              )}
+              <IconButton onClick={handleModalClose}>
+                <CloseIcon />
+              </IconButton>
+            </div>
           </div>
         </div>
 
         <div
           style={{
             display: 'grid',
-            gridTemplateRows: '0.5fr 4fr',
+            gridTemplateRows: '4fr',
             minHeight: '0',
             height: '100%',
           }}
         >
-          <DialogTitle
+          {/* <DialogTitle
             sx={{
               '&.MuiDialogTitle-root.MuiTypography-root': {
                 fontSize: 40,
@@ -192,7 +225,7 @@ export default function TempPostViewModal({
             }}
           >
             {postDetail.title}
-          </DialogTitle>
+          </DialogTitle> */}
           <DialogContentText
             sx={{
               '&.MuiDialogContentText-root.MuiTypography-root': {
@@ -210,19 +243,7 @@ export default function TempPostViewModal({
               marginLeft: 'auto',
               marginRight: '6px',
             }}
-          >
-            {isUser ? (
-              <IconButton
-                aria-controls={menuId}
-                aria-haspopup="false"
-                onClick={handleMenuOpen}
-              >
-                <MoreVertIcon />
-              </IconButton>
-            ) : (
-              <div></div>
-            )}
-          </div>
+          ></div>
         </div>
         {renderMenu}
       </Dialog>

@@ -180,6 +180,7 @@ const Editor = ({
       modules={modules}
       formats={formats}
       onChange={onChange}
+      id="editor"
     ></ReactQuill>
   );
 };
@@ -307,6 +308,7 @@ export default function UpdatePostEditor({
               backgroundColor: 'white',
               borderRadius: '6px',
             }}
+            id="tempTitle"
           />
           <Editor
             wrapperClassName={styles.wrapper}

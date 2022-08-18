@@ -82,6 +82,7 @@ export default function createPost() {
             withCredentials: true,
           },
         });
+        console.log(data);
         setMessage('임시저장 되었습니다.');
         setOpen(true);
         // router.back();
@@ -119,6 +120,51 @@ export default function createPost() {
     }
   }, [open]);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const tempTitle = document.getElementById('tempTitle').value;
+      const tempContent = document.querySelector('.ql-editor').innerHTML;
+      const tempTempId = document.getElementById('tempId').innerText;
+      if (tempTempId == '' && tempTitle && tempContent) {
+        const userPost = {
+          title: tempTitle,
+          content: tempContent,
+        };
+        axios
+          .post('/api/v2/posts/temp', userPost, {
+            headers: {
+              Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+              withCredentials: true,
+            },
+          })
+          .then(res => {
+            document.getElementById('tempId').innerText = res.data.data.postId;
+          });
+      } else if (tempTempId && tempTitle && tempContent) {
+        try {
+          const userPost = {
+            title: tempTitle,
+            content: tempContent,
+          };
+          const response = axios.post(
+            `/api/v2/posts/temp/${tempTempId}`,
+            userPost,
+            {
+              headers: {
+                Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+                withCredentials: true,
+              },
+            },
+          );
+          // router.back();
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    }, 600000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <Container
       style={{
@@ -133,6 +179,15 @@ export default function createPost() {
         mt: 2,
       }}
     >
+      <div
+        id="tempId"
+        hidden
+        onChange={event => {
+          setTempId(event.target.value);
+        }}
+      >
+        {tempId}
+      </div>
       <Box
         style={{
           position: 'absolute',

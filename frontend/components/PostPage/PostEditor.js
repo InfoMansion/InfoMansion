@@ -189,6 +189,7 @@ const Editor = ({
         backgroundColor: 'white',
         borderRadius: '6px',
       }}
+      id="editor"
     ></ReactQuill>
   );
 };
@@ -315,6 +316,7 @@ export default function PostEditor({
               borderRadius: 5,
             }}
             sx={{ px: 2 }}
+            id="tempTitle"
           />
           <Editor
             wrapperClassName={styles.wrapper}

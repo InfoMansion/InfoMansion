@@ -1,15 +1,50 @@
 import {
   Box,
+  Button,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
   Divider,
+  IconButton,
   Paper,
   Typography,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import axios from '../../../utils/axios';
+import { useCookies } from 'react-cookie';
 
-export default function Temp({ post, totheight, picwidth, openModal }) {
+export default function Temp({
+  post,
+  totheight,
+  picwidth,
+  openModal,
+  isDeleted,
+  setIsDeleted,
+  handleModalClose,
+}) {
+  const [cookies] = useCookies(['cookie-name']);
+  const TempDelete = async () => {
+    const postInfo = {};
+    try {
+      const { data } = await axios.patch(
+        `/api/v1/posts/${post.postId}`,
+        postInfo,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
+            withCredentials: true,
+          },
+        },
+      );
+      // handleModalClose();
+      setIsDeleted(!isDeleted);
+      // console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <Box
       key={post.title}
@@ -26,9 +61,8 @@ export default function Temp({ post, totheight, picwidth, openModal }) {
       <div
         style={{
           display: 'flex',
-          cursor: 'pointer',
         }}
-        onClick={() => openModal(post)}
+        // onClick={() => openModal(post)}
       >
         <CardContent
           sx={{
@@ -54,10 +88,17 @@ export default function Temp({ post, totheight, picwidth, openModal }) {
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
+                cursor: 'pointer',
               }}
+              onClick={() => openModal(post)}
             >
               {post.title}
             </Typography>
+            <IconButton onClick={TempDelete}>
+              <DeleteIcon
+                style={{ float: 'right', cursor: 'pointer' }}
+              ></DeleteIcon>
+            </IconButton>
             <Typography
               variant="body4"
               color="#aaaaaa"

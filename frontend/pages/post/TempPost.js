@@ -91,12 +91,20 @@ export default function tempPost() {
   return (
     <ThemeProvider theme={theme}>
       <Container>
-        <Box sx={{ width: '100%' }}>
+        <Box
+          sx={{ width: '100%' }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
           <Divider
             style={{
               bold: true,
               color: 'white',
               fontSize: 'x-large',
+              width: '100%',
             }}
             sx={{
               '&::before, &::after': {
@@ -112,15 +120,24 @@ export default function tempPost() {
             isDeleted={isDeleted}
             setIsDeleted={setIsDeleted}
           ></TempPostViewModal>
-          {posts.map((post, index) => (
-            <Temp
-              post={post}
-              totheight={150}
-              picwidth={150}
-              maxcontent={150}
-              openModal={openModal}
-            />
-          ))}
+          <Box
+            style={{
+              maxWidth: 900,
+              width: '100%',
+            }}
+          >
+            {posts.map((post, index) => (
+              <Temp
+                post={post}
+                totheight={150}
+                maxcontent={150}
+                openModal={openModal}
+                isDeleted={isDeleted}
+                setIsDeleted={setIsDeleted}
+                handleModalClose={handleModalClose}
+              />
+            ))}
+          </Box>
           {/* <Button
         onClick={() => {
           getResult(category, posts[category].page + 1);
