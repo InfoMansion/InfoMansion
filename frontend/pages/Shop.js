@@ -12,12 +12,14 @@ import {
   Grid,
   MenuItem,
   IconButton,
+  Icon,
 } from '@mui/material';
 import CopyrightIcon from '@mui/icons-material/Copyright';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useEffect, useState } from 'react';
 import ShowWindow from '../components/ShopPage/ShowWindow';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 import { Canvas } from '@react-three/fiber';
 import { OrthographicCamera } from '@react-three/drei';
@@ -151,7 +153,20 @@ export default function Shop() {
         }}
       >
         <Grid item sm={3}>
-          <Typography variant="h4" color="white">Shop</Typography>
+          <Box
+            style={{
+              display : 'flex',
+              alinItems : 'center'
+            }}
+          >
+            <Icon sx={{mr : 1}} style={{color : 'white'}} fontSize='large'>
+              <ShoppingCartIcon />
+            </Icon>
+            <Typography variant="h4" color="white">
+              Shop
+            </Typography>
+          </Box>
+
         </Grid>
         <Grid item sm={9}
           style={{
@@ -217,7 +232,7 @@ export default function Shop() {
 
               <Box
                 style={{
-                  backgroundColor : 'rgba(255,255,255,0.8)'
+                  backgroundColor : 'rgba(255,255,255,0.5)'
                 }}
                 sx={{ 
                   my : 2,

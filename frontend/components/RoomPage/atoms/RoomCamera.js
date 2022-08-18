@@ -10,9 +10,10 @@ export default function RoomCamera({camloc, clicked, zoomscale}) {
 
     useFrame(({mouse, camera}) => {
         const distance = 40;
-        const con = 0.5;
-        const xoff = mouse.x*con;
-        const yoff = mouse.y*con;
+        const xcon = 0.8;
+        const ycon = 0.5;
+        const xoff = mouse.x*xcon;
+        const yoff = mouse.y*ycon;
         
         // if(clicked && clicky < 5) setClicky(clicky + 0.1);
         // if(!clicked && clicky > 0) setClicky(clicky - 0.1);

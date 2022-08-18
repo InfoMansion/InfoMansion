@@ -40,8 +40,8 @@ export default function Home() {
     const out = () => hover(false)
 
     const loader = new TextureLoader();
-    const texture =  loader.load('/test.png');
-    // const texture =  loader.load(src + "?not-from-cache-please");
+    // const texture =  loader.load('/test.png');
+    const texture =  loader.load(src + "?not-from-cache-please");
     const dist = distConst * roomImgs.length;
     
     useEffect(() => {
@@ -146,8 +146,9 @@ export default function Home() {
     }, [])
 
     useEffect(() => {
-      let loc = (roomImgs.length - 30) / roomImgs.length;
+      let loc = (roomImgs.length) / (roomImgs.length + 30);
       if (loc < 0) loc = 0;
+
       scroll.scroll.current = loc;
     }, [roomImgs])
     
@@ -155,6 +156,7 @@ export default function Home() {
       <group></group>
     )
   }
+
   useEffect(() => {
     if(!nextPage) return;
     setPage(page+1);

@@ -8,7 +8,7 @@ import { forwardRef, useEffect, useState } from 'react';
 import axios from '../../../utils/axios';
 import { Button, Card, Divider, Grid, TextField } from '@mui/material';
 import CreateIcon from '@mui/icons-material/Create';
-import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import useAuth from '../../../hooks/useAuth';
 
 const Fade = forwardRef(function Fade(props, ref) {
@@ -77,80 +77,7 @@ export default function GuestBookPage({
   cookies,
 }) {
   // 더미 데이터
-  const [books, setBooks] = useState([
-    {
-      id: 1,
-      content: 'content1',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-    {
-      id: 2,
-      content: 'content2',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-    {
-      id: 3,
-      content: 'content3',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-    {
-      id: 4,
-      content: 'content1',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-    {
-      id: 5,
-      content: 'content2',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-    {
-      id: 6,
-      content: 'content3',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-    {
-      id: 7,
-      content: 'content1',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-    {
-      id: 8,
-      content: 'content2',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-    {
-      id: 9,
-      content: 'content3',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-    {
-      id: 10,
-      content: 'content1',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-    {
-      id: 11,
-      content: 'content2',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-    {
-      id: 12,
-      content: 'content3',
-      modifiedDate: '2022-08-15T00:00:28.0012579',
-      likes: 2,
-    },
-  ]);
+  const [books, setBooks] = useState([]);
   // 방명록 작성
   const submitGuestBook = async event => {
     event.preventDefault();
@@ -308,7 +235,6 @@ export default function GuestBookPage({
             sx={{
               p: 1,
               my: 2,
-              height: 680,
               overflow: 'scroll',
             }}
           >
@@ -318,27 +244,28 @@ export default function GuestBookPage({
                   sx={{
                     height: 200,
                     backgroundColor: colorDeck[Math.floor(Math.random() * 5)],
-                    p: 2,
+                    px : 2,
+                    py : 1,
+                    pb : 8
                   }}
                   key={book.id}
                 >
                   <Typography variant="h6">{book.username}</Typography>
                   {book.username === auth.username ||
                   userName === auth.userName ? (
-                    <AutoDeleteIcon
+                    <DeleteIcon
                       style={{ float: 'right', cursor: 'pointer' }}
                       onClick={e => deleteGuestBook(book.id, e)}
-                    ></AutoDeleteIcon>
-                  ) : (
-                    <div></div>
-                  )}
+                    />
+                  ) : <></> 
+                  }
 
                   <Typography variant="body2" style={{ color: 'grey' }}>
                     {book.modifiedDate.substr(0, 10)}
                   </Typography>
 
                   <Divider sx={{ mt: 1 }} />
-                  <Typography style={{ overflowY: 'scroll' }}>
+                  <Typography style={{ height : '90%', overflowY : 'scroll' }}>
                     {book.content}
                   </Typography>
                 </Card>
