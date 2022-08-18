@@ -132,7 +132,7 @@ export default function searchPost() {
     getResult('content');
     getResult('username');
   }, [query.keyword, isDeleted]);
-  console.log(posts[category]);
+  // console.log(posts[category]);
 
   const handleModalClose = () => {
     setShowModal(false);

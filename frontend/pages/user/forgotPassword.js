@@ -49,14 +49,14 @@ export default function forgotPassword() {
     };
 
     try {
-      console.log(credentials);
+      // console.log(credentials);
       setPageLoading(true);
       const res = await axios.post(
         'api/v1/auth/reset-password',
         credentials,
         {},
       );
-      console.log(res);
+      // console.log(res);
       alert('비밀번호가 이메일로 발송됐습니다.');
       router.push('/');
     } catch (e) {

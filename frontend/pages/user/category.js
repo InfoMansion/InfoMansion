@@ -214,7 +214,7 @@ export default function Category() {
         opacityTarget.style.opacity = 0.4;
       }
     }
-    console.log(likeCate);
+    // console.log(likeCate);
   };
 
   function nextPage() {

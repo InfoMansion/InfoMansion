@@ -69,7 +69,6 @@ export default function LogIn({ onSignIn }) {
           setAuth({ isAuthorized: true, accessToken: data.data.accessToken });
           localStorage.setItem('expiresAt', data.data.expiresAt);
           onSignIn(data.data.accessToken);
-          console.log('data : ', data);
         })
         .catch(e => {
           // console.log(e);
@@ -126,7 +125,6 @@ export default function LogIn({ onSignIn }) {
       setAuth({ isAuthorized: true, accessToken: data.data.accessToken });
       localStorage.setItem('expiresAt', data.data.expiresAt);
       onSignIn(data.data.accessToken);
-      console.log('data : ', data);
     } catch (e) {
       // console.log('error', e);
       setOpen(true);

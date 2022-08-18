@@ -14,9 +14,6 @@ export default function Follow({ isFollow, username, setNowFollow }) {
     setFollow(isFollow);
   }, [isFollow]);
 
-  console.log('isFollow? : ', isFollow);
-  console.log('username : ', username);
-
   const postFollow = async () => {
     try {
       await axios.post(

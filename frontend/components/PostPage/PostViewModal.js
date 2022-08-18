@@ -65,7 +65,7 @@ export default function PostViewModal({
           },
         },
       );
-      console.log(data);
+      // console.log(data);
       setIsDeleted(!isDelted);
       handleModalClose();
     } catch (e) {
@@ -147,7 +147,7 @@ export default function PostViewModal({
           Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
         },
       });
-      console.log(data);
+      // console.log(data);
       setModalInfo({ title: '좋아요 누른 사람들', data: data.data });
     } catch (e) {
       console.log(e);

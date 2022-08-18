@@ -1,5 +1,5 @@
 import { animated, config, useSpring } from '@react-spring/three';
-import { Circle, useGLTF } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import { useState } from 'react';
 
 export default function ShopStuff({ data, Click, stuffscale }) {

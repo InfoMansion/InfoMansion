@@ -1,13 +1,7 @@
 import {
   Typography,
   Box,
-  Card,
   Divider,
-  Modal,
-  Button,
-  CardActions,
-  CardContent,
-  CardHeader,
   Container,
   Grid,
   MenuItem,
@@ -48,6 +42,7 @@ export default function Shop() {
 
   const [credit, setCredit] = useState(0);
   const [open, setOpen] = useState(false);
+  const [scale, setScale] = useState(1);
 
   useEffect(() => {
     try {
@@ -97,8 +92,9 @@ export default function Shop() {
     setViewStuffs(stuffBundles[i].slice.content.slice(st, st + 6));
   }
 
-  function click(e, stuff) {
+  function click(e, stuff, scale) {
     setNowStuff(stuff);
+    setScale(scale);
     setOpen(true);
   }
 
@@ -158,14 +154,13 @@ export default function Shop() {
           <Box
             style={{
               display : 'flex',
-              alinItems : 'center'
+              alinItems : 'center',
             }}
+            sx={{ml : 2}}
           >
-            <Icon sx={{mr : 1}} style={{color : 'white'}} fontSize='large'>
-              <ShoppingCartIcon />
-            </Icon>
-            <Typography variant="h4" color="white">
-              Shop
+            <ShoppingCartIcon style={{ fontSize : '2rem', color : 'white',}} sx={{mr : 1, mb : 1}}/>
+            <Typography variant="h5" color="white">
+              상점
             </Typography>
           </Box>
 
@@ -246,7 +241,7 @@ export default function Shop() {
               >
                 <ShowWindow
                   stuffs={viewStuffs}
-                  click={click}
+                  click={(e, stuff) => click(e, stuff, stuffTypes[nowStuffBundle.stuffType].scale)}
                   scale={stuffTypes[nowStuffBundle.stuffType].scale}
                 />
 
@@ -285,6 +280,7 @@ export default function Shop() {
         setOpen={setOpen}
         nowStuff={nowStuff}
         cookies={cookies}
+        scale={scale}
         getCreditFromServer={getCreditFromServer}
       />
     </Container>

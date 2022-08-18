@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
 import { animated, config, useSpring } from "@react-spring/three";
 
-export default function ConfigAsset({data, pos, Click, iniscale, color, inicolor, speed, isFollow = false, rot = [0, -1.5, 0]}) {
+export default function ConfigAsset({data, pos, Click = () => {}, iniscale, color, inicolor, speed, isFollow = false, rot = [0, -1.5, 0]}) {
     const [geometry] = useState(data.geometry);
     const [material] = useState(data.material);
     const [glbpath] = useState(data.stuffGlbPath);

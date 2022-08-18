@@ -49,8 +49,6 @@ export default function Change() {
       newPassword: data.get('password'),
     };
     try {
-      console.log(credentials);
-      console.log(`Bearer ${cookies.InfoMansionAccessToken}`);
       const { data } = await axios.patch(
         '/api/v1/users/password',
         credentials,

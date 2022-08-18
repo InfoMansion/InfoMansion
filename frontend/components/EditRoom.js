@@ -30,7 +30,7 @@ const EditRoom = forwardRef(( {mapStuffs, stuffs, StuffClick}, ref ) => {
     
     // stuff 클릭 이벤트.
     function Click(e, stuff) { 
-        console.log(stuff);
+        // console.log(stuff);
         StuffClick(e, stuff);
     }
 

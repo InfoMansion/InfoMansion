@@ -28,7 +28,7 @@ export default function devView() {
                 },
             })
             .then(res => {
-                console.log(res.data);
+                // console.log(res.data);
                 
                 setStuffs(res.data.data.filter( stuff => stuff.stuffType == search));
             });

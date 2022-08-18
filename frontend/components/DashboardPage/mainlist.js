@@ -23,7 +23,6 @@ export default function MainListItems() {
   function changeDashNumTwo(event)   { setDashNum(2); }
   function changeDashNumThree(event) { setDashNum(3); }
   function changePage(event) {
-    console.log(router.query.userName);
     Router.push("/" + router.query.userName);
   }
 

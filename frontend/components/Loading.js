@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { MAIN_COLOR } from '../constants';
 import { Divider, Typography } from '@mui/material';
 import { Canvas } from '@react-three/fiber';
 import ConfigStuff from './RoomPage/atoms/ConfigStuff'
@@ -13,7 +11,7 @@ function comp0() {
       data={ConfigStuffs[3]}
       pos={[0, 0, -2]} rot={[0, 0, 0]} iniscale={5}
       inicolor="#F3F676"
-      speed={0.04}
+      speed={0.02}
     />
   )
 }
@@ -24,7 +22,7 @@ function comp1() {
       data={ConfigStuffs[0]}
       pos={[0, 0, 0]} iniscale={50}
       color="#fa7070" inicolor="#fa7070"
-      speed={0.02}
+      speed={0}
     />
   )
 }
@@ -35,7 +33,7 @@ function comp2() {
       pos={[0, -2, 0]} iniscale={500}
       Click={() => {}}
       color="#fa7070" inicolor="#fa7070"
-      speed={0}
+      speed={0.01}
     />
   )
 }
@@ -46,7 +44,7 @@ function comp3() {
       data={ConfigStuffs[1]}
       pos={[0, 0, -2]} rot={[0, 0, 0]} iniscale={9}
       color="#FFF89D" inicolor="#9C9292"
-      speed={0.04}
+      speed={0.02}
     />
   )
 }
@@ -57,7 +55,7 @@ function comp4() {
       data={ConfigStuffs[3]}
       pos={[0, 0, -2]} rot={[0, 0, 0]} iniscale={5}
       inicolor="#F3F676"
-      speed={0.04}
+      speed={0.02}
     />
   )
 }
@@ -71,8 +69,6 @@ export default function Loading() {
     ['이 메세지가 뜰 확률은 1억분의 1보다 낮습니다.', '운이 좋으시네요!'],
   ])
   const component = (type) => {
-    console.log(type);
-
     const comp = (
       type == 0 ? comp0() : 
       type == 1 ? comp1() : 
@@ -84,7 +80,6 @@ export default function Loading() {
   }
 
   const [type] = useState(parseInt(Math.random()*4));
-  // const [type] = useState(4);
   const [comp] = useState(component(type));
 
 

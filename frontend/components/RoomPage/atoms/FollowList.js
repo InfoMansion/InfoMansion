@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import Profile from '../../PostPage/Profile';
 export default function FollowList({ modalInfo, handleModalClose }) {
-  console.log('modalinfo : ', modalInfo);
+  // console.log('modalinfo : ', modalInfo);
   return (
     <>
       <Dialog

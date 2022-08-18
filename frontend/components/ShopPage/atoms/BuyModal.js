@@ -15,6 +15,7 @@ import ConfirmAlert from '../../ConfirmAlert';
 import CustomAlert from '../../CustomAlert';
 import axios from '../../../utils/axios';
 import ShopStuff from './ShopStuff';
+import StuffTypes from '../../jsonData/stuffTypes.json'
 
 const style = {
   position: 'absolute',
@@ -33,6 +34,7 @@ export default function BuyModal({
   setOpen,
   nowStuff,
   cookies,
+  scale,
   getCreditFromServer,
 }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -44,27 +46,6 @@ export default function BuyModal({
   const BuyStuffSubmit = event => {
     event.preventDefault();
     setConfirmOpen(true);
-    // if (!confirmOpen && agree) {
-    //   const buyStuff = {
-    //     stuffIds: [nowStuff.id],
-    //   };
-    //   try {
-    //     axios
-    //       .post('/api/v2/user-stuff', buyStuff, {
-    //         headers: {
-    //           Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
-    //         },
-    //       })
-    //       .then(res => {
-    //         alert('구매되었습니다!');
-    //         getCreditFromServer();
-    //       });
-    //   } catch (e) {
-    //     console.log(e);
-    //     alert('구매에 실패하였습니다');
-    // alert(e.response.data.message);
-    // }
-    // }
   };
 
   useEffect(() => {
@@ -121,8 +102,8 @@ export default function BuyModal({
             backgroundColor: '#eeeeee',
           }}
         >
-          <ShopStuff data={nowStuff} stuffscale={2} />
-          <OrthographicCamera makeDefault position={[0, 0, 4]} zoom={30} />
+          <ShopStuff data={nowStuff} stuffscale={scale * 1.5} Click={() => {}}/>
+          <OrthographicCamera makeDefault position={[0, 0, 8]} zoom={30} />
           <ambientLight />
         </Canvas>
 

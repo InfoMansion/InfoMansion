@@ -8,7 +8,7 @@ export default function ProfileMesh({pos, profileImage}) {
     const loader = new TextureLoader();
     loader.setCrossOrigin = 'anonymous';
 
-    console.log(profileImage);
+    // console.log(profileImage);
     
     let texture = new MeshBasicMaterial({
         map : loader.load("http://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg")

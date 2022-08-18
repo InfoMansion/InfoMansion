@@ -91,7 +91,7 @@ export default function EditConsole({addLocateStuff, addUnlocatedStuff, deleteUn
 
     function changeCategory(category) {
         setEditCategory(category);
-        console.log(category);
+        // console.log(category);
     }
 
     return (

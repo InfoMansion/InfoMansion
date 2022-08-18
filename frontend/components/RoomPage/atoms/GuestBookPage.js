@@ -97,7 +97,7 @@ export default function GuestBookPage({
           },
         },
       );
-      console.log(data);
+      // console.log(data);
       axios
         .get(`/api/v1/posts/guestbook/${userName}`, {
           headers: {
@@ -125,7 +125,7 @@ export default function GuestBookPage({
           withCredentials: true,
         },
       });
-      console.log(data);
+      // console.log(data);
       axios
         .get(`/api/v1/posts/guestbook/${userName}`, {
           headers: {

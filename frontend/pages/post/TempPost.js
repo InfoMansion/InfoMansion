@@ -72,7 +72,7 @@ export default function tempPost() {
           withCredentials: true,
         },
       });
-      console.log(data);
+      // console.log(data);
       setPosts(data.data);
     } catch (e) {
       console.log(e);

@@ -1,6 +1,4 @@
-import { Scroll, ScrollControls } from '@react-three/drei';
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import ShopStuff from './atoms/ShopStuff'
 
 export default function ShowWindow({stuffs, type, click, scale}) {

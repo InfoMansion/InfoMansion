@@ -65,7 +65,7 @@ export default function TempPostViewModal({
           },
         },
       );
-      console.log(data);
+      // console.log(data);
       setIsDeleted(!isDeleted);
       handleModalClose();
     } catch (e) {

@@ -94,7 +94,7 @@ export default function HeaderNav() {
           },
         );
         setNotification([]);
-        console.log(data);
+        // console.log(data);
       } catch (e) {
         console.log(e);
       }
@@ -104,7 +104,7 @@ export default function HeaderNav() {
 
   const handleLogout = async () => {
     try {
-      console.log('cookie : ', cookies['InfoMansionAccessToken']);
+      // console.log('cookie : ', cookies['InfoMansionAccessToken']);
       const { data } = await axios.get('/api/v1/auth/logout', {
         headers: {
           Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,

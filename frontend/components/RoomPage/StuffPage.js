@@ -65,7 +65,6 @@ export default function StuffPage({ data, cookies, clicked, setClicked }) {
           },
         })
         .then(res => {
-          console.log(res.data);
           setPostDetail(res.data.data);
         })
         .then(setShowModal(true));
@@ -108,7 +107,7 @@ export default function StuffPage({ data, cookies, clicked, setClicked }) {
       setEditAlias(true);
     } else {
       // 요청 보내기.
-      console.log(data.category.category);
+      // console.log(data.category.category);
 
       axios
         .put(
