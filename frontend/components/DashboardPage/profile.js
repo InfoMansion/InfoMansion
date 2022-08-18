@@ -172,12 +172,15 @@ export default function Profile({ ...props }) {
       setOpen(true);
       // alert('프로필 수정이 완료됐습니다.');
     } catch (e) {
-      setPageLoading(false);
       setSeverity('error');
       setMessage(e.response.data.message);
       setOpen(true);
       // alert(e.response.data.message);
     }
+    
+    setTimeout( () => {
+      setPageLoading(false);
+    }, 1000)
   };
 
   const [inputUsername, setInputUsername] = useState(userInfo.username);

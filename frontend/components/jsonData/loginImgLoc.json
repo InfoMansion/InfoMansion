@@ -96,21 +96,21 @@
             {
                 "id" : 10,
                 "right" : 10,
-                "bottom" : 5,
+                "bottom" : 15,
                 "size" : 40,
                 "opacity" : 50
             },
             {
                 "id" : 11,
                 "right" : 42,
-                "bottom" : -12,
+                "bottom" : 0,
                 "size" : 30,
                 "opacity" : 70
             },
             {
                 "id" : 12,
                 "right" : 70,
-                "bottom" : 35,
+                "bottom" : 40,
                 "size" : 18,
                 "opacity" : 75
             }

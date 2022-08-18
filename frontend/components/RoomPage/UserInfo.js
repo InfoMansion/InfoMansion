@@ -263,30 +263,37 @@ export default function UserInfo({
               alignItems: 'center',
             }}
           >
-            <Typography
-              variant="body2"
+            <Box
               onClick={getFollowingInfo}
-              style={{ ...textStyle, cursor: 'pointer' }}
+              style={{ ...textStyle, 
+                cursor: 'pointer', 
+                display : 'flex',
+                alignItems : 'center'
+              }}
             >
-              팔로워
-            </Typography>
-            <Typography
-              style={{ ...textStyle, cursor: 'pointer' }}
-              sx={{ ml: 1, mr: 2 }}
-            >
-              {nowFollow}
-            </Typography>
+              <Typography variant="body2">
+                팔로우
+              </Typography>
+              <Typography sx={{ ml: 1, mr: 2 }}>
+                {nowFollow}
+              </Typography>
+            </Box>
 
-            <Typography
-              variant="body2"
+            <Box
               onClick={getFollowerInfo}
-              style={{ ...textStyle, cursor: 'pointer' }}
+              style={{ ...textStyle, 
+                cursor: 'pointer', 
+                display : 'flex',
+                alignItems : 'center'
+              }}
             >
-              팔로우
-            </Typography>
-            <Typography style={textStyle} sx={{ ml: 1 }}>
-              {userInfo.following}
-            </Typography>
+              <Typography variant="body2" >
+                팔로워
+              </Typography>
+              <Typography sx={{ ml: 1 }}>
+                {userInfo.following}
+              </Typography>
+            </Box>
 
             {loginUser ? (
               <>

@@ -32,6 +32,6 @@ yarn-error.log*
 .vercel
 
 # glb
-/public/stuff-assets/*.glb
-!/public/stuff-assets/IM.glb
-/public/stuffAssets/*.glb
+# /public/stuff-assets/*.glb
+# !/public/stuff-assets/IM.glb
+# /public/stuffAssets/*.glb

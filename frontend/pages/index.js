@@ -1,11 +1,10 @@
-import { Box, formControlClasses, } from '@mui/material';
+import { Box } from '@mui/material';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import LoginComponent from '../components/login';
 import { useCookies } from 'react-cookie';
 import axios from '../utils/axios';
 import { useRouter } from 'next/router';
-import { useInView } from 'react-intersection-observer';
 import { Canvas, useFrame } from '@react-three/fiber';
 import Particles from '../components/RoomPage/atoms/Particles';
 import PostProcessing from '../components/RoomPage/atoms/PostProcessing';
@@ -21,7 +20,6 @@ export default function Home() {
   const { auth } = useAuth();
   const [cookies] = useCookies(['cookie-name']);
   const router = useRouter();
-  const [ref, inView] = useInView();
 
     // v1
   // const gap = 0.6
@@ -140,7 +138,6 @@ export default function Home() {
 
     useFrame(() => {
       if (scroll.offset > 0.99) {
-        console.log(scroll);
         setNextPage(true);
       } 
     }, [])
@@ -199,7 +196,6 @@ export default function Home() {
   },[page]);
 
   useEffect(() => {
-    console.log(page)
     if (!auth.isAuthorized || !cookies.InfoMansionAccessToken) {
       return;
     }

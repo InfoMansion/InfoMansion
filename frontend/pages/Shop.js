@@ -62,18 +62,20 @@ export default function Shop() {
         })
         .then(res => {
           setStuffBundles(res.data.data);
-          setPageLoading(false);
-
+          
           setNowStuffBundle(res.data.data[bundleIndex]);
           setViewStuffs(res.data.data[bundleIndex].slice.content.slice(0, 6))
         });
-
         // 크레딧 가져오기. 
         getCreditFromServer();
     } catch (e) {
-      setPageLoading(false);
       console.log(e);
     }
+    
+    setTimeout(() => {
+      setPageLoading(false);
+    }, 2000)
+
   }, []);
 
   function getCreditFromServer() {

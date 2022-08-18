@@ -77,20 +77,22 @@ export default function SignUp() {
 
     try {
       setPageLoading(true);
+
       const res = await axios.post('api/v1/auth/signup', credentials);
-      setPageLoading(false);
       setMessage('인증 메일이 발송됐습니다.');
       setSeverity('info');
       setOpen(true);
       // alert('인증 메일이 발송됐습니.');
       // router.push('/');
     } catch (e) {
-      setPageLoading(false);
       setMessage(e.response.data.message);
       setSeverity('error');
       setOpen(true);
       // alert(e.response.data.message);
     }
+    setTimeout(() => {
+      setPageLoading(false);
+  }, 500)
   };
 
   const prevPage = () => {

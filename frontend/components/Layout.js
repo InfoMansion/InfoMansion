@@ -27,18 +27,6 @@ const backgroundColor = [
   'linear-gradient(to bottom, #343536, #3d3e3f, #464748, #4f5051, #595a5b)',
 ];
 
-const Root = styled('div')(({ theme }) => ({
-  padding: theme.spacing(1),
-  margin: '30px auto',
-
-  [theme.breakpoints.down('lg')]: {
-    width: '700px',
-  },
-  [theme.breakpoints.up('lg')]: {
-    width: '1280px',
-  },
-}));
-
 export default function Layout({ children }) {
   const { auth } = useAuth();
   const [loading] = useRecoilState(pageLoading);
@@ -71,6 +59,7 @@ export default function Layout({ children }) {
 
   return (
     <div>
+      {loading && <Loading></Loading>}
       <div
         style={{
           minHeight: '100vh',
@@ -78,12 +67,12 @@ export default function Layout({ children }) {
           background: backgroundColor[colorIdx],
           position : 'absolute',
           zIndex : -5,
+          filter : loading ? 'blur(5px)' : ''
         }}
       >
         {auth.isAuthorized && <HeaderNav />}
         {children}
       </div>
-      {loading && <Loading></Loading>}
     </div>
   );
 }

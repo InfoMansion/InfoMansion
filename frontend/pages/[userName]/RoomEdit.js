@@ -50,12 +50,13 @@ export default function RoomEdit() {
                 setWallStuffs(res.data.data.filter(stuff => stuff.stuffType == 'WALL'))
                 setFloorStuffs(res.data.data.filter(stuff => stuff.stuffType == 'FLOOR'))
                 setStuffs(res.data.data.filter(stuff => stuff.stuffType != 'WALL' && stuff.stuffType != 'FLOOR'));
-                setPageLoading(false);
             })
         }catch(e) {
-            setPageLoading(false);
             console.log(e);
         }
+        setTimeout(() => {
+            setPageLoading(false);
+        }, 1500)
     }, []);
     
     useEffect(() => {

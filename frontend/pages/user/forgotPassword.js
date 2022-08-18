@@ -57,14 +57,15 @@ export default function forgotPassword() {
         {},
       );
       console.log(res);
-      setPageLoading(false);
       alert('비밀번호가 이메일로 발송됐습니다.');
       router.push('/');
     } catch (e) {
       alert(e.response.data.message);
-      setPageLoading(false);
       console.log(e);
     }
+    setTimeout(() => {
+      setPageLoading(false);
+  }, 500)
   };
 
   return (

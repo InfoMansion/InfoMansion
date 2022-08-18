@@ -58,24 +58,26 @@ export default function Room({
   // 마운트시 stuff 로드
   useEffect(() => {
     // stuff 가져오기
+    setPageLoading(true);
     if (!userName) return;
+    
     try {
-      setPageLoading(true);
       axios
         .get(`/api/v1/userstuffs/room/${userName}`, {
           headers: {
             Authorization: `Bearer ${cookies.InfoMansionAccessToken}`,
           },
-        })
-        .then(res => {
-          setMapstuffs(res.data.data.slice(0, 2));
-          setStuffs(res.data.data.slice(2));
-          setPageLoading(false);
-        });
+      })
+      .then(res => {
+        setMapstuffs(res.data.data.slice(0, 2));
+        setStuffs(res.data.data.slice(2));
+      });
     } catch (e) {
-      setPageLoading(false);
       console.log(e);
     }
+    setTimeout( () => {
+      setPageLoading(false);
+    }, 3000);
   }, [userName]);
 
   // stuff 호버 이벤트.
@@ -221,7 +223,7 @@ export default function Room({
                 height: '250px',
               }}
             >
-              {/* 팔로우 버튼 */}
+              {/* 상점, 편집 버튼 */}
               <ConfigItems
                 pagePush={pagePush}
                 userName={userName}

@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
 import { animated, config, useSpring } from "@react-spring/three";
 
-export default function ConfigAsset({data, pos, Click, iniscale, color, inicolor, speed, isFollow = false}) {
+export default function ConfigAsset({data, pos, Click, iniscale, color, inicolor, speed, isFollow = false, rot = [0, -1.5, 0]}) {
     const [geometry] = useState(data.geometry);
     const [material] = useState(data.material);
     const [glbpath] = useState(data.stuffGlbPath);
@@ -11,7 +11,8 @@ export default function ConfigAsset({data, pos, Click, iniscale, color, inicolor
     if(!glbpath) return null;
 
     // glb 임포트
-    const { nodes, materials } = useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath)
+    // const { nodes, materials } = useGLTF(process.env.NEXT_PUBLIC_S3_PATH + glbpath)
+    const { nodes, materials } = useGLTF(glbpath)
     if(!nodes[geometry[0]]) return
     const [hovered, setHovered] = useState(false);
     
@@ -37,7 +38,7 @@ export default function ConfigAsset({data, pos, Click, iniscale, color, inicolor
             onPointerLeave={() => setHovered(false)}
             onClick={e => Click(e)}
             position={pos}
-            rotation={[0, -1.5, 0]}
+            rotation={rot}
             scale={scale}
         >
             {geometry.map((geo, i) => ( 
