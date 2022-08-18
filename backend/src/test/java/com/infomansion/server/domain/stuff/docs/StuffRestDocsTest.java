@@ -6,6 +6,12 @@ import com.infomansion.server.domain.stuff.domain.StuffType;
 import com.infomansion.server.domain.stuff.dto.StuffRequestDto;
 import com.infomansion.server.domain.stuff.dto.StuffResponseDto;
 import com.infomansion.server.domain.stuff.service.StuffService;
+import com.infomansion.server.domain.user.domain.User;
+import com.infomansion.server.domain.user.dto.UserSignUpRequestDto;
+import com.infomansion.server.domain.user.repository.UserRepository;
+import com.infomansion.server.global.util.security.WithCustomAdminDetails;
+import com.infomansion.server.global.util.security.WithCustomUserDetails;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -16,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -43,10 +50,28 @@ public class StuffRestDocsTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @MockBean
     private StuffService stuffService;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
+    @BeforeEach
+    void setUp() {
+        UserSignUpRequestDto requestDto = UserSignUpRequestDto.builder()
+                .email("admin@test.com")
+                .password("testPassword1$")
+                .username("admin")
+                .tel("1111111")
+                .categories("IT")
+                .build();
+        userRepository.save(requestDto.toEntityWithEncryptPassword(passwordEncoder));
+    }
 
     @Test
     public void stuffId로_stuff조회() throws Exception {
@@ -81,6 +106,7 @@ public class StuffRestDocsTest {
     }
 
     @Test
+    @WithCustomAdminDetails
     public void 모든_stuff_조회() throws Exception {
         // given
         List<StuffResponseDto> responseDtoList = new ArrayList<>();
