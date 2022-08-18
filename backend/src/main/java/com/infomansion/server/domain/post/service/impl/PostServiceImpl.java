@@ -1,5 +1,8 @@
 package com.infomansion.server.domain.post.service.impl;
 
+import com.infomansion.server.domain.notification.domain.Notification;
+import com.infomansion.server.domain.notification.domain.NotificationType;
+import com.infomansion.server.domain.notification.repository.NotificationRepository;
 import com.infomansion.server.domain.post.domain.Post;
 import com.infomansion.server.domain.post.domain.PostImage;
 import com.infomansion.server.domain.post.dto.*;
@@ -47,6 +50,7 @@ public class PostServiceImpl implements PostService {
     private final UserLikePostRepository userLikePostRepository;
     private final FollowRepository followRepository;
     private final S3Uploader s3Uploader;
+    private final NotificationRepository notificationRepository;
 
     private final Long postPublishingCredit = 20L;
 
@@ -433,6 +437,8 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         UserStuff guestbook = userStuffRepository.findUserStuffByStuffType(user.getId(), StuffType.GUESTBOOK)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_STUFF_NOT_FOUND));
+
+        notificationRepository.save(Notification.createNotification(loginUser.getUsername(), user.getUsername(), NotificationType.GUEST_BOOK, loginUser.getId()));
         return postRepository.save(Post.createPost(loginUser, guestbook, "", requestDto.getContent())).getId();
     }
 
