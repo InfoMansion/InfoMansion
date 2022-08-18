@@ -188,7 +188,7 @@ export default function PostViewModal({
     </Menu>
   );
 
-  console.log(document.getElementById('imageBox'));
+  // console.log(document.getElementById('imageBox'));
 
   return (
     <>
