@@ -29,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,7 +48,7 @@ public class PostServiceImpl implements PostService {
     private final FollowRepository followRepository;
     private final S3Uploader s3Uploader;
 
-    private final Long postPublishingCredit = 30L;
+    private final Long postPublishingCredit = 20L;
 
     @Transactional
     @Override
@@ -237,7 +239,9 @@ public class PostServiceImpl implements PostService {
 
         Post post = postRepository.save(Post.createPost(user, userStuff, requestDto.getTitle(), requestDto.getContent()));
         post.linkOriginalPost(post.getId());
-        user.earnCredit(postPublishingCredit);
+        int count = postRepository.countByUserAndModifiedDateBetween(user, LocalDate.now().atStartOfDay(), LocalDateTime.now());
+        if(count < 5)
+            user.earnCredit(postPublishingCredit);
 
         return PostSaveResponseDto.builder()
                 .userStuffId(requestDto.getUserStuffId())
@@ -370,7 +374,6 @@ public class PostServiceImpl implements PostService {
             original.setUserAndUserStuff(user, userStuff);
         
             postRepository.delete(post);
-            user.earnCredit(postPublishingCredit);
 
             return PostSaveResponseDto.builder()
                     .userStuffId(requestDto.getUserStuffId())
@@ -383,7 +386,9 @@ public class PostServiceImpl implements PostService {
         // 원본을 발행하는 경우, 발행
         post.setUserAndUserStuff(user, userStuff);
         post.publish();
-        user.earnCredit(postPublishingCredit);
+        int count = postRepository.countByUserAndModifiedDateBetween(user, LocalDate.now().atStartOfDay(), LocalDateTime.now());
+        if(count < 5)
+            user.earnCredit(postPublishingCredit);
 
         return PostSaveResponseDto.builder()
                 .userStuffId(requestDto.getUserStuffId())

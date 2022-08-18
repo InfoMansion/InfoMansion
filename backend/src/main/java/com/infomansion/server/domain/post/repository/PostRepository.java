@@ -55,4 +55,6 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.userStuff = :guestbook")
     Slice<Post> findPostInTheGuestBook(@Param("guestbook") UserStuff guestbook, Pageable pageable);
 
+    int countByUserAndModifiedDateBetween(User user, LocalDateTime startDate, LocalDateTime endDate);
+
 }
