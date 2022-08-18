@@ -11,17 +11,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useRef, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { profileState } from '../../state/profileState';
+import CustomAlert from '../CustomAlert';
 import axios from '../../utils/axios';
-import categories from '../jsonData/category.json'
+import categories from '../jsonData/category.json';
 
-import {
-  Avatar,
-  Box,
-  Card,
-  Grid,
-  Typography,
-  TextField,
-} from '@mui/material';
+import { Avatar, Box, Card, Grid, Typography, TextField } from '@mui/material';
 import { useCookies } from 'react-cookie';
 import { useSetRecoilState } from 'recoil';
 import { pageLoading } from '../../state/pageLoading';
@@ -65,6 +59,9 @@ export default function Profile({ ...props }) {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState('');
+  const [message, setMessage] = useState('');
 
   const allCategories = {
     IT: false,
@@ -85,22 +82,22 @@ export default function Profile({ ...props }) {
     STUDY: false,
   };
   const [categoryArray] = useState([
-    "IT",
-    "COOK",
-    "MUSIC",
-    "GAME",
-    "SPORTS",
-    "FASHION",
-    "DAILY",
-    "TRAVEL",
-    "NATURE",
-    "ART",
-    "INTERIOR",
-    "CULTURE",
-    "BEAUTY",
-    "CLEANING",
-    "HOMEAPPLIANCES",
-    "STUDY",
+    'IT',
+    'COOK',
+    'MUSIC',
+    'GAME',
+    'SPORTS',
+    'FASHION',
+    'DAILY',
+    'TRAVEL',
+    'NATURE',
+    'ART',
+    'INTERIOR',
+    'CULTURE',
+    'BEAUTY',
+    'CLEANING',
+    'HOMEAPPLIANCES',
+    'STUDY',
   ]);
 
   let selectedCate = '';
@@ -170,10 +167,16 @@ export default function Profile({ ...props }) {
         accessToken: cookies.InfoMansionAccessToken,
         username: userInfo.username,
       });
-      alert('프로필 수정이 완료됐습니다.');
+      setSeverity('success');
+      setMessage('프로필 수정이 완료됐습니다.');
+      setOpen(true);
+      // alert('프로필 수정이 완료됐습니다.');
     } catch (e) {
       setPageLoading(false);
-      alert(e.response.data.message);
+      setSeverity('error');
+      setMessage(e.response.data.message);
+      setOpen(true);
+      // alert(e.response.data.message);
     }
   };
 
@@ -200,24 +203,30 @@ export default function Profile({ ...props }) {
           encType="multipart/form-data"
           onSubmit={handleSubmit}
         >
+          <CustomAlert
+            open={open}
+            setOpen={setOpen}
+            severity={severity}
+            message={message}
+          ></CustomAlert>
           <Card
             sx={{
-              py : 2
+              py: 2,
             }}
           >
             <Box
-              sx={{ 
-                display : 'flex',
-                alignItems : 'start'
+              sx={{
+                display: 'flex',
+                alignItems: 'start',
               }}
               container
             >
               <Box
                 sx={{
-                  display : 'flex',
-                  flexDirection : 'column',
-                  alignItems : 'center',
-                  m : 2
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  m: 2,
                 }}
               >
                 <Avatar
@@ -226,9 +235,9 @@ export default function Profile({ ...props }) {
                   sx={{
                     width: '80px',
                     height: '80px',
-                    mb : 1
+                    mb: 1,
                   }}
-                  />
+                />
                 <input
                   type="file"
                   style={{ display: 'none' }}
@@ -236,18 +245,18 @@ export default function Profile({ ...props }) {
                   name="profile_img"
                   onChange={onChange}
                   ref={fileInput}
-                  />
+                />
                 <Button
                   variant="outlined"
-                  onClick={() => {fileInput.current.click();}}
+                  onClick={() => {
+                    fileInput.current.click();
+                  }}
                 >
                   사진 변경
                 </Button>
               </Box>
 
-              <Box
-                sx={{m : 2}}
-              >
+              <Box sx={{ m: 2 }}>
                 <Typography>userName</Typography>
                 <TextField
                   value={inputUsername}
@@ -258,7 +267,7 @@ export default function Profile({ ...props }) {
               </Box>
             </Box>
 
-            <Box sx={{mx : 2}} >
+            <Box sx={{ mx: 2 }}>
               <Typography> Introduce</Typography>
               <TextField
                 multiline
@@ -272,56 +281,56 @@ export default function Profile({ ...props }) {
           </Card>
 
           <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <Card
-                sx={{
-                  mt : 8,
-                  display: 'flex',
-                  backgroundColor: 'white',
-                }}
-              >
-                <Box component="form">
-                  <Box sx={{ display: 'flex' }}>
-                    <FormControl
-                      sx={{ m: 3 }}
-                      component="fieldset"
-                      variant="standard"
-                    >
-                      <FormLabel component="legend">
-                        Select Your Interest
-                      </FormLabel>
-                      
-                      <FormGroup>
-                        <Grid container>
-                          {categoryArray.map(category => (
-                            <Grid item xs={3}>
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={state[category]}
-                                    onChange={handleChange}
-                                    name={category}
-                                  />
-                                }
-                                label={categories[category].alias}
-                              />
-                            </Grid>
-                          ))}
-                        </Grid>
-                      </FormGroup>
-                      <FormHelperText>
-                        1개 이상, 5개 이하를 골라주세요
-                      </FormHelperText>
-                    </FormControl>
-                  </Box>
+            <CssBaseline />
+            <Card
+              sx={{
+                mt: 8,
+                display: 'flex',
+                backgroundColor: 'white',
+              }}
+            >
+              <Box component="form">
+                <Box sx={{ display: 'flex' }}>
+                  <FormControl
+                    sx={{ m: 3 }}
+                    component="fieldset"
+                    variant="standard"
+                  >
+                    <FormLabel component="legend">
+                      Select Your Interest
+                    </FormLabel>
+
+                    <FormGroup>
+                      <Grid container>
+                        {categoryArray.map(category => (
+                          <Grid item xs={3}>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={state[category]}
+                                  onChange={handleChange}
+                                  name={category}
+                                />
+                              }
+                              label={categories[category].alias}
+                            />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </FormGroup>
+                    <FormHelperText>
+                      1개 이상, 5개 이하를 골라주세요
+                    </FormHelperText>
+                  </FormControl>
                 </Box>
-              </Card>
+              </Box>
+            </Card>
           </ThemeProvider>
-          
+
           <Box
             sx={{
-              display : 'flex',
-              justifyContent : 'end',
+              display: 'flex',
+              justifyContent: 'end',
             }}
           >
             <Button
@@ -333,7 +342,6 @@ export default function Profile({ ...props }) {
               UPDATE
             </Button>
           </Box>
-
         </Box>
       </Container>
     </ThemeProvider>

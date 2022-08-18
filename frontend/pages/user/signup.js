@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from '../../utils/axios';
 import { pageLoading } from '../../state/pageLoading';
+import CustomAlert from '../../components/CustomAlert';
 const theme = createTheme({
   palette: {
     primary: {
@@ -34,6 +35,9 @@ export default function SignUp() {
   const [inputPassword, setInputPassword] = useState('');
   const [inputPassword2, setInputPassword2] = useState('');
   const [inputUsername, setInputUsername] = useState('');
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('');
 
   const confirmEmail = /^[\w+_]\w+@\w+\.\w+/.test(inputEmail);
   const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
@@ -75,11 +79,17 @@ export default function SignUp() {
       setPageLoading(true);
       const res = await axios.post('api/v1/auth/signup', credentials);
       setPageLoading(false);
-      alert('인증 메일이 발송됐습니.');
-      router.push('/');
+      setMessage('인증 메일이 발송됐습니다.');
+      setSeverity('info');
+      setOpen(true);
+      // alert('인증 메일이 발송됐습니.');
+      // router.push('/');
     } catch (e) {
       setPageLoading(false);
-      alert(e.response.data.message);
+      setMessage(e.response.data.message);
+      setSeverity('error');
+      setOpen(true);
+      // alert(e.response.data.message);
     }
   };
 
@@ -94,6 +104,12 @@ export default function SignUp() {
     }
   }, [likeCate]);
 
+  useEffect(() => {
+    if (!open && severity === 'info') {
+      router.push('/');
+    }
+  }, [open]);
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -106,6 +122,12 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
+          <CustomAlert
+            open={open}
+            setOpen={setOpen}
+            severity={severity}
+            message={message}
+          ></CustomAlert>
           <Avatar src="/logo.png">
             <LockOutlinedIcon />
           </Avatar>

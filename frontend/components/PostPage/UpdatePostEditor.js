@@ -14,6 +14,7 @@ import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
 import { postDetailState } from '../../state/postDetailState';
 import { useRecoilState } from 'recoil';
+import CustomAlert from '../CustomAlert';
 import Router from 'next/router';
 
 Router.events.on('routeChangeStart', () => {
@@ -61,6 +62,8 @@ const Editor = ({
   setTempId,
   setImageUrlList,
   imageUrlList,
+  open,
+  setOpen,
   ...rest
 }) => {
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
@@ -85,8 +88,8 @@ const Editor = ({
 
   const ImageHandler = () => {
     const imageInput = document.createElement('input');
-    const tempTitle = localStorage.getItem('title') ?? '임시 제목';
-    const tempContent = localStorage.getItem('content') ?? "<p>' '</p>";
+    const tempTitle = localStorage.getItem('title') || '임시 제목';
+    const tempContent = localStorage.getItem('content') || "<p>' '</p>";
     const post = {
       title: tempTitle,
       content: tempContent,
@@ -131,7 +134,11 @@ const Editor = ({
               range,
               `<img src=${imageUrl} alt="이미지 태그가 삽입" />`,
             );
-            alert('이미지 업로드 전 까지의 내용이 임시저장 되었습니다.');
+            setOpen(true);
+            setTimeout(function () {
+              setOpen(false);
+            }, 1000);
+            // alert('이미지 업로드 전 까지의 내용이 임시저장 되었습니다.');
             localStorage.removeItem('title');
             localStorage.removeItem('content');
           }
@@ -192,6 +199,7 @@ export default function UpdatePostEditor({
   const [cookies] = useCookies(['cookie-name']);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
   const [nowCategory, setNowCategory] = useState('카테고리');
+  const [open, setOpen] = useState(false);
 
   const handleResize = useCallback(() => {
     setWindowSize({
@@ -280,6 +288,12 @@ export default function UpdatePostEditor({
               )}
             />
           </div>
+          <CustomAlert
+            open={open}
+            setOpen={setOpen}
+            severity="info"
+            message="이미지 업로드 전 까지의 내용이 임시저장 되었습니다."
+          ></CustomAlert>
           <Input
             placeholder="제목을 입력하세요"
             inputProps={title}
@@ -321,6 +335,8 @@ export default function UpdatePostEditor({
             // 기타
             // imageUrlList={imageUrlList}
             // setImageUrlList={setImageUrlList}
+            open={open}
+            setOpen={setOpen}
             style={{
               backgroundColor: 'white',
             }}

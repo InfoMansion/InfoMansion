@@ -18,6 +18,7 @@ import { likeCateState } from '../state/likeCate';
 import { useCookies } from 'react-cookie';
 import useAuth from '../hooks/useAuth';
 import styles from '../styles/Hex.module.css';
+import CustomAlert from './CustomAlert';
 import loginImgLoc from './jsonData/loginImgLoc.json';
 import Router from 'next/router';
 
@@ -48,6 +49,7 @@ export default function LogIn({ onSignIn }) {
   const [boxWidth, setBoxWidth] = useState(0.4 * window.innerWidth);
   const [boxHeight, setBoxHeight] = useState(0.3 * window.innerWidth);
   const [images, setImages] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const confirmId = /^[\w+_]\w+@\w+\.\w+/.test(inputId);
   const confirmPw = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(inputPw);
@@ -70,7 +72,8 @@ export default function LogIn({ onSignIn }) {
           console.log('data : ', data);
         })
         .catch(e => {
-          console.log(e);
+          // console.log(e);
+          setOpen(true);
         });
     }
   }
@@ -125,7 +128,8 @@ export default function LogIn({ onSignIn }) {
       onSignIn(data.data.accessToken);
       console.log('data : ', data);
     } catch (e) {
-      console.log('error', e);
+      // console.log('error', e);
+      setOpen(true);
     }
   };
 
@@ -199,6 +203,12 @@ export default function LogIn({ onSignIn }) {
             >
               <img src="/logo.png" style={{ width: '25%', height: '35%' }} />
             </div>
+            <CustomAlert
+              open={open}
+              setOpen={setOpen}
+              severity="error"
+              message="아이다가 없거나 비밀번호가 틀렸습니다."
+            ></CustomAlert>
             <Box
               component="form"
               onSubmit={handleSubmit}

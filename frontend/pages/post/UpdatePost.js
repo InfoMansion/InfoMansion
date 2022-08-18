@@ -4,6 +4,7 @@ import UpdatePostEditor from '../../components/PostPage/UpdatePostEditor';
 import { MAIN_COLOR } from '../../constants';
 import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
+import CustomAlert from '../../components/CustomAlert';
 import { postDetailState } from '../../state/postDetailState';
 import { useRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
@@ -17,6 +18,8 @@ export default function updatePost() {
   const [cookies] = useCookies(['cookie-name']);
   const [imageUrlList, setImageUrlList] = useState([]);
   const [postDetail, setPostDetail] = useRecoilState(postDetailState);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
   const [tempId, setTempId] = useState('');
   const router = useRouter();
   const postFinish = !!content && !!stuffId && !!title;
@@ -36,7 +39,13 @@ export default function updatePost() {
             withCredentials: true,
           },
         });
-        router.back();
+        if (postDetail.defaultPostThumbnail) {
+          setMessage('기존 글 수정 시 크레딧이 획득되지 않습니다.');
+        } else {
+          setMessage('글 쓰기로 획득 가능한 크레딧은 1회 20 하루 100입니다.');
+        }
+        setOpen(true);
+        // router.back();
       } catch (e) {
         console.log(e);
       }
@@ -57,7 +66,13 @@ export default function updatePost() {
             },
           },
         );
-        router.back();
+        if (postDetail.defaultPostThumbnail) {
+          setMessage('기존 글 수정 시 크레딧이 획득되지 않습니다.');
+        } else {
+          setMessage('글 쓰기로 획득 가능한 크레딧은 1회 20 하루 100입니다.');
+        }
+        setOpen(true);
+        // router.back();
       } catch (e) {
         console.log(e);
       }
@@ -81,7 +96,9 @@ export default function updatePost() {
             },
           },
         );
-        router.back();
+        setMessage('임시저장 되었습니다.');
+        setOpen(true);
+        // router.back();
       } catch (e) {
         console.log(e);
       }
@@ -101,7 +118,9 @@ export default function updatePost() {
             },
           },
         );
-        router.back();
+        setMessage('임시저장 되었습니다.');
+        setOpen(true);
+        // router.back();
       } catch (e) {
         console.log(e);
       }
@@ -112,6 +131,12 @@ export default function updatePost() {
     setTitle(postDetail.title);
     setContent(postDetail.content);
   }, []);
+
+  useEffect(() => {
+    if (!open && message) {
+      router.back();
+    }
+  }, [open]);
 
   return (
     <Container
@@ -134,6 +159,12 @@ export default function updatePost() {
           display: 'flex',
         }}
       >
+        <CustomAlert
+          open={open}
+          setOpen={setOpen}
+          severity="info"
+          message={message}
+        ></CustomAlert>
         <Button
           variant="contained"
           style={{

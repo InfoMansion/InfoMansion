@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from '../../utils/axios';
+import CustomAlert from '../CustomAlert';
 import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 
@@ -29,6 +30,8 @@ const theme = createTheme({
 
 export default function Confirm(props) {
   const [cookies] = useCookies(['cookie-name']);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
   const [inputPassword, setInputPassword] = useState('');
   const confirmPassword = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/.test(
     inputPassword,
@@ -56,21 +59,23 @@ export default function Confirm(props) {
       props.setUserInfo(data.data);
       props.setIsConfirmed(true);
     } catch (e) {
-      console.log(e);
-      alert(e.response.data.message);
+      setMessage(e.response.data.message);
+      setOpen(true);
+      // console.log(e);
+      // alert(e.response.data.message);
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Container 
+      <Container
         component="main"
-        style={{ 
-          height : window.innerHeight - 80,
-          display : 'flex',
-          flexDirection : 'column',
-          justifyContent : 'center',
-          alignItems : 'center'
+        style={{
+          height: window.innerHeight - 80,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <Box
@@ -80,16 +85,19 @@ export default function Confirm(props) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            width : '400px'
+            width: '400px',
           }}
         >
+          <CustomAlert
+            open={open}
+            setOpen={setOpen}
+            severity="error"
+            message={message}
+          ></CustomAlert>
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography 
-            sx={{color : 'white'}}
-            variant="h5"
-          >
+          <Typography sx={{ color: 'white' }} variant="h5">
             Confirm Password
           </Typography>
           <TextField
@@ -102,26 +110,25 @@ export default function Confirm(props) {
             color="textfield"
             onChange={handleInput}
             sx={{
-              m : 1,
-              width : '70%'
+              m: 1,
+              width: '70%',
             }}
             focused
           />
           <Button
             type="submit"
             variant="contained"
-            sx={{ 
-              mt : 1, 
-              width : '65%',
-              color : 'white'
+            sx={{
+              mt: 1,
+              width: '65%',
+              color: 'white',
             }}
             disabled={inputUnFinish}
           >
             Confirm Password
           </Button>
         </Box>
-      <Box style={{width : 100, height : 400 }}>
-      </Box>
+        <Box style={{ width: 100, height: 400 }}></Box>
       </Container>
     </ThemeProvider>
   );

@@ -6,6 +6,7 @@ import axios from '../../utils/axios';
 import { useCookies } from 'react-cookie';
 import { postDetailState } from '../../state/postDetailState';
 import { useRecoilState } from 'recoil';
+import CustomAlert from '../../components/CustomAlert';
 import { useRouter } from 'next/router';
 
 export default function createPost() {
@@ -21,6 +22,8 @@ export default function createPost() {
   const router = useRouter();
   const postFinish = !!content && !!stuffId && !!title;
   const tempFinish = !!content && !!title;
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleSave = async () => {
     if (!tempId) {
@@ -37,7 +40,9 @@ export default function createPost() {
             withCredentials: true,
           },
         });
-        router.back();
+        setMessage('글 쓰기로 획득 가능한 크레딧은 1회 20 하루 100입니다.');
+        setOpen(true);
+        // router.back();
       } catch (e) {
         console.log(e);
       }
@@ -55,7 +60,9 @@ export default function createPost() {
             withCredentials: true,
           },
         });
-        router.back();
+        setMessage('글 쓰기로 획득 가능한 크레딧은 1회 20 하루 100입니다.');
+        setOpen(true);
+        // router.back();
       } catch (e) {
         console.log(e);
       }
@@ -75,8 +82,9 @@ export default function createPost() {
             withCredentials: true,
           },
         });
-        alert('임시저장 되었습니다.');
-        router.back();
+        setMessage('임시저장 되었습니다.');
+        setOpen(true);
+        // router.back();
       } catch (e) {
         console.log(e);
       }
@@ -96,13 +104,20 @@ export default function createPost() {
             },
           },
         );
-        alert('임시저장 되었습니다.');
-        router.back();
+        setMessage('임시저장 되었습니다.');
+        setOpen(true);
+        // router.back();
       } catch (e) {
         console.log(e);
       }
     }
   };
+
+  useEffect(() => {
+    if (!open && message) {
+      router.back();
+    }
+  }, [open]);
 
   return (
     <Container
@@ -125,6 +140,12 @@ export default function createPost() {
           display: 'flex',
         }}
       >
+        <CustomAlert
+          open={open}
+          setOpen={setOpen}
+          severity="info"
+          message={message}
+        ></CustomAlert>
         <Button
           type="submit"
           variant="contained"
