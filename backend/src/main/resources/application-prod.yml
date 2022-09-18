@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://infomansion-webservice-database.ct0x0yhiwnnn.ap-northeast-2.rds.amazonaws.com:3306/infomansion_webservice_database
-    username: infomansion_admin
-    password: dlsvhaostusdjemalsqlalfqjsghdlqslek
+    url:
+    username:
+    password:
 
   jpa:
     hibernate:
@@ -20,7 +20,7 @@ spring:
 
   mail:
     redirectURI: https://i7a607.p.ssafy.io/
-    verificationLink: https://i7a607.p.ssafy.io/api/v1/auth/verification?key=
+    verificationLink:
 
 infomansion:
   cookie:

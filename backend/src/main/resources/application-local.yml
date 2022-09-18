@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/infomansion?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: infomansion
-    password: infomansion
+    url:
+    username:
+    password:
 
   jpa:
     hibernate:
@@ -19,7 +19,7 @@ spring:
 
   mail:
     redirectURI: http://localhost:8080
-    verificationLink: http://localhost:8080/api/v1/auth/verification?key=
+    verificationLink:
 
 infomansion:
   cookie:
