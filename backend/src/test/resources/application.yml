@@ -29,8 +29,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 465
-    username: contactinfomansion@gmail.com
-    password: szdwttmotcygfloo
+    username:
+    password:
     properties:
       mail:
         transport:
@@ -44,23 +44,23 @@ spring:
           ssl:
             enable: true
     redirectURI: http://localhost:8080/test/success
-    verificationLink: http://localhost:8080/api/v1/auth/verification?key=
+    verificationLink:
 
 jwt:
-  secret: dGhpcy1pcy1hLXRlbXAtc2VjcmV0LWtleS1mb3ItaW5mby1tYW5zaW9uLWluLXNzYWZ5LTd0aC1ieS1jaGl5b25ncy1sZXRzZ29pbmZvbWFuc2lvbgo=
+  secret:
 
 cloud:
   aws:
     stack:
       auto: false
     region:
-      static: ap-northeast-2
+      static:
     credentials:
-      access-key: AKIASJRN5KGTJSDN3WXL
-      secret-key: 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
+      access-key:
+      secret-key:
     s3:
-      bucket: infomansion-webservice-s3
-      bucketUrl: https://infomansion-webservice-s3.s3.ap-northeast-2.amazonaws.com
+      bucket:
+      bucketUrl:
 
 infomansion:
   cookie:
