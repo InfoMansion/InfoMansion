@@ -2,12 +2,15 @@ package com.infomansion.server.domain.post.dto;
 
 import com.infomansion.server.domain.category.domain.CategoryMapperValue;
 import com.infomansion.server.domain.post.domain.Post;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class PostSimpleResponseDto {
 
     private Long id;
@@ -27,17 +30,6 @@ public class PostSimpleResponseDto {
         this.defaultPostThumbnail = post.getDefaultPostThumbnail();
         this.modifiedDate = post.getModifiedDate();
         this.likes = (long) post.getUserLikePostList().size();
-    }
-
-    @Builder
-    public PostSimpleResponseDto(Long id, String title, String content, CategoryMapperValue category, String defaultPostThumbnail, LocalDateTime modifiedDate, Long likes) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.category = category;
-        this.defaultPostThumbnail = defaultPostThumbnail;
-        this.modifiedDate = modifiedDate;
-        this.likes = likes;
     }
 
     public static PostSimpleResponseDto toDto(Post post) {
