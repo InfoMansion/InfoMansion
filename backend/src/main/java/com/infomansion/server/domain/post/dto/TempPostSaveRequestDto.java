@@ -1,18 +1,18 @@
 package com.infomansion.server.domain.post.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
-@NoArgsConstructor
+@Value
 public class TempPostSaveRequestDto {
 
     @NotBlank
-    private String title;
+    String title;
     @NotBlank
-    private String content;
+    String content;
 
     public TempPostSaveRequestDto(String title, String content) {
         this.title = title;

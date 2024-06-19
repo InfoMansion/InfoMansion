@@ -2,12 +2,15 @@ package com.infomansion.server.domain.post.dto;
 
 import com.infomansion.server.domain.category.domain.Category;
 import com.infomansion.server.domain.post.domain.Post;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class PostDetailResponseDto {
 
     private Long id;
@@ -20,21 +23,6 @@ public class PostDetailResponseDto {
     private Long likes;
     private boolean followFlag;
     private boolean likeFlag;
-
-
-    @Builder
-    public PostDetailResponseDto(Long id, String userName, String title, String content, Category category, String defaultPostThumbnail, LocalDateTime modifiedDate, Long likes, boolean followFlag, boolean likeFlag) {
-        this.id = id;
-        this.userName = userName;
-        this.title = title;
-        this.content = content;
-        this.category = category;
-        this.defaultPostThumbnail = defaultPostThumbnail;
-        this.modifiedDate = modifiedDate;
-        this.likes = likes;
-        this.followFlag = followFlag;
-        this.likeFlag = likeFlag;
-    }
 
 
     public static PostDetailResponseDto toDto(Post post, boolean followFlag, boolean likeFlag){
