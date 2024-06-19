@@ -69,7 +69,8 @@ public class PostServiceImpl implements PostService {
         if (deleteImages.size() > 0)
             s3Uploader.deleteFiles(deleteImages);
 
-        return postRepository.save(requestDto.toEntity(user, userStuff)).getId();
+        var post = requestDto.toEntity(user, userStuff);
+        return postRepository.save(post).getId();
     }
 
     @Override
